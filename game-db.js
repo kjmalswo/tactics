@@ -2,7 +2,7 @@
 window.GAME_DB = {
   "_docs": {
     "title": "SCRAPWAKE · 폭주 항로 · 콘텐츠 DB",
-    "editing": "이 파일의 window.GAME_DB 객체만 편집해 밸런스·기체·무기·적·성장·지역·문구를 관리합니다. JSON 호환 객체를 유지하고 실행 코드는 넣지 않습니다.",
+    "editing": "게임 데이터 원본은 game-db.js 하나입니다. campaign/tactics/ui에서 필요한 키를 먼저 검색하고 해당 범위만 읽어 수정합니다. 엔진은 index.html에 있으며 DB를 참조합니다.",
     "files": "index.html은 엔진과 화면을 포함하고 이 DB를 먼저 동기 로드합니다. DB 수정은 해당 키를 검색해 필요한 범위만 읽습니다.",
     "rigs": "rigs 배열: id,name,description,tag,color,icon,weaponId,stats. stats는 config.baseStats에 덮어씁니다.",
     "weapons": "weapons 객체: mode=projectile|beam, damage,interval,range는 player stats.range, count,spread,speed,radius,pierce,chain. 기체 weaponId로 연결합니다.",
@@ -13,16 +13,18 @@ window.GAME_DB = {
     "objective": "이동하며 3개 중계기를 수리하고, 추격 요새를 격파한 후 탈출 지점에서 구조를 기다립니다. 전투는 실시간이며 성장 선택 중에는 자동 정지합니다.",
     "scrapArmor": "고철은 자력 궤도에서 근처 적을 공격하고, baseStats.scrapArmor 계수에 따라 받는 피해도 줄입니다. floor(고철 수 × 계수), 최대 config.scrapArmorCap. 고철 폭풍으로 소비하면 이 방어력도 즉시 감소합니다.",
     "interface": "ui에는 화면 문구, 단축키, 색상, 아이콘, 시각 효과 설정, 저장 키가 있습니다. 수치와 콘텐츠 수정 시 game-db.js를 먼저 검색합니다.",
-    "standalone": "DB 편집기에서 DB 파일 또는 모든 코드·데이터가 포함된 단일 HTML 실행본을 내보낼 수 있습니다."
+    "standalone": "DB 편집기에서 DB 파일 또는 모든 코드·데이터가 포함된 단일 HTML 실행본을 내보낼 수 있습니다.",
+    "campaign": "campaign: 영구 성장, 정비고 모듈, 연구, 분대, 교리, 분기 전선, 작전 보상과 경제. 임무가 끝나도 기체·계급·장비·연구를 초기화하지 않습니다.",
+    "tactics": "tactics: 분대 명령, 보급 연결, 거점 역할, 전장 건설, 증원, 적 공세와 4종 임무. nodes/structures/config에서 규칙과 수치를 수정합니다."
   },
   "meta": {
     "title": "폭주 항로",
     "english": "SCRAPWAKE",
     "tagline": "멈추지 마라. 잔해를 무기로 바꿔라.",
-    "objective": "중계기 3개 수리 → 추격 요새 격파 → 탈출",
-    "description": "움직이는 고철 폭풍 속에서 기체를 몰고, 쓰러진 적을 자력 장갑과 폭발 연료로 재활용하는 액션 로그라이트.",
+    "objective": "영구 기체 설계 → 분대·보급선 지휘 → 작전 보상과 다음 전선",
+    "description": "기체와 장비가 남는 전략 캠페인. 분대를 지휘하고 보급선을 운영하며 고철 전선을 확장합니다.",
     "extractionName": "긴급 탈출 항로",
-    "version": "2.0"
+    "version": "3.0"
   },
   "palette": {
     "bg": "#101a23",
@@ -1326,10 +1328,19 @@ window.GAME_DB = {
       "markerInset": 45,
       "salvageVisualCap": 10,
       "trailCount": 18,
-      "shakeScale": 5
+      "shakeScale": 5,
+      "strategicPadding": 120,
+      "tactics": {
+        "networkWidth": 2,
+        "networkAlpha": 0.5,
+        "orderWidth": 1.7,
+        "selectedRing": 9,
+        "healthWidth": 43,
+        "buildPreviewAlpha": 0.08
+      }
     },
     "settings": {
-      "storageKey": "scrapwake.run.v2",
+      "storageKey": "scrapwake.campaign.v3",
       "settingsKey": "scrapwake.preferences.v2",
       "seedPrefix": "SW",
       "seedMax": 999999,
@@ -1361,7 +1372,16 @@ window.GAME_DB = {
       "lowHullRatio": 0.25,
       "firstHintSeconds": 10,
       "secondHintSeconds": 22,
-      "tutorialSeconds": 35
+      "tutorialSeconds": 35,
+      "legacyStorageKey": "scrapwake.run.v2",
+      "saveEnvelopeVersion": 3,
+      "commandPickRadius": 40,
+      "nodePickRadius": 95,
+      "miniAllyRadius": 2.2,
+      "miniStructureRadius": 1.8,
+      "supplyDigits": 0,
+      "visibleUnitHotkeys": 2,
+      "incomeDigits": 1
     },
     "audio": {
       "enabled": true,
@@ -1401,7 +1421,7 @@ window.GAME_DB = {
     "text": {
       "brand": "폭주 항로",
       "english": "SCRAPWAKE",
-      "version": "ACTION / STRATEGY / ROGUELITE",
+      "version": "PERSISTENT CAMPAIGN / SQUAD TACTICS",
       "menuEyebrow": "THE WASTELAND DOESN’T WAIT",
       "menuTitle": "쏘고. 빼앗고.\n살아서 탈출하라.",
       "menuBody": "고철의 바다를 달리는 약탈 비행정. 세 중계기를 장악하고, 추격 요새를 무너뜨려 탈출하라. 적의 잔해는 나를 지키는 장갑이자, 판을 뒤집는 폭탄이다.",
@@ -1414,16 +1434,16 @@ window.GAME_DB = {
       "seed": "항로 코드",
       "seedHint": "같은 코드로 같은 전장에 도전",
       "pilot": "PILOT STATUS",
-      "hull": "선체",
+      "hull": "기체 내구",
       "shield": "실드",
       "scrap": "고철 장갑",
-      "level": "LV",
+      "level": "계급",
       "xp": "성장",
       "kills": "격파",
       "timer": "항해 시간",
       "pressure": "전장 위협",
-      "objective": "돌파 목표",
-      "objectiveShort": "거점 확보",
+      "objective": "작전 목표",
+      "objectiveShort": "전선 운영",
       "relayMarker": "중계기",
       "extractionMarker": "탈출 지점",
       "meters": "m",
@@ -1437,15 +1457,15 @@ window.GAME_DB = {
       "bossObjective": "추격 요새 격파",
       "extractObjective": "탈출 지점으로 이동",
       "relaysObjective": "세 중계기를 원하는 순서로 확보",
-      "relayHint": "빛나는 원 안에서 싸우면 점령이 진행됩니다.",
-      "combatHint": "이동만 해도 자동 사격합니다. 적 잔해를 회수해 성장하세요.",
-      "scrapHint": "고철을 남기면 장갑, E로 쓰면 광역 폭발.",
-      "bossHint": "붉은 돌진 경고를 보고 옆으로 대시하세요.",
+      "relayHint": "보급선으로 연결된 거점만 생산·건설·증원 효과를 냅니다.",
+      "combatHint": "Tab 전술 지도 · 우클릭 명령 · 1 전체 선택 · 2/3 동료 선택",
+      "scrapHint": "보급소를 연결해 자원을 벌고, 전력을 끊어 적 요새를 약화시키세요.",
+      "bossHint": "정면 화력전이 어렵다면 적 전력 거점을 끊고 부대를 재배치하세요.",
       "extractHint": "탈출 원 안에서 버티면 항로 돌파 완료!",
       "map": "전술 지도",
-      "build": "이번 항로의 빌드",
-      "emptyBuild": "잔해를 회수하면 새 개조를 선택할 수 있습니다.",
-      "upgrades": "장착한 개조",
+      "build": "영구 장비 구성",
+      "emptyBuild": "정비고에서 원하는 모듈을 구입하고 장착하세요.",
+      "upgrades": "장착 모듈",
       "weapon": "주 무장",
       "range": "사거리",
       "damage": "공격",
@@ -1464,7 +1484,7 @@ window.GAME_DB = {
       "soundOff": "사운드 꺼짐",
       "help": "조작 가이드",
       "db": "콘텐츠 DB",
-      "export": "진행 저장",
+      "export": "캠페인 저장 내보내기",
       "import": "저장 불러오기",
       "close": "닫기",
       "cancel": "취소",
@@ -1493,8 +1513,8 @@ window.GAME_DB = {
       "noSave": "이어갈 항로가 없습니다.",
       "autoSaved": "자동 저장",
       "loadFailed": "저장 파일을 읽을 수 없습니다.",
-      "firstHint": "WASD로 이동하면 비행정이 자동으로 적을 공격합니다.",
-      "mobileHint": "왼쪽 조이스틱으로 이동하고 아래 능력 버튼을 누르세요.",
+      "firstHint": "P로 전술 정지 → 동료 선택 → 지도 우클릭으로 명령. 동료도 거점을 점령합니다.",
+      "mobileHint": "P 버튼으로 멈추고, 동료 카드를 고른 뒤 지도에서 목적지를 누르세요.",
       "manualHint": "마우스를 누르면 그 방향으로 직접 조준합니다.",
       "dash": "추진 돌파",
       "burst": "자력 폭발",
@@ -1504,20 +1524,20 @@ window.GAME_DB = {
       "controlsDash": "대시 / 회피",
       "controlsBurst": "고철로 광역 반격",
       "controlsTurret": "자동 포탑 설치",
-      "controlsPause": "전술 정지",
+      "controlsPause": "정지하고 명령 설계",
       "controlKeysMove": "W A S D / 방향키",
       "controlKeysAim": "마우스 누르기",
       "controlKeysDash": "SPACE",
       "controlKeysBurst": "E",
       "controlKeysTurret": "Q",
       "controlKeysPause": "P / ESC",
-      "helpEyebrow": "LESS READING. MORE RAIDING.",
-      "helpTitle": "이것만 알면 바로 출격.",
-      "helpFooter": "자동 사격이 기본입니다. 처음에는 움직이며 대시로 피하는 것부터 시작하세요. 능력은 아래 버튼으로도 사용할 수 있습니다.",
+      "helpEyebrow": "PLAN THE FRONT. COMMAND THE FIGHT.",
+      "helpTitle": "손보다 먼저, 전선을 움직이세요.",
+      "helpFooter": "전술 정지 중에도 동료 선택과 명령, 건설 계획을 입력할 수 있습니다. 적은 고정된 퍼즐처럼 기다리지 않고 보급소를 탈환합니다.",
       "dbEyebrow": "TUNE YOUR OWN WASTELAND",
       "dbTitle": "전장의 설계 데이터",
-      "dbBody": "수치·무기·적·개조·맵·문구는 game-db.js에서 관리합니다. 아래에서 검증하고 DB 파일 또는 현재 데이터를 포함한 단일 HTML을 내보낼 수 있습니다.",
-      "dbHelp": "저장소 변경은 game-db.js에 반영하세요. 무기는 weapons, 적은 enemies, 개조는 upgrades, 비행정은 rigs, 전투 규칙은 config에서 수정합니다. 자세한 스키마는 _docs를 확인하세요.",
+      "dbBody": "영구 성장·정비고·연구·항로는 campaign, 야전 전술·시설·작전 규칙은 tactics에서 관리합니다. 모든 데이터의 원본은 game-db.js입니다.",
+      "dbHelp": "영구 모듈은 campaign.modules, 연구는 campaign.research, 임무는 campaign.sectors, 동료는 campaign.units, 시설은 tactics.structures를 수정하세요. 수치·문구·규칙은 DB에 두고 HTML은 참조합니다.",
       "dbValidate": "DB 검증",
       "dbOkay": "데이터 구조와 참조가 유효합니다.",
       "dbInvalid": "DB 구조를 확인하세요.",
@@ -1525,8 +1545,8 @@ window.GAME_DB = {
       "dbDownload": "DB 파일 받기",
       "htmlDownload": "단일 HTML 받기",
       "dbNote": "내려받은 game-db.js를 index.html과 같은 폴더에 두면 적용됩니다. 단일 HTML은 파일 하나만으로 실행됩니다.",
-      "fileName": "폭주_항로.html",
-      "saveName": "폭주_항로_저장.json",
+      "fileName": "폭주_항로_캠페인.html",
+      "saveName": "폭주_항로_캠페인.json",
       "dbName": "game-db.js",
       "menuConfirmTitle": "현재 항로를 떠날까요?",
       "menuConfirmBody": "진행은 자동 저장됩니다. 나중에 이어갈 수 있습니다.",
@@ -1543,9 +1563,69 @@ window.GAME_DB = {
       "mutedNotice": "버튼으로 사운드를 켤 수 있습니다.",
       "noMoreUpgrades": "개조 완료",
       "salvaged": "인양",
-      "revision": "REALTIME REBUILD · 02",
+      "revision": "COMMAND & CONQUER YOUR ROUTE · 03",
       "attackEffect": "범위 반격",
-      "armor": "피해 감소"
+      "armor": "피해 감소",
+      "resume": "명령 실행",
+      "planningTitle": "전술 정지 · 판단할 시간",
+      "planningBody": "동료를 선택하고 지도 우클릭. 명령을 내린 뒤 P로 전투를 재개하세요.",
+      "supply": "야전 보급",
+      "network": "연결",
+      "income": "생산",
+      "squad": "동료 분대",
+      "selectAll": "전체 선택",
+      "selected": "선택됨",
+      "noAllies": "생존한 동료가 없습니다. 연결된 거점에서 증원할 수 있습니다.",
+      "orderContext": "상황 명령",
+      "orderMove": "이동",
+      "orderAttack": "집중 공격",
+      "orderHold": "위치 방어",
+      "orderFollow": "기체 호위",
+      "orderCapture": "거점 점령",
+      "orderBuild": "시설 건설",
+      "orderQueued": "명령 대기열에 추가했습니다.",
+      "orderSent": "명령을 전달했습니다.",
+      "orderHint": "우클릭 상황 명령 · Shift로 명령 대기열 추가 · P 정지/재개",
+      "selectFirst": "돌격대 선택",
+      "selectSecond": "지원대 선택",
+      "tacticalMap": "전술 지도",
+      "reinforce": "증원",
+      "buildAt": "연결된 아군 거점 근처를 선택하세요.",
+      "reinforceAt": "증원할 아군 연결 거점을 먼저 선택하세요.",
+      "nodeActions": "거점 운영",
+      "connected": "보급 연결",
+      "disconnected": "보급 단절",
+      "playerOwner": "아군",
+      "enemyOwner": "적군",
+      "neutralOwner": "중립",
+      "supplyRole": "보급소",
+      "powerRole": "전력탑",
+      "intelRole": "관제소",
+      "factoryRole": "생산소",
+      "hq": "지휘 본부",
+      "cargo": "수송대",
+      "fieldSupport": "보급 · 전력 · 정보",
+      "enemyPush": "적 진격 예상",
+      "intelRequired": "관제소를 연결하면 적의 다음 공격 목표를 확인할 수 있습니다.",
+      "retreat": "장비 보존 귀환",
+      "retreatHint": "본부 또는 연결 거점 근처에서 귀환할 수 있습니다. 기존 장비·연구는 남습니다.",
+      "returnHQ": "작전 본부",
+      "missionContinue": "진행 중인 작전 복귀",
+      "campaignSaved": "캠페인과 작전 진행을 저장했습니다.",
+      "campaignLoaded": "영구 성장과 작전 진행을 복원했습니다.",
+      "legacyMigrated": "기존 기체 계급과 획득 개조를 영구 정비고로 옮겼습니다.",
+      "missionInvalid": "저장된 작전과 캠페인의 진행이 맞지 않습니다.",
+      "controlsSquad": "분대 선택",
+      "controlsOrders": "이동·공격·점령 명령",
+      "controlsMap": "전체 전술 지도",
+      "controlKeysSquad": "1 전체 · 2/3 동료",
+      "controlKeysOrders": "지도 우클릭 / 정지 중 터치",
+      "controlKeysMap": "TAB",
+      "tutorialSecondsNote": "전투 후 다음 항로와 정비고로 이어집니다. 패배해도 기존 연구와 장비는 초기화되지 않습니다.",
+      "networkConnected": "보급 연결",
+      "networkIsolated": "보급 단절",
+      "convoy": "호송 수송대",
+      "salvageCrate": "회수품"
     },
     "abilityKeys": {
       "dash": "SPACE",
@@ -1554,28 +1634,28 @@ window.GAME_DB = {
     },
     "help": [
       {
-        "icon": "move",
-        "title": "움직이며 쏜다",
-        "body": "WASD 또는 방향키로 이동하세요. 가까운 적을 자동으로 공격합니다. 마우스를 누르면 원하는 방향으로 사격할 수 있습니다.",
-        "key": "WASD"
+        "icon": "flag",
+        "title": "출격 전에 원하는 빌드를 설계",
+        "body": "임무 보상으로 원하는 장비를 직접 구입하고 강화하세요. 모듈 슬롯과 전력 한도 안에서 기체, 동료 편성, 교리를 조합합니다. 장비는 다음 항로에도 남습니다.",
+        "key": "정비고"
       },
       {
-        "icon": "dash",
-        "title": "대시는 생존이자 공격",
-        "body": "위험한 탄막과 돌진은 옆으로 대시해서 피하세요. 적을 관통하며 충돌 피해를 줄 수도 있습니다.",
-        "key": "SPACE"
+        "icon": "pause",
+        "title": "정지하고 분대를 지휘",
+        "body": "P로 전장을 멈추세요. 동료 카드를 선택하고 지도에서 우클릭하면 이동·공격·점령을 명령합니다. Shift를 누르면 명령을 순서대로 예약합니다.",
+        "key": "P · 1/2/3 · 우클릭"
       },
       {
-        "icon": "magnet",
-        "title": "잔해로 흐름을 뒤집는다",
-        "body": "적이 남긴 잔해를 회수하면 성장합니다. 모은 고철은 장갑이 되고, 자력 폭발을 쓰면 주변의 적을 밀어냅니다.",
-        "key": "E"
+        "icon": "relay",
+        "title": "거점보다 보급선을 운영",
+        "body": "보급소는 야전 자원을 생산하고, 전력탑은 요새와 시설을 지원하며, 관제소는 적의 다음 공세를 보여줍니다. 단절된 거점을 다시 연결하거나 적 연결망을 끊어보세요.",
+        "key": "TAB"
       },
       {
         "icon": "turret",
-        "title": "원하는 전선을 만든다",
-        "body": "포탑으로 한쪽 길을 막고 중계기를 확보하세요. 확보 순서와 개조 선택은 자유입니다. 모두 확보하면 추격 요새가 나타납니다.",
-        "key": "Q"
+        "title": "임무에 맞는 전선을 구성",
+        "body": "연결된 거점에 포탑·수리 시설을 건설하거나 동료를 증원하세요. 돌파전·호위·방어·회수 작전을 마치면 보상과 다음 전선이 열립니다.",
+        "key": "거점 운영"
       }
     ],
     "icons": {
@@ -1616,7 +1696,10 @@ window.GAME_DB = {
       "damage": "\u003cpath d='m3 16 8-8 3 3 7-7v6l-7 7-3-3-5 5-3-3ZM9 9l6 6'/>",
       "magnetism": "\u003cpath d='M5 3v10a7 7 0 0 0 14 0V3h-5v10a2 2 0 0 1-4 0V3H5Zm0 5h5m4 0h5'/>",
       "energy": "\u003cpath d='m14 2-9 12h6l-1 8 9-12h-6l1-8Z'/>",
-      "health": "\u003cpath d='M9 3h6v6h6v6h-6v6H9v-6H3V9h6V3Z'/>"
+      "health": "\u003cpath d='M9 3h6v6h6v6h-6v6H9v-6H3V9h6V3Z'/>",
+      "map": "\u003cpath d='m2 5 6-3 8 3 6-3v17l-6 3-8-3-6 3V5Zm6-3v17m8-14v17'/>",
+      "factory": "\u003cpath d='M3 21V9l6 4V8l6 4V3h5v18H3Zm4-4h1m4 0h1m4 0h1'/>",
+      "research": "\u003cpath d='M8 2h8m-6 0v7l-7 11h18L14 9V2M7 15h10'/>"
     },
     "bindings": {
       "up": [
@@ -1647,6 +1730,22 @@ window.GAME_DB = {
       "pause": [
         "KeyP",
         "Escape"
+      ],
+      "selectAll": [
+        "Digit1"
+      ],
+      "selectFirst": [
+        "Digit2"
+      ],
+      "selectSecond": [
+        "Digit3"
+      ],
+      "map": [
+        "Tab"
+      ],
+      "queue": [
+        "ShiftLeft",
+        "ShiftRight"
       ]
     },
     "phaseLabels": {
@@ -1662,25 +1761,2233 @@ window.GAME_DB = {
         "key": "controlKeysMove"
       },
       {
-        "label": "controlsAim",
-        "key": "controlKeysAim"
-      },
-      {
-        "label": "controlsDash",
-        "key": "controlKeysDash"
-      },
-      {
-        "label": "controlsBurst",
-        "key": "controlKeysBurst"
-      },
-      {
-        "label": "controlsTurret",
-        "key": "controlKeysTurret"
-      },
-      {
         "label": "controlsPause",
         "key": "controlKeysPause"
+      },
+      {
+        "label": "controlsSquad",
+        "key": "controlKeysSquad"
+      },
+      {
+        "label": "controlsOrders",
+        "key": "controlKeysOrders"
+      },
+      {
+        "label": "controlsMap",
+        "key": "controlKeysMap"
       }
-    ]
+    ],
+    "commands": [
+      {
+        "id": "context",
+        "text": "orderContext",
+        "icon": "crosshair"
+      },
+      {
+        "id": "move",
+        "text": "orderMove",
+        "icon": "move"
+      },
+      {
+        "id": "attack",
+        "text": "orderAttack",
+        "icon": "weapon"
+      },
+      {
+        "id": "hold",
+        "text": "orderHold",
+        "icon": "shield"
+      },
+      {
+        "id": "follow",
+        "text": "orderFollow",
+        "icon": "drone"
+      },
+      {
+        "id": "build",
+        "text": "orderBuild",
+        "icon": "turret"
+      }
+    ],
+    "orderLabels": {
+      "move": "orderMove",
+      "attack": "orderAttack",
+      "hold": "orderHold",
+      "follow": "orderFollow",
+      "capture": "orderCapture"
+    },
+    "roleLabels": {
+      "supply": "supplyRole",
+      "power": "powerRole",
+      "intel": "intelRole",
+      "factory": "factoryRole"
+    }
+  },
+  "campaign": {
+    "_docs": {
+      "purpose": "영구 캠페인·창고·연구·기체·동료·작전 데이터. 실행 코드는 campaign engine에 있고 원본은 game-db.js의 campaign입니다.",
+      "modules": "modules stats는 등급마다 반복 적용. power + (rank-1)*rankPower의 전력을 소비하며 4슬롯과 전력 한도를 지켜 편성합니다. 소유 장비·연구·기체 등급은 패배해도 소실되지 않습니다. requires는 무기 모드 또는 장착 빌드 스탯 조건입니다.",
+      "research": "requires 연구를 모두 완료한 뒤 비용을 지불합니다. stats는 플레이어, supportStats는 부대·보급 배율, powerBonus는 장착 전력을 확장합니다.",
+      "sector": "requires 전선을 점령하면 잠금 해제. requireMode=any는 어느 한 곳만 점령해도 됩니다. owned 전선은 재출격 가능하며 승리한 작전마다 income을 제공합니다. 최종 전선을 확보한 뒤에도 작전과 성장은 계속됩니다.",
+      "settlement": "makeMission의 고유 id와 같은 missionId만 한 번 정산합니다. 전투 phase와 missionResult, missionLoot를 받아 영구 자원·경험·전선 상태를 갱신합니다. 실패 시에도 장비와 성장 그대로, 일부 회수 보상만 감소합니다."
+    },
+    "config": {
+      "version": 3,
+      "defaultSeed": "FRONTIER-01",
+      "slots": 4,
+      "powerBase": 7,
+      "squadSlots": 2,
+      "startResources": {
+        "alloy": 160,
+        "data": 30
+      },
+      "startModules": [
+        {
+          "id": "hotbarrel",
+          "rank": 1
+        },
+        {
+          "id": "shieldcell",
+          "rank": 1
+        }
+      ],
+      "startLoadout": [
+        "hotbarrel",
+        "shieldcell",
+        null,
+        null
+      ],
+      "startUnits": [
+        "vanguard",
+        "engineer"
+      ],
+      "startSquad": [
+        "vanguard",
+        "engineer"
+      ],
+      "defaultDoctrine": "maneuver",
+      "careerStartLevel": 1,
+      "careerXpBase": 36,
+      "careerXpGrowth": 18,
+      "careerMaxLevel": 40,
+      "careerStats": [
+        {
+          "stat": "maxHp",
+          "op": "add",
+          "value": 2
+        },
+        {
+          "stat": "damage",
+          "op": "add",
+          "value": 0.02
+        }
+      ],
+      "rigStartRank": 1,
+      "rigMaxRank": 6,
+      "rigCost": {
+        "alloy": 85,
+        "data": 12
+      },
+      "rigCostGrowth": 1.45,
+      "rigStats": [
+        {
+          "stat": "maxHp",
+          "op": "add",
+          "value": 8
+        },
+        {
+          "stat": "damage",
+          "op": "add",
+          "value": 0.04
+        }
+      ],
+      "unitStartRank": 1,
+      "unitMaxRank": 5,
+      "unitCost": {
+        "alloy": 50,
+        "data": 6
+      },
+      "unitCostGrowth": 1.45,
+      "unitRankHp": 0.12,
+      "unitRankDamage": 0.1,
+      "defeatLootFraction": 0.35,
+      "withdrawLootFraction": 0.55,
+      "victoryXp": 28,
+      "defeatXp": 12,
+      "withdrawXp": 18,
+      "killXp": 1,
+      "defeatResources": {
+        "alloy": 12,
+        "data": 1
+      },
+      "repeatDifficulty": 0.06,
+      "completedDifficulty": 0.12,
+      "resourceCap": 999999,
+      "legacyLevelCap": 40,
+      "supportBase": {
+        "supplyIncome": 1,
+        "unitDamage": 1,
+        "unitHp": 1,
+        "constructionCost": 1
+      },
+      "legacyDefaultLoadout": true
+    },
+    "resources": {
+      "alloy": {
+        "name": "합금",
+        "icon": "scrap",
+        "color": "#f3c275"
+      },
+      "data": {
+        "name": "설계 자료",
+        "icon": "db",
+        "color": "#a7b8ef"
+      }
+    },
+    "modules": [
+      {
+        "id": "hotbarrel",
+        "name": "과급 리벳",
+        "description": "주무기 공격 속도 +25%. 빠른 사격으로 접근하기 전에 분해합니다.",
+        "icon": "weapon",
+        "stats": [
+          {
+            "stat": "fireRate",
+            "op": "add",
+            "value": 0.25
+          }
+        ],
+        "ref": "hotbarrel",
+        "tag": "연사",
+        "color": "#8ef0cf",
+        "cost": {
+          "alloy": 42,
+          "data": 2
+        },
+        "upgradeCost": {
+          "alloy": 36,
+          "data": 4
+        },
+        "upgradeGrowth": 1.6,
+        "power": 2,
+        "rankPower": 0.5,
+        "maxRank": 3
+      },
+      {
+        "id": "fracture",
+        "name": "균열 탄두",
+        "description": "모든 주무기 피해 +25%. 전격과 산탄에도 적용됩니다.",
+        "icon": "weapon",
+        "stats": [
+          {
+            "stat": "damage",
+            "op": "add",
+            "value": 0.25
+          }
+        ],
+        "ref": "fracture",
+        "tag": "화력",
+        "color": "#f3c275",
+        "cost": {
+          "alloy": 50,
+          "data": 2
+        },
+        "upgradeCost": {
+          "alloy": 46,
+          "data": 4
+        },
+        "upgradeGrowth": 1.6,
+        "power": 2,
+        "rankPower": 0.5,
+        "maxRank": 3
+      },
+      {
+        "id": "splitter",
+        "name": "분열 총구",
+        "description": "주무기 발사체 +1, 발사각이 조금 넓어집니다.",
+        "icon": "weapon",
+        "stats": [
+          {
+            "stat": "projectileCount",
+            "op": "add",
+            "value": 1
+          },
+          {
+            "stat": "spreadBonus",
+            "op": "add",
+            "value": 0.14
+          }
+        ],
+        "ref": "splitter",
+        "tag": "산탄",
+        "color": "#8ef0cf",
+        "cost": {
+          "alloy": 58,
+          "data": 6
+        },
+        "upgradeCost": {
+          "alloy": 56,
+          "data": 4
+        },
+        "upgradeGrowth": 1.6,
+        "power": 3,
+        "rankPower": 0.5,
+        "maxRank": 3,
+        "requires": {
+          "weaponMode": "projectile"
+        }
+      },
+      {
+        "id": "piercer",
+        "name": "관통 심",
+        "description": "발사체가 적 1기를 추가 관통합니다.",
+        "icon": "weapon",
+        "stats": [
+          {
+            "stat": "pierce",
+            "op": "add",
+            "value": 1
+          }
+        ],
+        "ref": "piercer",
+        "tag": "관통",
+        "color": "#8ef0cf",
+        "cost": {
+          "alloy": 66,
+          "data": 2
+        },
+        "upgradeCost": {
+          "alloy": 36,
+          "data": 4
+        },
+        "upgradeGrowth": 1.6,
+        "power": 2,
+        "rankPower": 0.5,
+        "maxRank": 3,
+        "requires": {
+          "weaponMode": "projectile"
+        }
+      },
+      {
+        "id": "arcnode",
+        "name": "도전성 잔해",
+        "description": "공격 적중 시 다른 적에게 1회 연쇄 전격.",
+        "icon": "bolt",
+        "stats": [
+          {
+            "stat": "chainCount",
+            "op": "add",
+            "value": 1
+          }
+        ],
+        "ref": "arcnode",
+        "tag": "연쇄",
+        "color": "#8ef0cf",
+        "cost": {
+          "alloy": 42,
+          "data": 6
+        },
+        "upgradeCost": {
+          "alloy": 46,
+          "data": 4
+        },
+        "upgradeGrowth": 1.6,
+        "power": 3,
+        "rankPower": 0.5,
+        "maxRank": 3
+      },
+      {
+        "id": "capacitor",
+        "name": "고전압 코일",
+        "description": "연쇄 전격 사거리 +70, 연쇄 피해 +15%p.",
+        "icon": "bolt",
+        "stats": [
+          {
+            "stat": "chainRange",
+            "op": "add",
+            "value": 70
+          },
+          {
+            "stat": "chainDamage",
+            "op": "add",
+            "value": 0.15
+          }
+        ],
+        "ref": "capacitor",
+        "tag": "연쇄",
+        "color": "#8ef0cf",
+        "cost": {
+          "alloy": 50,
+          "data": 2
+        },
+        "upgradeCost": {
+          "alloy": 56,
+          "data": 4
+        },
+        "upgradeGrowth": 1.6,
+        "power": 2,
+        "rankPower": 0.5,
+        "maxRank": 3,
+        "requires": {
+          "any": [
+            {
+              "stat": "chainCount",
+              "min": 1
+            },
+            {
+              "weaponStat": "chain",
+              "min": 1
+            }
+          ]
+        },
+        "research": "conductors"
+      },
+      {
+        "id": "orbital",
+        "name": "분쇄 궤도",
+        "description": "고철 장갑의 접촉 피해 +3. 고철을 아껴 근접전을 강화합니다.",
+        "icon": "scrap",
+        "stats": [
+          {
+            "stat": "orbitDamage",
+            "op": "add",
+            "value": 3
+          }
+        ],
+        "ref": "orbital",
+        "tag": "고철",
+        "color": "#8ef0cf",
+        "cost": {
+          "alloy": 58,
+          "data": 2
+        },
+        "upgradeCost": {
+          "alloy": 36,
+          "data": 4
+        },
+        "upgradeGrowth": 1.6,
+        "power": 2,
+        "rankPower": 0.5,
+        "maxRank": 3
+      },
+      {
+        "id": "magnet",
+        "name": "확장 자력장",
+        "description": "잔해와 경험치 회수 반경 +65. 위험한 회수 동선을 줄입니다.",
+        "icon": "scrap",
+        "stats": [
+          {
+            "stat": "pickupRadius",
+            "op": "add",
+            "value": 65
+          }
+        ],
+        "ref": "magnet",
+        "tag": "회수",
+        "color": "#8ef0cf",
+        "cost": {
+          "alloy": 66,
+          "data": 2
+        },
+        "upgradeCost": {
+          "alloy": 46,
+          "data": 4
+        },
+        "upgradeGrowth": 1.6,
+        "power": 2,
+        "rankPower": 0.5,
+        "maxRank": 3
+      },
+      {
+        "id": "overdrive",
+        "name": "질주 사격",
+        "description": "움직이는 동안 주무기 피해 +20%.",
+        "icon": "speed",
+        "stats": [
+          {
+            "stat": "movingDamage",
+            "op": "add",
+            "value": 0.2
+          }
+        ],
+        "ref": "overdrive",
+        "tag": "기동",
+        "color": "#8ef0cf",
+        "cost": {
+          "alloy": 42,
+          "data": 2
+        },
+        "upgradeCost": {
+          "alloy": 56,
+          "data": 4
+        },
+        "upgradeGrowth": 1.6,
+        "power": 2,
+        "rankPower": 0.5,
+        "maxRank": 3
+      },
+      {
+        "id": "afterburner",
+        "name": "애프터버너",
+        "description": "이동 속도 +12%, 부스트 재사용 시간 -12%.",
+        "icon": "speed",
+        "stats": [
+          {
+            "stat": "speed",
+            "op": "multiply",
+            "value": 1.12
+          },
+          {
+            "stat": "dashCooldown",
+            "op": "multiply",
+            "value": 0.88
+          }
+        ],
+        "ref": "afterburner",
+        "tag": "기동",
+        "color": "#8ef0cf",
+        "cost": {
+          "alloy": 50,
+          "data": 2
+        },
+        "upgradeCost": {
+          "alloy": 36,
+          "data": 4
+        },
+        "upgradeGrowth": 1.6,
+        "power": 2,
+        "rankPower": 0.5,
+        "maxRank": 3
+      },
+      {
+        "id": "ramplate",
+        "name": "충각 이빨",
+        "description": "부스트 충돌 피해 +25. 돌진을 공격 수단으로 바꿉니다.",
+        "icon": "armor",
+        "stats": [
+          {
+            "stat": "dashDamage",
+            "op": "add",
+            "value": 25
+          }
+        ],
+        "ref": "ramplate",
+        "tag": "충각",
+        "color": "#f3c275",
+        "cost": {
+          "alloy": 58,
+          "data": 2
+        },
+        "upgradeCost": {
+          "alloy": 46,
+          "data": 4
+        },
+        "upgradeGrowth": 1.6,
+        "power": 2,
+        "rankPower": 0.5,
+        "maxRank": 3
+      },
+      {
+        "id": "phasefuel",
+        "name": "위상 연료",
+        "description": "부스트 재사용 시간 -22%. 무적 진입과 탈출이 빨라집니다.",
+        "icon": "speed",
+        "stats": [
+          {
+            "stat": "dashCooldown",
+            "op": "multiply",
+            "value": 0.78
+          }
+        ],
+        "ref": "phasefuel",
+        "tag": "기동",
+        "color": "#8ef0cf",
+        "cost": {
+          "alloy": 66,
+          "data": 2
+        },
+        "upgradeCost": {
+          "alloy": 56,
+          "data": 4
+        },
+        "upgradeGrowth": 1.6,
+        "power": 2,
+        "rankPower": 0.5,
+        "maxRank": 3
+      },
+      {
+        "id": "stormcore",
+        "name": "자력 폭심",
+        "description": "고철 폭풍 피해 +18, 반경 +35.",
+        "icon": "burst",
+        "stats": [
+          {
+            "stat": "burstDamage",
+            "op": "add",
+            "value": 18
+          },
+          {
+            "stat": "burstRadius",
+            "op": "add",
+            "value": 35
+          }
+        ],
+        "ref": "stormcore",
+        "tag": "폭발",
+        "color": "#f3c275",
+        "cost": {
+          "alloy": 42,
+          "data": 2
+        },
+        "upgradeCost": {
+          "alloy": 36,
+          "data": 4
+        },
+        "upgradeGrowth": 1.6,
+        "power": 2,
+        "rankPower": 0.5,
+        "maxRank": 3
+      },
+      {
+        "id": "rapidburst",
+        "name": "응축 자석",
+        "description": "고철 폭풍 재사용 시간 -22%.",
+        "icon": "burst",
+        "stats": [
+          {
+            "stat": "burstCooldown",
+            "op": "multiply",
+            "value": 0.78
+          }
+        ],
+        "ref": "rapidburst",
+        "tag": "폭발",
+        "color": "#f3c275",
+        "cost": {
+          "alloy": 50,
+          "data": 2
+        },
+        "upgradeCost": {
+          "alloy": 46,
+          "data": 4
+        },
+        "upgradeGrowth": 1.6,
+        "power": 2,
+        "rankPower": 0.5,
+        "maxRank": 3
+      },
+      {
+        "id": "autoturret",
+        "name": "연동 포탑",
+        "description": "포탑 피해 +6, 지속 시간 +4초.",
+        "icon": "turret",
+        "stats": [
+          {
+            "stat": "turretDamage",
+            "op": "add",
+            "value": 6
+          },
+          {
+            "stat": "turretDuration",
+            "op": "add",
+            "value": 4
+          }
+        ],
+        "ref": "autoturret",
+        "tag": "지원",
+        "color": "#8ef0cf",
+        "cost": {
+          "alloy": 58,
+          "data": 2
+        },
+        "upgradeCost": {
+          "alloy": 56,
+          "data": 4
+        },
+        "upgradeGrowth": 1.6,
+        "power": 2,
+        "rankPower": 0.5,
+        "maxRank": 3
+      },
+      {
+        "id": "sentrynet",
+        "name": "접이식 포탑",
+        "description": "포탑 재사용 시간 -25%. 점령 지대를 방어하세요.",
+        "icon": "turret",
+        "stats": [
+          {
+            "stat": "turretCooldown",
+            "op": "multiply",
+            "value": 0.75
+          }
+        ],
+        "ref": "sentrynet",
+        "tag": "지원",
+        "color": "#8ef0cf",
+        "cost": {
+          "alloy": 66,
+          "data": 2
+        },
+        "upgradeCost": {
+          "alloy": 36,
+          "data": 4
+        },
+        "upgradeGrowth": 1.6,
+        "power": 2,
+        "rankPower": 0.5,
+        "maxRank": 3
+      },
+      {
+        "id": "wingman",
+        "name": "회수 드론",
+        "description": "자동 공격하는 보조 드론 +1. 회수와 기동에 집중할 수 있습니다.",
+        "icon": "drone",
+        "stats": [
+          {
+            "stat": "droneCount",
+            "op": "add",
+            "value": 1
+          }
+        ],
+        "ref": "wingman",
+        "tag": "드론",
+        "color": "#8ef0cf",
+        "cost": {
+          "alloy": 42,
+          "data": 6
+        },
+        "upgradeCost": {
+          "alloy": 46,
+          "data": 4
+        },
+        "upgradeGrowth": 1.6,
+        "power": 3,
+        "rankPower": 0.5,
+        "maxRank": 3,
+        "research": "drone-license"
+      },
+      {
+        "id": "dronerack",
+        "name": "드론 가속기",
+        "description": "보조 드론 공격 속도 +35%. 드론 보유 시 효과적입니다.",
+        "icon": "drone",
+        "stats": [
+          {
+            "stat": "droneRate",
+            "op": "multiply",
+            "value": 0.65
+          }
+        ],
+        "ref": "dronerack",
+        "tag": "드론",
+        "color": "#8ef0cf",
+        "cost": {
+          "alloy": 50,
+          "data": 2
+        },
+        "upgradeCost": {
+          "alloy": 56,
+          "data": 4
+        },
+        "upgradeGrowth": 1.6,
+        "power": 2,
+        "rankPower": 0.5,
+        "maxRank": 3,
+        "requires": {
+          "stat": "droneCount",
+          "min": 1
+        },
+        "research": "drone-license"
+      },
+      {
+        "id": "wakebomb",
+        "name": "잔향 기뢰",
+        "description": "부스트 시 출발점에 기뢰 +1. 추격자를 역으로 터뜨립니다.",
+        "icon": "mine",
+        "stats": [
+          {
+            "stat": "mineCount",
+            "op": "add",
+            "value": 1
+          }
+        ],
+        "ref": "wakebomb",
+        "tag": "기뢰",
+        "color": "#f3c275",
+        "cost": {
+          "alloy": 58,
+          "data": 6
+        },
+        "upgradeCost": {
+          "alloy": 36,
+          "data": 4
+        },
+        "upgradeGrowth": 1.6,
+        "power": 3,
+        "rankPower": 0.5,
+        "maxRank": 3,
+        "research": "demolition"
+      },
+      {
+        "id": "blastcase",
+        "name": "열압 탄피",
+        "description": "탄환 명중 시 반경 45 폭발. 밀집한 적에게 효과적입니다.",
+        "icon": "burst",
+        "stats": [
+          {
+            "stat": "splashRadius",
+            "op": "add",
+            "value": 45
+          }
+        ],
+        "ref": "blastcase",
+        "tag": "폭발",
+        "color": "#f3c275",
+        "cost": {
+          "alloy": 66,
+          "data": 6
+        },
+        "upgradeCost": {
+          "alloy": 46,
+          "data": 4
+        },
+        "upgradeGrowth": 1.6,
+        "power": 3,
+        "rankPower": 0.5,
+        "maxRank": 3,
+        "requires": {
+          "weaponMode": "projectile"
+        },
+        "research": "demolition"
+      },
+      {
+        "id": "shieldcell",
+        "name": "재생 방벽",
+        "description": "최대 보호막 +15. 피격을 피하면 자동 재생합니다.",
+        "icon": "shield",
+        "stats": [
+          {
+            "stat": "maxShield",
+            "op": "add",
+            "value": 15
+          }
+        ],
+        "ref": "shieldcell",
+        "tag": "방어",
+        "color": "#8ef0cf",
+        "cost": {
+          "alloy": 42,
+          "data": 2
+        },
+        "upgradeCost": {
+          "alloy": 56,
+          "data": 4
+        },
+        "upgradeGrowth": 1.6,
+        "power": 2,
+        "rankPower": 0.5,
+        "maxRank": 3
+      },
+      {
+        "id": "nanorepair",
+        "name": "잔해 재생기",
+        "description": "적 처치마다 선체 1.5 회복. 전투를 이어갈수록 버팁니다.",
+        "icon": "repair",
+        "stats": [
+          {
+            "stat": "killHeal",
+            "op": "add",
+            "value": 1.5
+          }
+        ],
+        "ref": "nanorepair",
+        "tag": "회복",
+        "color": "#8ef0cf",
+        "cost": {
+          "alloy": 50,
+          "data": 2
+        },
+        "upgradeCost": {
+          "alloy": 36,
+          "data": 4
+        },
+        "upgradeGrowth": 1.6,
+        "power": 2,
+        "rankPower": 0.5,
+        "maxRank": 3
+      },
+      {
+        "id": "plating",
+        "name": "적층 장갑",
+        "description": "받는 공격 피해 -2. 매 공격의 최소 피해는 1입니다.",
+        "icon": "armor",
+        "stats": [
+          {
+            "stat": "armor",
+            "op": "add",
+            "value": 2
+          }
+        ],
+        "ref": "plating",
+        "tag": "장갑",
+        "color": "#8ef0cf",
+        "cost": {
+          "alloy": 58,
+          "data": 6
+        },
+        "upgradeCost": {
+          "alloy": 46,
+          "data": 4
+        },
+        "upgradeGrowth": 1.6,
+        "power": 3,
+        "rankPower": 0.5,
+        "maxRank": 3
+      },
+      {
+        "id": "hull",
+        "name": "확장 선체",
+        "description": "최대 선체 +25, 선체 25 회복.",
+        "icon": "repair",
+        "stats": [
+          {
+            "stat": "maxHp",
+            "op": "add",
+            "value": 25
+          }
+        ],
+        "ref": "hull",
+        "tag": "생존",
+        "color": "#8ef0cf",
+        "cost": {
+          "alloy": 66,
+          "data": 2
+        },
+        "upgradeCost": {
+          "alloy": 56,
+          "data": 4
+        },
+        "upgradeGrowth": 1.6,
+        "power": 2,
+        "rankPower": 0.5,
+        "maxRank": 3
+      },
+      {
+        "id": "crit",
+        "name": "틈새 조준",
+        "description": "치명타 확률 +12%p. 치명타는 기본 피해의 1.8배입니다.",
+        "icon": "target",
+        "stats": [
+          {
+            "stat": "critChance",
+            "op": "add",
+            "value": 0.12
+          }
+        ],
+        "ref": "crit",
+        "tag": "치명",
+        "color": "#f3c275",
+        "cost": {
+          "alloy": 42,
+          "data": 2
+        },
+        "upgradeCost": {
+          "alloy": 36,
+          "data": 4
+        },
+        "upgradeGrowth": 1.6,
+        "power": 2,
+        "rankPower": 0.5,
+        "maxRank": 3,
+        "research": "targeting"
+      },
+      {
+        "id": "signal",
+        "name": "우회 신호기",
+        "description": "중계기 수리 속도 +30%, 고철 4개 즉시 획득.",
+        "icon": "relay",
+        "stats": [
+          {
+            "stat": "relaySpeed",
+            "op": "add",
+            "value": 0.3
+          }
+        ],
+        "ref": "signal",
+        "tag": "점령",
+        "color": "#8ef0cf",
+        "cost": {
+          "alloy": 50,
+          "data": 2
+        },
+        "upgradeCost": {
+          "alloy": 46,
+          "data": 4
+        },
+        "upgradeGrowth": 1.6,
+        "power": 2,
+        "rankPower": 0.5,
+        "maxRank": 3
+      },
+      {
+        "id": "killshield",
+        "name": "반응 차폐",
+        "description": "적 처치마다 보호막 +3.",
+        "icon": "shield",
+        "stats": [
+          {
+            "stat": "killShield",
+            "op": "add",
+            "value": 3
+          }
+        ],
+        "ref": "killshield",
+        "tag": "방어",
+        "color": "#8ef0cf",
+        "cost": {
+          "alloy": 58,
+          "data": 2
+        },
+        "upgradeCost": {
+          "alloy": 56,
+          "data": 4
+        },
+        "upgradeGrowth": 1.6,
+        "power": 2,
+        "rankPower": 0.5,
+        "maxRank": 3
+      }
+    ],
+    "research": [
+      {
+        "id": "aux-core",
+        "name": "보조 동력로",
+        "description": "장착 전력 +2. 큰 모듈과 고등급 장비를 함께 운용합니다.",
+        "icon": "bolt",
+        "cost": {
+          "alloy": 55,
+          "data": 16
+        },
+        "requires": [],
+        "powerBonus": 2
+      },
+      {
+        "id": "field-supply",
+        "name": "분산 보급망",
+        "description": "전장의 보급 생산량 +20%. 구조물과 아군 운용에 투자합니다.",
+        "icon": "relay",
+        "cost": {
+          "alloy": 50,
+          "data": 14
+        },
+        "requires": [],
+        "supportStats": [
+          {
+            "stat": "supplyIncome",
+            "op": "multiply",
+            "value": 1.2
+          }
+        ]
+      },
+      {
+        "id": "crew-training",
+        "name": "편대 전투 교범",
+        "description": "모든 동료의 체력 +15%, 화력 +10%.",
+        "icon": "flag",
+        "cost": {
+          "alloy": 65,
+          "data": 18
+        },
+        "requires": [],
+        "supportStats": [
+          {
+            "stat": "unitHp",
+            "op": "multiply",
+            "value": 1.15
+          },
+          {
+            "stat": "unitDamage",
+            "op": "multiply",
+            "value": 1.1
+          }
+        ]
+      },
+      {
+        "id": "conductors",
+        "name": "도전성 폐합금",
+        "description": "고전압 코일을 설계할 수 있습니다. 전격 연쇄 거리 +25.",
+        "icon": "chain",
+        "cost": {
+          "alloy": 65,
+          "data": 22
+        },
+        "requires": [
+          "aux-core"
+        ],
+        "stats": [
+          {
+            "stat": "chainRange",
+            "op": "add",
+            "value": 25
+          }
+        ]
+      },
+      {
+        "id": "drone-license",
+        "name": "자율 비행 제어",
+        "description": "회수 드론과 가속기를 설계합니다. 정비 드론 지원 체계를 해금합니다.",
+        "icon": "drone",
+        "cost": {
+          "alloy": 75,
+          "data": 24
+        },
+        "requires": [
+          "field-supply"
+        ]
+      },
+      {
+        "id": "demolition",
+        "name": "폭압 공학",
+        "description": "잔향 기뢰와 열압 탄피를 설계합니다. 폭발 반격 피해 +10%.",
+        "icon": "mine",
+        "cost": {
+          "alloy": 70,
+          "data": 22
+        },
+        "requires": [
+          "aux-core"
+        ],
+        "stats": [
+          {
+            "stat": "burstDamage",
+            "op": "multiply",
+            "value": 1.1
+          }
+        ]
+      },
+      {
+        "id": "targeting",
+        "name": "정밀 사격 통제",
+        "description": "틈새 조준 설계를 해금하고 모든 동료의 화력 +15%.",
+        "icon": "crosshair",
+        "cost": {
+          "alloy": 80,
+          "data": 26
+        },
+        "requires": [
+          "crew-training"
+        ],
+        "supportStats": [
+          {
+            "stat": "unitDamage",
+            "op": "multiply",
+            "value": 1.15
+          }
+        ]
+      },
+      {
+        "id": "efficient-build",
+        "name": "재사용 공병 자재",
+        "description": "전장 건설 비용 -20%. 중계기 확보 속도 +15%.",
+        "icon": "turret",
+        "cost": {
+          "alloy": 95,
+          "data": 28
+        },
+        "requires": [
+          "field-supply"
+        ],
+        "supportStats": [
+          {
+            "stat": "constructionCost",
+            "op": "multiply",
+            "value": 0.8
+          }
+        ],
+        "stats": [
+          {
+            "stat": "relaySpeed",
+            "op": "add",
+            "value": 0.15
+          }
+        ]
+      },
+      {
+        "id": "deep-reactor",
+        "name": "심층 반응로",
+        "description": "장착 전력 +2. 최대 실드 +12.",
+        "icon": "shield",
+        "cost": {
+          "alloy": 140,
+          "data": 45
+        },
+        "requires": [
+          "aux-core",
+          "conductors"
+        ],
+        "powerBonus": 2,
+        "stats": [
+          {
+            "stat": "maxShield",
+            "op": "add",
+            "value": 12
+          }
+        ]
+      },
+      {
+        "id": "battle-network",
+        "name": "통합 전장 네트워크",
+        "description": "동료 체력 +20%, 보급 생산 +15%, 포탑 사거리 +50.",
+        "icon": "relay",
+        "cost": {
+          "alloy": 150,
+          "data": 44
+        },
+        "requires": [
+          "crew-training",
+          "efficient-build"
+        ],
+        "supportStats": [
+          {
+            "stat": "unitHp",
+            "op": "multiply",
+            "value": 1.2
+          },
+          {
+            "stat": "supplyIncome",
+            "op": "multiply",
+            "value": 1.15
+          }
+        ],
+        "stats": [
+          {
+            "stat": "turretRange",
+            "op": "add",
+            "value": 50
+          }
+        ]
+      }
+    ],
+    "units": [
+      {
+        "id": "vanguard",
+        "name": "철벽 선봉정",
+        "description": "앞에서 적의 주의를 끌고 거점을 지킵니다. 방어선 유지에 적합합니다.",
+        "role": "tank",
+        "behavior": "rifle",
+        "icon": "shield",
+        "shape": "shield",
+        "color": "#83dcb8",
+        "cost": {
+          "alloy": 0,
+          "data": 0
+        },
+        "hp": 145,
+        "damage": 9,
+        "speed": 178,
+        "range": 235,
+        "fireRate": 0.6,
+        "armor": 2,
+        "repairRate": 0,
+        "healRate": 0,
+        "captureRate": 1
+      },
+      {
+        "id": "engineer",
+        "name": "회수 공병정",
+        "description": "아군과 구조물을 수리하고 거점을 빠르게 확보합니다. 보급선을 잇는 지원 부대입니다.",
+        "role": "support",
+        "behavior": "engineer",
+        "icon": "turret",
+        "shape": "hex",
+        "color": "#e3be77",
+        "cost": {
+          "alloy": 0,
+          "data": 0
+        },
+        "hp": 96,
+        "damage": 6,
+        "speed": 190,
+        "range": 235,
+        "fireRate": 0.75,
+        "armor": 0,
+        "repairRate": 8,
+        "healRate": 3,
+        "captureRate": 1.55
+      },
+      {
+        "id": "sniper",
+        "name": "장거리 포격정",
+        "description": "긴 사거리와 높은 단발 화력. 적 전력 거점을 우회 타격하거나 선봉 뒤에서 화력을 집중합니다.",
+        "role": "assault",
+        "behavior": "sniper",
+        "icon": "crosshair",
+        "shape": "diamond",
+        "color": "#ae9ded",
+        "cost": {
+          "alloy": 85,
+          "data": 15
+        },
+        "hp": 84,
+        "damage": 22,
+        "speed": 172,
+        "range": 435,
+        "fireRate": 1.1,
+        "armor": 0,
+        "repairRate": 0,
+        "healRate": 0,
+        "captureRate": 0.8
+      },
+      {
+        "id": "medic",
+        "name": "야전 의무정",
+        "description": "동료를 회복하며 긴 전선을 유지합니다. 공격력은 낮지만 재집결 시간을 줄입니다.",
+        "role": "support",
+        "behavior": "medic",
+        "icon": "repair",
+        "shape": "cross",
+        "color": "#8cd4ed",
+        "cost": {
+          "alloy": 75,
+          "data": 14
+        },
+        "hp": 106,
+        "damage": 5,
+        "speed": 180,
+        "range": 265,
+        "fireRate": 0.9,
+        "armor": 0,
+        "repairRate": 2,
+        "healRate": 9,
+        "captureRate": 1
+      }
+    ],
+    "doctrines": [
+      {
+        "id": "maneuver",
+        "name": "기동 우회 교리",
+        "description": "이동 속도 +8%, 거점 확보 +10%. 빈 곳을 찌르고 적의 보급선을 끊습니다.",
+        "icon": "speed",
+        "stats": [
+          {
+            "stat": "speed",
+            "op": "multiply",
+            "value": 1.08
+          },
+          {
+            "stat": "relaySpeed",
+            "op": "add",
+            "value": 0.1
+          }
+        ],
+        "supportStats": []
+      },
+      {
+        "id": "siege",
+        "name": "화력 집중 교리",
+        "description": "직접 화력 +10%, 동료 화력 +15%. 실드 재생은 20% 느려집니다.",
+        "icon": "weapon",
+        "stats": [
+          {
+            "stat": "damage",
+            "op": "add",
+            "value": 0.1
+          },
+          {
+            "stat": "shieldRegen",
+            "op": "multiply",
+            "value": 0.8
+          }
+        ],
+        "supportStats": [
+          {
+            "stat": "unitDamage",
+            "op": "multiply",
+            "value": 1.15
+          }
+        ]
+      },
+      {
+        "id": "logistics",
+        "name": "보급 방어 교리",
+        "description": "실드 +10, 포탑 수명 +4초, 보급 생산 +20%. 이동 속도는 5% 감소합니다.",
+        "icon": "relay",
+        "stats": [
+          {
+            "stat": "maxShield",
+            "op": "add",
+            "value": 10
+          },
+          {
+            "stat": "turretDuration",
+            "op": "add",
+            "value": 4
+          },
+          {
+            "stat": "speed",
+            "op": "multiply",
+            "value": 0.95
+          }
+        ],
+        "supportStats": [
+          {
+            "stat": "supplyIncome",
+            "op": "multiply",
+            "value": 1.2
+          }
+        ]
+      }
+    ],
+    "sectors": [
+      {
+        "id": "dock",
+        "name": "녹슨 정박지",
+        "kind": "assault",
+        "description": "적 전력 거점을 끊으면 요새의 방어가 약해집니다. 가장 먼저 확보할 전진 기지.",
+        "requires": [],
+        "requireMode": "any",
+        "position": {
+          "x": 12,
+          "y": 55
+        },
+        "difficulty": 1.0,
+        "reward": {
+          "alloy": 80,
+          "data": 14
+        },
+        "income": {
+          "alloy": 10,
+          "data": 1
+        },
+        "mission": {
+          "captureGoal": 2,
+          "enemyScale": 1.0,
+          "supplyStart": 70
+        },
+        "final": false
+      },
+      {
+        "id": "lifeline",
+        "name": "끊어진 생명선",
+        "kind": "convoy",
+        "description": "보급 수송정을 호위하세요. 교전 지역을 먼저 정리하고 부대를 길목에 배치해야 합니다.",
+        "requires": [
+          "dock"
+        ],
+        "requireMode": "any",
+        "position": {
+          "x": 31,
+          "y": 25
+        },
+        "difficulty": 1.06,
+        "reward": {
+          "alloy": 95,
+          "data": 18
+        },
+        "income": {
+          "alloy": 12,
+          "data": 2
+        },
+        "mission": {
+          "convoyHp": 430,
+          "enemyScale": 1.06,
+          "supplyStart": 65
+        },
+        "final": false
+      },
+      {
+        "id": "plant",
+        "name": "자력 발전소",
+        "kind": "defense",
+        "description": "적의 역습을 버티며 연결된 거점을 유지하세요. 전력과 보급을 나누어 지킬 부대가 필요합니다.",
+        "requires": [
+          "dock"
+        ],
+        "requireMode": "any",
+        "position": {
+          "x": 32,
+          "y": 77
+        },
+        "difficulty": 1.08,
+        "reward": {
+          "alloy": 100,
+          "data": 20
+        },
+        "income": {
+          "alloy": 14,
+          "data": 1
+        },
+        "mission": {
+          "defenseDuration": 100,
+          "captureGoal": 2,
+          "enemyScale": 1.08,
+          "supplyStart": 65
+        },
+        "final": false
+      },
+      {
+        "id": "forge",
+        "name": "회색 주조소",
+        "kind": "salvage",
+        "description": "흩어진 설계 화물을 회수하세요. 전장을 모두 쓸어버릴 필요 없이 운반 경로를 열면 됩니다.",
+        "requires": [
+          "lifeline"
+        ],
+        "requireMode": "any",
+        "position": {
+          "x": 51,
+          "y": 12
+        },
+        "difficulty": 1.18,
+        "reward": {
+          "alloy": 130,
+          "data": 28
+        },
+        "income": {
+          "alloy": 18,
+          "data": 2
+        },
+        "mission": {
+          "cratesRequired": 5,
+          "enemyScale": 1.18,
+          "supplyStart": 60
+        },
+        "final": false
+      },
+      {
+        "id": "refuge",
+        "name": "방벽 피난항",
+        "kind": "defense",
+        "description": "분산된 전선을 이어 역습을 막으세요. 공병과 수리 구조물로 장기 방어선을 구축합니다.",
+        "requires": [
+          "lifeline",
+          "plant"
+        ],
+        "requireMode": "any",
+        "position": {
+          "x": 53,
+          "y": 47
+        },
+        "difficulty": 1.22,
+        "reward": {
+          "alloy": 135,
+          "data": 30
+        },
+        "income": {
+          "alloy": 16,
+          "data": 3
+        },
+        "mission": {
+          "defenseDuration": 115,
+          "captureGoal": 3,
+          "enemyScale": 1.22,
+          "supplyStart": 65
+        },
+        "final": false
+      },
+      {
+        "id": "rail",
+        "name": "폐철로 수송로",
+        "kind": "convoy",
+        "description": "좁은 잔해 지대를 통과하는 수송대를 보호하세요. 포격정을 전진 배치하면 추격을 줄일 수 있습니다.",
+        "requires": [
+          "plant"
+        ],
+        "requireMode": "any",
+        "position": {
+          "x": 52,
+          "y": 87
+        },
+        "difficulty": 1.2,
+        "reward": {
+          "alloy": 130,
+          "data": 26
+        },
+        "income": {
+          "alloy": 14,
+          "data": 3
+        },
+        "mission": {
+          "convoyHp": 400,
+          "enemyScale": 1.2,
+          "supplyStart": 60
+        },
+        "final": false
+      },
+      {
+        "id": "spire",
+        "name": "침묵의 관제탑",
+        "kind": "salvage",
+        "description": "적 증원이 많은 구역의 정보를 회수하세요. 관제 시설을 먼저 장악하면 진격 방향을 읽을 수 있습니다.",
+        "requires": [
+          "forge",
+          "refuge"
+        ],
+        "requireMode": "any",
+        "position": {
+          "x": 74,
+          "y": 25
+        },
+        "difficulty": 1.36,
+        "reward": {
+          "alloy": 165,
+          "data": 40
+        },
+        "income": {
+          "alloy": 18,
+          "data": 4
+        },
+        "mission": {
+          "cratesRequired": 6,
+          "enemyScale": 1.36,
+          "supplyStart": 65
+        },
+        "final": false
+      },
+      {
+        "id": "harbor",
+        "name": "철갑 함대 정박지",
+        "kind": "assault",
+        "description": "적 요새와 전력 시설을 동시에 압박하세요. 정면 공격과 보급 차단 중 무엇에 투자할지 선택합니다.",
+        "requires": [
+          "refuge",
+          "rail"
+        ],
+        "requireMode": "any",
+        "position": {
+          "x": 75,
+          "y": 75
+        },
+        "difficulty": 1.4,
+        "reward": {
+          "alloy": 180,
+          "data": 40
+        },
+        "income": {
+          "alloy": 22,
+          "data": 3
+        },
+        "mission": {
+          "captureGoal": 2,
+          "enemyScale": 1.4,
+          "supplyStart": 70
+        },
+        "final": false
+      },
+      {
+        "id": "heart",
+        "name": "심층 기관 심장부",
+        "kind": "assault",
+        "description": "전선의 심장부. 축적한 장비와 연구, 부대 편성으로 마지막 방어망을 무너뜨리세요.",
+        "requires": [
+          "spire",
+          "harbor"
+        ],
+        "requireMode": "any",
+        "position": {
+          "x": 93,
+          "y": 50
+        },
+        "difficulty": 1.65,
+        "reward": {
+          "alloy": 260,
+          "data": 65
+        },
+        "income": {
+          "alloy": 25,
+          "data": 5
+        },
+        "mission": {
+          "captureGoal": 3,
+          "enemyScale": 1.65,
+          "supplyStart": 75
+        },
+        "final": true
+      }
+    ],
+    "text": {
+      "created": "새 원정단이 편성되었습니다. 장비와 성장은 항로를 넘어 유지됩니다.",
+      "saved": "원정단을 복원했습니다.",
+      "invalidSave": "올바른 캠페인 저장 데이터가 아닙니다.",
+      "unknownModule": "알 수 없는 장비입니다.",
+      "owned": "이미 보유한 설계입니다.",
+      "notOwned": "먼저 장비를 제작하세요.",
+      "insufficient": "자원이 부족합니다.",
+      "researchLocked": "선행 연구가 필요합니다.",
+      "researchDone": "이미 완료한 연구입니다.",
+      "unknownResearch": "알 수 없는 연구입니다.",
+      "purchased": "{name} 제작 완료. 창고에서 언제든 다시 장착할 수 있습니다.",
+      "upgraded": "{name} 강화 완료.",
+      "maxRank": "최고 등급입니다.",
+      "invalidSlot": "올바른 장착 슬롯이 아닙니다.",
+      "duplicateModule": "동일한 장비는 한 슬롯에만 장착할 수 있습니다.",
+      "powerShort": "전력이 부족합니다. 다른 장비를 해제하거나 동력로를 연구하세요.",
+      "incompatible": "현재 기체나 장착 빌드와 호환되지 않는 장비입니다.",
+      "equipped": "{name} 장착 완료.",
+      "unequipped": "장비를 창고로 옮겼습니다. 소유 등급은 유지됩니다.",
+      "researched": "{name} 연구 완료.",
+      "rigChanged": "{name} 편성 완료. 호환되지 않는 장비는 창고로 옮겼습니다.",
+      "unknownRig": "알 수 없는 기체입니다.",
+      "unitLocked": "해당 동료의 운용권을 먼저 확보하세요.",
+      "unknownUnit": "알 수 없는 동료입니다.",
+      "unitPurchased": "{name} 운용권 확보. 동료는 전투에서 쓰러져도 유지됩니다.",
+      "squadChanged": "동료 편성을 변경했습니다.",
+      "doctrineChanged": "{name} 적용 완료.",
+      "unknownDoctrine": "알 수 없는 교리입니다.",
+      "unknownSector": "알 수 없는 전선입니다.",
+      "sectorLocked": "연결된 전선을 먼저 확보하세요.",
+      "missionActive": "진행 중인 작전을 먼저 마무리하세요.",
+      "missionReady": "{name} 작전 준비 완료.",
+      "invalidMission": "현재 원정단의 작전 기록과 일치하지 않습니다.",
+      "settled": "작전 정산 완료. 장비와 영구 성장은 유지됩니다.",
+      "duplicateSettlement": "이미 정산했거나 유효하지 않은 작전입니다.",
+      "legacyImported": "이전 항로에서 얻은 기체 레벨과 개조를 영구 원정단으로 이전했습니다.",
+      "legacyInvalid": "이전 항로 데이터를 이전할 수 없습니다.",
+      "activeChange": "작전 중에는 정비 편성을 변경할 수 없습니다.",
+      "alloy": "합금",
+      "data": "설계 자료",
+      "victory": "작전 성공",
+      "defeat": "전선 이탈",
+      "withdraw": "전술 철수",
+      "missionCancelled": "손상되거나 시작하지 못한 작전 예약을 해제했습니다. 영구 성장은 유지됩니다."
+    },
+    "ui": {
+      "text": {
+        "eyebrow": "COMMAND THE FRONTIER",
+        "title": "다음 전선을, 당신의 설계로.",
+        "subtitle": "기체·개조·연구는 출격이 끝나도 남습니다. 전선을 선택하고, 부대를 편성하고, 원하는 전술로 돌파하세요.",
+        "career": "지휘관",
+        "level": "LV",
+        "experience": "경험",
+        "sorties": "출격",
+        "permanent": "영구 성장",
+        "saved": "캠페인 저장",
+        "save": "저장 내보내기",
+        "load": "저장 불러오기",
+        "back": "전선으로",
+        "next": "다음 전선 설계",
+        "launch": "작전 개시",
+        "locked": "미개방",
+        "open": "진입 가능",
+        "owned": "통제 중",
+        "sector": "작전 구역",
+        "difficulty": "위협",
+        "objective": "작전 목표",
+        "reward": "예상 보상",
+        "income": "통제 수입",
+        "incomeHint": "성공한 출격마다 통제 구역의 수입이 누적됩니다.",
+        "unlockHint": "선행 구역을 통제하면 새로운 전선이 열립니다.",
+        "repeat": "재출격",
+        "repeatHint": "이미 확보한 구역도 다시 출격할 수 있습니다. 장비는 유지되고, 전선의 위협은 커집니다.",
+        "campaignComplete": "주요 전선 안정화 · 심화 작전 개방",
+        "missionBrief": "작전 브리핑",
+        "missionTypes": {
+          "assault": "거점 강습",
+          "convoy": "수송대 호위",
+          "defense": "전선 방어",
+          "salvage": "위험 인양"
+        },
+        "missionHints": {
+          "assault": "보급선을 끊어 적 거점을 약화시키거나, 화력을 집중해 정면으로 돌파하세요.",
+          "convoy": "수송대의 앞길을 확보하세요. 분대를 나눠 거점을 장악하면 호위 부담이 줄어듭니다.",
+          "defense": "생산과 수리를 연결해 방어선을 만드세요. 모든 부대가 같은 곳에 있을 필요는 없습니다.",
+          "salvage": "인양 위치와 귀환 경로를 계획하세요. 필요한 전력 거점을 먼저 확보할 수도 있습니다."
+        },
+        "garageTitle": "필요한 개조를 직접 고르세요.",
+        "garageBody": "무작위 보상을 기다리지 않습니다. 구입한 개조를 슬롯과 전력 한도 안에서 배치하고, 필요한 장비에 자원을 투자하세요.",
+        "activeRig": "출격 기체",
+        "rigRank": "기체 등급",
+        "rigUpgrade": "기체 강화",
+        "maxRank": "최대 등급",
+        "power": "설계 전력",
+        "powerHint": "강한 개조일수록 많은 전력을 사용합니다. 슬롯이 남아도 전력 한도를 넘길 수 없습니다.",
+        "slots": "개조 장착 슬롯",
+        "slot": "슬롯",
+        "emptySlot": "비어 있음",
+        "selectSlot": "이 슬롯에 장착",
+        "slotHint": "왼쪽에서 장착할 슬롯을 선택한 뒤 개조의 장착 버튼을 누르세요.",
+        "unequip": "해제",
+        "moduleCatalog": "개조 설계 목록",
+        "allModules": "전체 설계",
+        "ownedModules": "보유 설계",
+        "buy": "구입",
+        "upgrade": "강화",
+        "equip": "장착",
+        "equipped": "장착 중",
+        "rank": "등급",
+        "notOwned": "미보유",
+        "modulePower": "전력",
+        "needs": "필요",
+        "cost": "비용",
+        "ownedModuleHint": "구입·강화한 개조는 패배해도 사라지지 않습니다.",
+        "statPreview": "현재 설계 성능",
+        "statSource": "기체·영구 레벨·연구·장착 개조를 모두 반영합니다.",
+        "noModules": "표시할 개조가 없습니다.",
+        "researchTitle": "다음 전술을 먼저 연구하세요.",
+        "researchBody": "어떤 기술을 먼저 열지 직접 선택합니다. 연구는 영구 적용되며, 선행 기술과 자료 비용이 필요합니다.",
+        "researched": "연구 완료",
+        "research": "연구",
+        "prerequisites": "선행 기술",
+        "researchReady": "연구 가능",
+        "researchLocked": "선행 연구 필요",
+        "researchBonus": "영구 효과",
+        "researchUnlocks": "새 설계 개방",
+        "noPrerequisites": "기초 기술",
+        "researchPersistent": "연구 성과는 모든 이후 출격에 적용됩니다.",
+        "squadTitle": "혼자 피하는 대신, 전선을 지휘하세요.",
+        "squadBody": "아군의 역할과 교리를 정하고 출격하세요. 전술 정지 중 이동·집중 공격·거점 확보·방어 명령을 내려 동시에 다른 전선을 운영할 수 있습니다.",
+        "squadSlots": "출격 분대",
+        "squadSlot": "지원 분대",
+        "emptySquad": "지원 없음",
+        "assign": "편성",
+        "assigned": "편성 중",
+        "selectSquad": "편성할 분대 선택",
+        "doctrine": "출격 교리",
+        "selected": "선택 중",
+        "select": "선택",
+        "unitHp": "내구도",
+        "unitDamage": "화력",
+        "unitRange": "사거리",
+        "unitSpeed": "속도",
+        "role": "역할",
+        "unitLocked": "연구로 개방",
+        "doctrineHint": "교리는 기체와 지원 분대의 운용 방향을 바꿉니다.",
+        "commandHint": "전술 정지는 생각할 시간입니다. 이동한 뒤 반응하는 대신, 아군을 나눠 배치하고 적의 공격 방향을 바꿔보세요.",
+        "debriefEyebrow": "AFTER ACTION REPORT",
+        "victoryTitle": "이 전선은 우리의 것이다.",
+        "defeatTitle": "패배는 장비를 빼앗지 못한다.",
+        "withdrawTitle": "전력을 보존하고, 다음 수를 준비한다.",
+        "victoryBody": "자원과 경험을 정산했습니다. 확보한 구역의 수입과 새 항로를 확인하고, 다음 출격에 맞춰 설계를 바꾸세요.",
+        "defeatBody": "기존 기체 강화·장비·연구는 그대로 남습니다. 이번 작전의 회수분으로 정비하고 같은 구역에 다시 도전할 수 있습니다.",
+        "withdrawBody": "작전을 중단하고 회수 가능한 전리품을 정산했습니다. 영구 성장과 장비는 유지됩니다.",
+        "gained": "회수한 자원",
+        "xpGained": "획득 경험",
+        "newLevel": "지휘관 성장",
+        "newSectors": "새 전선 개방",
+        "retained": "장비 · 기체 강화 · 연구 유지",
+        "debriefTime": "작전 시간",
+        "debriefKills": "격파",
+        "debriefNodes": "확보 거점",
+        "debriefSalvage": "인양",
+        "debriefContinue": "정비 후 다음 작전",
+        "noLoot": "회수 자원 없음",
+        "fixedBuild": "원하는 장비를 구입하고, 강화하고, 다음 전선에 맞춰 재편성하세요.",
+        "genericError": "지금은 이 작업을 진행할 수 없습니다.",
+        "resources": "보유 자원",
+        "defaultCampaign": "장기 캠페인",
+        "seconds": "초",
+        "meters": "m",
+        "damage": "피해",
+        "capacity": "한도",
+        "unitOwned": "사용 가능",
+        "buyUnit": "부대 개방",
+        "openGarage": "설계 정비",
+        "openResearch": "연구소",
+        "openSquad": "부대 편성",
+        "incompatible": "현재 기체의 무장과 호환되지 않습니다.",
+        "resumeMission": "진행 중인 작전 복귀"
+      },
+      "tabs": [
+        {
+          "id": "map",
+          "label": "전선 지도",
+          "icon": "relay"
+        },
+        {
+          "id": "garage",
+          "label": "설계 정비",
+          "icon": "weapon"
+        },
+        {
+          "id": "research",
+          "label": "연구소",
+          "icon": "bolt"
+        },
+        {
+          "id": "squad",
+          "label": "부대 편성",
+          "icon": "drone"
+        }
+      ],
+      "statRows": [
+        {
+          "key": "maxHp",
+          "label": "선체 내구도",
+          "format": "number"
+        },
+        {
+          "key": "maxShield",
+          "label": "최대 실드",
+          "format": "number"
+        },
+        {
+          "key": "damage",
+          "label": "주무기 화력",
+          "format": "multiplier"
+        },
+        {
+          "key": "fireRate",
+          "label": "공격 속도",
+          "format": "multiplier"
+        },
+        {
+          "key": "speed",
+          "label": "이동 속도",
+          "format": "number"
+        },
+        {
+          "key": "armor",
+          "label": "기본 피해 감소",
+          "format": "number"
+        }
+      ],
+      "settings": {
+        "mapWidth": 1000,
+        "mapHeight": 560,
+        "mapPadding": 7,
+        "mapNodeRadius": 22,
+        "percentScale": 100,
+        "statDigits": 1,
+        "secondsPerMinute": 60,
+        "tierScale": 5,
+        "visibleRequirementLimit": 3,
+        "resourceIconFallback": "scrap"
+      },
+      "missionIcons": {
+        "assault": "crosshair",
+        "convoy": "move",
+        "defense": "shield",
+        "salvage": "scrap"
+      }
+    }
+  },
+  "tactics": {
+    "config": {
+      "supplyStart": 55,
+      "supplyCap": 180,
+      "supplyIncome": 1.4,
+      "incomeInterval": 1,
+      "hqIncome": 0.45,
+      "linkRadius": 790,
+      "nodeCaptureTime": 13,
+      "playerCaptureWeight": 1.35,
+      "allyCaptureWeight": 1,
+      "enemyCaptureWeight": 0.72,
+      "captureWeightCap": 2.5,
+      "contestedCaptureMultiplier": 0.55,
+      "neutralDecay": 0.03,
+      "buildRadius": 215,
+      "structureSpacing": 58,
+      "structureLimit": 9,
+      "maxAllies": 5,
+      "reinforcementCost": 38,
+      "reinforcementCostByRole": {
+        "assault": 34,
+        "tank": 44,
+        "support": 40
+      },
+      "reinforcementRadius": 75,
+      "hqHp": 1050,
+      "hqRadius": 42,
+      "hqRepair": 0.6,
+      "hqDefeat": true,
+      "allyRadius": 17,
+      "allySpacing": 62,
+      "formationAngle": 2.399963229728653,
+      "followDistance": 105,
+      "arrivalDistance": 24,
+      "holdLeash": 210,
+      "engageRange": 440,
+      "enemyAggroRange": 460,
+      "allyProjectileSpeed": 680,
+      "allyProjectileRadius": 3,
+      "allyProjectileLife": 0.95,
+      "allyFireRate": 0.62,
+      "allyDamage": 11,
+      "allyHp": 145,
+      "allySpeed": 190,
+      "allyRange": 360,
+      "allyArmor": 0,
+      "allyRepairRate": 5,
+      "supportRange": 170,
+      "repairSupplyPerHp": 0.04,
+      "allyAvoidRadius": 65,
+      "allyAvoidWeight": 2.5,
+      "allySeparation": 0.3,
+      "tankAggroBias": 0.65,
+      "structureAggroBias": 0.78,
+      "convoyAggroBias": 0.8,
+      "enemyPlanInterval": 20,
+      "enemyPlanWindup": 5,
+      "enemyPlanSupplyWeight": 1.3,
+      "enemyPlanIsolatedWeight": 0.65,
+      "enemyNodeDefendRadius": 130,
+      "enemyRaidChance": 0.72,
+      "enemyMissionScale": 0.2,
+      "missionWaveCountBonus": 0.5,
+      "bossPowerDamageMultiplier": 0.3,
+      "friendlyPowerDamageBonus": 0.12,
+      "friendlyPowerTurretBonus": 0.2,
+      "powerRadius": 290,
+      "intelRevealRange": 1600,
+      "nodeRepairRate": 3,
+      "nodeRepairRadius": 165,
+      "retreatMinTime": 15,
+      "retreatRadius": 200,
+      "extractionTime": 4,
+      "defenseDuration": 105,
+      "convoyHp": 550,
+      "convoyRadius": 31,
+      "convoySpeed": 90,
+      "convoyEscortRadius": 250,
+      "convoyThreatRadius": 155,
+      "convoyContestedMultiplier": 0.38,
+      "convoyArrivalRadius": 35,
+      "cratesRequired": 4,
+      "crateCollectRadius": 65,
+      "crateRadius": 18,
+      "crateAlloy": 5,
+      "crateData": 2,
+      "nodeAlloy": 3,
+      "nodeXp": 10,
+      "startingGarrison": 1,
+      "missionXpPerKill": 1.5,
+      "structurePowerRegen": 2,
+      "structureShotSpeed": 710,
+      "structureShotRadius": 3,
+      "structureShotLife": 0.9,
+      "structureRepairTick": 0.5,
+      "baseNodeId": "hq",
+      "missionBossScale": 1,
+      "convoyCaptureBonus": 0.12,
+      "coverRadius": 85,
+      "coverArmor": 3,
+      "catchupDistanceMultiplier": 3,
+      "catchupSpeedMultiplier": 1.28,
+      "followStopDistance": 28,
+      "captureStandRadius": 0.3,
+      "attackStandRange": 0.75,
+      "nodeRadius": 140,
+      "garrisonOffset": 55
+    },
+    "hq": {
+      "id": "hq",
+      "x": 430,
+      "y": 1030,
+      "hp": 1050,
+      "radius": 42,
+      "color": "#a5efcf",
+      "name": "전진 지휘소"
+    },
+    "nodes": [
+      {
+        "id": "supply",
+        "name": "서부 보급창",
+        "x": 770,
+        "y": 790,
+        "radius": 140,
+        "owner": "neutral",
+        "role": "supply"
+      },
+      {
+        "id": "power",
+        "name": "중앙 발전소",
+        "x": 1320,
+        "y": 620,
+        "radius": 140,
+        "owner": "enemy",
+        "role": "power"
+      },
+      {
+        "id": "intel",
+        "name": "동부 관제탑",
+        "x": 1770,
+        "y": 1070,
+        "radius": 140,
+        "owner": "enemy",
+        "role": "intel"
+      },
+      {
+        "id": "factory",
+        "name": "남부 조립소",
+        "x": 1150,
+        "y": 1360,
+        "radius": 140,
+        "owner": "neutral",
+        "role": "factory"
+      }
+    ],
+    "nodeRoles": {
+      "supply": {
+        "name": "보급창",
+        "description": "연결된 동안 야전 보급을 생산합니다. 끊어진 보급선을 탈환해 생산을 복구하세요.",
+        "color": "#f1c37b",
+        "icon": "scrap",
+        "income": 1.4
+      },
+      "power": {
+        "name": "발전소",
+        "description": "아군 화력을 증폭합니다. 적이 보유하면 요새의 방어장을 유지합니다.",
+        "color": "#9ac8ec",
+        "icon": "bolt",
+        "income": 0.35
+      },
+      "intel": {
+        "name": "관제탑",
+        "description": "연결되면 적의 다음 공세 목표와 도착 시간을 미리 확인할 수 있습니다.",
+        "color": "#c4a8ed",
+        "icon": "relay",
+        "income": 0.35
+      },
+      "factory": {
+        "name": "조립소",
+        "description": "연결된 이곳에서 분대를 증원하고 주변 아군을 수리합니다.",
+        "color": "#a5efcf",
+        "icon": "turret",
+        "income": 0.55
+      }
+    },
+    "structures": {
+      "turret": {
+        "name": "연결 포대",
+        "description": "보급망 안에서 자동 사격. 발전소 연결 시 화력이 증가합니다.",
+        "role": "turret",
+        "icon": "turret",
+        "color": "#a5efcf",
+        "cost": 28,
+        "hp": 180,
+        "radius": 20,
+        "range": 440,
+        "damage": 15,
+        "fireRate": 0.55
+      },
+      "repair": {
+        "name": "야전 정비소",
+        "description": "주변 기체와 분대를 야전 보급을 소모하여 수리합니다.",
+        "role": "repair",
+        "icon": "repair",
+        "color": "#8fb9e5",
+        "cost": 30,
+        "hp": 150,
+        "radius": 22,
+        "range": 190,
+        "repairRate": 7
+      },
+      "barricade": {
+        "name": "충격 방벽",
+        "description": "높은 내구도로 적의 사격과 접근을 받아내 전선을 지탱합니다.",
+        "role": "barricade",
+        "icon": "shield",
+        "color": "#f1c37b",
+        "cost": 16,
+        "hp": 420,
+        "radius": 34,
+        "range": 0
+      }
+    },
+    "convoy": {
+      "x": 430,
+      "y": 1030,
+      "waypoints": [
+        {
+          "x": 770,
+          "y": 790
+        },
+        {
+          "x": 1320,
+          "y": 620
+        },
+        {
+          "x": 1770,
+          "y": 1070
+        },
+        {
+          "x": 1970,
+          "y": 1450
+        }
+      ],
+      "color": "#f1c37b"
+    },
+    "crates": [
+      {
+        "x": 660,
+        "y": 450
+      },
+      {
+        "x": 1420,
+        "y": 430
+      },
+      {
+        "x": 1860,
+        "y": 850
+      },
+      {
+        "x": 1740,
+        "y": 1510
+      },
+      {
+        "x": 980,
+        "y": 1460
+      },
+      {
+        "x": 390,
+        "y": 1320
+      }
+    ],
+    "text": {
+      "missionStarted": "{name} 작전 개시. 분대를 나누고 보급망을 확보하세요.",
+      "commandIssued": "{count}개 분대에 {order} 명령을 전달했습니다.",
+      "invalidCommand": "사용할 수 없는 분대 명령입니다.",
+      "noUnits": "명령할 분대를 선택하세요.",
+      "unitDestroyed": "{name} 전투 불능. 기체와 장비는 캠페인에서 유지됩니다.",
+      "nodeCaptured": "{name} 확보. 보급망 연결을 확인하세요.",
+      "nodeLost": "{name} 탈환당했습니다. 고립된 거점을 지원하세요.",
+      "structureBuilt": "{name} 건설 완료.",
+      "notConnected": "연결된 아군 거점 근처에 건설해야 합니다.",
+      "buildBlocked": "다른 시설이나 잔해와 너무 가깝습니다.",
+      "supplyShort": "야전 보급이 부족합니다.",
+      "structureLimit": "건설 한도에 도달했습니다.",
+      "unitLimit": "분대 편성 한도에 도달했습니다.",
+      "notFactory": "연결된 조립소 또는 지휘소를 선택하세요.",
+      "reinforced": "{name} 증원 도착.",
+      "notTactical": "캠페인 작전에서 사용할 수 있습니다.",
+      "notPlanning": "작전 진행 또는 전술 정지 상태에서 사용할 수 있습니다.",
+      "unknownStructure": "알 수 없는 시설입니다.",
+      "unknownUnit": "사용할 수 없는 분대입니다.",
+      "retreatEarly": "작전 시작 직후에는 철수할 수 없습니다.",
+      "retreatUnsafe": "아군 지휘소 또는 연결된 거점으로 이동한 뒤 철수하세요.",
+      "withdraw": "긴급 철수. 회수한 자원을 정산하고 기지로 복귀합니다.",
+      "headquartersLost": "전진 지휘소가 파괴되었습니다. 부대는 기지로 후퇴합니다.",
+      "convoyLost": "호송선이 파괴되었습니다. 남은 부대가 기지로 후퇴합니다.",
+      "convoyComplete": "호송선이 항로를 통과했습니다. 탈출 지점으로 복귀하세요.",
+      "defenseComplete": "방어 임무 완료. 적의 추격을 벗어나 복귀하세요.",
+      "salvageComplete": "필수 인양량 확보. 추가 수색 또는 탈출을 선택하세요.",
+      "crateCollected": "보급 상자 회수. 합금 +{alloy}, 설계 자료 +{data}.",
+      "powerShield": "발전소가 적 요새의 방어장을 유지하고 있습니다.",
+      "enemyPlan": "{name}에 적 공세 준비 중.",
+      "victory": "작전 성공. 다음 전선과 영구 성장을 정비하세요.",
+      "defeat": "기체를 회수했습니다. 장비를 유지한 채 다시 계획할 수 있습니다.",
+      "assaultGoal": "적 요새 격파 후 탈출",
+      "convoyGoal": "호송선 호위 후 탈출",
+      "defenseGoal": "지휘소 방어 후 탈출",
+      "salvageGoal": "보급 상자 인양 후 탈출",
+      "order_move": "이동",
+      "order_attack": "집중 공격",
+      "order_hold": "거점 방어",
+      "order_follow": "호위",
+      "order_capture": "거점 확보",
+      "planning": "명령 대기",
+      "supply": "야전 보급",
+      "connected": "보급 연결",
+      "isolated": "고립",
+      "intelUnknown": "관제탑을 확보하면 공세 정보가 공개됩니다.",
+      "convoyName": "호송선",
+      "crateName": "보급 상자"
+    },
+    "_docs": {
+      "missions": "mission.kind=assault|convoy|defense|salvage. mission.world는 nodes,hq,convoy,crates,playerStart,bossSpawn,obstacles를 덮어쓸 수 있습니다. mission.mission에는 defenseDuration,convoyHp,cratesRequired,enemyScale,supplyStart를 지정합니다.",
+      "orders": "command({unitIds,kind,x,y,targetId,queue})는 전술 정지 중에도 허용됩니다. move|attack|hold|follow|capture. 선택된 분대가 기본 대상이며 capture는 targetId 거점을 참조합니다.",
+      "network": "지휘소부터 linkRadius 내 아군 거점을 연결합니다. 연결된 보급창은 자원을, 발전소는 화력, 관제탑은 적 공세 정보, 조립소는 증원과 수리를 제공합니다."
+    }
   }
 };
