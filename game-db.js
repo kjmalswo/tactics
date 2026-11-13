@@ -1381,7 +1381,22 @@ window.GAME_DB = {
       "miniStructureRadius": 1.8,
       "supplyDigits": 0,
       "visibleUnitHotkeys": 2,
-      "incomeDigits": 1
+      "incomeDigits": 1,
+      "mobileBreakpoint": 760,
+      "mobileLandscapeHeight": 550,
+      "mobilePixelRatioCap": 1.5,
+      "mobileHudInterval": 0.2,
+      "mobileDustCount": 28,
+      "mobileTrailCount": 10,
+      "mobileStrategicPadding": 38,
+      "mobileMarkerInset": 23,
+      "mobileTouchPickRadius": 22,
+      "touchTapSlop": 12,
+      "menuFrameInterval": 0.05,
+      "titleFrameInterval": 0.08,
+      "mobileShakeScale": 2.2,
+      "mobileMinZoom": 0.45,
+      "mobileTutorialSeconds": 12
     },
     "audio": {
       "enabled": true,
@@ -1625,7 +1640,51 @@ window.GAME_DB = {
       "networkConnected": "보급 연결",
       "networkIsolated": "보급 단절",
       "convoy": "호송 수송대",
-      "salvageCrate": "회수품"
+      "salvageCrate": "회수품",
+      "mainTitle": "메인 타이틀",
+      "titleKicker": "YOUR FLEET. YOUR FRONT.",
+      "titleTagline": "보급선을 그려라.\n전선을 움직여라.",
+      "titleBody": "끝나지 않는 고철 전선. 기체를 설계하고, 분대를 지휘하고, 당신만의 항로를 개척하라.",
+      "titleStart": "캠페인 시작",
+      "titleContinue": "계속하기",
+      "titleHeadquarters": "작전 본부",
+      "titleGarage": "기체 정비고",
+      "titleGuide": "플레이 가이드",
+      "titleSettings": "설정",
+      "titleFooter": "영구 성장 · 분대 전술 · 분기 캠페인",
+      "titleSaveNote": "진행은 이 브라우저에 자동 저장됩니다.",
+      "titleCareer": "지휘관 계급",
+      "titleSectors": "확보 전선",
+      "titleModules": "보유 장비",
+      "titleSorties": "출격 기록",
+      "titleNoProgress": "당신의 첫 전선이 기다립니다.",
+      "titleActiveMission": "진행 중인 작전이 있습니다. 이어서 지휘할 수 있습니다.",
+      "titleCampaignReady": "정비고와 전선 지도에서 다음 작전을 준비하세요.",
+      "settingsTitle": "항해 설정",
+      "settingsEyebrow": "SET YOUR COURSE",
+      "settingsBody": "조준과 화면 효과를 편한 방식으로 조정하세요. 캠페인 진행과 장비에는 영향을 주지 않습니다.",
+      "reducedEffects": "화면 효과 절약",
+      "reducedEffectsHint": "빛 번짐과 입자를 줄여 작은 화면의 가독성과 성능을 높입니다.",
+      "settingEnabled": "켜짐",
+      "settingDisabled": "꺼짐",
+      "settingAutoHint": "이동과 분대 지휘에 집중할 수 있도록 가까운 적을 자동으로 공격합니다.",
+      "settingSoundHint": "사격·피격·명령의 소리 피드백을 켜거나 끕니다.",
+      "settingsBack": "돌아가기",
+      "saveManagement": "캠페인 저장 내보내기",
+      "mobileObjectives": "작전 정보",
+      "mobileOrders": "분대 명령",
+      "mobileQueue": "예약",
+      "mobileQueueOn": "명령 예약 켜짐 · 다음 명령을 대기열에 추가합니다.",
+      "mobileQueueOff": "명령 예약 꺼짐 · 다음 명령으로 교체합니다.",
+      "mobilePlanHint": "동료 카드 선택 → 지도 터치로 명령 → 재개",
+      "mobileLiveHint": "왼쪽 스틱 이동 · 오른쪽 능력 · 정지 후 지도 터치로 지휘",
+      "mobileMapHint": "지도는 좌우로 밀어 다른 전선을 볼 수 있습니다.",
+      "mobileClosePanel": "패널 닫기",
+      "mobileOrientationHint": "화면 방향이 바뀌어 전술 정지했습니다.",
+      "mobileOperationsHint": "시설 선택 후 연결된 아군 거점 근처를 터치하세요.",
+      "mobileNoKeyboard": "터치로도 모든 전술 명령을 사용할 수 있습니다.",
+      "titleArtLabel": "분대를 이끄는 고철 비행정과 항로 지도",
+      "mobileSquad": "분대 선택"
     },
     "abilityKeys": {
       "dash": "SPACE",
@@ -1699,7 +1758,8 @@ window.GAME_DB = {
       "health": "\u003cpath d='M9 3h6v6h6v6h-6v6H9v-6H3V9h6V3Z'/>",
       "map": "\u003cpath d='m2 5 6-3 8 3 6-3v17l-6 3-8-3-6 3V5Zm6-3v17m8-14v17'/>",
       "factory": "\u003cpath d='M3 21V9l6 4V8l6 4V3h5v18H3Zm4-4h1m4 0h1m4 0h1'/>",
-      "research": "\u003cpath d='M8 2h8m-6 0v7l-7 11h18L14 9V2M7 15h10'/>"
+      "research": "\u003cpath d='M8 2h8m-6 0v7l-7 11h18L14 9V2M7 15h10'/>",
+      "settings": "\u003ccircle cx='12' cy='12' r='3'/>\u003cpath d='m10 2-1 3-3 1-3-1-2 4 2 2v3l-2 2 2 4 3-1 3 1 1 3h4l1-3 3-1 3 1 2-4-2-2v-3l2-2-2-4-3 1-3-1-1-3h-4Z'/>"
     },
     "bindings": {
       "up": [
@@ -1821,6 +1881,9 @@ window.GAME_DB = {
       "power": "powerRole",
       "intel": "intelRole",
       "factory": "factoryRole"
+    },
+    "title": {
+      "art": "\u003csvg viewBox='0 0 700 690' fill='none' xmlns='http://www.w3.org/2000/svg' role='img'>\u003cdefs>\u003clinearGradient id='title-hull' x1='310' y1='130' x2='440' y2='560' gradientUnits='userSpaceOnUse'>\u003cstop stop-color='#395861'/>\u003cstop offset='1' stop-color='#132e39'/>\u003c/linearGradient>\u003clinearGradient id='title-engine' x1='0' y1='0' x2='0' y2='130'>\u003cstop stop-color='#a5efcf' stop-opacity='.75'/>\u003cstop offset='1' stop-color='#a5efcf' stop-opacity='0'/>\u003c/linearGradient>\u003c/defs>\u003cg stroke='#a5efcf' stroke-opacity='.13'>\u003ccircle cx='350' cy='335' r='265'/>\u003ccircle cx='350' cy='335' r='208' stroke-dasharray='6 13'/>\u003ccircle cx='350' cy='335' r='130'/>\u003cpath d='M30 335h640M350 15v640M120 105l460 460M120 565l460-460'/>\u003c/g>\u003cg stroke='#f1c37b' stroke-opacity='.4'>\u003cpath d='m78 427 110-65 84 83 170-260 186 59' stroke-dasharray='5 7'/>\u003ccircle cx='78' cy='427' r='6'/>\u003ccircle cx='188' cy='362' r='6'/>\u003ccircle cx='272' cy='445' r='6'/>\u003ccircle cx='442' cy='185' r='6'/>\u003ccircle cx='628' cy='244' r='6'/>\u003c/g>\u003cg transform='translate(12 5) rotate(-24 350 330)'>\u003cpath d='m271 416-19 124 36 65 38-63-21-126' fill='url(#title-engine)'/>\u003cpath d='m396 416-17 124 34 65 38-63-18-126' fill='url(#title-engine)'/>\u003cg fill='#102a34' stroke='#7ca8ad' stroke-width='2'>\u003cpath d='m220 250-61 70 13 139 72-49 10-136-34-24Z'/>\u003cpath d='m482 250 61 70-13 139-72-49-10-136 34-24Z'/>\u003c/g>\u003cpath d='m350 79 71 144 27 218-51 57-47-28-48 28-50-57 27-218L350 79Z' fill='url(#title-hull)' stroke='#a5efcf' stroke-opacity='.7' stroke-width='2'/>\u003cpath d='m350 98-32 146 32 49 32-49-32-146Z' fill='#a5efcf' fill-opacity='.13' stroke='#a5efcf' stroke-opacity='.6'/>\u003cpath d='M350 294v161M279 223l39 21m103-21-39 21M264 356l68-22m104 22-68-22' stroke='#8baeb4' stroke-opacity='.55'/>\u003cpath d='m289 284-31 115 36 48 25-99-30-64Zm122 0 31 115-36 48-25-99 30-64Z' fill='#09232e' stroke='#6d939c'/>\u003cpath d='m310 359 40-24 40 24v61l-40 28-40-28v-61Z' fill='#102f39' stroke='#f1c37b' stroke-opacity='.8'/>\u003cpath d='m330 372 20-12 20 12v31l-20 13-20-13v-31Z' fill='#f1c37b' fill-opacity='.16' stroke='#f1c37b'/>\u003cpath d='M217 311v73m267-73v73' stroke='#f1c37b' stroke-width='7'/>\u003cpath d='M282 436v24m137-24v24' stroke='#a5efcf' stroke-width='12'/>\u003cpath d='m308 192 14-31m56 0 14 31M283 268h19m96 0h19' stroke='#f1c37b' stroke-width='3'/>\u003ccircle cx='350' cy='318' r='5' fill='#a5efcf'/>\u003c/g>\u003cg fill='#112f39' stroke='#8fb9e5' stroke-opacity='.5'>\u003cpath d='m120 500 23 48-23-10-23 10 23-48Z' transform='rotate(-22 120 524)'/>\u003cpath d='m542 453 20 43-20-9-20 9 20-43Z' transform='rotate(-22 542 474)'/>\u003c/g>\u003cg stroke='#a5efcf' stroke-opacity='.5'>\u003cpath d='M473 112h102l30 30M88 244h75l31-31M420 549h133l24-24'/>\u003cpath d='M470 106v12m-6-6h12M85 238v12m-6-6h12'/>\u003c/g>\u003c/svg>"
     }
   },
   "campaign": {
@@ -3585,7 +3648,9 @@ window.GAME_DB = {
         "openResearch": "연구소",
         "openSquad": "부대 편성",
         "incompatible": "현재 기체의 무장과 호환되지 않습니다.",
-        "resumeMission": "진행 중인 작전 복귀"
+        "resumeMission": "진행 중인 작전 복귀",
+        "mainTitle": "메인 타이틀",
+        "mapGesture": "지도를 좌우로 밀어 다른 전선을 확인하세요."
       },
       "tabs": [
         {
