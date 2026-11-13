@@ -1315,7 +1315,7 @@ window.GAME_DB = {
       "gold": "#f1c37b",
       "danger": "#f27b68",
       "ink": "#ecf1e8",
-      "muted": "#8babb2"
+      "muted": "#adc3c9"
     },
     "renderer": {
       "cameraFollow": 7,
@@ -1337,7 +1337,9 @@ window.GAME_DB = {
         "selectedRing": 9,
         "healthWidth": 43,
         "buildPreviewAlpha": 0.08
-      }
+      },
+      "minLabelPixels": 11,
+      "showCoordinates": false
     },
     "settings": {
       "storageKey": "scrapwake.campaign.v3",
@@ -1396,7 +1398,12 @@ window.GAME_DB = {
       "titleFrameInterval": 0.08,
       "mobileShakeScale": 2.2,
       "mobileMinZoom": 0.45,
-      "mobileTutorialSeconds": 12
+      "mobileTutorialSeconds": 12,
+      "defaultTextSize": "standard",
+      "minLabelPixels": 11,
+      "landscapeOrientation": "landscape",
+      "defaultLandscapeFullscreen": true,
+      "mobileLandscapeStrategicPadding": 150
     },
     "audio": {
       "enabled": true,
@@ -1662,7 +1669,7 @@ window.GAME_DB = {
       "titleCampaignReady": "정비고와 전선 지도에서 다음 작전을 준비하세요.",
       "settingsTitle": "항해 설정",
       "settingsEyebrow": "SET YOUR COURSE",
-      "settingsBody": "조준과 화면 효과를 편한 방식으로 조정하세요. 캠페인 진행과 장비에는 영향을 주지 않습니다.",
+      "settingsBody": "글자 크기·조준·소리·전체화면을 조정하세요. 설정을 바꿔도 캠페인 진행과 장비는 유지됩니다.",
       "reducedEffects": "화면 효과 절약",
       "reducedEffectsHint": "빛 번짐과 입자를 줄여 작은 화면의 가독성과 성능을 높입니다.",
       "settingEnabled": "켜짐",
@@ -1684,7 +1691,29 @@ window.GAME_DB = {
       "mobileOperationsHint": "시설 선택 후 연결된 아군 거점 근처를 터치하세요.",
       "mobileNoKeyboard": "터치로도 모든 전술 명령을 사용할 수 있습니다.",
       "titleArtLabel": "분대를 이끄는 고철 비행정과 항로 지도",
-      "mobileSquad": "분대 선택"
+      "mobileSquad": "분대 선택",
+      "newGame": "새 게임",
+      "newGameTitle": "캠페인을 처음부터 시작할까요?",
+      "newGameEyebrow": "NEW CAMPAIGN",
+      "newGameBody": "현재 캠페인의 계급·기체 강화·장비·연구·부대 편성과 진행 중인 작전이 초기화됩니다. 소리와 화면 설정은 유지됩니다.",
+      "newGameBackup": "먼저 현재 진행 저장하기",
+      "newGameConfirm": "초기화하고 새로 시작",
+      "newGameCancel": "현재 캠페인 유지",
+      "newGameDone": "새 캠페인을 시작했습니다.",
+      "fullscreen": "전체화면 / 최대화",
+      "fullscreenEnter": "가로 전체화면",
+      "fullscreenExit": "전체화면 종료",
+      "fullscreenUnsupported": "이 브라우저는 전체화면 API를 지원하지 않습니다. 기기를 가로로 돌리거나 홈 화면에 추가해 넓게 이용하세요.",
+      "fullscreenFailed": "전체화면으로 전환하지 못했습니다. 브라우저에서 허용하는지 확인하세요.",
+      "fullscreenRotateHint": "화면을 가로로 돌리면 가로 배치가 적용됩니다.",
+      "fullscreenBody": "지원하는 브라우저에서는 주소창 없이 화면을 넓게 사용합니다. 모바일에서는 가로 방향 잠금도 함께 시도합니다.",
+      "landscapePreference": "전체화면에서 가로 방향 우선",
+      "landscapePreferenceHint": "기기가 가로 방향 잠금을 지원할 때 적용됩니다. 지원하지 않으면 직접 화면을 돌려주세요.",
+      "textSize": "글자 크기",
+      "textSizeHint": "전투 정보·버튼·설명과 지도 글자의 크기를 함께 조정합니다.",
+      "settingsGuide": "조작 방법 보기",
+      "loadoutLocked": "작전 중에는 장비와 부대 변경이 잠깁니다. 귀환 또는 작전 종료 후 바꿀 수 있습니다.",
+      "hudReadability": "전투 정보"
     },
     "abilityKeys": {
       "dash": "SPACE",
@@ -1759,7 +1788,10 @@ window.GAME_DB = {
       "map": "\u003cpath d='m2 5 6-3 8 3 6-3v17l-6 3-8-3-6 3V5Zm6-3v17m8-14v17'/>",
       "factory": "\u003cpath d='M3 21V9l6 4V8l6 4V3h5v18H3Zm4-4h1m4 0h1m4 0h1'/>",
       "research": "\u003cpath d='M8 2h8m-6 0v7l-7 11h18L14 9V2M7 15h10'/>",
-      "settings": "\u003ccircle cx='12' cy='12' r='3'/>\u003cpath d='m10 2-1 3-3 1-3-1-2 4 2 2v3l-2 2 2 4 3-1 3 1 1 3h4l1-3 3-1 3 1 2-4-2-2v-3l2-2-2-4-3 1-3-1-1-3h-4Z'/>"
+      "settings": "\u003ccircle cx='12' cy='12' r='3'/>\u003cpath d='m10 2-1 3-3 1-3-1-2 4 2 2v3l-2 2 2 4 3-1 3 1 1 3h4l1-3 3-1 3 1 2-4-2-2v-3l2-2-2-4-3 1-3-1-1-3h-4Z'/>",
+      "maximize": "\u003cpath d='M3 9V3h6m6 0h6v6M3 15v6h6m6 0h6v-6M3 3l6 6m6 6 6 6M21 3l-6 6m-6 6-6 6'/>",
+      "minimize": "\u003cpath d='M9 3v6H3m12-6v6h6M3 15h6v6m6 0v-6h6'/>",
+      "restart": "\u003cpath d='M3 9V3m0 6h6M3 9a9 9 0 1 1 0 7'/>"
     },
     "bindings": {
       "up": [
@@ -1884,6 +1916,28 @@ window.GAME_DB = {
     },
     "title": {
       "art": "\u003csvg viewBox='0 0 700 690' fill='none' xmlns='http://www.w3.org/2000/svg' role='img'>\u003cdefs>\u003clinearGradient id='title-hull' x1='310' y1='130' x2='440' y2='560' gradientUnits='userSpaceOnUse'>\u003cstop stop-color='#395861'/>\u003cstop offset='1' stop-color='#132e39'/>\u003c/linearGradient>\u003clinearGradient id='title-engine' x1='0' y1='0' x2='0' y2='130'>\u003cstop stop-color='#a5efcf' stop-opacity='.75'/>\u003cstop offset='1' stop-color='#a5efcf' stop-opacity='0'/>\u003c/linearGradient>\u003c/defs>\u003cg stroke='#a5efcf' stroke-opacity='.13'>\u003ccircle cx='350' cy='335' r='265'/>\u003ccircle cx='350' cy='335' r='208' stroke-dasharray='6 13'/>\u003ccircle cx='350' cy='335' r='130'/>\u003cpath d='M30 335h640M350 15v640M120 105l460 460M120 565l460-460'/>\u003c/g>\u003cg stroke='#f1c37b' stroke-opacity='.4'>\u003cpath d='m78 427 110-65 84 83 170-260 186 59' stroke-dasharray='5 7'/>\u003ccircle cx='78' cy='427' r='6'/>\u003ccircle cx='188' cy='362' r='6'/>\u003ccircle cx='272' cy='445' r='6'/>\u003ccircle cx='442' cy='185' r='6'/>\u003ccircle cx='628' cy='244' r='6'/>\u003c/g>\u003cg transform='translate(12 5) rotate(-24 350 330)'>\u003cpath d='m271 416-19 124 36 65 38-63-21-126' fill='url(#title-engine)'/>\u003cpath d='m396 416-17 124 34 65 38-63-18-126' fill='url(#title-engine)'/>\u003cg fill='#102a34' stroke='#7ca8ad' stroke-width='2'>\u003cpath d='m220 250-61 70 13 139 72-49 10-136-34-24Z'/>\u003cpath d='m482 250 61 70-13 139-72-49-10-136 34-24Z'/>\u003c/g>\u003cpath d='m350 79 71 144 27 218-51 57-47-28-48 28-50-57 27-218L350 79Z' fill='url(#title-hull)' stroke='#a5efcf' stroke-opacity='.7' stroke-width='2'/>\u003cpath d='m350 98-32 146 32 49 32-49-32-146Z' fill='#a5efcf' fill-opacity='.13' stroke='#a5efcf' stroke-opacity='.6'/>\u003cpath d='M350 294v161M279 223l39 21m103-21-39 21M264 356l68-22m104 22-68-22' stroke='#8baeb4' stroke-opacity='.55'/>\u003cpath d='m289 284-31 115 36 48 25-99-30-64Zm122 0 31 115-36 48-25-99 30-64Z' fill='#09232e' stroke='#6d939c'/>\u003cpath d='m310 359 40-24 40 24v61l-40 28-40-28v-61Z' fill='#102f39' stroke='#f1c37b' stroke-opacity='.8'/>\u003cpath d='m330 372 20-12 20 12v31l-20 13-20-13v-31Z' fill='#f1c37b' fill-opacity='.16' stroke='#f1c37b'/>\u003cpath d='M217 311v73m267-73v73' stroke='#f1c37b' stroke-width='7'/>\u003cpath d='M282 436v24m137-24v24' stroke='#a5efcf' stroke-width='12'/>\u003cpath d='m308 192 14-31m56 0 14 31M283 268h19m96 0h19' stroke='#f1c37b' stroke-width='3'/>\u003ccircle cx='350' cy='318' r='5' fill='#a5efcf'/>\u003c/g>\u003cg fill='#112f39' stroke='#8fb9e5' stroke-opacity='.5'>\u003cpath d='m120 500 23 48-23-10-23 10 23-48Z' transform='rotate(-22 120 524)'/>\u003cpath d='m542 453 20 43-20-9-20 9 20-43Z' transform='rotate(-22 542 474)'/>\u003c/g>\u003cg stroke='#a5efcf' stroke-opacity='.5'>\u003cpath d='M473 112h102l30 30M88 244h75l31-31M420 549h133l24-24'/>\u003cpath d='M470 106v12m-6-6h12M85 238v12m-6-6h12'/>\u003c/g>\u003c/svg>"
+    },
+    "textSizes": [
+      {
+        "id": "standard",
+        "label": "기본",
+        "scale": 1
+      },
+      {
+        "id": "large",
+        "label": "크게",
+        "scale": 1.15
+      },
+      {
+        "id": "largest",
+        "label": "아주 크게",
+        "scale": 1.3
+      }
+    ],
+    "abilityLabels": {
+      "dash": "돌파",
+      "burst": "폭발",
+      "turret": "포탑"
     }
   },
   "campaign": {
@@ -3556,35 +3610,35 @@ window.GAME_DB = {
           "defense": "생산과 수리를 연결해 방어선을 만드세요. 모든 부대가 같은 곳에 있을 필요는 없습니다.",
           "salvage": "인양 위치와 귀환 경로를 계획하세요. 필요한 전력 거점을 먼저 확보할 수도 있습니다."
         },
-        "garageTitle": "필요한 개조를 직접 고르세요.",
-        "garageBody": "무작위 보상을 기다리지 않습니다. 구입한 개조를 슬롯과 전력 한도 안에서 배치하고, 필요한 장비에 자원을 투자하세요.",
-        "activeRig": "출격 기체",
-        "rigRank": "기체 등급",
-        "rigUpgrade": "기체 강화",
+        "garageTitle": "기체와 장비 설정",
+        "garageBody": "기체를 고르고 → 장착할 칸을 선택하고 → 장비의 장착 버튼을 누르세요. 구입한 장비는 사라지지 않으며 언제든 바꿀 수 있습니다.",
+        "activeRig": "사용할 기체",
+        "rigRank": "기체 강화",
+        "rigUpgrade": "기체 강화하기",
         "maxRank": "최대 등급",
-        "power": "설계 전력",
-        "powerHint": "강한 개조일수록 많은 전력을 사용합니다. 슬롯이 남아도 전력 한도를 넘길 수 없습니다.",
-        "slots": "개조 장착 슬롯",
+        "power": "장비 전력",
+        "powerHint": "장착한 장비의 전력 합계가 기체 한도를 넘으면 장착할 수 없습니다. 장비를 해제하거나 전력 연구를 진행하세요.",
+        "slots": "장착할 칸",
         "slot": "슬롯",
-        "emptySlot": "비어 있음",
+        "emptySlot": "빈 장비칸",
         "selectSlot": "이 슬롯에 장착",
-        "slotHint": "왼쪽에서 장착할 슬롯을 선택한 뒤 개조의 장착 버튼을 누르세요.",
+        "slotHint": "테두리가 빛나는 칸에 장착됩니다. 기존 장비를 교체해도 창고에 그대로 남습니다.",
         "unequip": "해제",
-        "moduleCatalog": "개조 설계 목록",
-        "allModules": "전체 설계",
-        "ownedModules": "보유 설계",
-        "buy": "구입",
-        "upgrade": "강화",
+        "moduleCatalog": "장비 선택",
+        "allModules": "전체 장비",
+        "ownedModules": "보유 장비",
+        "buy": "장비 구입",
+        "upgrade": "강화하기",
         "equip": "장착",
         "equipped": "장착 중",
-        "rank": "등급",
+        "rank": "강화",
         "notOwned": "미보유",
-        "modulePower": "전력",
+        "modulePower": "필요 전력",
         "needs": "필요",
         "cost": "비용",
         "ownedModuleHint": "구입·강화한 개조는 패배해도 사라지지 않습니다.",
         "statPreview": "현재 설계 성능",
-        "statSource": "기체·영구 레벨·연구·장착 개조를 모두 반영합니다.",
+        "statSource": "기체 · 영구 성장 · 장착 장비 · 연구 · 운용 방식을 모두 반영한 실제 수치입니다.",
         "noModules": "표시할 개조가 없습니다.",
         "researchTitle": "다음 전술을 먼저 연구하세요.",
         "researchBody": "어떤 기술을 먼저 열지 직접 선택합니다. 연구는 영구 적용되며, 선행 기술과 자료 비용이 필요합니다.",
@@ -3597,24 +3651,24 @@ window.GAME_DB = {
         "researchUnlocks": "새 설계 개방",
         "noPrerequisites": "기초 기술",
         "researchPersistent": "연구 성과는 모든 이후 출격에 적용됩니다.",
-        "squadTitle": "혼자 피하는 대신, 전선을 지휘하세요.",
-        "squadBody": "아군의 역할과 교리를 정하고 출격하세요. 전술 정지 중 이동·집중 공격·거점 확보·방어 명령을 내려 동시에 다른 전선을 운영할 수 있습니다.",
-        "squadSlots": "출격 분대",
-        "squadSlot": "지원 분대",
-        "emptySquad": "지원 없음",
+        "squadTitle": "출격할 동료와 운용 방식",
+        "squadBody": "바꿀 출격 자리를 고른 뒤 동료의 배치 버튼을 누르세요. 동료는 자동으로 전투하며, 출격 후에는 이동·공격·점령 명령을 내릴 수 있습니다.",
+        "squadSlots": "바꿀 출격 자리",
+        "squadSlot": "출격 자리",
+        "emptySquad": "동료를 배치하세요",
         "assign": "편성",
-        "assigned": "편성 중",
+        "assigned": "이 자리에 배치됨",
         "selectSquad": "편성할 분대 선택",
-        "doctrine": "출격 교리",
+        "doctrine": "부대 운용 방식 — 하나만 선택",
         "selected": "선택 중",
         "select": "선택",
-        "unitHp": "내구도",
-        "unitDamage": "화력",
-        "unitRange": "사거리",
+        "unitHp": "버티는 체력",
+        "unitDamage": "한 발 피해",
+        "unitRange": "공격 거리",
         "unitSpeed": "속도",
         "role": "역할",
         "unitLocked": "연구로 개방",
-        "doctrineHint": "교리는 기체와 지원 분대의 운용 방향을 바꿉니다.",
+        "doctrineHint": "선택한 운용 방식은 다음 출격부터 기체와 동료 전체에 적용됩니다. 비용 없이 바꿀 수 있습니다.",
         "commandHint": "전술 정지는 생각할 시간입니다. 이동한 뒤 반응하는 대신, 아군을 나눠 배치하고 적의 공격 방향을 바꿔보세요.",
         "debriefEyebrow": "AFTER ACTION REPORT",
         "victoryTitle": "이 전선은 우리의 것이다.",
@@ -3650,7 +3704,76 @@ window.GAME_DB = {
         "incompatible": "현재 기체의 무장과 호환되지 않습니다.",
         "resumeMission": "진행 중인 작전 복귀",
         "mainTitle": "메인 타이틀",
-        "mapGesture": "지도를 좌우로 밀어 다른 전선을 확인하세요."
+        "mapGesture": "지도를 좌우로 밀어 다른 전선을 확인하세요.",
+        "availableModules": "사용 가능한 장비",
+        "rigSwitchHint": "기체를 바꾸면 주무기가 달라집니다. 맞지 않는 장비는 파괴되지 않고 창고로 돌아갑니다.",
+        "weaponLabel": "주무기",
+        "selectRig": "이 기체 사용",
+        "selectedRig": "사용 중인 기체",
+        "selectedSocket": "선택한 장착칸",
+        "socket": "{slot}번 장비칸",
+        "socketBody": "아래 장비를 이 칸에 장착합니다.",
+        "remainingPower": "남은 전력",
+        "preview": "장착 전 성능 보기",
+        "previewTitle": "선택한 장비를 장착하면",
+        "previewEmpty": "장비의 성능 보기 버튼을 누르면 현재 기체와 비교할 수 있습니다.",
+        "current": "현재",
+        "afterEquip": "장착 후",
+        "noStatChange": "추가 기능은 아래 장비 효과를 확인하세요.",
+        "equipAt": "{slot}번 칸에 장착",
+        "replaceAt": "{slot}번 칸 교체",
+        "currentlyEquipped": "현재 장착 중",
+        "buyFirst": "구입 후 장착할 수 있습니다.",
+        "buyCost": "구입 비용",
+        "upgradeCost": "다음 강화 비용",
+        "nextRank": "다음 강화",
+        "effects": "이 장비의 효과",
+        "costShort": "재료 부족",
+        "needHave": "{name}: 보유 {have} / 필요 {need}",
+        "researchFirst": "먼저 연구 필요",
+        "openRequiredResearch": "필요한 연구 보기",
+        "compatibility": "사용 조건",
+        "projectileOnly": "탄환을 발사하는 주무기 전용",
+        "beamOnly": "전격 주무기 전용",
+        "requiresStat": "{name} {value} 이상 필요",
+        "conditionOr": " 또는 ",
+        "conditionAnd": " · ",
+        "powerShort": "장착 후 전력 {usage}/{capacity} — 다른 장비를 해제하거나 전력 한도를 늘리세요.",
+        "upgradePowerShort": "강화 후 전력 한도를 넘습니다. 먼저 다른 장비를 해제하세요.",
+        "activeLock": "진행 중인 작전이 있어 정비와 편성을 바꿀 수 없습니다. 작전 복귀 후 귀환하거나 임무를 마무리하세요.",
+        "goResume": "진행 중인 작전 복귀",
+        "selectFirst": "선택",
+        "garageSteps": [
+          "기체 선택",
+          "장착할 칸 선택",
+          "장비 구입·장착"
+        ],
+        "squadSteps": [
+          "출격 자리 선택",
+          "동료 배치",
+          "운용 방식 선택"
+        ],
+        "position": "{slot}번 출격 자리",
+        "assignAt": "{slot}번 자리에 배치",
+        "assignedElsewhere": "다른 자리에도 배치되어 있습니다.",
+        "unitUpgrade": "대원 훈련하기",
+        "unitRank": "훈련 등급",
+        "unitUnlock": "동료 영구 해금",
+        "unitUnlockCost": "해금 비용",
+        "unitUpgradeCost": "다음 훈련 비용",
+        "unitRepair": "초당 수리",
+        "unitRole": "전투 역할",
+        "clearSquad": "이 자리 비우기",
+        "applyDoctrine": "이 운용 방식 사용",
+        "selectedDoctrine": "현재 적용 중",
+        "doctrineRoles": {
+          "tank": "전방 방어",
+          "assault": "원거리 화력",
+          "support": "수리·지원"
+        },
+        "effectsPerRank": "강화 {rank}단계 기준",
+        "squadSummary": "현재 출격 편성",
+        "unitHelp": "배치한 동료는 다음 출격 때 함께 나갑니다. 전투에서 파괴되어도 해금과 훈련 등급은 유지됩니다."
       },
       "tabs": [
         {
@@ -3716,14 +3839,191 @@ window.GAME_DB = {
         "secondsPerMinute": 60,
         "tierScale": 5,
         "visibleRequirementLimit": 3,
-        "resourceIconFallback": "scrap"
+        "resourceIconFallback": "scrap",
+        "compareEpsilon": 0.0001
       },
       "missionIcons": {
         "assault": "crosshair",
         "convoy": "move",
         "defense": "shield",
         "salvage": "scrap"
-      }
+      },
+      "statMeta": {
+        "maxHp": {
+          "label": "최대 내구도",
+          "unit": "",
+          "format": "flat"
+        },
+        "maxShield": {
+          "label": "최대 실드",
+          "unit": "",
+          "format": "flat"
+        },
+        "damage": {
+          "label": "주무기 위력",
+          "unit": "%",
+          "format": "percent"
+        },
+        "fireRate": {
+          "label": "공격 속도",
+          "unit": "%",
+          "format": "percent"
+        },
+        "speed": {
+          "label": "이동 속도",
+          "unit": "",
+          "format": "flat"
+        },
+        "armor": {
+          "label": "받는 피해 감소",
+          "unit": "",
+          "format": "flat"
+        },
+        "burstCooldown": {
+          "label": "자력 폭발 대기시간",
+          "unit": "초",
+          "format": "flat"
+        },
+        "burstDamage": {
+          "label": "자력 폭발 피해",
+          "unit": "",
+          "format": "flat"
+        },
+        "burstRadius": {
+          "label": "자력 폭발 범위",
+          "unit": "",
+          "format": "flat"
+        },
+        "chainCount": {
+          "label": "연쇄 전격 대상",
+          "unit": "명",
+          "format": "flat"
+        },
+        "chainDamage": {
+          "label": "연쇄 전격 위력",
+          "unit": "%",
+          "format": "percent"
+        },
+        "chainRange": {
+          "label": "연쇄 전격 거리",
+          "unit": "",
+          "format": "flat"
+        },
+        "critChance": {
+          "label": "치명타 확률",
+          "unit": "%",
+          "format": "percent"
+        },
+        "dashCooldown": {
+          "label": "대시 대기시간",
+          "unit": "초",
+          "format": "flat"
+        },
+        "dashDamage": {
+          "label": "대시 충돌 피해",
+          "unit": "",
+          "format": "flat"
+        },
+        "droneCount": {
+          "label": "지원 드론",
+          "unit": "기",
+          "format": "flat"
+        },
+        "droneRate": {
+          "label": "드론 사격 간격",
+          "unit": "초",
+          "format": "flat"
+        },
+        "killHeal": {
+          "label": "처치 시 내구 회복",
+          "unit": "",
+          "format": "flat"
+        },
+        "killShield": {
+          "label": "처치 시 실드 회복",
+          "unit": "",
+          "format": "flat"
+        },
+        "mineCount": {
+          "label": "대시 기뢰",
+          "unit": "개",
+          "format": "flat"
+        },
+        "movingDamage": {
+          "label": "이동 중 추가 위력",
+          "unit": "%",
+          "format": "percent"
+        },
+        "orbitDamage": {
+          "label": "고철 장갑 접촉 피해",
+          "unit": "",
+          "format": "flat"
+        },
+        "pickupRadius": {
+          "label": "잔해 회수 거리",
+          "unit": "",
+          "format": "flat"
+        },
+        "pierce": {
+          "label": "추가 관통 대상",
+          "unit": "명",
+          "format": "flat"
+        },
+        "projectileCount": {
+          "label": "추가 발사체",
+          "unit": "발",
+          "format": "flat"
+        },
+        "relaySpeed": {
+          "label": "거점 확보 속도",
+          "unit": "%",
+          "format": "percent"
+        },
+        "splashRadius": {
+          "label": "탄환 폭발 범위",
+          "unit": "",
+          "format": "flat"
+        },
+        "spreadBonus": {
+          "label": "발사각 확장",
+          "unit": "",
+          "format": "flat"
+        },
+        "turretCooldown": {
+          "label": "포탑 대기시간",
+          "unit": "초",
+          "format": "flat"
+        },
+        "turretDamage": {
+          "label": "포탑 피해",
+          "unit": "",
+          "format": "flat"
+        },
+        "turretDuration": {
+          "label": "포탑 유지시간",
+          "unit": "초",
+          "format": "flat"
+        },
+        "chain": {
+          "label": "연쇄 전격",
+          "unit": "회",
+          "format": "flat"
+        }
+      },
+      "mutatingActions": [
+        "rig",
+        "rig-upgrade",
+        "module-buy",
+        "module-upgrade",
+        "module-equip",
+        "unequip",
+        "research",
+        "squad-assign",
+        "squad-clear",
+        "unit-buy",
+        "unit-upgrade",
+        "doctrine"
+      ]
     }
   },
   "tactics": {
