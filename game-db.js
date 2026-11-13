@@ -5293,7 +5293,9 @@ window.GAME_DB = {
       "scrapCost": "고철 {cost}",
       "saveReady": "진행을 저장 파일로 내보냈습니다.",
       "invalidSave": "저장 파일을 확인하세요",
-      "subtitle": "해상 약탈 액션"
+      "subtitle": "해상 약탈 액션",
+      "desktopIntro": "WASD로 항해 · 마우스를 눌러 붉은 화약선 포격",
+      "mobileIntro": "왼쪽 스틱으로 항해 · 오른쪽 포격으로 화약선 공격"
     }
   }
 };
