@@ -1,0 +1,2202 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0a161d">
+<title>밀물의 설계자 — TIDEBREAKER</title>
+<style>
+/* Layout values are presentation only. All game content, balancing and text live in #game-db. */
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,"Pretendard","Noto Sans KR",system-ui,-apple-system,sans-serif;font-size:14px;line-height:1.55}button,input,textarea{font:inherit}button{cursor:pointer;color:inherit}button:disabled{cursor:not-allowed;opacity:.38}button:focus-visible,input:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--gold);outline-offset:4px}button{touch-action:manipulation}svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.65;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}button svg{pointer-events:none}.app{max-width:1600px;margin:auto;padding:0 36px 24px;min-height:100vh;background:radial-gradient(ellipse at 52% 40%,#17313b66,transparent 60%)}.topbar{height:88px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);gap:24px}.brand{display:flex;align-items:center;gap:13px}.brandmark{width:42px;height:42px;display:grid;place-items:center;border:1px solid var(--accent);color:var(--accent);transform:rotate(-7deg)}.brandmark svg{width:28px;height:28px}.brand h1{font-size:20px;letter-spacing:-.7px;margin:0;font-weight:750}.brand small,.eyebrow{font-size:10px;letter-spacing:2.5px;color:var(--accent);font-weight:700}.brand small{display:block;color:var(--muted);letter-spacing:3px;font-size:9px}.top-tools{display:flex;align-items:center;gap:8px}.icon-btn{border:1px solid var(--line);background:transparent;padding:9px;display:flex;align-items:center;justify-content:center;border-radius:5px;color:var(--muted)}.icon-btn:hover{color:var(--accent);border-color:var(--accent)}.text-btn{display:flex;align-items:center;gap:8px;background:transparent;border:1px solid var(--line);padding:9px 13px;border-radius:5px;font-size:12px}.text-btn svg{width:16px;height:16px}.text-btn:hover{border-color:var(--accent);color:var(--accent)}.campaign-head{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:24px 0 20px}.campaign-title{display:flex;align-items:center;gap:14px}.operation-index{color:var(--gold);font-size:36px;font-weight:300;line-height:1;border-right:1px solid var(--line);padding-right:16px;font-variant-numeric:tabular-nums}.campaign-title h2{font-size:18px;letter-spacing:-.5px;margin:3px 0}.campaign-title p{margin:0;color:var(--muted);font-size:11px}.route-track{display:flex;align-items:center;gap:0}.route-node{display:grid;place-items:center;border:1px solid var(--line);height:29px;width:29px;transform:rotate(45deg);color:var(--muted);background:var(--bg)}.route-node span{transform:rotate(-45deg);font-size:10px}.route-node.current{border-color:var(--gold);color:var(--gold);box-shadow:0 0 20px #f2ca8317}.route-node.done{border-color:var(--accent);color:var(--accent);background:#a7efd913}.route-connector{width:26px;height:1px;background:var(--line)}.game-layout{display:grid;grid-template-columns:212px minmax(360px,1fr) 260px;gap:22px;align-items:start}.panel{background:linear-gradient(140deg,#13262e,var(--panel));border:1px solid var(--line);border-radius:8px}.player-panel{padding:19px 17px;position:relative;overflow:hidden}.panel-label{color:var(--muted);font-size:10px;letter-spacing:1.8px;text-transform:uppercase}.pilot-art{height:133px;position:relative;margin:8px 0 18px;display:grid;place-items:center;background:radial-gradient(ellipse,#a7efd916,transparent 70%)}.pilot-art:before,.pilot-art:after{content:"";position:absolute;border:1px solid #a7efd927;width:103px;height:103px;transform:rotate(45deg)}.pilot-art:after{height:75px;width:75px;border-style:dashed;transform:rotate(22deg)}.pilot-art svg{width:75px;height:75px;color:var(--accent);filter:drop-shadow(0 0 15px #a7efd955);stroke-width:.7}.pilot-level{position:absolute;bottom:-2px;right:4px;font-size:11px;color:var(--gold);background:var(--bg);padding:3px 8px;border:1px solid var(--line)}.player-name{display:flex;justify-content:space-between;gap:4px;align-items:center;margin-bottom:16px}.player-name strong{font-size:17px}.player-name span{font-size:10px;color:var(--muted)}.meter-heading{display:flex;align-items:center;justify-content:space-between;margin-top:12px;margin-bottom:7px;font-size:11px}.meter-heading span{color:var(--muted)}.meter-heading strong{font-variant-numeric:tabular-nums;font-weight:500}.meter{height:5px;background:#07131b;border-radius:2px;overflow:hidden}.meter i{height:100%;display:block;background:var(--accent);transition:width .3s}.meter.hp i{background:var(--gold)}.meter.xp{height:3px}.meter.xp i{background:var(--blue)}.energy-pips{display:flex;gap:5px}.pip{height:7px;flex:1;border:1px solid var(--line);background:#07131b;transform:skew(-18deg)}.pip.full{background:var(--accent);border-color:var(--accent);box-shadow:0 0 8px #a7efd922}.shield-line{color:var(--blue);font-size:11px;margin-top:9px;display:flex;align-items:center;gap:6px}.shield-line svg{height:14px;width:14px}.build-panel{margin-top:15px;padding:17px}.section-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:13px}.section-heading h3{font-size:12px;margin:0;font-weight:600}.section-heading .count{font-size:10px;color:var(--muted)}.module{padding:10px 0;display:flex;gap:9px;border-top:1px solid var(--line)}.module:first-of-type{border-top:0}.module svg{color:var(--gold);width:19px;height:19px;margin-top:2px}.module strong{font-size:11px;font-weight:600}.module p{margin:3px 0 0;font-size:10px;color:var(--muted);line-height:1.6}.empty{font-size:11px;color:var(--muted);line-height:1.8;margin:0}.objective{border-left:2px solid var(--accent);padding-left:12px;margin-top:20px}.objective strong{font-size:11px;color:var(--accent)}.objective p{font-size:10px;color:var(--muted);margin:6px 0 0}.map-panel{padding:19px 20px 13px;position:relative;background:linear-gradient(160deg,#10242d88,#10202999)}.map-head{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:13px}.map-head h3{font-size:12px;font-weight:500;margin:4px 0 0}.turn-chip{padding:5px 10px;font-size:11px;border:1px solid var(--line);border-radius:4px;white-space:nowrap}.turn-chip strong{color:var(--gold);margin-left:4px;font-variant-numeric:tabular-nums}.board-frame{padding:18px 0 0 20px;position:relative}.column-labels{position:absolute;top:0;left:20px;right:0;display:grid;grid-template-columns:repeat(var(--cols),1fr)}.row-labels{position:absolute;left:0;top:18px;bottom:0;display:grid;grid-template-rows:repeat(var(--rows),1fr)}.coordinate{font-size:9px;color:#6b8d9a;text-align:center;display:flex;align-items:center;justify-content:center;font-family:monospace}.board{display:grid;grid-template-columns:repeat(var(--cols),1fr);grid-template-rows:repeat(var(--rows),1fr);gap:5px;position:relative;aspect-ratio:var(--cols)/var(--rows);isolation:isolate}.tile{position:relative;border:1px solid #30525f;background:#193540;min-width:0;min-height:0;padding:0;display:flex;align-items:center;justify-content:center;border-radius:3px;transition:background .14s,box-shadow .14s,border-color .14s;isolation:isolate;overflow:visible}.tile:before{content:"";position:absolute;inset:5px;border:1px solid #5f8f9a11;pointer-events:none}.tile:after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:2px;z-index:-1}.tile:hover{border-color:var(--accent);z-index:3}.tile.valid{border-color:#87d7c268}.tile.valid:hover,.tile.hovered{background:#31595b;border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),0 0 19px #a7efd91c}.tile.affected{box-shadow:inset 0 0 0 2px var(--accent);z-index:1}.tile.threat:after{background:repeating-linear-gradient(-45deg,transparent,transparent 7px,#f18a7d19 7px,#f18a7d19 9px);border:1px solid #f18a7d55}.tile.focus-threat:after{background:repeating-linear-gradient(-45deg,#f18a7d1f,#f18a7d1f 6px,#f18a7d4a 6px,#f18a7d4a 8px);border-color:var(--danger)}.terrain-art{position:absolute;inset:0;display:grid;place-items:center;opacity:.23;pointer-events:none}.terrain-art svg{width:33%;height:33%;color:var(--terrainColor,var(--muted))}.tile.entity .terrain-art{opacity:.13}.tile.terrain-water{background:#102a35}.tile.terrain-reef{background:#203b3c}.tile.terrain-vent,.tile.terrain-hazard{background:#3a302d}.tile.terrain-charge,.tile.terrain-energy{background:#203d43}.tile.terrain-repair{background:#20403b}.tile-badge{position:absolute;right:3px;top:1px;font-size:9px;color:var(--danger);font-family:monospace;line-height:1.4;pointer-events:none}.unit{height:66%;width:66%;border-radius:8px;display:flex;align-items:center;justify-content:center;position:relative;border:1px solid #f18a7d80;color:var(--danger);background:#28292b;box-shadow:0 5px 0 #07131988,0 4px 12px #0003;pointer-events:none}.unit svg{width:62%;height:62%;stroke-width:1.5}.unit.player{border-color:var(--gold);color:var(--gold);background:#39443a;border-radius:50% 50% 9px 9px;box-shadow:0 0 16px #f2ca8321,0 5px 0 #07131988}.unit.enemy{background:#3d3232}.unit .unit-hp{position:absolute;bottom:-7px;left:8%;right:8%;height:3px;background:#0b181d;border:0}.unit-hp i{display:block;height:100%;background:currentColor}.unit-order{position:absolute;left:-6px;top:-6px;width:15px;height:15px;border-radius:50%;background:var(--danger);color:var(--bg);display:grid;place-items:center;font-size:9px;font-family:monospace}.unit-shield{position:absolute;right:-6px;bottom:-4px;font-size:9px;border:1px solid var(--blue);color:var(--blue);background:var(--bg);padding:0 3px;line-height:13px}.trap-marker{position:absolute;left:4px;bottom:3px;color:var(--gold);display:flex;align-items:center;gap:1px;font-size:8px}.trap-marker svg{width:12px;height:12px}.tide-arrow{position:absolute;left:-20px;color:var(--accent);z-index:4;display:flex;align-items:center;pointer-events:none}.tide-arrow svg{width:16px;height:16px}.map-legend{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:15px;font-size:9px;color:var(--muted)}.legend-items{display:flex;gap:12px;align-items:center}.legend-items span{display:flex;align-items:center;gap:5px}.legend-dot{width:6px;height:6px;background:var(--danger);display:block}.legend-dot.target{background:var(--accent)}.tide-label{display:flex;align-items:center;gap:5px;color:var(--accent);white-space:nowrap}.tide-label svg{width:14px;height:14px}.tile-info{margin-top:11px;border:1px solid var(--line);border-radius:6px;padding:10px 13px;min-height:63px;display:flex;align-items:center;gap:12px;background:#0c1b23}.tile-info>svg{color:var(--accent);width:21px;height:21px}.tile-info strong{font-weight:500;font-size:11px}.tile-info p{font-size:10px;color:var(--muted);margin:3px 0 0;line-height:1.5}.tile-info .preview-text{color:var(--accent)}.action-heading{display:flex;justify-content:space-between;align-items:center;margin:21px 0 10px}.action-heading h3{font-size:13px;margin:0}.action-heading p{font-size:10px;color:var(--muted);margin:0}.actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.action-card{border:1px solid var(--line);border-radius:6px;padding:11px;background:var(--panel);text-align:left;position:relative;min-height:87px;transition:transform .15s,border-color .15s,background .15s}.action-card:not(:disabled):hover{transform:translateY(-2px);border-color:#7ea69f}.action-card.active{border-color:var(--accent);background:#1c363c;box-shadow:0 0 0 1px #a7efd92a}.action-card .card-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}.action-card svg{color:var(--accent);width:20px;height:20px}.card-cost{font-family:monospace;font-size:11px;color:var(--gold);display:flex;align-items:center;gap:3px}.card-cost svg{height:12px;width:12px;color:var(--gold)}.card-key{font-size:8px;color:var(--muted);position:absolute;bottom:8px;right:9px;border:1px solid var(--line);padding:0 3px}.action-card strong{font-size:11px;font-weight:600;display:block;padding-right:10px}.action-card p{font-size:9px;color:var(--muted);margin:3px 10px 0 0;line-height:1.5}.turn-controls{display:flex;align-items:stretch;gap:10px;margin-top:13px}.undo-btn{padding:11px 14px;display:flex;align-items:center;gap:7px;background:transparent;border:1px solid var(--line);border-radius:6px;font-size:11px}.undo-btn svg{width:16px;height:16px}.end-btn{flex:1;background:var(--accent);color:#12292d;border:1px solid var(--accent);border-radius:6px;display:flex;justify-content:space-between;align-items:center;padding:10px 17px}.end-btn strong{font-size:13px}.end-btn small{display:block;opacity:.65;font-size:9px;margin-top:1px}.end-btn svg{width:20px;height:20px}.end-btn:not(:disabled):hover{background:#c4ffeb;box-shadow:0 0 20px #a7efd918}.intent-panel{padding:17px 14px}.intent-sub{font-size:9px;color:var(--muted);margin:-7px 0 13px}.enemy-intent{border:1px solid var(--line);border-left:2px solid var(--danger);background:#14252c;padding:11px 10px;margin-top:9px;border-radius:4px;transition:background .15s;cursor:default}.enemy-intent:hover,.enemy-intent.focused{background:#302b2c;border-color:#9e695e}.enemy-head{display:flex;align-items:center;gap:8px}.enemy-head svg{color:var(--danger);width:21px;height:21px}.enemy-head strong{font-size:11px;font-weight:600;flex:1}.enemy-head .sequence{font-family:monospace;font-size:9px;color:var(--muted)}.enemy-vitals{display:flex;align-items:center;gap:7px;margin:9px 0}.enemy-vitals .meter{height:3px;flex:1}.enemy-vitals .meter i{background:var(--danger)}.enemy-vitals span{font-size:9px;color:var(--muted);font-family:monospace}.intent-detail{font-size:10px;color:var(--ink);line-height:1.7}.intent-detail small{color:var(--muted);font-size:9px;display:block}.intent-damage{display:flex;align-items:center;gap:5px;font-size:9px;color:var(--danger);margin-top:7px}.intent-damage svg{width:12px;height:12px}.order-note{font-size:9px;color:var(--muted);margin:14px 0 0;line-height:1.7}.journal-panel{padding:16px 14px;margin-top:15px;background:transparent}.log-item{font-size:10px;color:var(--muted);line-height:1.7;padding:7px 0;border-top:1px solid #29414b80}.log-item:first-child{border:0;padding-top:0}.log-item.good,.log-item.success{color:var(--accent)}.log-item.danger,.log-item.damage{color:var(--danger)}.footer{display:flex;justify-content:space-between;color:#5e7c88;font-size:9px;margin-top:21px;gap:18px}.footer .seed{font-family:monospace;letter-spacing:1px;white-space:nowrap}.modal-backdrop{position:fixed;inset:0;background:#061017db;backdrop-filter:blur(11px);display:flex;align-items:center;justify-content:center;padding:28px;z-index:20;overflow:auto}.modal-backdrop[hidden]{display:none}.modal{width:min(760px,100%);background:linear-gradient(145deg,#172e36,#0e1d26);border:1px solid #41616b;border-radius:12px;padding:36px;position:relative;box-shadow:0 28px 100px #0008;max-height:calc(100vh - 56px);overflow:auto}.modal.wide{width:min(1030px,100%)}.modal .close-modal{position:absolute;right:16px;top:16px;z-index:2}.modal h2{font-size:29px;line-height:1.4;letter-spacing:-1px;margin:12px 0 13px;white-space:pre-line}.modal .lead{font-size:12px;color:var(--muted);max-width:570px;line-height:1.9;margin:0 0 23px}.intro-hero{position:relative;overflow:hidden;min-height:210px;padding-right:170px}.intro-art{position:absolute;right:5px;top:20px;height:150px;width:150px;display:grid;place-items:center}.intro-art:before,.intro-art:after{content:"";position:absolute;inset:8px;border:1px solid #a7efd944;transform:rotate(45deg)}.intro-art:after{inset:30px;transform:rotate(15deg);border-color:#f2ca8344}.intro-art svg{width:77px;height:77px;color:var(--accent);filter:drop-shadow(0 0 20px #a7efd955)}.core-rule{padding:10px 14px;border:1px solid #a7efd94a;background:#a7efd909;color:var(--accent);display:flex;align-items:center;gap:10px;font-size:12px;margin:8px 0 24px;border-radius:5px}.core-rule svg{width:18px;height:18px}.modal-label{font-size:11px;margin:18px 0 10px;color:var(--ink);display:block}.class-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.class-card{padding:16px 13px;text-align:left;background:#102029;border:1px solid var(--line);border-radius:6px;position:relative}.class-card.active{border-color:var(--gold);background:#f2ca8309}.class-card svg{color:var(--gold);height:24px;width:24px;margin-bottom:9px}.class-card strong{display:block;font-size:13px}.class-card p{font-size:10px;line-height:1.8;color:var(--muted);margin:7px 0 0}.class-card small{font-size:9px;color:var(--accent);display:block;margin-top:10px}.seed-input{display:flex;align-items:center;gap:10px;margin-top:19px}.seed-input label{font-size:11px;white-space:nowrap;color:var(--muted)}input{border:1px solid var(--line);border-radius:5px;background:#0c1a22;color:var(--ink);padding:10px 12px;min-width:0}.seed-input input{flex:1;font-family:monospace;font-size:11px}.primary{display:flex;align-items:center;justify-content:center;gap:10px;padding:13px 24px;background:var(--accent);color:#10242c;border:0;border-radius:5px;font-weight:700;font-size:12px}.primary:hover{background:#c4ffeb}.primary svg{height:17px;width:17px}.modal-actions{display:flex;align-items:center;justify-content:flex-end;gap:10px;margin-top:23px}.reward-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}.reward-card{text-align:left;background:#10222b;border:1px solid var(--line);border-radius:7px;padding:21px 17px;transition:transform .15s,border-color .15s}.reward-card:hover{border-color:var(--gold);transform:translateY(-3px)}.reward-card>.reward-icon{height:48px;width:48px;display:grid;place-items:center;border:1px solid #f2ca8355;background:#f2ca8308;border-radius:10px;color:var(--gold);margin-bottom:20px}.reward-card strong{display:block;font-size:15px;font-weight:650}.reward-card p{font-size:11px;line-height:1.8;color:var(--muted);margin:10px 0 20px}.reward-card small{font-size:10px;color:var(--accent);display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--line);padding-top:12px}.reward-card small svg{width:14px;height:14px}.tutorial-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.tutorial-step{padding:17px;border:1px solid var(--line);border-radius:7px;background:#0f222b}.tutorial-step .step-heading{display:flex;align-items:center;gap:10px}.tutorial-step svg{color:var(--accent)}.tutorial-step .step-num{margin-left:auto;font-family:monospace;color:var(--muted);font-size:10px}.tutorial-step h3{font-size:13px;font-weight:600;margin:14px 0 8px}.tutorial-step p{font-size:11px;line-height:1.9;color:var(--muted);margin:0}.help-footer{font-size:11px;line-height:1.8;color:var(--gold);margin:20px 0 0}.summary-grid{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:23px 0}.summary-stat{padding:22px 8px;text-align:center}.summary-stat strong{font-size:28px;color:var(--gold);display:block;font-weight:400;font-family:monospace}.summary-stat span{font-size:10px;color:var(--muted)}.db-editor{width:100%;height:380px;resize:vertical;background:#09151d;color:#b9d7d6;border:1px solid var(--line);padding:15px;font-family:monospace;font-size:11px;line-height:1.65;tab-size:2;border-radius:6px}.db-status{font-size:11px;line-height:1.7;margin:12px 0;color:var(--accent);white-space:pre-wrap}.db-help{font-size:10px;color:var(--muted);line-height:1.8}.toast{position:fixed;bottom:27px;left:50%;transform:translate(-50%,20px);padding:12px 20px;border:1px solid var(--accent);border-radius:6px;background:#142c34;color:var(--accent);font-size:12px;z-index:40;opacity:0;transition:opacity .2s,transform .2s;pointer-events:none;max-width:90vw;box-shadow:0 8px 30px #0005}.toast.visible{opacity:1;transform:translate(-50%,0)}.toast.error{border-color:var(--danger);color:var(--danger)}.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}@media(min-width:1500px){.app{padding-left:50px;padding-right:50px}.game-layout{grid-template-columns:230px minmax(360px,1fr) 280px;gap:26px}.actions{grid-template-columns:repeat(4,minmax(0,1fr))}}@media(max-width:1160px){.app{padding:0 22px 20px}.game-layout{grid-template-columns:180px minmax(330px,1fr) 220px;gap:14px}.map-panel{padding:14px}.player-panel{padding:16px 13px}.build-panel{padding:14px}.action-card{padding:9px}.pilot-art{height:110px}.topbar{height:76px}.campaign-head{padding:20px 0}.intro-hero{padding-right:140px}.intro-art{width:125px;height:125px}.top-tools .desktop-text{display:none}}@media(max-width:960px){.game-layout{grid-template-columns:minmax(0,1fr) 235px}.left-column{grid-column:1/-1;display:flex;gap:14px;align-items:stretch}.player-panel{flex:1;display:grid;grid-template-columns:125px 1fr;gap:0 18px;padding:15px 20px}.player-panel>.panel-label,.pilot-art{display:none}.player-name{grid-row:1/4;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;margin:0}.player-panel .meter-heading{margin:0 0 5px}.player-panel>.meter,.player-panel>.energy-pips{margin-bottom:10px}.player-panel>.shield-line{grid-column:1;margin:0;grid-row:3;font-size:10px}.player-panel>.xp-heading,.player-panel>.meter.xp{display:none}.build-panel{flex:1;margin:0;padding:15px;max-height:130px;overflow:auto}.objective{display:none}.footer{font-size:8px}.actions{grid-template-columns:repeat(3,minmax(0,1fr))}.map-legend .legend-items{gap:7px}.route-track{transform:scale(.9);transform-origin:right}.campaign-title h2{font-size:16px}}@media(max-width:700px){.app{padding:0 13px 18px}.topbar{height:69px;gap:8px}.brand h1{font-size:16px}.brand small{font-size:8px;letter-spacing:2px}.brandmark{width:32px;height:32px}.brandmark svg{width:23px;height:23px}.brand{gap:10px}.top-tools{gap:5px}.top-tools .icon-btn{padding:7px}.top-tools .icon-btn svg{width:17px;height:17px}.top-tools .optional-tool{display:none}.top-tools .text-btn{padding:7px;font-size:0;gap:0}.top-tools .text-btn svg{width:17px;height:17px}.campaign-head{padding:17px 0 14px;gap:7px}.campaign-title{gap:10px}.operation-index{font-size:29px;padding-right:11px}.campaign-title .eyebrow{font-size:8px;letter-spacing:1.8px}.campaign-title h2{font-size:13px;margin:2px 0}.campaign-title p{font-size:9px}.route-track{display:none}.game-layout{display:flex;flex-direction:column;gap:14px}.left-column{width:100%}.player-panel{grid-template-columns:100px 1fr;padding:12px 15px;gap:0 12px}.player-name strong{font-size:14px}.player-name span{font-size:9px}.build-panel{display:none}.center-column,.right-column{width:100%}.map-panel{padding:12px}.map-head{margin-bottom:9px}.map-head .eyebrow{font-size:8px;letter-spacing:1.8px}.map-head h3{font-size:10px}.turn-chip{font-size:10px;padding:4px 8px}.board{gap:4px}.board-frame{padding-left:16px}.column-labels{left:16px}.unit{border-radius:5px}.tile-badge{font-size:8px}.unit-order{height:13px;width:13px;font-size:8px;left:-5px;top:-5px}.map-legend{font-size:8px;gap:5px;margin-top:12px}.tide-label svg{width:12px;height:12px}.tile-info{min-height:65px;padding:9px 11px}.tile-info strong{font-size:10px}.tile-info p{font-size:9px}.action-heading{margin-top:17px}.action-heading h3{font-size:12px}.action-heading p{display:none}.actions{gap:6px;grid-template-columns:repeat(3,minmax(0,1fr))}.action-card{padding:10px 8px;min-height:90px}.action-card strong{font-size:10px}.action-card p{font-size:8px}.action-card svg{height:19px;width:19px}.card-key{display:none}.turn-controls{position:sticky;bottom:10px;z-index:7;background:#0a161deb;padding:8px;border:1px solid var(--line);border-radius:8px;box-shadow:0 3px 25px #0006}.undo-btn{font-size:10px;padding:10px}.end-btn{padding:9px 13px}.end-btn strong{font-size:12px}.end-btn small{font-size:8px}.right-column{display:grid;grid-template-columns:1fr;gap:10px}.intent-panel{padding:14px}.intent-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.enemy-intent{margin:0;padding:9px}.intent-sub{font-size:9px}.enemy-head strong{font-size:10px}.enemy-head svg{width:18px;height:18px}.intent-detail{font-size:9px}.journal-panel{margin:0;padding:13px}.journal-panel .log-item{font-size:9px}.footer{display:block;margin-top:17px;line-height:1.9}.footer .seed{margin-top:4px}.modal-backdrop{padding:13px}.modal{padding:25px 20px;max-height:calc(100dvh - 26px)}.modal h2{font-size:25px;margin-top:10px}.modal .lead{font-size:11px;margin-bottom:17px}.intro-hero{padding-right:0;min-height:0}.intro-art{display:none}.core-rule{font-size:10px;padding:10px;margin:4px 0 18px}.class-grid{grid-template-columns:1fr}.class-card{padding:12px 13px;display:grid;grid-template-columns:25px 1fr;gap:0 12px}.class-card svg{grid-row:1/4;margin:3px 0}.class-card p{font-size:10px;margin:4px 0 0}.class-card small{font-size:9px;margin-top:4px}.class-card strong{font-size:12px}.seed-input{display:block}.seed-input label{display:block;margin-bottom:7px}.seed-input input{width:100%;font-size:10px}.modal-actions{flex-wrap:wrap;gap:8px;margin-top:18px}.modal-actions .primary{flex:1}.reward-grid{grid-template-columns:1fr;gap:10px}.reward-card{padding:15px;display:grid;grid-template-columns:42px 1fr;gap:0 13px}.reward-card>.reward-icon{width:42px;height:42px;grid-row:1/4;margin:0}.reward-card strong{font-size:13px}.reward-card p{font-size:10px;margin:6px 0 12px}.reward-card small{font-size:9px}.tutorial-grid{grid-template-columns:1fr;gap:10px}.tutorial-step{padding:14px}.tutorial-step h3{margin:9px 0 6px;font-size:12px}.tutorial-step p{font-size:10px}.summary-grid{grid-template-columns:repeat(2,1fr)}.summary-stat{padding:15px 6px}.db-editor{height:300px}.modal .close-modal{right:10px;top:10px}.modal .close-modal svg{width:17px;height:17px}.eyebrow{font-size:9px;letter-spacing:2px}.toast{font-size:11px;text-align:center;bottom:22px;width:max-content}.intent-damage{font-size:8px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;animation:none!important}} 
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <header class="topbar"><div class="brand"><div class="brandmark" data-icon="logo"></div><div><h1 id="brand-title"></h1><small id="brand-english"></small></div></div><nav class="top-tools" aria-label="게임 메뉴"><button class="icon-btn" id="help-btn" data-title="help" data-icon="help"></button><button class="icon-btn optional-tool" id="save-btn" data-title="save" data-icon="download"></button><button class="icon-btn optional-tool" id="load-btn" data-title="load" data-icon="upload"></button><button class="icon-btn" id="db-btn" data-title="db" data-icon="db"></button><button class="text-btn" id="new-btn"><span data-icon="flag"></span><span class="desktop-text" data-ui="newRun"></span></button></nav></header>
+  <div class="campaign-head"><div class="campaign-title"><div class="operation-index" id="stage-number"></div><div><span class="eyebrow" data-ui="op"></span><h2 id="encounter-name"></h2><p id="encounter-subtitle"></p></div></div><div class="route-track" id="route-track" role="img" data-title="campaign"></div></div>
+  <main class="game-layout"><aside class="left-column"><section class="panel player-panel" id="player-panel"></section><section class="panel build-panel"><div class="section-heading"><h3 data-ui="build"></h3><span class="count" id="module-count"></span></div><div id="modules"></div></section><div class="objective"><strong data-ui="objectives"></strong><p data-ui="objectiveBody"></p></div></aside>
+  <section class="center-column"><div class="panel map-panel"><div class="map-head"><div><span class="eyebrow" data-ui="boardEyebrow"></span><h3 data-ui="boardTitle"></h3></div><div class="turn-chip"><span data-ui="turn"></span><strong id="turn-number"></strong></div></div><div class="board-frame"><div class="column-labels" id="column-labels"></div><div class="row-labels" id="row-labels"></div><div class="board" id="board" role="grid" aria-label="전술 지도"></div></div><div class="map-legend"><div class="legend-items"><span><i class="legend-dot"></i><span data-ui="danger"></span></span><span><i class="legend-dot target"></i><span data-ui="target"></span></span></div><div class="tide-label" id="tide-label"></div></div></div><div class="tile-info" id="tile-info" aria-live="polite"></div><div class="action-heading"><h3 data-ui="actions"></h3><p data-ui="actionSub"></p></div><div class="actions" id="actions" role="group" aria-label="전술 행동"></div><div class="turn-controls"><button class="undo-btn" id="undo-btn"><span data-icon="undo"></span><span data-ui="undoShort"></span></button><button class="end-btn" id="end-btn"><span><strong data-ui="endTurn"></strong><small data-ui="endSub"></small></span><span data-icon="chevron"></span></button></div></section>
+  <aside class="right-column"><section class="panel intent-panel"><div class="section-heading"><h3 data-ui="intent"></h3><span class="count" id="enemy-count"></span></div><p class="intent-sub" data-ui="intentSub"></p><div class="intent-list" id="intents"></div><p class="order-note" data-ui="enemyOrder"></p></section><section class="panel journal-panel"><div class="section-heading"><h3 data-ui="journal"></h3><span data-icon="clock"></span></div><div id="logs" aria-live="polite"></div></section></aside></main>
+  <footer class="footer"><span data-ui="selectHint"></span><span class="seed" id="seed-display"></span></footer>
+</div>
+<div class="modal-backdrop" id="modal-backdrop" hidden><section class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"></section></div>
+<div class="toast" id="toast" role="status"></div><input class="sr-only" type="file" id="load-file" accept="application/json,.json" tabindex="-1">
+<!-- All gameplay content, numbers, text, icons and editable rules are stored in this one database. -->
+<script type="application/json" id="game-db">
+{
+  "_docs": {
+    "title": "밀물의 설계자 · 콘텐츠 DB",
+    "editing": "이 JSON만 편집하면 수치·직업·기술·적·지형·장비·항로·전투를 추가/수정/삭제할 수 있습니다. 엔진은 콘텐츠 ID를 분기하지 않습니다. 배열의 id와 참조는 고유해야 합니다.",
+    "abilitySchema": "abilities: {id,name,description,icon,color,cost,target,range,empty?,maxUses?,effects:[{op,...}]}. target=self|cell|enemy|row. range=-1은 무제한. effects의 op=move|damage|pull|push|shift|shield|trap|energy|heal. value, distance, direction, radius 등을 지정합니다.",
+    "relicSchema": "relics: {id,name,description,icon,stats:{damageBonus,...},hooks:[{event,limit,effects}]}. event=shift|kill|turnStart|battleStart. limit은 턴당 발동 수(-1=무제한). effect의 target=player 지정 가능.",
+    "enemySchema": "enemies 키에 새 적을 추가한 뒤 encounters.spawns에서 참조합니다. pattern=point|cross|ray|row|ring. patternParams.radius, damage, hp, move, preferredRange, xp로 행동을 구성합니다.",
+    "terrainSchema": "terrain 키에 색상, 이름, enter/turnStart 효과 배열을 지정합니다. 효과 대상은 해당 칸의 유닛입니다. perTurn=true는 같은 유닛에게 턴당 1회 적용합니다.",
+    "encounterSchema": "encounters의 배열 길이가 총 전투 수입니다. spawns=[{type,x,y}], terrain=[{type,x,y}], playerStart={x,y}, rewards는 rewards DB를 참조합니다.",
+    "effectsExample": {
+      "id": "example",
+      "name": "쌍방 압력",
+      "description": "적에게 피해를 주고 밀어냅니다.",
+      "icon": "attack",
+      "color": "#a3e6cf",
+      "cost": 1,
+      "target": "enemy",
+      "range": 2,
+      "effects": [
+        {
+          "op": "damage",
+          "value": 3,
+          "scale": "damageBonus"
+        },
+        {
+          "op": "push",
+          "distance": 1
+        }
+      ]
+    },
+    "numericPolicy": "밸런스 수치·콘텐츠·초깃값·맵·보상·난수 설정은 이 DB에 둡니다. 엔진의 0/1은 배열 인덱스·상태 초기화·격자 알고리즘 등 구조적 상수입니다.",
+    "resolution": [
+      "플레이어 행동(되돌리기 가능)",
+      "생존한 적이 예고된 좌표에 순서대로 공격(아군 피해 가능)",
+      "예고된 자연 조류가 한 행을 순환 이동",
+      "생존한 적이 접근하고 지형 효과 발동",
+      "압력 피해 → 보호막 감소 → 에너지 회복 → 새로운 적 의도 공개"
+    ],
+    "uiSchema": "ui에는 화면 문구·벡터 아이콘·색상·저장 설정이 있습니다. abilities.cardTemplate의 {range},{damage},{shield},{pull},{push},{trap},{energy}는 현재 빌드 효과를 반영해 자동 표시됩니다. 아이콘은 ui.icons의 키를 참조합니다."
+  },
+  "config": {
+    "version": 1,
+    "saveVersion": 1,
+    "width": 7,
+    "height": 6,
+    "title": "밀물의 설계자",
+    "subtitle": "떠도는 도시, 고정된 조준점. 판을 움직여 운명을 바꾸세요.",
+    "defaultSeed": "TIDE-073",
+    "defaultClass": "architect",
+    "defaultTerrain": "deck",
+    "startStage": 0,
+    "startTurn": 1,
+    "startLevel": 1,
+    "startXp": 0,
+    "startShield": 0,
+    "energyCap": 7,
+    "maxHistory": 24,
+    "maxLogs": 35,
+    "xpBase": 8,
+    "xpGrowth": 4,
+    "levelHp": 3,
+    "levelHeal": 3,
+    "levelDamageInterval": 3,
+    "levelDamageBonus": 1,
+    "shieldDecay": 2,
+    "pressureStart": 8,
+    "pressureDamage": 1,
+    "pressureGrowth": 1,
+    "battleHeal": 4,
+    "rewardChoices": 3,
+    "routeChoices": 2,
+    "baseStats": {
+      "damageBonus": 0,
+      "pullBonus": 0,
+      "shieldBonus": 0,
+      "trapBonus": 0,
+      "maxEnergyBonus": 0,
+      "movementBonus": 0,
+      "rangeBonus": 0
+    },
+    "tideDirections": [
+      -1,
+      1
+    ],
+    "tideRowSequence": [
+      0,
+      2,
+      5,
+      1,
+      4,
+      3
+    ],
+    "entityPrefix": "e",
+    "logKinds": [
+      "info",
+      "good",
+      "bad",
+      "system"
+    ],
+    "routeEnemyHpMultiplier": 1,
+    "routeEnemyDamageBonus": 0,
+    "seedHash": {
+      "offset": 2166136261,
+      "prime": 16777619
+    },
+    "rng": {
+      "a": 1664525,
+      "c": 1013904223,
+      "m": 4294967296
+    },
+    "enemyIntentScale": 1,
+    "enemyFriendlyFireScale": 1,
+    "trapDefaultOwner": "player",
+    "endTurnLabel": "조류를 넘긴다",
+    "rewardHeal": 7,
+    "rewardXp": 6,
+    "rewardHp": 4,
+    "routeHeal": 6,
+    "routeXp": 5,
+    "tideDistance": 1
+  },
+  "classes": [
+    {
+      "id": "architect",
+      "name": "조류 설계자",
+      "tag": "위치 조작 · 연쇄 공격",
+      "description": "적의 포격을 옮겨 담는 도시의 항해사. 갈고리로 사선을 엮습니다.",
+      "icon": "shift",
+      "color": "#83e6d1",
+      "hp": 27,
+      "energy": 3,
+      "stats": {
+        "pullBonus": 0
+      },
+      "startingActions": [
+        "move",
+        "strike",
+        "shiftLeft",
+        "shiftRight",
+        "guard",
+        "harpoon"
+      ],
+      "startingRelics": [
+        "slipstream"
+      ]
+    },
+    {
+      "id": "saboteur",
+      "name": "잔향 공병",
+      "tag": "함정 · 유도 · 폭발",
+      "description": "지나간 자리에 파동을 남기는 해체 기술자. 적의 접근이 곧 기회입니다.",
+      "icon": "trap",
+      "color": "#e7b675",
+      "hp": 24,
+      "energy": 3,
+      "stats": {
+        "trapBonus": 1
+      },
+      "startingActions": [
+        "move",
+        "strike",
+        "shiftLeft",
+        "shiftRight",
+        "guard",
+        "mine"
+      ],
+      "startingRelics": [
+        "capacitor"
+      ]
+    },
+    {
+      "id": "duelist",
+      "name": "방파제 결투가",
+      "tag": "밀치기 · 방어 · 압박",
+      "description": "위험한 사선 안으로 걸어 들어가는 항구의 수호자. 지형을 무기로 씁니다.",
+      "icon": "shield",
+      "color": "#aeb6ff",
+      "hp": 32,
+      "energy": 3,
+      "stats": {
+        "shieldBonus": 1
+      },
+      "startingActions": [
+        "move",
+        "strike",
+        "shiftLeft",
+        "shiftRight",
+        "guard",
+        "ram"
+      ],
+      "startingRelics": [
+        "armor"
+      ]
+    }
+  ],
+  "terrain": {
+    "deck": {
+      "name": "부유 갑판",
+      "description": "안전한 이동 공간. 조류와 함께 순환합니다.",
+      "icon": "water",
+      "color": "#1b343a"
+    },
+    "charge": {
+      "name": "축전 부표",
+      "description": "밟으면 에너지 +1. 같은 부표는 한 턴에 한 번만 충전합니다.",
+      "icon": "energy",
+      "color": "#467b65",
+      "perTurn": true,
+      "playerOnly": true,
+      "enter": [
+        {
+          "op": "energy",
+          "value": 1
+        }
+      ]
+    },
+    "spike": {
+      "name": "파열 산호",
+      "description": "진입한 유닛에게 피해 2. 밀치기·갈고리로 적을 유도하세요.",
+      "icon": "reef",
+      "color": "#735046",
+      "perTurn": false,
+      "enter": [
+        {
+          "op": "damage",
+          "value": 2
+        }
+      ]
+    },
+    "cover": {
+      "name": "방벽 부유물",
+      "description": "턴 시작 시 이 칸의 유닛은 보호막 +2.",
+      "icon": "shield",
+      "color": "#3c5f74",
+      "turnStart": [
+        {
+          "op": "shield",
+          "value": 2
+        }
+      ]
+    }
+  },
+  "abilities": [
+    {
+      "id": "move",
+      "name": "갑판 도약",
+      "short": "이동",
+      "description": "빈 칸으로 최대 2칸 이동. 이동 경로의 산호와 함정은 피하고, 도착 칸 효과만 받습니다.",
+      "icon": "move",
+      "color": "#88d7ce",
+      "cost": 1,
+      "target": "cell",
+      "range": 2,
+      "rangeScale": "movementBonus",
+      "empty": true,
+      "effects": [
+        {
+          "op": "move"
+        }
+      ],
+      "cardTemplate": "빈 칸으로 최대 {range}칸 도약"
+    },
+    {
+      "id": "strike",
+      "name": "공명 타격",
+      "short": "타격",
+      "description": "인접한 적에게 피해 4. 피해 보너스가 적용됩니다.",
+      "icon": "attack",
+      "color": "#eac18a",
+      "cost": 1,
+      "target": "enemy",
+      "range": 1,
+      "effects": [
+        {
+          "op": "damage",
+          "value": 4,
+          "scale": "damageBonus"
+        }
+      ],
+      "cardTemplate": "인접한 적에게 피해 {damage}"
+    },
+    {
+      "id": "shiftLeft",
+      "name": "서쪽 조류",
+      "short": "조류 ←",
+      "description": "선택한 행 전체를 왼쪽으로 1칸 순환. 유닛·바닥·함정이 함께 이동하지만 적 조준점은 고정됩니다.",
+      "icon": "left",
+      "color": "#8bd9c2",
+      "cost": 1,
+      "target": "row",
+      "range": -1,
+      "effects": [
+        {
+          "op": "shift",
+          "direction": -1,
+          "distance": 1
+        }
+      ],
+      "cardTemplate": "원하는 줄을 왼쪽으로 {shift}칸"
+    },
+    {
+      "id": "shiftRight",
+      "name": "동쪽 조류",
+      "short": "조류 →",
+      "description": "선택한 행 전체를 오른쪽으로 1칸 순환. 유닛·바닥·함정이 함께 이동하지만 적 조준점은 고정됩니다.",
+      "icon": "right",
+      "color": "#8bd9c2",
+      "cost": 1,
+      "target": "row",
+      "range": -1,
+      "effects": [
+        {
+          "op": "shift",
+          "direction": 1,
+          "distance": 1
+        }
+      ],
+      "cardTemplate": "원하는 줄을 오른쪽으로 {shift}칸"
+    },
+    {
+      "id": "guard",
+      "name": "방파 방벽",
+      "short": "방벽",
+      "description": "보호막 4 획득. 보호막은 피해를 먼저 흡수하며 매 턴 2 감소합니다.",
+      "icon": "shield",
+      "color": "#9eacdf",
+      "cost": 1,
+      "target": "self",
+      "range": 0,
+      "effects": [
+        {
+          "op": "shield",
+          "value": 4,
+          "scale": "shieldBonus",
+          "target": "player"
+        }
+      ],
+      "cardTemplate": "보호막 {shield} 획득 · 즉시 사용"
+    },
+    {
+      "id": "harpoon",
+      "name": "중력 갈고리",
+      "short": "갈고리",
+      "description": "3칸 내 적에게 피해 1 후 내 방향으로 2칸 당깁니다. 이동 경로의 산호와 함정이 발동합니다.",
+      "icon": "hook",
+      "color": "#b2cfeb",
+      "cost": 1,
+      "target": "enemy",
+      "range": 3,
+      "effects": [
+        {
+          "op": "damage",
+          "value": 1,
+          "scale": "damageBonus"
+        },
+        {
+          "op": "pull",
+          "distance": 2,
+          "scale": "pullBonus"
+        }
+      ],
+      "cardTemplate": "사거리 {range} · 피해 {damage} + {pull}칸 당김"
+    },
+    {
+      "id": "mine",
+      "name": "잔향 기뢰",
+      "short": "기뢰",
+      "description": "3칸 내 빈 칸에 피해 5 기뢰 설치. 먼저 진입한 유닛에게 발동하며 함께 이동하는 바닥에 고정됩니다.",
+      "icon": "trap",
+      "color": "#e1b48c",
+      "cost": 1,
+      "target": "cell",
+      "range": 3,
+      "empty": true,
+      "noTrap": true,
+      "effects": [
+        {
+          "op": "trap",
+          "value": 5,
+          "scale": "trapBonus",
+          "radius": 0
+        }
+      ],
+      "cardTemplate": "사거리 {range} · 피해 {trap} 기뢰"
+    },
+    {
+      "id": "ram",
+      "name": "쇄파 돌격",
+      "short": "밀치기",
+      "description": "인접한 적에게 피해 2 후 2칸 밀어냅니다. 산호와 기뢰를 적극 활용하세요.",
+      "icon": "right",
+      "color": "#d3b3a4",
+      "cost": 1,
+      "target": "enemy",
+      "range": 1,
+      "effects": [
+        {
+          "op": "damage",
+          "value": 2,
+          "scale": "damageBonus"
+        },
+        {
+          "op": "push",
+          "distance": 2
+        }
+      ],
+      "cardTemplate": "피해 {damage} + {push}칸 밀치기"
+    },
+    {
+      "id": "snipe",
+      "name": "위상 관통",
+      "short": "관통",
+      "description": "4칸 내 적에게 피해 7. 보호막을 무시합니다. 에너지 2 소모.",
+      "icon": "crosshair",
+      "color": "#d1a8ed",
+      "cost": 2,
+      "target": "enemy",
+      "range": 4,
+      "effects": [
+        {
+          "op": "damage",
+          "value": 7,
+          "scale": "damageBonus",
+          "pierce": true
+        }
+      ],
+      "cardTemplate": "사거리 {range} · 방어 관통 피해 {damage}"
+    },
+    {
+      "id": "overclock",
+      "name": "금지된 과충전",
+      "short": "과충전",
+      "description": "체력을 3 잃고 에너지 2 획득. 한 턴에 한 번. 체력 비용은 보호막을 무시합니다.",
+      "icon": "energy",
+      "color": "#eea68f",
+      "cost": 0,
+      "target": "self",
+      "range": 0,
+      "maxUses": 1,
+      "minHp": 4,
+      "effects": [
+        {
+          "op": "damage",
+          "value": 3,
+          "target": "player",
+          "pierce": true
+        },
+        {
+          "op": "energy",
+          "value": 2,
+          "target": "player"
+        }
+      ],
+      "cardTemplate": "체력 {damage} → 행동력 {energy}"
+    },
+    {
+      "id": "blink",
+      "name": "비상 도선",
+      "short": "도선",
+      "description": "4칸 내 빈 칸으로 이동한 뒤 보호막 2. 에너지 2 소모.",
+      "icon": "move",
+      "color": "#afcce7",
+      "cost": 2,
+      "target": "cell",
+      "range": 4,
+      "empty": true,
+      "effects": [
+        {
+          "op": "move"
+        },
+        {
+          "op": "shield",
+          "value": 2,
+          "target": "player"
+        }
+      ],
+      "cardTemplate": "{range}칸 이동 + 보호막 {shield}"
+    },
+    {
+      "id": "wave",
+      "name": "원형 파동",
+      "short": "파동",
+      "description": "자신 주변 1칸의 모든 적에게 피해 3. 상하좌우 적을 동시에 공격합니다.",
+      "icon": "crosshair",
+      "color": "#d2bce5",
+      "cost": 2,
+      "target": "self",
+      "range": 0,
+      "effects": [
+        {
+          "op": "damage",
+          "value": 3,
+          "scale": "damageBonus",
+          "selector": "enemies",
+          "radius": 1
+        }
+      ],
+      "cardTemplate": "인접한 모든 적에게 피해 {damage}"
+    }
+  ],
+  "enemies": {
+    "sentry": {
+      "name": "직선 감시기",
+      "description": "현재 플레이어 방향의 직선 전체를 사격합니다.",
+      "icon": "gunner",
+      "color": "#ecb482",
+      "hp": 7,
+      "damage": 3,
+      "move": 1,
+      "preferredRange": 3,
+      "pattern": "ray",
+      "patternParams": {
+        "radius": 0
+      },
+      "xp": 4
+    },
+    "needle": {
+      "name": "추적 바늘",
+      "description": "플레이어가 서 있던 한 칸을 찌릅니다.",
+      "icon": "charger",
+      "color": "#e88f8b",
+      "hp": 5,
+      "damage": 3,
+      "move": 2,
+      "preferredRange": 1,
+      "pattern": "point",
+      "patternParams": {
+        "radius": 0
+      },
+      "xp": 3
+    },
+    "mortar": {
+      "name": "십자 포격수",
+      "description": "조준한 칸과 상하좌우를 폭격합니다.",
+      "icon": "crosshair",
+      "color": "#dfa3bd",
+      "hp": 9,
+      "damage": 3,
+      "move": 1,
+      "preferredRange": 3,
+      "pattern": "cross",
+      "patternParams": {
+        "radius": 1
+      },
+      "xp": 5
+    },
+    "sweeper": {
+      "name": "수평 절단기",
+      "description": "플레이어가 있는 행 전체를 공격합니다. 다른 행으로 피하세요.",
+      "icon": "shift",
+      "color": "#b3a7e7",
+      "hp": 8,
+      "damage": 2,
+      "move": 1,
+      "preferredRange": 2,
+      "pattern": "row",
+      "patternParams": {
+        "radius": 0
+      },
+      "xp": 5
+    },
+    "warden": {
+      "name": "닻의 심장",
+      "description": "도시를 묶은 기계. 넓은 십자 공격과 두꺼운 보호막을 가집니다.",
+      "icon": "boss",
+      "color": "#e6ba7f",
+      "hp": 22,
+      "shield": 3,
+      "damage": 4,
+      "move": 1,
+      "preferredRange": 2,
+      "pattern": "cross",
+      "patternParams": {
+        "radius": 2
+      },
+      "xp": 10
+    }
+  },
+  "relics": [
+    {
+      "id": "slipstream",
+      "name": "미끄럼 베어링",
+      "description": "매 턴 첫 수동 조류 이동 후 보호막 +2.",
+      "icon": "shift",
+      "hooks": [
+        {
+          "event": "shift",
+          "limit": 1,
+          "effects": [
+            {
+              "op": "shield",
+              "value": 2,
+              "target": "player"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "capacitor",
+      "name": "차폐 축전기",
+      "description": "매 턴 첫 적 처치 시 에너지 +1.",
+      "icon": "energy",
+      "hooks": [
+        {
+          "event": "kill",
+          "limit": 1,
+          "effects": [
+            {
+              "op": "energy",
+              "value": 1,
+              "target": "player"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "armor",
+      "name": "진주 갑피",
+      "description": "방벽 기술의 보호막 +2.",
+      "icon": "shield",
+      "stats": {
+        "shieldBonus": 2
+      }
+    },
+    {
+      "id": "edge",
+      "name": "균열 증폭기",
+      "description": "직접 공격 피해 +1. 타격·갈고리·관통·파동에 모두 적용.",
+      "icon": "attack",
+      "stats": {
+        "damageBonus": 1
+      }
+    },
+    {
+      "id": "coil",
+      "name": "예비 조류 코일",
+      "description": "매 턴 최대 에너지 +1.",
+      "icon": "energy",
+      "stats": {
+        "maxEnergyBonus": 1
+      }
+    },
+    {
+      "id": "tether",
+      "name": "장거리 계류삭",
+      "description": "갈고리 당기는 거리 +1.",
+      "icon": "hook",
+      "stats": {
+        "pullBonus": 1
+      }
+    },
+    {
+      "id": "detonator",
+      "name": "이중 공명핵",
+      "description": "설치하는 기뢰 피해 +3.",
+      "icon": "trap",
+      "stats": {
+        "trapBonus": 3
+      }
+    },
+    {
+      "id": "sails",
+      "name": "접이식 보조돛",
+      "description": "갑판 도약 이동 거리 +1.",
+      "icon": "move",
+      "stats": {
+        "movementBonus": 1
+      }
+    },
+    {
+      "id": "recycler",
+      "name": "잔해 재생기",
+      "description": "매 턴 첫 적 처치 시 체력 +2.",
+      "icon": "repair",
+      "hooks": [
+        {
+          "event": "kill",
+          "limit": 1,
+          "effects": [
+            {
+              "op": "heal",
+              "value": 2,
+              "target": "player"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "undertow",
+      "name": "역류 터빈",
+      "description": "매 턴 첫 수동 조류 이동의 에너지 1 회복.",
+      "icon": "shift",
+      "hooks": [
+        {
+          "event": "shift",
+          "limit": 1,
+          "effects": [
+            {
+              "op": "energy",
+              "value": 1,
+              "target": "player"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "rewards": [
+    {
+      "id": "repair",
+      "kind": "heal",
+      "title": "항구 응급 수리",
+      "description": "체력 7 회복. 이미 건강하다면 다른 보상이 유리합니다.",
+      "icon": "repair",
+      "value": 7
+    },
+    {
+      "id": "hull",
+      "kind": "maxHp",
+      "title": "확장 부유 선체",
+      "description": "최대 체력 +4, 체력 +4.",
+      "icon": "shield",
+      "value": 4
+    },
+    {
+      "id": "experience",
+      "kind": "xp",
+      "title": "도시의 기억",
+      "description": "경험치 +6. 레벨업 시 최대 체력과 체력 +3.",
+      "icon": "reef",
+      "value": 6
+    },
+    {
+      "id": "learn-harpoon",
+      "kind": "ability",
+      "ref": "harpoon"
+    },
+    {
+      "id": "learn-mine",
+      "kind": "ability",
+      "ref": "mine"
+    },
+    {
+      "id": "learn-ram",
+      "kind": "ability",
+      "ref": "ram"
+    },
+    {
+      "id": "learn-snipe",
+      "kind": "ability",
+      "ref": "snipe"
+    },
+    {
+      "id": "learn-overclock",
+      "kind": "ability",
+      "ref": "overclock"
+    },
+    {
+      "id": "learn-blink",
+      "kind": "ability",
+      "ref": "blink"
+    },
+    {
+      "id": "learn-wave",
+      "kind": "ability",
+      "ref": "wave"
+    },
+    {
+      "id": "relic-edge",
+      "kind": "relic",
+      "ref": "edge"
+    },
+    {
+      "id": "relic-coil",
+      "kind": "relic",
+      "ref": "coil"
+    },
+    {
+      "id": "relic-tether",
+      "kind": "relic",
+      "ref": "tether"
+    },
+    {
+      "id": "relic-detonator",
+      "kind": "relic",
+      "ref": "detonator"
+    },
+    {
+      "id": "relic-sails",
+      "kind": "relic",
+      "ref": "sails"
+    },
+    {
+      "id": "relic-recycler",
+      "kind": "relic",
+      "ref": "recycler"
+    },
+    {
+      "id": "relic-undertow",
+      "kind": "relic",
+      "ref": "undertow"
+    },
+    {
+      "id": "relic-armor",
+      "kind": "relic",
+      "ref": "armor"
+    },
+    {
+      "id": "relic-capacitor",
+      "kind": "relic",
+      "ref": "capacitor"
+    },
+    {
+      "id": "relic-slipstream",
+      "kind": "relic",
+      "ref": "slipstream"
+    }
+  ],
+  "routes": [
+    {
+      "id": "calm",
+      "title": "고요한 수로",
+      "description": "전투 진입 시 체력 6 회복. 적은 표준 능력치.",
+      "icon": "water",
+      "color": "#94d4c0",
+      "enemyHpMultiplier": 1,
+      "enemyDamageBonus": 0,
+      "effects": [
+        {
+          "op": "heal",
+          "value": 6,
+          "target": "player"
+        }
+      ]
+    },
+    {
+      "id": "storm",
+      "title": "폭풍의 잔해",
+      "description": "적 체력 +25%, 공격 +1. 진입 시 경험치 5와 무작위 장비를 획득.",
+      "icon": "energy",
+      "color": "#dfb382",
+      "enemyHpMultiplier": 1.25,
+      "enemyDamageBonus": 1,
+      "bonusRelics": 1,
+      "xp": 5,
+      "effects": []
+    },
+    {
+      "id": "current",
+      "title": "축전소 우회로",
+      "description": "다음 전투에 축전 부표 2개 추가. 체력 3 회복.",
+      "icon": "crosshair",
+      "color": "#b9b1e1",
+      "enemyHpMultiplier": 1,
+      "enemyDamageBonus": 0,
+      "addTerrain": {
+        "type": "charge",
+        "count": 2
+      },
+      "effects": [
+        {
+          "op": "heal",
+          "value": 3,
+          "target": "player"
+        }
+      ]
+    }
+  ],
+  "encounters": [
+    {
+      "id": "harbor",
+      "name": "침묵의 부두",
+      "subtitle": "첫 번째 해방 · 조준점을 훔치다",
+      "playerStart": {
+        "x": 3,
+        "y": 4
+      },
+      "spawns": [
+        {
+          "type": "sentry",
+          "x": 3,
+          "y": 1
+        },
+        {
+          "type": "needle",
+          "x": 2,
+          "y": 4
+        }
+      ],
+      "terrain": [
+        {
+          "type": "spike",
+          "x": 4,
+          "y": 2
+        },
+        {
+          "type": "charge",
+          "x": 2,
+          "y": 3
+        },
+        {
+          "type": "cover",
+          "x": 5,
+          "y": 4
+        }
+      ],
+      "tip": "동쪽 조류로 내 행을 밀어보세요. 바늘이 내 조준점으로 밀려 들어갑니다."
+    },
+    {
+      "id": "canal",
+      "name": "유리 운하",
+      "subtitle": "두 번째 해방 · 흐름을 엮다",
+      "playerStart": {
+        "x": 3,
+        "y": 4
+      },
+      "spawns": [
+        {
+          "type": "mortar",
+          "x": 3,
+          "y": 1
+        },
+        {
+          "type": "needle",
+          "x": 1,
+          "y": 3
+        },
+        {
+          "type": "sentry",
+          "x": 5,
+          "y": 2
+        }
+      ],
+      "terrain": [
+        {
+          "type": "spike",
+          "x": 2,
+          "y": 2
+        },
+        {
+          "type": "spike",
+          "x": 4,
+          "y": 3
+        },
+        {
+          "type": "charge",
+          "x": 1,
+          "y": 4
+        },
+        {
+          "type": "cover",
+          "x": 5,
+          "y": 4
+        }
+      ],
+      "tip": "갈고리와 밀치기는 산호를 발동시킵니다. 십자 포격의 빈틈을 읽으세요."
+    },
+    {
+      "id": "foundry",
+      "name": "뒤집힌 조선소",
+      "subtitle": "세 번째 해방 · 수평선의 균열",
+      "playerStart": {
+        "x": 3,
+        "y": 5
+      },
+      "spawns": [
+        {
+          "type": "sweeper",
+          "x": 1,
+          "y": 1
+        },
+        {
+          "type": "mortar",
+          "x": 5,
+          "y": 1
+        },
+        {
+          "type": "needle",
+          "x": 2,
+          "y": 3
+        },
+        {
+          "type": "needle",
+          "x": 4,
+          "y": 3
+        }
+      ],
+      "terrain": [
+        {
+          "type": "spike",
+          "x": 2,
+          "y": 2
+        },
+        {
+          "type": "spike",
+          "x": 4,
+          "y": 2
+        },
+        {
+          "type": "charge",
+          "x": 3,
+          "y": 3
+        },
+        {
+          "type": "cover",
+          "x": 1,
+          "y": 4
+        },
+        {
+          "type": "cover",
+          "x": 5,
+          "y": 4
+        }
+      ],
+      "tip": "수평 절단기는 행 전체를 베어냅니다. 좌우 조류만으로 피할 수는 없습니다."
+    },
+    {
+      "id": "spire",
+      "name": "역류 관측탑",
+      "subtitle": "네 번째 해방 · 사선을 교차하다",
+      "playerStart": {
+        "x": 3,
+        "y": 4
+      },
+      "spawns": [
+        {
+          "type": "sentry",
+          "x": 1,
+          "y": 1
+        },
+        {
+          "type": "sentry",
+          "x": 5,
+          "y": 1
+        },
+        {
+          "type": "sweeper",
+          "x": 3,
+          "y": 0
+        },
+        {
+          "type": "mortar",
+          "x": 3,
+          "y": 2
+        }
+      ],
+      "terrain": [
+        {
+          "type": "spike",
+          "x": 2,
+          "y": 3
+        },
+        {
+          "type": "spike",
+          "x": 4,
+          "y": 3
+        },
+        {
+          "type": "charge",
+          "x": 0,
+          "y": 4
+        },
+        {
+          "type": "charge",
+          "x": 6,
+          "y": 4
+        },
+        {
+          "type": "cover",
+          "x": 3,
+          "y": 5
+        }
+      ],
+      "tip": "보호막은 여러 공격에 함께 소모됩니다. 먼저 죽일 적과 피할 사선을 선택하세요."
+    },
+    {
+      "id": "heart",
+      "name": "도시의 닻",
+      "subtitle": "마지막 해방 · 고정된 운명을 끊다",
+      "playerStart": {
+        "x": 3,
+        "y": 5
+      },
+      "spawns": [
+        {
+          "type": "warden",
+          "x": 3,
+          "y": 1
+        },
+        {
+          "type": "sentry",
+          "x": 1,
+          "y": 1
+        },
+        {
+          "type": "sweeper",
+          "x": 5,
+          "y": 1
+        },
+        {
+          "type": "needle",
+          "x": 1,
+          "y": 3
+        },
+        {
+          "type": "needle",
+          "x": 5,
+          "y": 3
+        }
+      ],
+      "terrain": [
+        {
+          "type": "spike",
+          "x": 2,
+          "y": 2
+        },
+        {
+          "type": "spike",
+          "x": 4,
+          "y": 2
+        },
+        {
+          "type": "charge",
+          "x": 2,
+          "y": 4
+        },
+        {
+          "type": "charge",
+          "x": 4,
+          "y": 4
+        },
+        {
+          "type": "cover",
+          "x": 3,
+          "y": 3
+        }
+      ],
+      "tip": "닻의 심장도 자신의 포격에 피해를 입습니다. 지금까지 만든 빌드로 도시를 해방하세요."
+    }
+  ],
+  "labels": {
+    "player": "항해사",
+    "right": "오른쪽",
+    "left": "왼쪽",
+    "patterns": {
+      "point": "정점 타격",
+      "cross": "십자 포격",
+      "ray": "직선 사격",
+      "row": "수평 절단",
+      "ring": "외곽 포격"
+    }
+  },
+  "messages": {
+    "valid": "선택 가능",
+    "classMissing": "항해사 데이터를 찾을 수 없습니다.",
+    "runCreated": "출항했습니다. 적의 조준점은 조류 이동 후에도 고정됩니다.",
+    "notBattle": "전투 중에만 사용할 수 있습니다.",
+    "energyShort": "에너지가 부족합니다.",
+    "usedUp": "이번 턴 사용 횟수를 모두 소모했습니다.",
+    "hpShort": "과충전 비용을 지불할 체력이 부족합니다.",
+    "unknownAction": "기술을 찾을 수 없습니다.",
+    "outside": "보드 안의 칸을 선택하세요.",
+    "outOfRange": "기술 사거리 밖입니다.",
+    "occupied": "빈 칸을 선택하세요.",
+    "trapExists": "이미 기뢰가 설치된 칸입니다.",
+    "needEnemy": "적이 있는 칸을 선택하세요.",
+    "cannotUndo": "되돌릴 행동이 없습니다. 턴을 넘기면 이전 행동을 되돌릴 수 없습니다.",
+    "undone": "마지막 행동을 되돌렸습니다.",
+    "actionDone": "{name} 실행.",
+    "turnDone": "적의 포격과 자연 조류가 지나갔습니다.",
+    "notReward": "지금은 보상 선택 단계가 아닙니다.",
+    "unknownReward": "보상을 찾을 수 없습니다.",
+    "rewardDone": "성장을 선택했습니다. 다음 항로를 고르세요.",
+    "notRoute": "지금은 항로 선택 단계가 아닙니다.",
+    "unknownRoute": "항로를 찾을 수 없습니다.",
+    "routeDone": "다음 해역에 도착했습니다.",
+    "invalidSave": "현재 DB와 호환되는 올바른 저장 파일이 아닙니다.",
+    "loaded": "저장된 항해를 불러왔습니다.",
+    "levelUp": "레벨 {level}! 최대 체력과 체력 +{hp}.",
+    "damage": "{unit}: 피해 {value} · 보호막 흡수 {shield}.",
+    "kill": "{unit} 해체. 경험치를 회수했습니다.",
+    "trapTrigger": "{unit}이(가) 잔향 기뢰를 밟았습니다.",
+    "shift": "{row}행을 {direction}으로 순환 이동했습니다. 조준점은 유지됩니다.",
+    "learnTitle": "기술 습득 · {name}",
+    "lost": "항해가 멈췄습니다. 새 빌드로 다시 출항할 수 있습니다.",
+    "won": "도시를 묶은 마지막 닻이 끊어졌습니다. 밀물이 당신의 편입니다.",
+    "battleWon": "해역 해방! 긴급 수리로 체력 {heal} 회복. 성장 보상 하나를 선택하세요.",
+    "battleStart": "{name} 진입. 적의 공격은 표시된 좌표에 고정됩니다.",
+    "rowName": "{row}행",
+    "cellName": "({x}, {y})",
+    "actionPreview": "{action} → {target}",
+    "actionUsed": "{name} 실행.",
+    "enemyAttack": "{name} · {pattern} 실행.",
+    "pressure": "해역 압력으로 체력 {value} 손실. 오래 머물수록 압력이 커집니다.",
+    "rewardChosen": "성장 선택: {name}.",
+    "bonusRelic": "폭풍의 잔해에서 {name} 획득.",
+    "intentDescription": "{name} · {pattern}: 표시된 {cells}칸에 피해 {damage}. 적도 맞습니다."
+  },
+  "ui": {
+    "brand": {
+      "title": "밀물의 설계자",
+      "english": "TIDEBREAKER",
+      "tagline": "도시를 움직여, 운명을 비틀다.",
+      "version": "TACTICAL ROGUELITE · PROTOTYPE 01"
+    },
+    "theme": {
+      "bg": "#0a161d",
+      "panel": "#101f28",
+      "line": "#29414b",
+      "ink": "#e2eae9",
+      "muted": "#8da8b1",
+      "accent": "#a7efd9",
+      "gold": "#f2ca83",
+      "danger": "#f18a7d",
+      "blue": "#88b8de"
+    },
+    "settings": {
+      "storageKey": "tidebreaker.run.v1",
+      "metaKey": "tidebreaker.meta.v1",
+      "seedPrefix": "TIDE",
+      "seedMax": 999999,
+      "toastMs": 3000,
+      "logLimit": 5,
+      "cardShortLimit": 42,
+      "coordinateStart": 65,
+      "maxSeedLength": 40,
+      "screenShotWidth": 1440
+    },
+    "text": {
+      "operation": "원정 작전",
+      "stage": "해역",
+      "turn": "턴",
+      "hp": "내구도",
+      "shield": "보호막",
+      "energy": "행동력",
+      "level": "등급",
+      "xp": "경험",
+      "build": "장착한 설계",
+      "emptyBuild": "아직 모듈이 없습니다. 전투 후 새로운 설계를 선택하세요.",
+      "actions": "이번 수를 설계하세요",
+      "actionSub": "행동을 고르고 바다 위의 칸을 선택하세요.",
+      "intent": "적의 다음 수",
+      "intentSub": "턴 종료 시 위에서부터 실행",
+      "journal": "항해 기록",
+      "boardEyebrow": "LIVE TACTICAL CHART",
+      "boardTitle": "침수 도시 · 전술 지도",
+      "forecast": "다음 조류",
+      "shift": "줄 이동",
+      "wrap": "양 끝은 연결됩니다",
+      "danger": "공격 예고",
+      "target": "사용 가능",
+      "tile": "지형",
+      "enemy": "적",
+      "you": "설계자",
+      "noEnemies": "이 해역의 위협이 사라졌습니다.",
+      "endTurn": "턴 종료",
+      "endSub": "적의 작전 실행 → 다음 턴",
+      "undo": "한 수 되돌리기",
+      "undoShort": "되돌리기",
+      "help": "플레이 가이드",
+      "db": "콘텐츠 DB",
+      "save": "저장 내보내기",
+      "load": "저장 불러오기",
+      "newRun": "새 원정",
+      "close": "닫기",
+      "cancel": "취소",
+      "start": "원정 시작",
+      "continue": "작전 계속하기",
+      "seed": "원정 코드",
+      "seedPlaceholder": "같은 코드는 같은 해역을 만듭니다",
+      "introEyebrow": "TURN THE TIDE",
+      "introTitle": "이 도시의 지형이\n당신의 무기다.",
+      "introBody": "물에 잠긴 도시, 적들은 이미 방아쇠를 당겼다. 당신은 마지막 조류 설계자. 적의 수를 읽고, 도시의 한 줄을 움직여 포격의 주인을 바꿔라.",
+      "chooseClass": "시작 설계 선택",
+      "coreRule": "적의 조준점은 그대로. 바닥과 유닛만 이동.",
+      "rewardEyebrow": "SALVAGE & EVOLVE",
+      "rewardTitle": "승리의 잔해에서, 다음 설계를.",
+      "rewardBody": "이번 원정에 적용할 보상 하나를 선택하세요. 서로 다른 효과를 연결하면 새로운 전술이 됩니다.",
+      "routeEyebrow": "CHOOSE YOUR CURRENT",
+      "routeTitle": "다음 해역을 고르세요.",
+      "routeBody": "위험과 보상을 살피고, 지금의 빌드에 맞는 항로를 선택하세요.",
+      "wonEyebrow": "THE CITY REMEMBERS",
+      "wonTitle": "도시가 다시 떠오릅니다.",
+      "wonBody": "마지막 포대를 멈췄습니다. 이번 원정의 설계가 도시를 구했습니다.",
+      "lostEyebrow": "A LESSON IN THE DEEP",
+      "lostTitle": "파도는 설계도를 남긴다.",
+      "lostBody": "원정은 끝났지만 다음 수는 달라질 수 있습니다. 다른 설계와 항로로 다시 도전해보세요.",
+      "kills": "격파",
+      "damage": "가한 피해",
+      "turns": "경과 턴",
+      "redirects": "유도 명중",
+      "newConfirmTitle": "새로운 조류를 설계할까요?",
+      "newConfirmBody": "현재 원정의 진행은 새 원정으로 교체됩니다. 필요하면 먼저 저장을 내보내세요.",
+      "dbEyebrow": "DATA-DRIVEN DESIGN",
+      "dbTitle": "모든 설계는 데이터에서.",
+      "dbBody": "캐릭터·스킬·적·지형·보상·밸런스는 HTML 안 game-db JSON에 분리되어 있습니다. 아래에서 편집하고 검증한 뒤, 수정된 단일 HTML을 내려받을 수 있습니다.",
+      "dbValidate": "DB 검증",
+      "dbDownload": "수정한 HTML 내려받기",
+      "dbReset": "원본으로 되돌리기",
+      "dbOkay": "DB 구조와 참조가 유효합니다.",
+      "dbHelp": "새 스킬은 actions에 효과 데이터를 추가하고, classes의 시작 스킬 또는 보상에 연결하세요. 엔진에 등록된 효과 연산자를 조합할 수 있습니다. 자세한 규칙은 DB의 _docs를 확인하세요.",
+      "saved": "원정 저장 파일을 내보냈습니다.",
+      "loaded": "저장된 원정을 복원했습니다.",
+      "invalidSave": "이 게임의 올바른 저장 파일이 아닙니다.",
+      "saveUnavailable": "브라우저 자동 저장을 사용할 수 없습니다. 저장 내보내기를 이용하세요.",
+      "restored": "진행 중이던 원정을 이어갑니다.",
+      "selected": "선택됨",
+      "passive": "패시브",
+      "selfTarget": "즉시 사용",
+      "cost": "행동력",
+      "free": "무료",
+      "selectHint": "카드 선택 → 대상 칸 선택 · Space 턴 종료 · Z 되돌리기 · Esc 선택 해제",
+      "keyboard": "단축키",
+      "boardHint": "빨간 칸은 턴 종료 시 공격받습니다. 적을 그 칸에 밀어 넣어보세요.",
+      "dangerTotal": "예상 피해",
+      "noDanger": "포격 예고 없음",
+      "fileName": "밀물의_설계자.html",
+      "saveName": "밀물의_설계자_저장.json",
+      "dbInvalid": "DB를 확인해주세요.",
+      "actionFailed": "지금은 이 행동을 할 수 없습니다.",
+      "confirmEnd": "공격 예고를 확인하고 턴을 종료합니다.",
+      "status": "상태",
+      "order": "공격 순서",
+      "remaining": "남은 횟수",
+      "snapshot": "작전 예측",
+      "enemyOrder": "적의 공격은 표시 순서대로 진행됩니다. 먼저 격파된 적의 공격은 취소됩니다.",
+      "campaign": "원정 진행",
+      "helpEyebrow": "READ · REARRANGE · REVERSE",
+      "helpTitle": "강한 적에게, 더 영리한 한 수.",
+      "helpFooter": "완벽한 반격을 찾을 때까지 한 수 되돌리기를 사용하세요. 턴을 종료한 뒤에는 되돌릴 수 없습니다.",
+      "summary": "원정 결과",
+      "choose": "선택하기",
+      "seedLabel": "SEED",
+      "moduleCount": "모듈",
+      "objectives": "작전 목표",
+      "objectiveBody": "모든 적을 격파하고 다음 해역으로 전진하세요. 마지막 해역의 적을 무너뜨리면 승리합니다.",
+      "noSelection": "지도 위의 위험을 읽고 행동 카드를 선택하세요.",
+      "apEmpty": "행동력을 모두 사용했습니다. 적의 작전을 확인하고 턴을 종료하세요.",
+      "loadTitle": "저장 JSON 불러오기",
+      "dbNote": "내려받은 파일을 다시 열면 수정된 DB가 적용됩니다. DB 변경 시 기존 저장은 사용하지 않는 것을 권장합니다.",
+      "terrainLegend": "파란 지형을 활용하고 붉은 사선을 피하세요.",
+      "nextCurrent": "조류는 턴 종료 시 작동합니다.",
+      "noHistory": "이번 턴의 첫 수입니다.",
+      "pressure": "장기전 경보",
+      "moduleEmpty": "첫 전투에서 나만의 빌드를 시작하세요.",
+      "op": "OPERATION",
+      "stageOf": "/",
+      "attack": "공격",
+      "seedCopied": "원정 코드가 복사되었습니다.",
+      "download": "HTML 받기",
+      "forecastPrefix": "턴 종료 예측",
+      "forecastDamage": "최대 내구도 피해",
+      "forecastFriendly": "오사 가능",
+      "forecastPressure": "수압 피해",
+      "forecastNote": "사선 기준 상한입니다. 먼저 격파된 적의 공격이 취소되면 실제 피해는 줄어듭니다."
+    },
+    "tutorial": [
+      {
+        "step": "01",
+        "title": "적의 수를 읽는다",
+        "body": "빨간 사선은 적이 조준한 칸입니다. 오른쪽 작전 목록에 마우스를 올리면 각 적의 공격 범위를 확인할 수 있습니다.",
+        "icon": "eye"
+      },
+      {
+        "step": "02",
+        "title": "도시의 한 줄을 비튼다",
+        "body": "조류 행동을 선택하고 원하는 줄을 누르세요. 그 줄의 바닥·함정·모든 유닛이 함께 이동합니다. 줄 끝은 반대편과 연결됩니다.",
+        "icon": "shift"
+      },
+      {
+        "step": "03",
+        "title": "적의 공격을 돌려준다",
+        "body": "조준점은 움직이지 않습니다. 적을 다른 적의 공격 칸에 놓고 턴을 종료하면 포격을 역이용할 수 있습니다.",
+        "icon": "crosshair"
+      },
+      {
+        "step": "04",
+        "title": "당신만의 설계를 만든다",
+        "body": "직접 공격, 밀고 당기기, 함정, 보호막을 조합하세요. 전투마다 보상을 선택하고 다른 항로를 탐색하며 빌드를 성장시킵니다.",
+        "icon": "module"
+      }
+    ],
+    "icons": {
+      "logo": "\u003cpath d='M3 15l5-8 5 8 5-8 3 8M3 20h18M8 3v4m10-4v4'/>",
+      "eye": "\u003cpath d='M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12Z'/>\u003ccircle cx='12' cy='12' r='3'/>",
+      "shift": "\u003cpath d='M3 8h17m-4-4 4 4-4 4M21 16H4m4-4-4 4 4 4'/>",
+      "left": "\u003cpath d='M20 12H4m6-6-6 6 6 6'/>",
+      "right": "\u003cpath d='M4 12h16m-6-6 6 6-6 6'/>",
+      "move": "\u003cpath d='m14 3 7 7-7 7M21 10H9a6 6 0 0 0-6 6v5'/>",
+      "crosshair": "\u003ccircle cx='12' cy='12' r='7'/>\u003cpath d='M12 2v5m0 10v5M2 12h5m10 0h5'/>",
+      "attack": "\u003cpath d='m5 19 14-14 2-2v5L8 21m-4-7 6 6M3 21l3-3'/>",
+      "hook": "\u003cpath d='M6 3v12a6 6 0 0 0 12 0v-5l-4 4m4-4 3 4'/>",
+      "shield": "\u003cpath d='m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6l8-3Z'/>\u003cpath d='m8 12 3 3 5-6'/>",
+      "trap": "\u003cpath d='m3 17 4-7 5 7 5-7 4 7M3 21h18M12 2v5m-6-3 2 3m10-3-2 3'/>",
+      "module": "\u003cpath d='m12 3 9 5-9 5-9-5 9-5Zm-9 9 9 5 9-5M3 16l9 5 9-5'/>",
+      "energy": "\u003cpath d='m14 2-9 12h6l-1 8 9-12h-6l1-8Z'/>",
+      "heart": "\u003cpath d='M12 21 3 12a6 6 0 0 1 9-8 6 6 0 0 1 9 8l-9 9Z'/>",
+      "undo": "\u003cpath d='M8 4 3 9l5 5M3 9h11a7 7 0 0 1 0 14'/>",
+      "help": "\u003ccircle cx='12' cy='12' r='9'/>\u003cpath d='M9 9a3 3 0 1 1 4 3c-1 .5-1 1-1 2m0 3h.01'/>",
+      "db": "\u003cellipse cx='12' cy='5' rx='8' ry='3'/>\u003cpath d='M4 5v7c0 4 16 4 16 0V5M4 12v7c0 4 16 4 16 0v-7'/>",
+      "download": "\u003cpath d='M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5'/>",
+      "upload": "\u003cpath d='M12 16V4m-5 5 5-5 5 5M4 16v5h16v-5'/>",
+      "flag": "\u003cpath d='M5 22V3m0 0h14l-3 5 3 5H5'/>",
+      "close": "\u003cpath d='m6 6 12 12M6 18 18 6'/>",
+      "play": "\u003cpath d='m8 4 13 8-13 8V4Z'/>",
+      "player": "\u003cpath d='m12 2 8 10-8 10L4 12 12 2Z'/>\u003cpath d='m8 12 4-4 4 4-4 4-4-4Z'/>",
+      "enemy": "\u003cpath d='m5 4 7 4 7-4 2 12-9 5-9-5L5 4Z'/>\u003cpath d='m7 12 3 2m7-2-3 2'/>",
+      "gunner": "\u003cpath d='M4 8h16v10H4zM8 8V4h8v4m-4 5v9M1 12h3m16 0h3'/>",
+      "sniper": "\u003cpath d='m12 2 10 10-10 10L2 12 12 2Z'/>\u003ccircle cx='12' cy='12' r='3'/>",
+      "charger": "\u003cpath d='m12 2 9 18-9-5-9 5 9-18Zm0 0v13'/>",
+      "boss": "\u003cpath d='m2 6 5 4 5-7 5 7 5-4-3 14H5L2 6Z'/>\u003cpath d='M8 15h8'/>",
+      "water": "\u003cpath d='M2 10c3-4 5 4 8 0s5 4 8 0 4 0 4 0M2 17c3-4 5 4 8 0s5 4 8 0'/>",
+      "reef": "\u003cpath d='M12 21V4m0 8L5 8V4m7 13 7-5V7M5 8 2 6m17 6 3-4'/>",
+      "fire": "\u003cpath d='M12 2c3 8 9 9 7 15-2 7-15 6-15-1 0-4 3-7 5-10 0 5 3 6 3-4Z'/>",
+      "repair": "\u003cpath d='M9 3h6v6h6v6h-6v6H9v-6H3V9h6V3Z'/>",
+      "chevron": "\u003cpath d='m9 5 7 7-7 7'/>",
+      "star": "\u003cpath d='m12 2 3 6 7 1-5 5 1 8-6-4-6 4 1-8-5-5 7-1 3-6Z'/>",
+      "clock": "\u003ccircle cx='12' cy='12' r='9'/>\u003cpath d='M12 6v7l4 2'/>",
+      "anchor": "\u003ccircle cx='12' cy='5' r='3'/>\u003cpath d='M12 8v14M5 12H2a10 10 0 0 0 20 0h-3M7 11h10'/>",
+      "sound": "\u003cpath d='m11 4-6 5H2v6h3l6 5V4Zm4 4c4 2 4 6 0 8m3-11c6 4 6 10 0 14'/>"
+    }
+  }
+}
+</script>
+<script>
+/* Generic tactics engine. Content, balance and effects are supplied by #game-db. */
+(() => {
+'use strict';
+const DB = JSON.parse(document.getElementById('game-db').textContent);
+const C = DB.config;
+let S = null;
+const clone = value => JSON.parse(JSON.stringify(value));
+const byId = (list,id) => list.find(item => item.id === id);
+const fmt = (key,args={}) => (DB.messages[key] || key).replace(/\{(\w+)\}/g,(_,name)=>args[name] ?? '');
+const result = (ok,key,args) => ({ok,message:fmt(key,args)});
+const inside = p => Number.isInteger(p?.x) && Number.isInteger(p?.y) && p.x >= 0 && p.y >= 0 && p.x < C.width && p.y < C.height;
+const same = (a,b) => a.x === b.x && a.y === b.y;
+const dist = (a,b) => Math.abs(a.x-b.x)+Math.abs(a.y-b.y);
+const mod = (a,n) => ((a%n)+n)%n;
+const tileAt = p => S.tiles.find(t=>same(t,p));
+const enemyAt = p => S.enemies.find(e=>e.hp>0 && same(e,p));
+const unitAt = p => same(S.player,p) ? S.player : enemyAt(p);
+const isPlayer = unit => unit === S.player;
+const defOf = unit => isPlayer(unit) ? byId(DB.classes,S.classId) : DB.enemies[unit.type];
+const nameOf = unit => isPlayer(unit) ? DB.labels.player : DB.enemies[unit.type].name;
+const alive = unit => unit && unit.hp > 0;
+const log = (key,args={},kind='info') => {
+  S.logs.unshift({text:fmt(key,args),kind}); S.logs = S.logs.slice(0,C.maxLogs);
+};
+function seedNumber(seed) {
+  let h = C.seedHash.offset;
+  for (const ch of String(seed)) h = Math.imul(h ^ ch.codePointAt(0), C.seedHash.prime);
+  return h >>> 0;
+}
+function rand() { S.rng = (Math.imul(S.rng,C.rng.a)+C.rng.c) >>> 0; return S.rng/C.rng.m; }
+const pick = array => array[Math.floor(rand()*array.length)];
+function shuffle(array) {
+  const out = array.slice();
+  for(let i=out.length-1;i>0;i--) { const j=Math.floor(rand()*(i+1)); [out[i],out[j]]=[out[j],out[i]]; }
+  return out;
+}
+function getStats() {
+  if (!S) return clone(C.baseStats);
+  const stats = clone(C.baseStats);
+  for (const src of [byId(DB.classes,S.classId).stats || {}, ...S.relics.map(id=>byId(DB.relics,id)?.stats || {})]) {
+    for(const [key,value] of Object.entries(src)) stats[key]=(stats[key] || 0)+value;
+  }
+  stats.damageBonus += Math.floor((S.player.level-C.startLevel)/C.levelDamageInterval)*C.levelDamageBonus;
+  stats.maxEnergy = S.player.baseMaxEnergy+stats.maxEnergyBonus;
+  return stats;
+}
+function syncStats() { S.player.maxEnergy=getStats().maxEnergy; }
+function event(name) {
+  for (const id of S.relics.slice()) {
+    const item = byId(DB.relics,id);
+    (item?.hooks || []).forEach((hook,index)=>{
+      if(hook.event !== name) return;
+      const key=id+':'+index;
+      if(hook.limit >= 0 && (S.eventUses[key] || 0) >= hook.limit) return;
+      S.eventUses[key]=(S.eventUses[key] || 0)+1;
+      for(const effect of hook.effects) applyEffect(effect,{actor:S.player,source:'relic',targetCell:S.player});
+    });
+  }
+}
+function xp(value) {
+  S.player.xp += value;
+  while(S.player.xp >= S.player.xpNext) {
+    S.player.xp -= S.player.xpNext;
+    S.player.level++;
+    S.player.xpNext += C.xpGrowth;
+    S.player.maxHp += C.levelHp;
+    if(S.player.hp>0) S.player.hp = Math.min(S.player.maxHp,S.player.hp+C.levelHeal);
+    log('levelUp',{level:S.player.level,hp:C.levelHp},'good');
+  }
+  syncStats();
+}
+function damage(unit,value,context={}) {
+  if(!alive(unit) || value <= 0) return;
+  const absorb=context.pierce ? 0 : Math.min(unit.shield || 0,value);
+  unit.shield=Math.max(0,(unit.shield || 0)-absorb);
+  const amount=Math.max(0,value-absorb);
+  unit.hp=Math.max(0,unit.hp-amount);
+  if(isPlayer(unit)) S.stats.damageTaken+=amount;
+  else {
+    S.stats.damageDealt+=amount;
+    if(context.source==='enemy' && amount>0) S.stats.redirects++;
+  }
+  log('damage',{unit:nameOf(unit),value:amount,shield:absorb},isPlayer(unit)?'bad':'good');
+  if(unit.hp <= 0 && !isPlayer(unit)) {
+    S.stats.kills++;
+    S.enemies=S.enemies.filter(e=>e.id!==unit.id);
+    log('kill',{unit:nameOf(unit)},'good');
+    xp(DB.enemies[unit.type].xp);
+    event('kill');
+  }
+}
+function terrain(unit,phase) {
+  if(!alive(unit)) return;
+  const tile=tileAt(unit), def=DB.terrain[tile.type];
+  if(def.playerOnly && !isPlayer(unit)) return;
+  const effects=def[phase];
+  if(!effects) return;
+  const key=[unit.id || DB.labels.player,tile.id,phase].join(':');
+  if(def.perTurn && S.terrainUses[key]) return;
+  S.terrainUses[key]=true;
+  for(const effect of effects) applyEffect(effect,{actor:unit,target:unit,targetCell:unit,source:'terrain'});
+}
+function enter(unit) {
+  if(!alive(unit)) return;
+  terrain(unit,'enter');
+  if(!alive(unit)) return;
+  const trap=S.traps.find(t=>same(t,unit));
+  if(trap) {
+    S.traps=S.traps.filter(t=>t.id!==trap.id);
+    log('trapTrigger',{unit:nameOf(unit)},'system');
+    const targets=[S.player,...S.enemies].filter(e=>alive(e) && dist(e,trap)<=trap.radius);
+    for(const target of targets) damage(target,trap.damage,{source:'trap'});
+  }
+}
+function displace(unit,direction,distance) {
+  for(let i=0;i<distance && alive(unit);i++) {
+    const next={x:unit.x+direction.x,y:unit.y+direction.y};
+    if(!inside(next) || unitAt(next)) break;
+    unit.x=next.x; unit.y=next.y;
+    enter(unit);
+  }
+}
+function shiftRow(row,direction,distance,manual=true) {
+  const offset=direction*distance;
+  for(const item of [...S.tiles,S.player,...S.enemies,...S.traps]) if(item.y===row) item.x=mod(item.x+offset,C.width);
+  S.tiles.sort((a,b)=>a.y*C.width+a.x-(b.y*C.width+b.x));
+  if(manual) { event('shift'); log('shift',{row:row+1,direction:direction>0?DB.labels.right:DB.labels.left},'system'); }
+}
+function effectTargets(effect,context) {
+  if(effect.selector==='enemies') return S.enemies.filter(e=>dist(e,context.actor)<=effect.radius);
+  if(effect.target==='player') return [S.player];
+  return [context.target || enemyAt(context.targetCell || context.actor) || context.actor];
+}
+function applyEffect(effect,context) {
+  const stats=getStats();
+  const value=(effect.value || 0)+(effect.scale ? stats[effect.scale] || 0 : 0);
+  const p=context.targetCell || context.actor;
+  const targets=effectTargets(effect,context);
+  switch(effect.op) {
+    case 'move': context.actor.x=p.x; context.actor.y=p.y; enter(context.actor); break;
+    case 'damage': for(const unit of targets) damage(unit,value,{source:context.source,pierce:effect.pierce}); break;
+    case 'shield': for(const unit of targets) unit.shield=(unit.shield || 0)+value; break;
+    case 'heal': for(const unit of targets) if(alive(unit)) unit.hp=Math.min(unit.maxHp,unit.hp+value); break;
+    case 'energy': for(const unit of targets) if(isPlayer(unit)) unit.energy=Math.max(0,Math.min(C.energyCap,unit.energy+value)); break;
+    case 'shift': shiftRow(p.y,effect.direction,effect.distance,true); break;
+    case 'trap': S.traps.push({id:'t'+S.nextId++,x:p.x,y:p.y,damage:value,radius:effect.radius,owner:C.trapDefaultOwner}); break;
+    case 'pull': case 'push': {
+      for(const unit of targets) {
+        if(unit===context.actor) continue;
+        let dx=context.actor.x-unit.x,dy=context.actor.y-unit.y;
+        const direction=Math.abs(dx)>=Math.abs(dy) ? {x:Math.sign(dx),y:0} : {x:0,y:Math.sign(dy)};
+        if(effect.op==='push') { direction.x*=-1; direction.y*=-1; }
+        displace(unit,direction,effect.distance+(effect.scale ? stats[effect.scale] || 0 : 0));
+      }
+      break;
+    }
+    default: throw Error('Unsupported effect operation: '+effect.op);
+  }
+}
+function patternCells(enemy) {
+  const def=DB.enemies[enemy.type], aim={x:S.player.x,y:S.player.y},radius=def.patternParams.radius;
+  const all=S.tiles.map(t=>({x:t.x,y:t.y}));
+  switch(def.pattern) {
+    case 'point': return [aim];
+    case 'cross': return all.filter(p=>(p.x===aim.x || p.y===aim.y) && dist(p,aim)<=radius);
+    case 'ring': return all.filter(p=>dist(p,aim)===radius);
+    case 'row': return all.filter(p=>p.y===aim.y);
+    case 'ray': {
+      const dx=aim.x-enemy.x,dy=aim.y-enemy.y;
+      if(Math.abs(dx)>Math.abs(dy)) return all.filter(p=>p.y===enemy.y && (p.x-enemy.x)*Math.sign(dx)>0);
+      return all.filter(p=>p.x===enemy.x && (p.y-enemy.y)*Math.sign(dy)>0);
+    }
+    default: throw Error('Unsupported enemy pattern: '+def.pattern);
+  }
+}
+function planIntents() {
+  for(const enemy of S.enemies) {
+    const def=DB.enemies[enemy.type];
+    enemy.intent={cells:patternCells(enemy),damage:def.damage+S.routeModifier.enemyDamageBonus,kind:def.pattern,label:DB.labels.patterns[def.pattern]};
+  }
+  const row=C.tideRowSequence[(S.turn-C.startTurn)%C.tideRowSequence.length];
+  S.tide={row:mod(row+S.stage,C.height),direction:pick(C.tideDirections)};
+}
+function moveEnemy(enemy) {
+  const def=DB.enemies[enemy.type];
+  for(let i=0;i<def.move && alive(enemy) && S.player.hp>0;i++) {
+    if(dist(enemy,S.player)<=def.preferredRange) break;
+    const candidates=[{x:enemy.x-1,y:enemy.y},{x:enemy.x+1,y:enemy.y},{x:enemy.x,y:enemy.y-1},{x:enemy.x,y:enemy.y+1}].filter(p=>inside(p) && !unitAt(p));
+    candidates.sort((a,b)=>dist(a,S.player)-dist(b,S.player));
+    if(!candidates.length || dist(candidates[0],S.player)>=dist(enemy,S.player)) break;
+    enemy.x=candidates[0].x;enemy.y=candidates[0].y;enter(enemy);
+  }
+}
+function rewardObject(item) {
+  const reward=clone(item);
+  if(item.kind==='ability') {
+    const a=byId(DB.abilities,item.ref); reward.title=fmt('learnTitle',{name:a.name});reward.description=a.description;reward.icon=a.icon;
+  }
+  if(item.kind==='relic') {
+    const a=byId(DB.relics,item.ref);reward.title=a.name;reward.description=a.description;reward.icon=a.icon;
+  }
+  return reward;
+}
+function offerRewards() {
+  const available=DB.rewards.filter(r=>(r.kind!=='ability' || !S.learned.includes(r.ref)) && (r.kind!=='relic' || !S.relics.includes(r.ref)));
+  const specialised=shuffle(available.filter(r=>['ability','relic'].includes(r.kind)));
+  const normal=shuffle(available.filter(r=>!['ability','relic'].includes(r.kind)));
+  S.rewards=shuffle([...specialised.slice(0,Math.max(0,C.rewardChoices-1)),...normal.slice(0,1)]).slice(0,C.rewardChoices).map(rewardObject);
+}
+function checkOutcome() {
+  if(S.player.hp<=0) { S.phase='lost';S.history=[];log('lost',{},'bad');return true; }
+  if(!S.enemies.length) {
+    S.history=[];
+    if(S.stage>=DB.encounters.length-1) { S.phase='won';log('won',{},'good'); }
+    else {
+      S.phase='reward';S.player.hp=Math.min(S.player.maxHp,S.player.hp+C.battleHeal);
+      offerRewards();log('battleWon',{heal:C.battleHeal},'good');
+    }
+    return true;
+  }
+  return false;
+}
+function startBattle() {
+  const encounter=DB.encounters[S.stage];
+  S.phase='battle';S.turn=C.startTurn;S.history=[];S.actionUses={};S.eventUses={};S.terrainUses={};S.rewards=[];S.routeOptions=[];S.traps=[];
+  S.player.x=encounter.playerStart.x;S.player.y=encounter.playerStart.y;S.player.shield=C.startShield;
+  syncStats();S.player.energy=S.player.maxEnergy;
+  S.tiles=[];
+  for(let y=0;y<C.height;y++) for(let x=0;x<C.width;x++) S.tiles.push({id:S.stage+':'+x+':'+y,x,y,type:C.defaultTerrain});
+  for(const tile of encounter.terrain) tileAt(tile).type=tile.type;
+  if(S.pendingTerrain) {
+    const possible=shuffle(S.tiles.filter(t=>t.type===C.defaultTerrain && !same(t,S.player)));
+    for(const tile of possible.slice(0,S.pendingTerrain.count)) tile.type=S.pendingTerrain.type;
+    S.pendingTerrain=null;
+  }
+  S.enemies=encounter.spawns.map(spawn=>{
+    const def=DB.enemies[spawn.type];const maxHp=Math.ceil(def.hp*S.routeModifier.enemyHpMultiplier);
+    return {id:C.entityPrefix+S.nextId++,type:spawn.type,x:spawn.x,y:spawn.y,hp:maxHp,maxHp,shield:def.shield || 0,intent:null};
+  });
+  event('battleStart');terrain(S.player,'turnStart');planIntents();log('battleStart',{name:encounter.name},'system');
+}
+function createRun(classId=C.defaultClass,seed=C.defaultSeed) {
+  const cls=byId(DB.classes,classId);
+  if(!cls) return result(false,'classMissing');
+  S={version:C.saveVersion,seed:String(seed),rng:seedNumber(seed),phase:'battle',stage:C.startStage,turn:C.startTurn,classId,player:{id:DB.labels.player,x:0,y:0,hp:cls.hp,maxHp:cls.hp,shield:C.startShield,energy:cls.energy,maxEnergy:cls.energy,baseMaxEnergy:cls.energy,level:C.startLevel,xp:C.startXp,xpNext:C.xpBase},enemies:[],tiles:[],traps:[],relics:cls.startingRelics.slice(),learned:cls.startingActions.slice(),logs:[],rewards:[],routeOptions:[],history:[],actionUses:{},eventUses:{},terrainUses:{},stats:{kills:0,damageDealt:0,damageTaken:0,turns:0,redirects:0},routeModifier:{enemyHpMultiplier:C.routeEnemyHpMultiplier,enemyDamageBonus:C.routeEnemyDamageBonus},nextId:0,pendingTerrain:null};
+  startBattle();return result(true,'runCreated');
+}
+function getActions() {
+  if(!S) return [];
+  return S.learned.map(id=>byId(DB.abilities,id)).filter(Boolean).map(a=>{
+    const out=clone(a);out.usesLeft=a.maxUses===undefined ? null : Math.max(0,a.maxUses-(S.actionUses[a.id] || 0));
+    out.disabledReason=S.phase!=='battle' ? fmt('notBattle') : S.player.energy<a.cost ? fmt('energyShort') : out.usesLeft===0 ? fmt('usedUp') : (a.minHp && S.player.hp<a.minHp) ? fmt('hpShort') : '';
+    out.range=a.range<0 ? a.range : a.range+(a.rangeScale ? getStats()[a.rangeScale] || 0 : 0);
+    return out;
+  });
+}
+function validateTarget(action,p,ignoreEnergy=false) {
+  if(!S || S.phase!=='battle') return result(false,'notBattle');
+  if(!action) return result(false,'unknownAction');
+  if(!ignoreEnergy && action.disabledReason) return {ok:false,message:action.disabledReason};
+  if(action.target==='self') return result(true,'valid');
+  if(!inside(p)) return result(false,'outside');
+  if(action.range>=0 && dist(p,S.player)>action.range) return result(false,'outOfRange');
+  if(action.empty && unitAt(p)) return result(false,'occupied');
+  if(action.noTrap && S.traps.some(t=>same(t,p))) return result(false,'trapExists');
+  if(action.target==='enemy' && !enemyAt(p)) return result(false,'needEnemy');
+  return result(true,'valid');
+}
+function validTargets(actionId) {
+  const action=getActions().find(a=>a.id===actionId);
+  if(!action) return [];
+  if(action.target==='self') return action.disabledReason ? [] : [{x:S.player.x,y:S.player.y}];
+  return S.tiles.filter(t=>validateTarget(action,t).ok).map(t=>({x:t.x,y:t.y}));
+}
+function preview(actionId,target) {
+  const action=getActions().find(a=>a.id===actionId);
+  if(!action) return {valid:false,reason:fmt('unknownAction'),cells:[],text:''};
+  const p=action.target==='self' ? {x:S.player.x,y:S.player.y} : target;
+  const validation=validateTarget(action,p);
+  let cells=[];
+  if(validation.ok) cells=action.target==='row' ? S.tiles.filter(t=>t.y===p.y).map(t=>({x:t.x,y:t.y})) : action.effects.some(e=>e.selector==='enemies') ? S.tiles.filter(t=>dist(t,S.player)<=Math.max(...action.effects.map(e=>e.radius || 0))).map(t=>({x:t.x,y:t.y})) : [p];
+  const enemy=p && enemyAt(p);
+  return {valid:validation.ok,reason:validation.ok?'':validation.message,cells,text:validation.ok ? fmt('actionPreview',{action:action.name,target:enemy?nameOf(enemy):action.target==='self'?DB.labels.player:action.target==='row'?fmt('rowName',{row:p.y+1}):fmt('cellName',{x:p.x+1,y:p.y+1})}) : validation.message};
+}
+function snapshot() { if(!S) return null; const out=clone(S);out.history=[];return out; }
+function act(actionId,target) {
+  const action=getActions().find(a=>a.id===actionId);
+  const p=action?.target==='self' ? {x:S.player.x,y:S.player.y} : target;
+  const validation=validateTarget(action,p);
+  if(!validation.ok) return validation;
+  const history=S.history.slice();history.push(snapshot());S.history=history.slice(-C.maxHistory);
+  S.player.energy-=action.cost;S.actionUses[action.id]=(S.actionUses[action.id] || 0)+1;
+  const targetUnit=enemyAt(p);
+  log('actionUsed',{name:action.name},'info');
+  for(const effect of action.effects) {
+    if(S.player.hp<=0) break;
+    applyEffect(effect,{actor:S.player,target:targetUnit,targetCell:p,source:'player'});
+  }
+  checkOutcome();return result(true,'actionDone',{name:action.name});
+}
+function undo() {
+  if(!S || S.phase!=='battle' || !S.history.length) return result(false,'cannotUndo');
+  const history=S.history.slice(),previous=history.pop();S=previous;S.history=history;
+  return result(true,'undone');
+}
+function forecast() {
+  if(!S) return null;
+  const attackers=S.enemies.filter(e=>e.intent?.cells.some(p=>same(p,S.player)));
+  const incoming=attackers.reduce((n,e)=>n+e.intent.damage,0);
+  return {incoming,blocked:Math.min(incoming,S.player.shield),hpDamage:Math.max(0,incoming-S.player.shield),attackers:attackers.map(e=>e.id),friendlyFire:S.enemies.reduce((n,e)=>n+S.enemies.filter(t=>e.intent.cells.some(p=>same(p,t))).length,0),pressure:S.turn>=C.pressureStart?C.pressureDamage+(S.turn-C.pressureStart)*C.pressureGrowth:0,tide:clone(S.tide)};
+}
+function endTurn() {
+  if(!S || S.phase!=='battle') return result(false,'notBattle');
+  S.history=[];S.stats.turns++;
+  const sequence=S.enemies.slice();
+  for(const enemy of sequence) {
+    if(!alive(enemy) || !S.enemies.some(e=>e.id===enemy.id)) continue;
+    log('enemyAttack',{name:nameOf(enemy),pattern:enemy.intent.label},'bad');
+    const targets=[S.player,...S.enemies].filter(u=>alive(u) && enemy.intent.cells.some(p=>same(p,u)));
+    for(const target of targets) damage(target,Math.round(enemy.intent.damage*(isPlayer(target)?C.enemyIntentScale:C.enemyFriendlyFireScale)),{source:'enemy'});
+    if(checkOutcome()) return result(true,'turnDone');
+  }
+  shiftRow(S.tide.row,S.tide.direction,C.tideDistance,false);
+  for(const enemy of S.enemies.slice()) moveEnemy(enemy);
+  if(checkOutcome()) return result(true,'turnDone');
+  if(S.turn>=C.pressureStart) {
+    const pressure=C.pressureDamage+(S.turn-C.pressureStart)*C.pressureGrowth;
+    damage(S.player,pressure,{source:'pressure',pierce:true});log('pressure',{value:pressure},'bad');
+    if(checkOutcome()) return result(true,'turnDone');
+  }
+  S.turn++;S.actionUses={};S.eventUses={};S.terrainUses={};
+  S.player.shield=Math.max(0,S.player.shield-C.shieldDecay);
+  syncStats();S.player.energy=S.player.maxEnergy;
+  event('turnStart');
+  for(const unit of [S.player,...S.enemies]) terrain(unit,'turnStart');
+  if(checkOutcome()) return result(true,'turnDone');
+  planIntents();return result(true,'turnDone');
+}
+function chooseReward(id) {
+  if(!S || S.phase!=='reward') return result(false,'notReward');
+  const reward=S.rewards.find(r=>r.id===id);if(!reward) return result(false,'unknownReward');
+  switch(reward.kind) {
+    case 'heal': S.player.hp=Math.min(S.player.maxHp,S.player.hp+reward.value);break;
+    case 'maxHp':S.player.maxHp+=reward.value;S.player.hp+=reward.value;break;
+    case 'xp':xp(reward.value);break;
+    case 'ability':S.learned.push(reward.ref);break;
+    case 'relic':S.relics.push(reward.ref);syncStats();break;
+    default:return result(false,'unknownReward');
+  }
+  log('rewardChosen',{name:reward.title},'good');S.phase='route';S.rewards=[];
+  S.routeOptions=shuffle(DB.routes).slice(0,C.routeChoices).map(clone);return result(true,'rewardDone');
+}
+function chooseRoute(id) {
+  if(!S || S.phase!=='route') return result(false,'notRoute');
+  const route=S.routeOptions.find(r=>r.id===id);if(!route) return result(false,'unknownRoute');
+  S.routeModifier={enemyHpMultiplier:route.enemyHpMultiplier,enemyDamageBonus:route.enemyDamageBonus};
+  for(const effect of route.effects) applyEffect(effect,{actor:S.player,target:S.player,source:'route'});
+  if(route.xp) xp(route.xp);
+  if(route.bonusRelics) {
+    const available=shuffle(DB.relics.filter(r=>!S.relics.includes(r.id)));
+    for(const relic of available.slice(0,route.bonusRelics)) {S.relics.push(relic.id);log('bonusRelic',{name:relic.name},'good');}
+  }
+  S.pendingTerrain=route.addTerrain || null;S.routeId=id;S.stage++;startBattle();return result(true,'routeDone');
+}
+function describeIntent(enemy) {
+  if(!enemy?.intent) return '';
+  return fmt('intentDescription',{name:DB.enemies[enemy.type].name,pattern:enemy.intent.label,damage:enemy.intent.damage,cells:enemy.intent.cells.length});
+}
+function validateDB(db) {
+  const errors=[],ops=['move','damage','pull','push','shift','shield','trap','energy','heal'],patterns=['point','cross','ray','row','ring'];
+  const error=message=>errors.push(message);
+  for(const key of ['config','classes','terrain','abilities','enemies','relics','encounters','rewards','routes','messages','labels']) if(!db[key]) error('Missing DB.'+key);
+  if(errors.length) return errors;
+  if(!Number.isInteger(db.config.width) || !Number.isInteger(db.config.height) || db.config.width<1 || db.config.height<1) error('config.width/height must be positive integers');
+  const idSets={};
+  for(const key of ['classes','abilities','relics','encounters','rewards','routes']) {
+    idSets[key]=new Set();for(const item of db[key]) {if(!item.id || idSets[key].has(item.id)) error(key+': duplicate or missing id '+item.id);idSets[key].add(item.id);}
+  }
+  if(!idSets.classes.has(db.config.defaultClass)) error('config.defaultClass: unknown class '+db.config.defaultClass);
+  if(!db.terrain[db.config.defaultTerrain]) error('config.defaultTerrain: unknown terrain '+db.config.defaultTerrain);
+  if(!db.encounters.length || !db.encounters[db.config.startStage]) error('config.startStage: missing encounter');
+  const effects=(list,path)=>{for(const effect of list || []) if(!ops.includes(effect.op)) error(path+': unknown op '+effect.op);};
+  const validPos=p=>Number.isInteger(p?.x)&&Number.isInteger(p?.y)&&p.x>=0&&p.y>=0&&p.x<db.config.width&&p.y<db.config.height;
+  for(const a of db.abilities) {effects(a.effects,'abilities.'+a.id);if(!['self','cell','enemy','row'].includes(a.target)) error('abilities.'+a.id+': unknown target');if(a.cost<0) error('abilities.'+a.id+': negative cost');}
+  for(const cls of db.classes) {for(const id of cls.startingActions) if(!idSets.abilities.has(id)) error(cls.id+': unknown action '+id);for(const id of cls.startingRelics) if(!idSets.relics.has(id)) error(cls.id+': unknown relic '+id);}
+  for(const [id,t] of Object.entries(db.terrain)) {effects(t.enter,'terrain.'+id);effects(t.turnStart,'terrain.'+id);}
+  for(const r of db.relics) for(const h of r.hooks || []) effects(h.effects,'relics.'+r.id);
+  for(const [id,e] of Object.entries(db.enemies)) if(!patterns.includes(e.pattern)) error('enemies.'+id+': unknown pattern');
+  for(const e of db.encounters) {
+    if(!validPos(e.playerStart)) error(e.id+': player outside board');
+    const occupied=new Set([e.playerStart.x+','+e.playerStart.y]);
+    for(const spawn of e.spawns) {if(!db.enemies[spawn.type]) error(e.id+': unknown enemy '+spawn.type);if(!validPos(spawn)) error(e.id+': enemy outside board');const key=spawn.x+','+spawn.y;if(occupied.has(key)) error(e.id+': overlapping spawn');occupied.add(key);}
+    for(const t of e.terrain) {if(!db.terrain[t.type]) error(e.id+': unknown terrain '+t.type);if(!validPos(t)) error(e.id+': terrain outside board');}
+  }
+  for(const r of db.rewards) {if(r.kind==='ability'&&!idSets.abilities.has(r.ref)) error(r.id+': unknown ability '+r.ref);if(r.kind==='relic'&&!idSets.relics.has(r.ref)) error(r.id+': unknown relic '+r.ref);}
+  for(const route of db.routes) {effects(route.effects,'routes.'+route.id);if(route.addTerrain && !db.terrain[route.addTerrain.type]) error('routes.'+route.id+': unknown terrain '+route.addTerrain.type);}
+  return errors;
+}
+function loadState(obj) {
+  const previous=S;
+  try {
+    const saved=clone(obj);
+    if(saved.version!==C.saveVersion || !byId(DB.classes,saved.classId) || !DB.encounters[saved.stage] || !['battle','reward','route','won','lost'].includes(saved.phase)) return result(false,'invalidSave');
+    if(!saved.player || !Array.isArray(saved.enemies) || !Array.isArray(saved.tiles) || saved.tiles.length!==C.width*C.height || !inside(saved.player)) return result(false,'invalidSave');
+    if(saved.enemies.some(e=>!DB.enemies[e.type] || !inside(e) || !Array.isArray(e.intent?.cells))) return result(false,'invalidSave');
+    if(!['traps','learned','relics','logs','rewards','routeOptions'].every(key=>Array.isArray(saved[key])) || !saved.stats || !saved.routeModifier) return result(false,'invalidSave');
+    if(saved.tiles.some(t=>!DB.terrain[t.type] || !inside(t)) || saved.learned.some(id=>!byId(DB.abilities,id)) || saved.relics.some(id=>!byId(DB.relics,id))) return result(false,'invalidSave');
+    const numbers=['hp','maxHp','shield','energy','maxEnergy','baseMaxEnergy','level','xp','xpNext'];
+    if(numbers.some(key=>!Number.isFinite(saved.player[key])) || saved.player.maxHp<=0 || saved.player.hp<0 || saved.player.hp>saved.player.maxHp || saved.player.energy<0 || saved.player.xpNext<=0 || saved.player.level<C.startLevel || !Number.isInteger(saved.turn) || saved.turn<C.startTurn || !Number.isFinite(saved.rng) || !Number.isFinite(saved.nextId)) return result(false,'invalidSave');
+    if(!Number.isFinite(saved.routeModifier.enemyHpMultiplier) || saved.routeModifier.enemyHpMultiplier<=0 || !Number.isFinite(saved.routeModifier.enemyDamageBonus) || Object.values(saved.stats).some(v=>!Number.isFinite(v))) return result(false,'invalidSave');
+    const cells=new Set(saved.tiles.map(t=>t.x+','+t.y));
+    const units=[saved.player,...saved.enemies];
+    if(cells.size!==C.width*C.height || new Set(units.map(u=>u.x+','+u.y)).size!==units.length || saved.enemies.some(e=>!Number.isFinite(e.hp) || e.hp<=0 || !Number.isFinite(e.maxHp) || !Number.isFinite(e.shield) || !Number.isFinite(e.intent.damage) || e.intent.cells.some(p=>!inside(p))) || saved.traps.some(t=>!inside(t) || !Number.isFinite(t.damage) || !Number.isFinite(t.radius))) return result(false,'invalidSave');
+    if(saved.phase==='reward' && saved.rewards.some(r=>!byId(DB.rewards,r.id))) return result(false,'invalidSave');
+    if(saved.phase==='route' && saved.routeOptions.some(r=>!byId(DB.routes,r.id))) return result(false,'invalidSave');
+    saved.history=[];saved.actionUses ||= {};saved.eventUses ||= {};saved.terrainUses ||= {};S=saved;syncStats();return result(true,'loaded');
+  } catch(error) {S=previous;return result(false,'invalidSave');}
+}
+window.Tide={DB,createRun,getState:()=>S,loadState,act,endTurn,undo,chooseReward,chooseRoute,snapshot,preview,validTargets,getActions,getStats,describeIntent,validateDB,forecast};
+const errors=validateDB(DB);if(errors.length) console.error('Tide DB validation:',errors);
+})();
+
+</script>
+<script>
+(() => {
+  'use strict';
+  const game = window.Tide, DB = game.DB, UI = DB.ui, T = UI.text, S = UI.settings;
+  const $ = id => document.getElementById(id);
+  const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const icon = (id, fallback = 'module') => `<svg viewBox="0 0 24 24" aria-hidden="true">${UI.icons[id] || UI.icons[fallback]}</svg>`;
+  const num = value => Number.isFinite(Number(value)) ? Number(value) : 0;
+  const percent = (a, b) => Math.max(0, Math.min(100, num(a) / Math.max(1, num(b)) * 100));
+  const lookup = (collection, id) => Array.isArray(collection) ? collection.find(item => item.id === id) : collection?.[id];
+  let selectedAction = null, hoveredCell = null, focusedEnemy = null, modalKind = null, introClass = DB.classes[0].id, toastTimer, previousFocus;
+  let cachedActions = [], validCells = new Set(), savingWarning = false;
+  const keyOf = (x,y) => `${x},${y}`;
+
+  for (const [name,value] of Object.entries(UI.theme)) document.documentElement.style.setProperty(`--${name}`,value);
+  document.documentElement.style.setProperty('--cols', DB.config.width);
+  document.documentElement.style.setProperty('--rows', DB.config.height);
+  document.title = `${UI.brand.title} — ${UI.brand.english}`;
+  $('brand-title').textContent = UI.brand.title;
+  $('brand-english').textContent = UI.brand.english;
+  document.querySelectorAll('[data-ui]').forEach(el => el.textContent = T[el.dataset.ui] || '');
+  document.querySelectorAll('[data-title]').forEach(el => { el.title = T[el.dataset.title] || ''; el.setAttribute('aria-label',el.title); });
+  document.querySelectorAll('[data-icon]').forEach(el => el.innerHTML = icon(el.dataset.icon));
+
+  function toast(message,error=false) {
+    if (!message) return;
+    clearTimeout(toastTimer);
+    $('toast').textContent = message;
+    $('toast').className = `toast visible${error?' error':''}`;
+    toastTimer = setTimeout(() => $('toast').classList.remove('visible'), S.toastMs);
+  }
+
+  function saveLocal() {
+    try { localStorage.setItem(S.storageKey, JSON.stringify(game.snapshot())); }
+    catch { if(!savingWarning){ savingWarning=true; toast(T.saveUnavailable,true); } }
+  }
+
+  function process(result) {
+    if (result?.ok === false) { toast(result.message || T.actionFailed,true); return false; }
+    hoveredCell = null; focusedEnemy = null;
+    render(); saveLocal();
+    return true;
+  }
+
+  function perform(actionId,target) {
+    try { process(game.act(actionId,target)); } catch(error){toast(error.message,true);}
+  }
+
+  function selectAction(id) {
+    const action = cachedActions.find(a=>a.id===id);
+    if (!action || action.disabledReason || (num(action.cost)>game.getState().player.energy)) {
+      if(action?.disabledReason) toast(action.disabledReason,true);
+      return;
+    }
+    if(action.target === 'self' || action.target === 'none') { perform(id); return; }
+    selectedAction = selectedAction === id ? null : id;
+    hoveredCell = null;
+    renderActions(); updateTargetMarks(); renderTileInfo();
+  }
+
+  function renderPlayer(state) {
+    const p = state.player, cls=lookup(DB.classes,state.classId || p.classId) || DB.classes[0];
+    $('player-panel').innerHTML = `<div class="panel-label">${esc(UI.brand.english)}</div><div class="pilot-art">${icon('player')}<span class="pilot-level">${esc(T.level)} ${num(p.level)}</span></div><div class="player-name"><strong>${esc(cls.name)}</strong><span>${esc(T.level)} ${num(p.level)}</span></div><div class="meter-heading"><span>${esc(T.hp)}</span><strong>${num(p.hp)} <span>/ ${num(p.maxHp)}</span></strong></div><div class="meter hp"><i style="width:${percent(p.hp,p.maxHp)}%"></i></div><div class="meter-heading"><span>${esc(T.energy)}</span><strong>${num(p.energy)} <span>/ ${num(p.maxEnergy)}</span></strong></div><div class="energy-pips">${Array.from({length:Math.max(0,num(p.maxEnergy))},(_,i)=>`<i class="pip ${i<p.energy?'full':''}"></i>`).join('')}</div><div class="shield-line">${icon('shield')} ${esc(T.shield)} <strong>${num(p.shield)}</strong></div><div class="meter-heading xp-heading"><span>${esc(T.xp)}</span><strong>${num(p.xp)} / ${num(p.xpNext)}</strong></div><div class="meter xp"><i style="width:${percent(p.xp,p.xpNext)}%"></i></div>`;
+    const relics=(state.relics||[]).map(id=>typeof id==='object'?id:lookup(DB.relics,id)).filter(Boolean);
+    $('module-count').textContent = `${relics.length} ${T.moduleCount}`;
+    $('modules').innerHTML = relics.length ? relics.map(r=>`<div class="module">${icon(r.icon)}<div><strong>${esc(r.name || r.title)}</strong><p>${esc(r.description)}</p></div></div>`).join('') : `<p class="empty">${esc(T.moduleEmpty)}</p>`;
+  }
+
+  function renderCampaign(state) {
+    const encounter = typeof state.encounter === 'object' ? state.encounter : lookup(DB.encounters,state.encounter) || DB.encounters[state.stage];
+    $('stage-number').textContent = String(state.stage+1).padStart(2,'0');
+    $('encounter-name').textContent = encounter?.name || T.operation;
+    $('encounter-subtitle').textContent = encounter?.subtitle || encounter?.description || UI.brand.tagline;
+    $('turn-number').textContent = String(state.turn).padStart(2,'0');
+    $('route-track').innerHTML = DB.encounters.map((e,i)=>`${i?'<i class="route-connector"></i>':''}<div class="route-node ${i===state.stage?'current':i<state.stage?'done':''}"><span>${i<state.stage?'✓':String(i+1).padStart(2,'0')}</span></div>`).join('');
+    $('route-track').setAttribute('aria-label',`${T.campaign} ${state.stage+1}${T.stageOf}${DB.encounters.length}`);
+    $('seed-display').textContent = `${T.seedLabel} / ${state.seed ?? ''}`;
+  }
+
+  function threats(state) {
+    const cells = new Map();
+    for (const e of state.enemies.filter(e=>e.hp>0)) for(const cell of e.intent?.cells || []) {
+      const key=keyOf(cell.x,cell.y), value=cells.get(key)||{damage:0,enemies:[]};
+      value.damage += num(e.intent.damage);value.enemies.push(e.id);cells.set(key,value);
+    }
+    return cells;
+  }
+
+  function renderBoard(state) {
+    const W=DB.config.width,H=DB.config.height, danger=threats(state);
+    $('column-labels').innerHTML=Array.from({length:W},(_,x)=>`<span class="coordinate">${String.fromCharCode(S.coordinateStart+x)}</span>`).join('');
+    $('row-labels').innerHTML=Array.from({length:H},(_,y)=>`<span class="coordinate">${y+1}</span>`).join('');
+    $('board').setAttribute('aria-rowcount',H);$('board').setAttribute('aria-colcount',W);
+    $('board').innerHTML = state.tiles.map(tile => {
+      const terrain=DB.terrain[tile.type]||{}, at=keyOf(tile.x,tile.y), threat=danger.get(at);
+      const enemy=state.enemies.find(e=>e.hp>0&&e.x===tile.x&&e.y===tile.y), player=state.player.x===tile.x&&state.player.y===tile.y;
+      let unit='';
+      if(player) unit=`<span class="unit player">${icon('player')}<span class="unit-hp"><i style="width:${percent(state.player.hp,state.player.maxHp)}%"></i></span>${state.player.shield?`<span class="unit-shield">${num(state.player.shield)}</span>`:''}</span>`;
+      if(enemy) { const type=DB.enemies[enemy.type]||{}; const order=state.enemies.filter(e=>e.hp>0).findIndex(e=>e.id===enemy.id)+1;
+        unit=`<span class="unit enemy" style="color:${esc(type.color||UI.theme.danger)}">${icon(type.icon,'enemy')}<span class="unit-order">${order}</span><span class="unit-hp"><i style="width:${percent(enemy.hp,enemy.maxHp)}%"></i></span>${enemy.shield?`<span class="unit-shield">${num(enemy.shield)}</span>`:''}</span>`;
+      }
+      const trap=(state.traps||[]).find(trap=>trap.x===tile.x&&trap.y===tile.y);
+      const tileLabel = `${String.fromCharCode(S.coordinateStart+tile.x)}${tile.y+1} · ${terrain.name||tile.type}${player?` · ${T.you}`:''}${enemy?` · ${DB.enemies[enemy.type]?.name}`:''}${threat?` · ${T.dangerTotal} ${threat.damage}`:''}`;
+      return `<button class="tile terrain-${esc(tile.type)} ${player||enemy?'entity':''} ${threat?'threat':''}" data-x="${tile.x}" data-y="${tile.y}" data-threat="${threat?.enemies.map(esc).join(' ')||''}" role="gridcell" aria-label="${esc(tileLabel)}" style="--terrainColor:${esc(terrain.color||UI.theme.muted)}"><span class="terrain-art">${icon(terrain.icon,'water')}</span>${threat?`<span class="tile-badge">${threat.damage}</span>`:''}${unit}${trap?`<span class="trap-marker">${icon('trap')}${num(trap.timer ?? trap.turns ?? trap.fuse)}</span>`:''}</button>`;
+    }).join('');
+    const direction=state.tide?.direction;
+    const row=state.tide?.row;
+    $('tide-label').innerHTML=state.tide?`${icon(direction<0?'left':'right')} ${esc(T.forecast)} ${num(row)+1} · ${esc(T.shift)}`:`${icon('anchor')} ${esc(T.wrap)}`;
+    $('tide-label').title=T.nextCurrent;
+    updateTargetMarks();
+  }
+
+  function updateTargetMarks() {
+    validCells=new Set();
+    if(selectedAction&&game.getState().phase==='battle') {
+      try { validCells=new Set(game.validTargets(selectedAction).map(c=>keyOf(c.x,c.y))); }catch{}
+    }
+    let affected=new Set();
+    if(selectedAction&&hoveredCell) {try{affected=new Set((game.preview(selectedAction,hoveredCell)?.cells||[]).map(c=>keyOf(c.x,c.y)));}catch{}}
+    $('board').querySelectorAll('.tile').forEach(el=>{
+      const key=keyOf(num(el.dataset.x),num(el.dataset.y));
+      el.classList.toggle('valid',validCells.has(key));el.classList.toggle('affected',affected.has(key));
+      el.classList.toggle('focus-threat',Boolean(focusedEnemy&&el.dataset.threat.split(' ').includes(String(focusedEnemy))));
+      el.classList.toggle('hovered',Boolean(hoveredCell&&num(el.dataset.x)===hoveredCell.x&&num(el.dataset.y)===hoveredCell.y));
+    });
+  }
+
+  function renderTileInfo() {
+    const state=game.getState(), action=cachedActions.find(a=>a.id===selectedAction);
+    if (!hoveredCell) {
+      const prediction=game.forecast();
+      const forecastText=`${T.forecastPrefix} · ${T.forecastDamage} ${prediction.hpDamage}${prediction.pressure?` + ${T.forecastPressure} ${prediction.pressure}`:''} · ${T.forecastFriendly} ${prediction.friendlyFire}`;
+      $('tile-info').innerHTML=`${icon(action?.icon||'eye')}<div><strong>${esc(action?.name || T.snapshot)}</strong><p>${esc(action?.description || (state.player.energy<=0?T.apEmpty:T.boardHint))}</p><p title="${esc(T.forecastNote)}" style="color:${esc(prediction.hpDamage||prediction.pressure?UI.theme.danger:UI.theme.accent)}">${esc(forecastText)}</p></div>`;return;
+    }
+    const {x,y}=hoveredCell,tile=state.tiles.find(t=>t.x===x&&t.y===y),terrain=DB.terrain[tile?.type]||{},enemy=state.enemies.find(e=>e.hp>0&&e.x===x&&e.y===y);
+    let title=`${String.fromCharCode(S.coordinateStart+x)}${y+1} · ${terrain.name||tile?.type}`, description=terrain.description||'';
+    if(enemy){title+=` · ${DB.enemies[enemy.type]?.name}`;description+=` · ${T.hp} ${enemy.hp}/${enemy.maxHp}`;}
+    let preview=null;
+    if(action)try{preview=game.preview(action.id,hoveredCell);}catch{}
+    const detail=preview?.text || preview?.reason || description;
+    $('tile-info').innerHTML=`${icon(action?.icon||terrain.icon,'crosshair')}<div><strong>${esc(title)}</strong><p class="${preview?.valid?'preview-text':''}">${esc(detail)}</p></div>`;
+  }
+
+  function renderActions() {
+    const state=game.getState();
+    cachedActions=game.getActions();
+    if(selectedAction&&!cachedActions.some(a=>a.id===selectedAction))selectedAction=null;
+    $('actions').innerHTML=cachedActions.map((a,i)=>{
+      const disabled=state.phase!=='battle'||a.disabledReason||num(a.cost)>state.player.energy;
+      return `<button class="action-card ${a.id===selectedAction?'active':''}" data-action="${esc(a.id)}" ${disabled?'disabled':''} aria-pressed="${a.id===selectedAction}" title="${esc(a.disabledReason||a.description)}"><div class="card-top">${icon(a.icon)}<span class="card-cost">${num(a.cost)}${icon('energy')}</span></div><strong>${esc(a.name)}</strong><p>${esc(actionSummary(a))}</p><span class="card-key">${i+1}</span></button>`;
+    }).join('');
+    $('end-btn').disabled=state.phase!=='battle';
+    $('undo-btn').disabled=state.phase!=='battle'||!state.history?.length;
+    $('undo-btn').title=state.history?.length?T.undo:T.noHistory;
+  }
+
+  function actionSummary(action) {
+    const stats=game.getStats(),values={range:action.range,cost:action.cost};
+    for(const effect of action.effects||[])values[effect.op]=num(effect.value??effect.distance)+(effect.scale?num(stats[effect.scale]):0);
+    return (action.cardTemplate||action.cardText||action.short||action.description?.slice(0,S.cardShortLimit)||'').replace(/\{(\w+)\}/g,(_,key)=>values[key]??'');
+  }
+
+  function renderIntents(state) {
+    const enemies=state.enemies.filter(e=>e.hp>0);
+    $('enemy-count').textContent=String(enemies.length).padStart(2,'0');
+    $('intents').innerHTML=enemies.length?enemies.map((e,i)=>{
+      const type=DB.enemies[e.type]||{};let description='';
+      try{description=game.describeIntent(e);}catch{}
+      if(typeof description==='object')description=description.text||description.description||'';
+      const coords=(e.intent?.cells||[]).map(c=>`${String.fromCharCode(S.coordinateStart+c.x)}${c.y+1}`).join(' · ');
+      return `<div class="enemy-intent" data-enemy="${esc(e.id)}" tabindex="0"><div class="enemy-head">${icon(type.icon,'enemy')}<strong>${esc(type.name||e.type)}</strong><span class="sequence">${String(i+1).padStart(2,'0')}</span></div><div class="enemy-vitals"><div class="meter"><i style="width:${percent(e.hp,e.maxHp)}%"></i></div><span>${e.hp}/${e.maxHp}</span></div><div class="intent-detail">${esc(e.intent?.label||description)}<small>${esc(coords)}</small></div><div class="intent-damage">${icon('crosshair')} ${esc(T.attack)} ${num(e.intent?.damage)}${e.shield?` · ${T.shield} ${e.shield}`:''}</div></div>`;
+    }).join(''):`<p class="empty">${esc(T.noEnemies)}</p>`;
+    $('logs').innerHTML=(state.logs||[]).slice(0,S.logLimit).map(log=>`<div class="log-item ${esc(log.kind||'')}">${esc(log.text||log)}</div>`).join('');
+  }
+
+  function render() {
+    const state=game.getState();
+    renderCampaign(state);renderPlayer(state);renderActions();renderBoard(state);renderIntents(state);renderTileInfo();
+    if(state.phase==='battle') {
+      if(['reward','route','won','lost'].includes(modalKind))closeModal(true);
+    }else if(state.phase!==modalKind)showPhase(state);
+  }
+
+  function openModal(kind,html,wide=false) {
+    if($('modal-backdrop').hidden)previousFocus=document.activeElement;
+    modalKind=kind;$('modal').classList.toggle('wide',wide);$('modal').innerHTML=html;$('modal-backdrop').hidden=false;
+    document.body.style.overflow='hidden';
+    requestAnimationFrame(()=>($('modal').querySelector('button:not(:disabled),input,textarea')||$('modal')).focus());
+  }
+
+  function closeButton() {return `<button class="icon-btn close-modal" data-modal="close" aria-label="${esc(T.close)}">${icon('close')}</button>`;}
+  function closeModal(force=false) {
+    if(!force&&['reward','route','won','lost','intro-start'].includes(modalKind))return;
+    $('modal-backdrop').hidden=true;modalKind=null;document.body.style.overflow='';previousFocus?.focus?.();
+  }
+
+  function showIntro(canClose=false,seedValue='') {
+    const seed=seedValue||`${S.seedPrefix}-${Math.floor(Math.random()*S.seedMax)}`;
+    openModal(canClose?'intro':'intro-start',`${canClose?closeButton():''}<div class="intro-hero"><span class="eyebrow">${esc(T.introEyebrow)}</span><h2 id="modal-title">${esc(T.introTitle)}</h2><p class="lead">${esc(T.introBody)}</p><div class="intro-art">${icon('logo')}</div></div><div class="core-rule">${icon('shift')}<span>${esc(T.coreRule)}</span></div><label class="modal-label">${esc(T.chooseClass)}</label><div class="class-grid">${DB.classes.map(c=>`<button class="class-card ${c.id===introClass?'active':''}" data-class="${esc(c.id)}" aria-pressed="${c.id===introClass}">${icon(c.icon,'module')}<strong>${esc(c.name)}</strong><p>${esc(c.description)}</p><small>${esc(c.tagline||c.tag||c.specialty||'')}</small></button>`).join('')}</div><div class="seed-input"><label for="seed-input">${esc(T.seed)}</label><input id="seed-input" maxlength="${S.maxSeedLength}" value="${esc(seed)}" placeholder="${esc(T.seedPlaceholder)}"></div><div class="modal-actions"><button class="text-btn" data-modal="help">${icon('help')}${esc(T.help)}</button><button class="primary" data-modal="start">${esc(T.start)}${icon('right')}</button></div>`);
+  }
+
+  function showHelp() {
+    const isIntro=['intro','intro-start'].includes(modalKind);
+    const seed=$('seed-input')?.value;
+    openModal(isIntro?'help-intro':'help',`${closeButton()}<span class="eyebrow">${esc(T.helpEyebrow)}</span><h2 id="modal-title">${esc(T.helpTitle)}</h2><p class="lead">${esc(T.coreRule)}</p><div class="tutorial-grid">${UI.tutorial.map(step=>`<div class="tutorial-step"><div class="step-heading">${icon(step.icon)}<span class="step-num">${esc(step.step)}</span></div><h3>${esc(step.title)}</h3><p>${esc(step.body)}</p></div>`).join('')}</div><p class="help-footer">${esc(T.helpFooter)}</p><div class="modal-actions"><button class="primary" data-modal="${isIntro?'back-intro':'close'}">${esc(T.continue)}${icon('right')}</button></div>`);
+    if(isIntro)$('modal').dataset.introSeed=seed||'';
+  }
+
+  function showPhase(state) {
+    if(state.phase==='reward'||state.phase==='route') {
+      const reward=state.phase==='reward', options=reward?state.rewards:state.routeOptions;
+      openModal(state.phase,`<span class="eyebrow">${esc(reward?T.rewardEyebrow:T.routeEyebrow)}</span><h2 id="modal-title">${esc(reward?T.rewardTitle:T.routeTitle)}</h2><p class="lead">${esc(reward?T.rewardBody:T.routeBody)}</p><div class="reward-grid">${(options||[]).map(option=>{
+        const data=typeof option==='string'?(lookup(reward?DB.relics:DB.routes,option)||{id:option}):option;
+        return `<button class="reward-card" data-${reward?'reward':'route'}="${esc(data.id)}"><span class="reward-icon">${icon(data.icon,reward?'module':'anchor')}</span><strong>${esc(data.title||data.name)}</strong><p>${esc(data.description)}</p><small>${esc(data.kindLabel||data.category||T.choose)}${icon('right')}</small></button>`;
+      }).join('')}</div>`);
+    } else if(['won','lost'].includes(state.phase)) {
+      const won=state.phase==='won',stats=state.stats||{};
+      openModal(state.phase,`<span class="eyebrow">${esc(won?T.wonEyebrow:T.lostEyebrow)}</span><h2 id="modal-title">${esc(won?T.wonTitle:T.lostTitle)}</h2><p class="lead">${esc(won?T.wonBody:T.lostBody)}</p><div class="summary-grid">${[[T.kills,stats.kills],[T.damage,stats.damageDealt],[T.redirects,stats.redirects],[T.turns,stats.turns]].map(([label,value])=>`<div class="summary-stat"><strong>${num(value)}</strong><span>${esc(label)}</span></div>`).join('')}</div><p class="db-help">${esc(T.seed)} · ${esc(state.seed)}</p><div class="modal-actions"><button class="text-btn" data-modal="save">${icon('download')}${esc(T.save)}</button><button class="primary" data-modal="new">${esc(T.newRun)}${icon('right')}</button></div>`);
+    }
+  }
+
+  function showDB() {
+    openModal('db',`${closeButton()}<span class="eyebrow">${esc(T.dbEyebrow)}</span><h2 id="modal-title">${esc(T.dbTitle)}</h2><p class="lead">${esc(T.dbBody)}</p><textarea class="db-editor" id="db-editor" spellcheck="false" aria-label="${esc(T.db)}"></textarea><div class="db-status" id="db-status" role="status"></div><p class="db-help">${esc(T.dbHelp)}</p><p class="db-help">${esc(T.dbNote)}</p><div class="modal-actions"><button class="text-btn" data-modal="db-reset">${esc(T.dbReset)}</button><button class="text-btn" data-modal="db-validate">${icon('shield')}${esc(T.dbValidate)}</button><button class="primary" data-modal="db-download">${icon('download')}${esc(T.dbDownload)}</button></div>`,true);
+    $('db-editor').value=JSON.stringify(DB,null,2);
+  }
+
+  function validateEditor() {
+    try{
+      const data=JSON.parse($('db-editor').value),result=game.validateDB(data);
+      let errors=[];
+      if(Array.isArray(result))errors=result;
+      else if(result?.ok===false||result?.valid===false)errors=result.errors||[result.message||T.dbInvalid];
+      if(result===false)errors=[T.dbInvalid];
+      if(!data.ui?.text||!data.ui?.icons||!data.ui?.theme)errors.push(T.dbInvalid);
+      if(errors.length)throw Error(errors.join('\n'));
+      $('db-status').textContent=T.dbOkay;$('db-status').style.color=UI.theme.accent;return data;
+    }catch(error){$('db-status').textContent=error.message;$('db-status').style.color=UI.theme.danger;return null;}
+  }
+
+  function download(content,mime,name) {
+    const url=URL.createObjectURL(new Blob([content],{type:mime})),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),S.toastMs);
+  }
+
+  function downloadHTML(data) {
+    const clone=document.documentElement.cloneNode(true);
+    clone.querySelector('#game-db').textContent='\n'+JSON.stringify(data,null,2).replace(/</g,'\\u003c')+'\n';
+    clone.querySelector('#modal-backdrop').hidden=true;
+    clone.querySelector('#modal').innerHTML='';clone.querySelector('#toast').className='toast';
+    clone.querySelector('body').style.overflow='';
+    download('<!doctype html>\n'+clone.outerHTML,'text/html;charset=utf-8',T.fileName);
+  }
+
+  function exportSave(){download(JSON.stringify(game.snapshot(),null,2),'application/json;charset=utf-8',T.saveName);toast(T.saved);}
+  function endTurn(){if(game.getState().phase==='battle')try{process(game.endTurn());}catch(e){toast(e.message,true);}}
+  function undo(){try{process(game.undo());}catch(e){toast(e.message,true);}}
+
+  $('board').addEventListener('click',event=>{
+    const tile=event.target.closest('[data-x]');if(!tile||game.getState().phase!=='battle')return;
+    hoveredCell={x:num(tile.dataset.x),y:num(tile.dataset.y)};
+    if(selectedAction)perform(selectedAction,hoveredCell);else{updateTargetMarks();renderTileInfo();}
+  });
+  function hoverTile(event){const tile=event.target.closest('[data-x]');if(!tile)return;hoveredCell={x:num(tile.dataset.x),y:num(tile.dataset.y)};focusedEnemy=null;updateTargetMarks();renderTileInfo();}
+  $('board').addEventListener('pointerover',hoverTile);$('board').addEventListener('focusin',hoverTile);
+  $('board').addEventListener('pointerleave',()=>{hoveredCell=null;updateTargetMarks();renderTileInfo();});
+  $('actions').addEventListener('click',event=>{const el=event.target.closest('[data-action]');if(el)selectAction(el.dataset.action);});
+  function focusIntent(event){const el=event.target.closest('[data-enemy]');if(!el)return;focusedEnemy=el.dataset.enemy;hoveredCell=null;updateTargetMarks();}
+  $('intents').addEventListener('pointerover',focusIntent);$('intents').addEventListener('focusin',focusIntent);
+  $('intents').addEventListener('pointerleave',()=>{focusedEnemy=null;updateTargetMarks();});
+  $('end-btn').addEventListener('click',endTurn);$('undo-btn').addEventListener('click',undo);
+  $('help-btn').addEventListener('click',showHelp);$('db-btn').addEventListener('click',showDB);$('save-btn').addEventListener('click',exportSave);
+  $('load-btn').addEventListener('click',()=>$('load-file').click());
+  $('new-btn').addEventListener('click',()=>{
+    openModal('new-confirm',`${closeButton()}<span class="eyebrow">${esc(UI.brand.english)}</span><h2 id="modal-title">${esc(T.newConfirmTitle)}</h2><p class="lead">${esc(T.newConfirmBody)}</p><div class="modal-actions"><button class="text-btn" data-modal="save">${icon('download')}${esc(T.save)}</button><button class="text-btn" data-modal="close">${esc(T.cancel)}</button><button class="primary" data-modal="new">${esc(T.newRun)}${icon('right')}</button></div>`);
+  });
+  $('load-file').addEventListener('change',async event=>{
+    const file=event.target.files?.[0];if(!file)return;
+    try {const data=JSON.parse(await file.text()),result=game.loadState(data);if(result?.ok===false)throw Error(result.message||T.invalidSave);selectedAction=null;closeModal(true);render();saveLocal();toast(T.loaded);}
+    catch(error){toast(error.message||T.invalidSave,true);}event.target.value='';
+  });
+  $('modal').addEventListener('click',event=>{
+    const classButton=event.target.closest('[data-class]');
+    if(classButton){introClass=classButton.dataset.class;const seed=$('seed-input')?.value,canClose=modalKind==='intro';showIntro(canClose,seed);return;}
+    const reward=event.target.closest('[data-reward]');if(reward){process(game.chooseReward(reward.dataset.reward));return;}
+    const route=event.target.closest('[data-route]');if(route){selectedAction=null;process(game.chooseRoute(route.dataset.route));return;}
+    const button=event.target.closest('[data-modal]');if(!button)return;
+    const cmd=button.dataset.modal;
+    if(cmd==='close'){if(modalKind==='help-intro'){showIntro(false,$('modal').dataset.introSeed);return;}closeModal();}
+    if(cmd==='help')showHelp();
+    if(cmd==='back-intro')showIntro(false,$('modal').dataset.introSeed);
+    if(cmd==='start'){const seed=$('seed-input').value.trim()||`${S.seedPrefix}-${Math.floor(Math.random()*S.seedMax)}`;const result=game.createRun(introClass,seed);if(result?.ok===false){toast(result.message,true);return;}selectedAction=null;closeModal(true);render();saveLocal();}
+    if(cmd==='new')showIntro(false);
+    if(cmd==='save')exportSave();
+    if(cmd==='db-reset'){$('db-editor').value=JSON.stringify(DB,null,2);$('db-status').textContent='';}
+    if(cmd==='db-validate')validateEditor();
+    if(cmd==='db-download'){const data=validateEditor();if(data)downloadHTML(data);}
+  });
+  $('modal-backdrop').addEventListener('click',event=>{if(event.target===$('modal-backdrop'))closeModal();});
+
+  document.addEventListener('keydown',event=>{
+    if(!$('modal-backdrop').hidden){
+      if(event.key==='Escape'){event.preventDefault();if(modalKind==='help-intro')showIntro(false,$('modal').dataset.introSeed);else closeModal();}
+      if(event.key==='Tab'){
+        const controls=[...$('modal').querySelectorAll('button:not(:disabled),input,textarea,[tabindex="0"]')];const first=controls[0],last=controls.at(-1);
+        if(event.shiftKey&&document.activeElement===first){event.preventDefault();last?.focus();}
+        else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first?.focus();}
+      }return;
+    }
+    if(event.target.closest('input,textarea')||event.ctrlKey||event.metaKey||event.altKey)return;
+    if(event.code==='Space'){event.preventDefault();endTurn();}
+    else if(event.key.toLowerCase()==='z'){event.preventDefault();undo();}
+    else if(event.key==='Escape'){selectedAction=null;hoveredCell=null;renderActions();updateTargetMarks();renderTileInfo();}
+    else if(/^[1-9]$/.test(event.key)){const action=cachedActions[num(event.key)-1];if(action){event.preventDefault();selectAction(action.id);}}
+  });
+
+  let restored=false;
+  try{const saved=localStorage.getItem(S.storageKey);if(saved){const result=game.loadState(JSON.parse(saved));restored=result?.ok!==false;}}catch{}
+  if(!restored)game.createRun(DB.classes[0].id,`${S.seedPrefix}-${Math.floor(Math.random()*S.seedMax)}`);
+  render();
+  if(!restored)showIntro();else toast(T.restored);
+  window.TideUI={render,showIntro,showHelp,showDB,selectAction,exportSave};
+})();
+
+</script>
+</body>
+</html>
