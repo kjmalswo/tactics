@@ -1,7 +1,7 @@
 // Editable JSON-compatible game database. Runtime logic belongs in index.html.
 window.GAME_DB = {
   "meta": {
-    "version": "9.0",
+    "version": "9.1",
     "title": "계약의 링",
     "subtitle": "서약 아래 모인 투사들의 결투",
     "description": "한 투사와 계약하고 성장시키는 1대1 실시간 전술 대전. 직접 조작 대신 작전과 대응을 지휘합니다."
@@ -186,100 +186,101 @@ window.GAME_DB = {
     "statusPrefixLength": 7,
     "minStepDuration": 0.05,
     "signatureReactGrace": 0.12,
-    "signatureKey": "Digit4",
     "damageMergeTime": 0.24,
-    "signatureHoldLimit": 2.8
+    "signatureHoldLimit": 2.8,
+    "signatureAuto": true,
+    "signatureAutoRecoveryRatio": 0.65
   },
   "progression": {
     "ranks": [
       {
         "id": "rank_1",
-        "name": "이등병",
+        "name": "떠돌이",
         "minLevel": 1
       },
       {
         "id": "rank_2",
-        "name": "일등병",
+        "name": "견습 투사",
         "minLevel": 2
       },
       {
         "id": "rank_3",
-        "name": "상등병",
+        "name": "길드 투사",
         "minLevel": 3
       },
       {
         "id": "rank_4",
-        "name": "병장",
+        "name": "숙련 투사",
         "minLevel": 4
       },
       {
         "id": "rank_5",
-        "name": "하사",
+        "name": "정예 투사",
         "minLevel": 5
       },
       {
         "id": "rank_6",
-        "name": "중사",
+        "name": "청동 투사",
         "minLevel": 7
       },
       {
         "id": "rank_7",
-        "name": "상사",
+        "name": "백은 투사",
         "minLevel": 9
       },
       {
         "id": "rank_8",
-        "name": "원사",
+        "name": "황금 투사",
         "minLevel": 11
       },
       {
         "id": "rank_9",
-        "name": "소위",
+        "name": "서약 기사",
         "minLevel": 13
       },
       {
         "id": "rank_10",
-        "name": "중위",
+        "name": "별빛 기사",
         "minLevel": 15
       },
       {
         "id": "rank_11",
-        "name": "대위",
+        "name": "여명 기사",
         "minLevel": 17
       },
       {
         "id": "rank_12",
-        "name": "소령",
+        "name": "성휘 기사",
         "minLevel": 19
       },
       {
         "id": "rank_13",
-        "name": "중령",
+        "name": "용혼 기사",
         "minLevel": 22
       },
       {
         "id": "rank_14",
-        "name": "대령",
+        "name": "성역 수호자",
         "minLevel": 25
       },
       {
         "id": "rank_15",
-        "name": "준장",
+        "name": "별의 계승자",
         "minLevel": 28
       },
       {
         "id": "rank_16",
-        "name": "소장",
+        "name": "신화의 영웅",
         "minLevel": 32
       },
       {
         "id": "rank_17",
-        "name": "중장",
+        "name": "불멸의 전설",
         "minLevel": 36
       },
       {
         "id": "rank_18",
-        "name": "대장",
+        "name": "영원의 서약자",
         "minLevel": 40
       }
     ],
@@ -6240,12 +6241,12 @@ window.GAME_DB = {
     "prepare": "결투장 입장",
     "start": "결투 시작",
     "back": "돌아가기",
-    "rank": "계급",
+    "rank": "등급",
     "coins": "금화",
     "points": "훈련 포인트",
     "xp": "경험",
-    "nextRank": "다음 계급",
-    "maxRank": "최고 계급",
+    "nextRank": "다음 등급",
+    "maxRank": "최고 등급",
     "wins": "승",
     "losses": "패",
     "draws": "무",
@@ -6366,7 +6367,7 @@ window.GAME_DB = {
     "loadSuccess": "저장을 불러왔습니다.",
     "invalidSave": "저장 파일을 확인하세요.",
     "profileLocked": "계약한 투사는 새 계약 전까지 유지됩니다.",
-    "legacy": "이전 계급과 자원을 새 계약에 이어받았습니다.",
+    "legacy": "이전 등급과 자원을 새 계약에 이어받았습니다.",
     "first": "첫 승리 추가 보상",
     "habitRange": "선호 거리",
     "habitPace": "선호 속도",
@@ -6403,22 +6404,21 @@ window.GAME_DB = {
     "meters": "m",
     "manualOnly": "자동 대응 꺼짐",
     "wait": "대기",
-    "arenaLabel": "스스로 싸우는 두 투사. 공세·유인·회복 지시와 캐릭터 결정기로 승부를 조정합니다.",
+    "arenaLabel": "스스로 싸우는 두 투사. 공격 목표·거리·수비와 공세·유인·회복을 지시합니다. 결정기는 자동 발동합니다.",
     "fullscreenHint": "전체 화면은 지원되는 브라우저에서 사용할 수 있습니다.",
-    "legacyChoose": "이전 계급과 자원을 이어받을 투사를 선택하세요.",
+    "legacyChoose": "이전 등급과 자원을 이어받을 투사를 선택하세요.",
     "background": "투사의 이야기",
     "challengeTier": "도전자전 {tier}",
     "directFight": "결투장 입장",
     "signature": "결정기",
-    "signatureReady": "결정기 준비 완료",
-    "signatureArm": "승부처 지시",
-    "signatureSeeking": "틈을 만드는 중",
-    "signatureWaitRange": "사거리에 들어가는 중",
-    "signatureWaitStamina": "기력을 모으는 중",
-    "signatureWaitAttack": "상대 타격을 기다림",
-    "signatureCancel": "준비 취소",
+    "signatureReady": "기회에 맞춰 자동 발동",
+    "signatureArm": "자동 발동 대기",
+    "signatureSeeking": "발동을 준비하는 중",
+    "signatureWaitRange": "사거리 진입 후 자동 발동",
+    "signatureWaitStamina": "기력을 회복하는 중",
+    "signatureWaitAttack": "상대 타격에 자동 반격",
     "coach": "경기 중에는 세 지시만 선택하세요",
-    "coachHint": "투사가 자기 방식으로 실행합니다. 결정기는 틈을 보고 사용합니다.",
+    "coachHint": "공세·유인·회복을 지시하세요. 결정기는 집중이 차면 기력·사거리·기회에 맞춰 자동 발동합니다.",
     "coachCurrent": "지금 실행 중",
     "coachPending": "지시 전달 중",
     "characterIdentity": "내 투사의 리듬",
@@ -6434,18 +6434,18 @@ window.GAME_DB = {
     "optionalBuild": "육성과 장비는 경기 사이에 바꿀 수 있습니다.",
     "iconicMove": "대표 기술",
     "signatureCost": "집중 {cost}",
-    "hotkeys": "1 공세 · 2 유인 · 3 회복 · 4 결정기",
+    "hotkeys": "1 공세 · 2 유인 · 3 회복",
     "cornerAuto": "곧 다음 라운드",
     "combatGuide": "상대와 기력을 보고 흐름을 바꾸세요",
     "next": "다음",
     "keepFighter": "투사·성장·장비는 그대로 이어집니다.",
-    "rankShort": "계급",
+    "rankShort": "등급",
     "strengthShort": "잘하는 것",
     "weaknessShort": "주의할 것",
     "basicAI": "1대1 결투 · AI",
     "recordButton": "결투 기록",
     "backToRing": "결투로 복귀",
-    "signatureBlocked": "집중이 부족하거나 재사용 대기 중입니다.",
+    "signatureBlocked": "집중·기력·재사용 대기 조건을 갖추면 자동 발동합니다.",
     "fighterStats": "투사 수치 보기",
     "watchFor": "상대의 승부수",
     "coachShort": "노림수와 거리·수비는 따로 조정할 수 있습니다.",
@@ -6491,9 +6491,9 @@ window.GAME_DB = {
     "workshopSub": "고유 효과와 부작용을 조합하고 특화 방향을 고르세요.",
     "workshopEquipment": "장비",
     "workshopTalents": "재능",
-    "equippedTitle": "현재 장착",
-    "slotSelect": "이 칸에 교체",
-    "selectedSlot": "교체할 칸",
+    "equippedTitle": "출전 장비",
+    "slotSelect": "교체 대상으로 선택",
+    "selectedSlot": "교체 대상",
     "replaceItem": "교체 대상",
     "selectItem": "장비를 선택하세요",
     "itemBenefit": "얻는 것",
@@ -6555,7 +6555,7 @@ window.GAME_DB = {
     "neutral": "변화 없음",
     "tacticSignal": "지시 전달 중",
     "buildStatsTitle": "현재 전투 능력",
-    "rankBudget": "계급 · 성장",
+    "rankBudget": "등급 · 성장",
     "previewBranch": "이 특화의 이득과 손해",
     "closeCompare": "비교 닫기",
     "learnRps": "상성 보기",
@@ -6593,7 +6593,7 @@ window.GAME_DB = {
     "currentBuildName": "현재 무장",
     "focusKeyTitle": "노림수",
     "investedPoints": "투자",
-    "rankNameLabel": "계급",
+    "rankNameLabel": "등급",
     "procs": "장비 발동",
     "clashes": "상성 파훼",
     "tacticsPaused": "선택 후 적용하면 결투가 이어집니다.",
@@ -6625,7 +6625,25 @@ window.GAME_DB = {
     "foeGearDetails": "무장 효과 확인",
     "resonanceGain": "새 공명 발동",
     "resonanceLoss": "공명 해제",
-    "inBattle": "결투 진행 중"
+    "inBattle": "결투 진행 중",
+    "signatureAuto": "자동 발동",
+    "signatureCharging": "집중 충전 중",
+    "signatureCooling": "재사용 대기 {seconds}초",
+    "signatureExecuting": "자동 발동 중",
+    "slotEmpty": "빈 장비칸",
+    "slotEquipped": "장착 중",
+    "slotInspect": "상세",
+    "slotRemove": "해제",
+    "slotRackHelp": "바꿀 칸을 고르고, 아래 목록에서 교체할 장비를 선택하세요.",
+    "slotTargetFormat": "선택한 교체칸 · {slot}",
+    "slotEquippedFormat": "{slot}에 장착 중",
+    "slotEquipFormat": "{slot}에 장착",
+    "slotBuyEquipFormat": "{slot} · 구입·장착",
+    "slotFreeHint": "모든 칸에 원하는 장비를 장착할 수 있습니다.",
+    "slotCountFormat": "{count} / {total} 장착",
+    "slotSelectedHint": "아래에서 선택한 장비가 이 칸을 교체합니다.",
+    "slotEmptyHint": "장비를 장착할 수 있습니다.",
+    "slotOwnedHint": "장착 중인 장비는 초록색으로 표시됩니다."
   },
   "messages": {
     "queued": "{who} 전술 전환 예약",
@@ -6650,7 +6668,7 @@ window.GAME_DB = {
     "noCoins": "코인이 부족합니다.",
     "command": "{who} · {name}",
     "followup": "{who} · {name}",
-    "signatureArmed": "{who} · {name} 준비",
+    "signatureArmed": "{who} · {name} 자동 준비",
     "signatureUsed": "{who} · {name}!",
     "signatureCancelled": "결정기 준비 취소",
     "signatureBlocked": "지금은 결정기를 준비할 수 없습니다.",
@@ -7013,7 +7031,9 @@ window.GAME_DB = {
     "identity": "characters[].visual은 체형·장비·자세, identity는 고유 상태 표시, chargeTrait는 결정기 게이지 획득 조건입니다. 대표 동작·연계·지시 결과가 화면에서 연결되게 유지합니다.",
     "theme": "theme.colors/fonts/icons/labels는 중세 판타지 UI 테마의 단일 원본입니다. palette는 대비와 전투 색상, draw의 fantasy*는 석조 결투장·깃발·횃불 표현입니다. 화면 배치는 CSS 구조로 관리하며 전투 규칙과 저장 키는 바꾸지 않습니다.",
     "forge": "modules의 기본 stats·trait는 한 번 적용합니다. 특화 단계부터 forges[].stats와 trait, 완성 단계에는 mastery.stats와 대체 trait가 추가됩니다. 문장 2개로 forge.resonances 발동. 장비 ID·v6 저장 키 유지.",
-    "tactics": "tactics.focuses의 실제 기술 상성과 clashes가 판정 원본입니다. 노림수·간격·수비는 독립 조정하고 공세·유인·회복은 실행 속도와 기만을 조정합니다. 인공 지능은 rivals[].sequence와 최근 기술을 읽습니다."
+    "tactics": "tactics.focuses의 실제 기술 상성과 clashes가 판정 원본입니다. 노림수·간격·수비는 독립 조정하고 공세·유인·회복은 실행 속도와 기만을 조정합니다. 인공 지능은 rivals[].sequence와 최근 기술을 읽습니다.",
+    "autoSignature": "config.signatureAuto와 signatureAutoRecoveryRatio로 자동 발동을 관리합니다. 양측 모두 집중·재사용 대기·기력을 충족하면 준비하고, 사거리와 고유 기회에 맞춰 자동 실행합니다. 회복 지시 중 기력이 낮으면 진입을 보류합니다. 수동 버튼·단축키 없음.",
+    "rankTitles": "progression.ranks의 이름만 판타지 등급으로 교체합니다. id·minLevel·경험치·v6 저장 키는 보존합니다."
   },
   "enemyTraining": {
     "strike": {
@@ -7133,6 +7153,14 @@ window.GAME_DB = {
     {
       "label": "2×",
       "value": 2
+    },
+    {
+      "label": "4×",
+      "value": 4
+    },
+    {
+      "label": "8×",
+      "value": 8
     }
   ],
   "visibleEvents": [
@@ -7233,7 +7261,12 @@ window.GAME_DB = {
       "torch": "#f1c078",
       "torchCore": "#fff0bd",
       "bannerCloth": "#573a2d",
-      "bannerTrim": "#baa16d"
+      "bannerTrim": "#baa16d",
+      "equippedWood": "#263d32",
+      "equippedWoodLight": "#34513e",
+      "equippedBorder": "#8b9d75",
+      "equippedPaper": "#e1e8d3",
+      "equippedInk": "#304b33"
     },
     "icons": {
       "brand": "<circle cx='12' cy='12' r='9'/><path d='m12 5 3 7-3 7-3-7 3-7Zm-8 7h4m8 0h4'/>",
@@ -7262,7 +7295,9 @@ window.GAME_DB = {
       "grip": "<path d=\"M6 12V9a2 2 0 0 1 4 0v2-6a2 2 0 0 1 4 0v6-4a2 2 0 0 1 4 0v6l2-2 2 2-5 7H9l-5-6z\"/>",
       "shield": "<path d=\"m12 3 8 3v6c0 5-8 9-8 9S4 17 4 12V6z\"/><path d=\"m8 12 3 3 5-6\"/>",
       "anvil": "<path d=\"M3 6h18l-4 6h-5l-2 3v4h7v2H4v-2h4v-4l-3-3H3z\"/>",
-      "compare": "<path d=\"M8 3v18M16 3v18M3 8h10M11 16h10m-6-4-4 4 4 4M9 4l4 4-4 4\"/>"
+      "compare": "<path d=\"M8 3v18M16 3v18M3 8h10M11 16h10m-6-4-4 4 4 4M9 4l4 4-4 4\"/>",
+      "check": "<path d=\"m5 12 4 4L19 6\"/>",
+      "plus": "<path d=\"M12 5v14M5 12h14\"/>"
     },
     "labels": {
       "settingsView": "화면과 소리",
@@ -7274,7 +7309,7 @@ window.GAME_DB = {
       "commandTitle": "전술 지시",
       "arenaTitle": "서약의 결투장",
       "coinLabel": "금화",
-      "rankLabel": "계급",
+      "rankLabel": "등급",
       "closeLabel": "닫기"
     }
   },
@@ -7381,7 +7416,12 @@ window.GAME_DB = {
     ],
     "specializeRank": 2,
     "masterRank": 3,
-    "mobileBreakpoint": 760
+    "mobileBreakpoint": 760,
+    "slotLabels": [
+      "장비 1",
+      "장비 2",
+      "장비 3"
+    ]
   },
   "tactics": {
     "focuses": [
