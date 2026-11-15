@@ -1,9 +1,9 @@
 // Editable JSON-compatible game database. Runtime logic belongs in index.html.
 window.GAME_DB = {
   "meta": {
-    "version": "6.0",
+    "version": "7.0",
     "title": "계약의 링",
-    "subtitle": "한 명의 투사, 나만의 전술",
+    "subtitle": "내 투사의 방식으로, 승부를 바꾼다",
     "description": "한 투사와 계약하고 성장시키는 1대1 실시간 전술 대전. 직접 조작 대신 작전과 대응을 지휘합니다."
   },
   "world": {
@@ -123,10 +123,10 @@ window.GAME_DB = {
     "pivotWeight": 0.85,
     "cutoffWeight": 0.2,
     "ruleCooldown": 4,
-    "manualPriority": 7,
-    "tacticLag": 1.15,
+    "manualPriority": 9999,
+    "tacticLag": 0.42,
     "minTacticLag": 0.35,
-    "changeCooldown": 1.8,
+    "changeCooldown": 0.65,
     "aiReview": 6.5,
     "aiInitialDelay": 4,
     "focusCost": 60,
@@ -166,7 +166,29 @@ window.GAME_DB = {
     "audioMinGain": 0.001,
     "visibleLog": 3,
     "flashSeconds": 2.3,
-    "migrationKey": "tactics.duel.migrated.v6"
+    "migrationKey": "tactics.duel.migrated.v6",
+    "cornerSeconds": 2.8,
+    "signatureCost": 60,
+    "signatureMinStaminaRatio": 0.2,
+    "signatureArmDelay": 0.2,
+    "signatureNoticeSeconds": 1.5,
+    "followupSeconds": 2.4,
+    "commandVisualSeconds": 2.5,
+    "motionLead": 0.65,
+    "stepWindupFraction": 0.7,
+    "signatureCooldown": 4,
+    "throwAnimationSeconds": 0.65,
+    "comboNoticeSeconds": 1.4,
+    "hitHoldSeconds": 0.025,
+    "signatureHitHold": 0.07,
+    "moveTraceLife": 0.35,
+    "signatureBaseFocus": 20,
+    "statusPrefixLength": 7,
+    "minStepDuration": 0.05,
+    "signatureReactGrace": 0.12,
+    "signatureKey": "Digit4",
+    "damageMergeTime": 0.24,
+    "signatureHoldLimit": 2.8
   },
   "progression": {
     "ranks": [
@@ -419,7 +441,93 @@ window.GAME_DB = {
         ]
       },
       "trait": "spacing",
-      "default": "keepout"
+      "default": "keepout",
+      "commands": {
+        "attack": {
+          "name": "긴 차기로 압박",
+          "hint": "전진하며 긴 차기로 가드를 압박",
+          "plan": {
+            "range": "mid",
+            "pace": "steady",
+            "intent": "strike",
+            "defense": "evade"
+          },
+          "weights": {
+            "strike": 0.73,
+            "grab": 0.06,
+            "counter": 0.05,
+            "feint": 0.16
+          }
+        },
+        "bait": {
+          "name": "헛치게 만든다",
+          "hint": "한 발 빠진 뒤 긴 차기로 응징",
+          "plan": {
+            "range": "far",
+            "pace": "steady",
+            "intent": "counter",
+            "defense": "evade"
+          },
+          "weights": {
+            "strike": 0.2,
+            "grab": 0.05,
+            "counter": 0.3,
+            "feint": 0.45
+          }
+        },
+        "recover": {
+          "name": "간격 리셋",
+          "hint": "뒤로 빠지며 기력 회복",
+          "plan": {
+            "range": "far",
+            "pace": "calm",
+            "intent": "counter",
+            "defense": "block"
+          },
+          "weights": {
+            "strike": 0.16,
+            "grab": 0.03,
+            "counter": 0.74,
+            "feint": 0.07
+          }
+        }
+      },
+      "signature": {
+        "move": "signature_jin",
+        "name": "백스텝 관통차기",
+        "hint": "거리 확보 뒤 길게 뻗는 결정타",
+        "meter": "간격",
+        "seekRange": 0.9,
+        "waitForStrike": false
+      },
+      "identity": {
+        "kind": "range",
+        "threshold": 2.1,
+        "ready": "긴 거리 확보",
+        "waiting": "접근을 떼어내기"
+      },
+      "visual": {
+        "stance": "elusive",
+        "height": 1.08,
+        "width": 0.85,
+        "glove": 0.88,
+        "legs": 1.13,
+        "lean": -0.08,
+        "equipment": "scarf",
+        "mark": "diagonal",
+        "pose": "kick",
+        "face": "visor"
+      },
+      "defaultCall": "attack",
+      "followups": [
+        {
+          "trigger": "onDodge",
+          "move": "long_kick",
+          "name": "회피 → 관통차기",
+          "cooldown": 3.5
+        }
+      ],
+      "chargeTrait": "charge_jin"
     },
     {
       "id": "taeo",
@@ -457,7 +565,100 @@ window.GAME_DB = {
         ]
       },
       "trait": "rhythm",
-      "default": "pressure"
+      "default": "pressure",
+      "commands": {
+        "attack": {
+          "name": "연타 몰아치기",
+          "hint": "연타를 이어 가드를 무너뜨림",
+          "plan": {
+            "range": "mid",
+            "pace": "burst",
+            "intent": "strike",
+            "defense": "block"
+          },
+          "weights": {
+            "strike": 0.73,
+            "grab": 0.06,
+            "counter": 0.05,
+            "feint": 0.16
+          }
+        },
+        "bait": {
+          "name": "박자 흔들기",
+          "hint": "속임수 뒤 연타로 연결",
+          "plan": {
+            "range": "mid",
+            "pace": "steady",
+            "intent": "feint",
+            "defense": "evade"
+          },
+          "weights": {
+            "strike": 0.3,
+            "grab": 0.14,
+            "counter": 0.06,
+            "feint": 0.5
+          }
+        },
+        "recover": {
+          "name": "호흡 되찾기",
+          "hint": "교환을 끊고 기력 회복",
+          "plan": {
+            "range": "far",
+            "pace": "calm",
+            "intent": "counter",
+            "defense": "block"
+          },
+          "weights": {
+            "strike": 0.16,
+            "grab": 0.03,
+            "counter": 0.74,
+            "feint": 0.07
+          }
+        }
+      },
+      "signature": {
+        "move": "signature_taeo",
+        "name": "오연 폭주",
+        "hint": "다섯 번의 연타. 반격에 끊길 수 있음",
+        "meter": "리듬",
+        "seekRange": 0.9,
+        "waitForStrike": false
+      },
+      "identity": {
+        "kind": "stacks",
+        "status": "rhythm",
+        "max": 3,
+        "ready": "연타 리듬"
+      },
+      "visual": {
+        "stance": "boxer",
+        "height": 0.96,
+        "width": 1.08,
+        "glove": 1.65,
+        "legs": 0.95,
+        "lean": 0.08,
+        "equipment": "gauntlets",
+        "mark": "fists",
+        "pose": "punch",
+        "face": "open"
+      },
+      "defaultCall": "attack",
+      "followups": [
+        {
+          "trigger": "onHit",
+          "move": "flurry",
+          "name": "적중 → 삼연격",
+          "cooldown": 4.2,
+          "when": [
+            {
+              "metric": "status_rhythm",
+              "op": "gte",
+              "value": 2
+            }
+          ]
+        }
+      ],
+      "chargeTrait": "charge_taeo"
     },
     {
       "id": "garam",
@@ -497,7 +698,104 @@ window.GAME_DB = {
         ]
       },
       "trait": "corner",
-      "default": "clinch"
+      "default": "clinch",
+      "commands": {
+        "attack": {
+          "name": "붙어서 제압",
+          "hint": "막으며 접근해 붙잡아 넘김",
+          "plan": {
+            "range": "close",
+            "pace": "steady",
+            "intent": "grab",
+            "defense": "block"
+          },
+          "weights": {
+            "strike": 0.13,
+            "grab": 0.65,
+            "counter": 0.04,
+            "feint": 0.18
+          }
+        },
+        "bait": {
+          "name": "진입 받아내기",
+          "hint": "공격을 버티고 잡기로 전환",
+          "plan": {
+            "range": "mid",
+            "pace": "steady",
+            "intent": "strike",
+            "defense": "block"
+          },
+          "weights": {
+            "strike": 0.73,
+            "grab": 0.06,
+            "counter": 0.05,
+            "feint": 0.16
+          }
+        },
+        "recover": {
+          "name": "중심 빼며 재정비",
+          "hint": "거리를 두고 피하며 기력 회복",
+          "plan": {
+            "range": "mid",
+            "pace": "calm",
+            "intent": "counter",
+            "defense": "evade"
+          },
+          "weights": {
+            "strike": 0.16,
+            "grab": 0.03,
+            "counter": 0.74,
+            "feint": 0.07
+          }
+        }
+      },
+      "signature": {
+        "move": "signature_garam",
+        "name": "대지 내려찍기",
+        "hint": "가드를 무시하는 강한 잡기. 먼저 붙어야 함",
+        "meter": "압박",
+        "seekRange": 0.9,
+        "waitForStrike": false
+      },
+      "identity": {
+        "kind": "foeEdge",
+        "ready": "외곽 압박"
+      },
+      "visual": {
+        "stance": "heavy",
+        "height": 1.08,
+        "width": 1.38,
+        "glove": 1.42,
+        "legs": 0.98,
+        "lean": 0.07,
+        "equipment": "frame",
+        "mark": "square",
+        "pose": "grab",
+        "face": "jaw"
+      },
+      "defaultCall": "attack",
+      "followups": [
+        {
+          "trigger": "onBlock",
+          "move": "body_lock",
+          "name": "막기 → 제압",
+          "cooldown": 4.5
+        },
+        {
+          "trigger": "onHit",
+          "move": "body_lock",
+          "name": "외곽 압박 → 잡기",
+          "cooldown": 4.5,
+          "when": [
+            {
+              "metric": "foeEdge",
+              "op": "gt",
+              "value": 0.65
+            }
+          ]
+        }
+      ],
+      "chargeTrait": "charge_garam"
     },
     {
       "id": "yuna",
@@ -537,7 +835,100 @@ window.GAME_DB = {
         ]
       },
       "trait": "entry",
-      "default": "trick"
+      "default": "trick",
+      "commands": {
+        "attack": {
+          "name": "속이고 넘어뜨리기",
+          "hint": "속임수가 통하면 즉시 태클",
+          "plan": {
+            "range": "close",
+            "pace": "steady",
+            "intent": "feint",
+            "defense": "evade"
+          },
+          "weights": {
+            "strike": 0.3,
+            "grab": 0.14,
+            "counter": 0.06,
+            "feint": 0.5
+          }
+        },
+        "bait": {
+          "name": "피하고 파고들기",
+          "hint": "회피 뒤 틈으로 태클 진입",
+          "plan": {
+            "range": "mid",
+            "pace": "steady",
+            "intent": "counter",
+            "defense": "evade"
+          },
+          "weights": {
+            "strike": 0.16,
+            "grab": 0.03,
+            "counter": 0.74,
+            "feint": 0.07
+          }
+        },
+        "recover": {
+          "name": "빠져나오기",
+          "hint": "옆으로 이탈하며 기력 회복",
+          "plan": {
+            "range": "far",
+            "pace": "calm",
+            "intent": "feint",
+            "defense": "block"
+          },
+          "weights": {
+            "strike": 0.3,
+            "grab": 0.14,
+            "counter": 0.06,
+            "feint": 0.5
+          }
+        }
+      },
+      "signature": {
+        "move": "signature_yuna",
+        "name": "잔상 태클",
+        "hint": "속임수 동작 뒤 낮게 파고드는 태클",
+        "meter": "기만",
+        "seekRange": 0.9,
+        "waitForStrike": false
+      },
+      "identity": {
+        "kind": "stacks",
+        "status": "entry",
+        "max": 1,
+        "ready": "태클 기회",
+        "waiting": "회피·속임수로 틈 만들기"
+      },
+      "visual": {
+        "stance": "low",
+        "height": 0.93,
+        "width": 0.82,
+        "glove": 0.91,
+        "legs": 1.06,
+        "lean": 0.16,
+        "equipment": "ribbons",
+        "mark": "sweep",
+        "pose": "sweep",
+        "face": "mono"
+      },
+      "defaultCall": "attack",
+      "followups": [
+        {
+          "trigger": "onFeint",
+          "move": "sweep",
+          "name": "속임수 → 태클",
+          "cooldown": 2.8
+        },
+        {
+          "trigger": "onDodge",
+          "move": "sweep",
+          "name": "회피 → 태클",
+          "cooldown": 3.5
+        }
+      ],
+      "chargeTrait": "charge_yuna"
     },
     {
       "id": "sion",
@@ -576,7 +967,99 @@ window.GAME_DB = {
         ]
       },
       "trait": "reader",
-      "default": "read"
+      "default": "read",
+      "commands": {
+        "attack": {
+          "name": "허점 찌르기",
+          "hint": "상대의 회복 동작을 짧게 응징",
+          "plan": {
+            "range": "close",
+            "pace": "steady",
+            "intent": "strike",
+            "defense": "evade"
+          },
+          "weights": {
+            "strike": 0.5,
+            "grab": 0.25,
+            "counter": 0.05,
+            "feint": 0.2
+          }
+        },
+        "bait": {
+          "name": "타격 받아치기",
+          "hint": "반복 타격을 읽어 정타 반격",
+          "plan": {
+            "range": "mid",
+            "pace": "steady",
+            "intent": "counter",
+            "defense": "evade"
+          },
+          "weights": {
+            "strike": 0.16,
+            "grab": 0.03,
+            "counter": 0.74,
+            "feint": 0.07
+          }
+        },
+        "recover": {
+          "name": "흐름 다시 읽기",
+          "hint": "간격을 벌리고 기력 회복",
+          "plan": {
+            "range": "far",
+            "pace": "calm",
+            "intent": "counter",
+            "defense": "block"
+          },
+          "weights": {
+            "strike": 0.16,
+            "grab": 0.03,
+            "counter": 0.74,
+            "feint": 0.07
+          }
+        }
+      },
+      "signature": {
+        "move": "signature_sion",
+        "name": "찰나의 정타",
+        "hint": "상대 타격이 시작될 때 강한 반격",
+        "meter": "간파",
+        "seekRange": 0.9,
+        "waitForStrike": true
+      },
+      "identity": {
+        "kind": "stacks",
+        "status": "reading",
+        "max": 3,
+        "ready": "습관 간파"
+      },
+      "visual": {
+        "stance": "precise",
+        "height": 1.04,
+        "width": 0.86,
+        "glove": 0.95,
+        "legs": 1.02,
+        "lean": -0.03,
+        "equipment": "halo",
+        "mark": "eye",
+        "pose": "counter",
+        "face": "hood"
+      },
+      "defaultCall": "bait",
+      "followups": [
+        {
+          "trigger": "onCounterHit",
+          "move": "read_punish",
+          "name": "반격 → 정타",
+          "cooldown": 3
+        },
+        {
+          "trigger": "onFoeWhiff",
+          "move": "read_punish",
+          "name": "헛공격 → 응징",
+          "cooldown": 3.5
+        }
+      ],
+      "chargeTrait": "charge_sion"
     },
     {
       "id": "mira",
@@ -616,7 +1099,100 @@ window.GAME_DB = {
         ]
       },
       "trait": "reservoir",
-      "default": "shell"
+      "default": "shell",
+      "commands": {
+        "attack": {
+          "name": "철벽 전진",
+          "hint": "막으며 전진해 힘을 축적",
+          "plan": {
+            "range": "close",
+            "pace": "steady",
+            "intent": "strike",
+            "defense": "block"
+          },
+          "weights": {
+            "strike": 0.5,
+            "grab": 0.3,
+            "counter": 0.05,
+            "feint": 0.15
+          }
+        },
+        "bait": {
+          "name": "방패 흘려치기",
+          "hint": "공격을 흘리고 축적한 힘으로 반격",
+          "plan": {
+            "range": "mid",
+            "pace": "steady",
+            "intent": "counter",
+            "defense": "evade"
+          },
+          "weights": {
+            "strike": 0.16,
+            "grab": 0.03,
+            "counter": 0.74,
+            "feint": 0.07
+          }
+        },
+        "recover": {
+          "name": "방벽 재정비",
+          "hint": "기력과 가드가 회복될 틈을 확보",
+          "plan": {
+            "range": "far",
+            "pace": "calm",
+            "intent": "counter",
+            "defense": "block"
+          },
+          "weights": {
+            "strike": 0.16,
+            "grab": 0.03,
+            "counter": 0.74,
+            "feint": 0.07
+          }
+        }
+      },
+      "signature": {
+        "move": "signature_mira",
+        "name": "방벽 해방",
+        "hint": "축적한 힘을 큰 가드 파괴 타격으로 방출",
+        "meter": "축적",
+        "seekRange": 0.9,
+        "waitForStrike": false
+      },
+      "identity": {
+        "kind": "stacks",
+        "status": "stored",
+        "max": 4,
+        "ready": "받아낸 힘"
+      },
+      "visual": {
+        "stance": "fortress",
+        "height": 1,
+        "width": 1.22,
+        "glove": 1.25,
+        "legs": 0.96,
+        "lean": 0.03,
+        "equipment": "shields",
+        "mark": "circle",
+        "pose": "guard",
+        "face": "glass"
+      },
+      "defaultCall": "bait",
+      "followups": [
+        {
+          "trigger": "onBlock",
+          "move": "guard_counter",
+          "name": "축적 → 반격",
+          "cooldown": 4,
+          "when": [
+            {
+              "metric": "status_stored",
+              "op": "gte",
+              "value": 3
+            }
+          ]
+        }
+      ],
+      "chargeTrait": "charge_mira"
     }
   ],
   "moves": {
@@ -666,7 +1242,8 @@ window.GAME_DB = {
       "reach": 1.08,
       "accuracy": -0.03,
       "weight": 1,
-      "animation": "kick"
+      "animation": "kick",
+      "visual": "lance"
     },
     "flurry": {
       "name": "삼연격",
@@ -684,7 +1261,8 @@ window.GAME_DB = {
       "reach": 1,
       "accuracy": 0.015,
       "weight": 2,
-      "animation": "flurry"
+      "animation": "flurry",
+      "visual": "barrage"
     },
     "pressure_jab": {
       "name": "밀어붙이기",
@@ -700,7 +1278,8 @@ window.GAME_DB = {
       "reach": 1,
       "accuracy": 0,
       "weight": 1,
-      "animation": "punch"
+      "animation": "punch",
+      "visual": "heavy"
     },
     "touch": {
       "name": "탐색 타격",
@@ -748,7 +1327,8 @@ window.GAME_DB = {
       "reach": 1.12,
       "accuracy": -0.02,
       "weight": 1,
-      "animation": "grab"
+      "animation": "grab",
+      "visual": "slam"
     },
     "sweep": {
       "name": "전환 태클",
@@ -764,7 +1344,8 @@ window.GAME_DB = {
       "reach": 1.08,
       "accuracy": 0,
       "weight": 1,
-      "animation": "sweep"
+      "animation": "sweep",
+      "visual": "mirage"
     },
     "counter": {
       "name": "반격 대기",
@@ -794,7 +1375,8 @@ window.GAME_DB = {
       "reach": 1.06,
       "accuracy": 0.08,
       "weight": 1,
-      "animation": "counter"
+      "animation": "counter",
+      "visual": "riposte"
     },
     "guard_counter": {
       "name": "흘림 반격",
@@ -809,7 +1391,8 @@ window.GAME_DB = {
       "reach": 1.04,
       "accuracy": 0.04,
       "weight": 1,
-      "animation": "counter"
+      "animation": "counter",
+      "visual": "shield"
     },
     "feint": {
       "name": "속임수",
@@ -826,6 +1409,160 @@ window.GAME_DB = {
       "accuracy": 0,
       "weight": 1,
       "animation": "feint"
+    },
+    "read_punish": {
+      "name": "빈틈 정타",
+      "type": "strike",
+      "startup": 0.18,
+      "hits": [
+        0
+      ],
+      "recovery": 0.4,
+      "cost": 7,
+      "damage": 17,
+      "guard": 12,
+      "reach": 1.12,
+      "accuracy": 0.05,
+      "weight": 1,
+      "animation": "riposte",
+      "visual": "riposte"
+    },
+    "signature_jin": {
+      "name": "백스텝 관통차기",
+      "type": "strike",
+      "startup": 0.46,
+      "hits": [
+        0
+      ],
+      "recovery": 0.65,
+      "cost": 16,
+      "damage": 37,
+      "guard": 32,
+      "reach": 1.13,
+      "accuracy": -0.03,
+      "weight": 1,
+      "animation": "backkick",
+      "visual": "lance",
+      "step": -0.32,
+      "id": "signature_jin",
+      "signature": true
+    },
+    "signature_taeo": {
+      "name": "오연 폭주",
+      "type": "strike",
+      "startup": 0.3,
+      "hits": [
+        0,
+        0.11,
+        0.22,
+        0.33,
+        0.44
+      ],
+      "recovery": 0.6,
+      "cost": 24,
+      "damage": 10,
+      "guard": 9,
+      "reach": 1,
+      "accuracy": 0.015,
+      "weight": 1,
+      "animation": "barrage",
+      "visual": "barrage",
+      "step": 0.15,
+      "id": "signature_taeo",
+      "signature": true
+    },
+    "signature_garam": {
+      "name": "대지 내려찍기",
+      "type": "grab",
+      "startup": 0.62,
+      "hits": [
+        0
+      ],
+      "recovery": 0.82,
+      "cost": 21,
+      "damage": 41,
+      "guard": 20,
+      "reach": 1.14,
+      "accuracy": -0.02,
+      "weight": 1,
+      "animation": "powerthrow",
+      "visual": "slam",
+      "step": 0.18,
+      "id": "signature_garam",
+      "signature": true
+    },
+    "signature_yuna": {
+      "name": "잔상 태클",
+      "type": "grab",
+      "startup": 0.28,
+      "hits": [
+        0,
+        0.26
+      ],
+      "recovery": 0.65,
+      "cost": 19,
+      "damage": 34,
+      "guard": 13,
+      "reach": 1.22,
+      "accuracy": 0,
+      "weight": 1,
+      "animation": "mirage",
+      "stages": [
+        {
+          "type": "feint",
+          "damage": 0
+        },
+        {
+          "type": "grab",
+          "damage": 34
+        }
+      ],
+      "visual": "mirage",
+      "step": 0.35,
+      "id": "signature_yuna",
+      "signature": true
+    },
+    "signature_sion": {
+      "name": "찰나의 정타",
+      "type": "counter",
+      "startup": 0.05,
+      "hits": [],
+      "window": 1.45,
+      "recovery": 0.42,
+      "cost": 12,
+      "damage": 41,
+      "guard": 32,
+      "reach": 1.12,
+      "accuracy": 0.08,
+      "weight": 1,
+      "animation": "riposte",
+      "visual": "riposte",
+      "id": "signature_sion",
+      "signature": true
+    },
+    "signature_mira": {
+      "name": "방벽 해방",
+      "type": "strike",
+      "startup": 0.48,
+      "hits": [
+        0
+      ],
+      "recovery": 0.7,
+      "cost": 16,
+      "damage": 34,
+      "guard": 44,
+      "reach": 1.04,
+      "accuracy": 0.05,
+      "weight": 1,
+      "animation": "shieldburst",
+      "visual": "shield",
+      "step": 0.12,
+      "counterScale": true,
+      "id": "signature_mira",
+      "signature": true,
+      "consumeStatuses": [
+        "stored"
+      ]
     }
   },
   "options": {
@@ -1547,6 +2284,210 @@ window.GAME_DB = {
               "target": "self",
               "key": "focus",
               "value": 8
+            }
+          ],
+          "when": [],
+          "cooldown": 0
+        }
+      ]
+    },
+    "charge_jin": {
+      "name": "간격",
+      "description": "거리 확보 뒤 길게 뻗는 결정타",
+      "hooks": [
+        {
+          "trigger": "onHit",
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "focus",
+              "value": 8
+            }
+          ],
+          "when": [
+            {
+              "metric": "distance",
+              "op": "gt",
+              "value": 2.05
+            }
+          ],
+          "cooldown": 0
+        },
+        {
+          "trigger": "onDodge",
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "focus",
+              "value": 8
+            }
+          ],
+          "when": [],
+          "cooldown": 0
+        }
+      ]
+    },
+    "charge_taeo": {
+      "name": "리듬",
+      "description": "다섯 번의 연타. 반격에 끊길 수 있음",
+      "hooks": [
+        {
+          "trigger": "onHit",
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "focus",
+              "value": 6
+            }
+          ],
+          "when": [
+            {
+              "metric": "attackStrike",
+              "op": "eq",
+              "value": 1
+            }
+          ],
+          "cooldown": 0
+        }
+      ]
+    },
+    "charge_garam": {
+      "name": "압박",
+      "description": "가드를 무시하는 강한 잡기. 먼저 붙어야 함",
+      "hooks": [
+        {
+          "trigger": "onBlock",
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "focus",
+              "value": 5
+            }
+          ],
+          "when": [],
+          "cooldown": 0
+        },
+        {
+          "trigger": "onGrabHit",
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "focus",
+              "value": 13
+            }
+          ],
+          "when": [],
+          "cooldown": 0
+        }
+      ]
+    },
+    "charge_yuna": {
+      "name": "기만",
+      "description": "속임수 동작 뒤 낮게 파고드는 태클",
+      "hooks": [
+        {
+          "trigger": "onFeint",
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "focus",
+              "value": 11
+            }
+          ],
+          "when": [],
+          "cooldown": 0
+        },
+        {
+          "trigger": "onDodge",
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "focus",
+              "value": 10
+            }
+          ],
+          "when": [],
+          "cooldown": 0
+        },
+        {
+          "trigger": "onGrabHit",
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "focus",
+              "value": 9
+            }
+          ],
+          "when": [],
+          "cooldown": 0
+        }
+      ]
+    },
+    "charge_sion": {
+      "name": "간파",
+      "description": "상대 타격이 시작될 때 강한 반격",
+      "hooks": [
+        {
+          "trigger": "onFoeRepeat",
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "focus",
+              "value": 6
+            }
+          ],
+          "when": [],
+          "cooldown": 0
+        },
+        {
+          "trigger": "onCounterHit",
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "focus",
+              "value": 12
+            }
+          ],
+          "when": [],
+          "cooldown": 0
+        }
+      ]
+    },
+    "charge_mira": {
+      "name": "축적",
+      "description": "축적한 힘을 큰 가드 파괴 타격으로 방출",
+      "hooks": [
+        {
+          "trigger": "onBlock",
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "focus",
+              "value": 6
+            }
+          ],
+          "when": [],
+          "cooldown": 0
+        },
+        {
+          "trigger": "onCounterHit",
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "focus",
+              "value": 10
             }
           ],
           "when": [],
@@ -2399,8 +3340,8 @@ window.GAME_DB = {
     "title": "계약의 링",
     "yourFighter": "내 투사",
     "selectCharacter": "한 명의 투사와 계약하세요",
-    "choose": "이 투사와 계약",
-    "chooseNote": "선택한 투사를 계속 육성합니다. 대전마다 바뀌지 않습니다.",
+    "choose": "이 투사로 경기 시작",
+    "chooseNote": "한 투사를 선택해 계속 성장시킵니다. 바로 경기를 시작할 수 있습니다.",
     "callsign": "호출명",
     "callsignPlaceholder": "나의 호출명",
     "home": "라커룸",
@@ -2411,7 +3352,7 @@ window.GAME_DB = {
     "records": "기록",
     "nextRival": "다음 상대",
     "aiBout": "AI 1대1 대전",
-    "prepare": "대전 준비",
+    "prepare": "바로 대전",
     "start": "경기 시작",
     "back": "돌아가기",
     "rank": "계급",
@@ -2489,7 +3430,7 @@ window.GAME_DB = {
     "breaks": "가드 붕괴",
     "bestMoment": "경기의 전환점",
     "rematch": "재대결",
-    "nextMatch": "다음 상대 준비",
+    "nextMatch": "다음 대전",
     "spendPoints": "훈련 포인트 사용",
     "gain": "획득",
     "kept": "투사·훈련·장비·특성은 결과와 관계없이 유지됩니다.",
@@ -2577,11 +3518,53 @@ window.GAME_DB = {
     "meters": "m",
     "manualOnly": "자동 대응 꺼짐",
     "wait": "대기",
-    "arenaLabel": "투사들이 자동으로 이동하고 싸우는 1대1 링. 거리·속도·노림수·방어를 조정하세요.",
+    "arenaLabel": "스스로 싸우는 두 투사. 공세·유인·회복 지시와 캐릭터 결정기로 승부를 조정합니다.",
     "fullscreenHint": "전체 화면은 지원되는 브라우저에서 사용할 수 있습니다.",
     "legacyChoose": "이전 계급과 자원을 이어받을 투사를 선택하세요.",
     "background": "투사의 배경",
-    "challengeTier": "도전자전 {tier}"
+    "challengeTier": "도전자전 {tier}",
+    "directFight": "바로 대전",
+    "signature": "결정기",
+    "signatureReady": "결정기 준비 완료",
+    "signatureArm": "승부처 지시",
+    "signatureSeeking": "틈을 만드는 중",
+    "signatureWaitRange": "사거리에 들어가는 중",
+    "signatureWaitStamina": "기력을 모으는 중",
+    "signatureWaitAttack": "상대 타격을 기다림",
+    "signatureCancel": "준비 취소",
+    "coach": "경기 중에는 세 지시만 선택하세요",
+    "coachHint": "투사가 자기 방식으로 실행합니다. 결정기는 틈을 보고 사용합니다.",
+    "coachCurrent": "지금 실행 중",
+    "coachPending": "지시 전달 중",
+    "characterIdentity": "내 투사의 리듬",
+    "identityActive": "특성 발동",
+    "flowApproach": "파고드는 중",
+    "flowRetreat": "간격을 벌리는 중",
+    "flowRecover": "기력 회복 중",
+    "flowCounter": "반격을 기다리는 중",
+    "flowHold": "내 거리 유지",
+    "flowSignature": "결정기 진입",
+    "flowFollowup": "연계 기술 준비",
+    "leagueTable": "리그 상대 보기",
+    "optionalBuild": "육성과 장비는 경기 사이에 바꿀 수 있습니다.",
+    "iconicMove": "대표 기술",
+    "signatureCost": "집중 {cost}",
+    "hotkeys": "1 공세 · 2 유인 · 3 회복 · 4 결정기",
+    "cornerAuto": "곧 다음 라운드",
+    "combatGuide": "상대와 기력을 보고 흐름을 바꾸세요",
+    "next": "다음",
+    "keepFighter": "투사·성장·장비는 그대로 이어집니다.",
+    "rankShort": "계급",
+    "strengthShort": "잘하는 것",
+    "weaknessShort": "주의할 것",
+    "basicAI": "AI 1대1",
+    "recordButton": "지난 경기",
+    "backToRing": "링으로 복귀",
+    "signatureBlocked": "집중이 부족하거나 재사용 대기 중입니다.",
+    "fighterStats": "투사 수치 보기",
+    "watchFor": "상대의 승부수",
+    "coachShort": "지시는 짧게. 실행은 투사의 방식으로.",
+    "hintRecoverActive": "회복 중에는 공격 빈도가 줄어듭니다."
   },
   "messages": {
     "queued": "{who} 전술 전환 예약",
@@ -2603,7 +3586,13 @@ window.GAME_DB = {
     "upgraded": "{name} 강화",
     "equipped": "{name} 장착",
     "newRival": "다음 상대 개방",
-    "noCoins": "코인이 부족합니다."
+    "noCoins": "코인이 부족합니다.",
+    "command": "{who} · {name}",
+    "followup": "{who} · {name}",
+    "signatureArmed": "{who} · {name} 준비",
+    "signatureUsed": "{who} · {name}!",
+    "signatureCancelled": "결정기 준비 취소",
+    "signatureBlocked": "지금은 결정기를 준비할 수 없습니다."
   },
   "draw": {
     "font": "system-ui, sans-serif",
@@ -2625,7 +3614,7 @@ window.GAME_DB = {
     "statusFont": 11,
     "labelOffset": 112,
     "cameraEase": 5,
-    "shadowWidth": 24,
+    "shadowWidth": 27,
     "shadowHeight": 8,
     "floorRings": 3,
     "ropeHeight": 20,
@@ -2662,8 +3651,8 @@ window.GAME_DB = {
     "edgeRing": 29,
     "edgeWidth": 2,
     "minFighterScale": 0.64,
-    "maxFighterScale": 1.05,
-    "fighterScaleDivisor": 440,
+    "maxFighterScale": 1.22,
+    "fighterScaleDivisor": 420,
     "animationLead": 0.12,
     "animationSpan": 0.4,
     "flurryRate": 25,
@@ -2705,7 +3694,7 @@ window.GAME_DB = {
     "hoodExtra": 4,
     "hoodLine": 5,
     "labelGap": 30,
-    "actionWidth": 112,
+    "actionWidth": 152,
     "actionHeight": 24,
     "traitY": 27,
     "statusY": 44,
@@ -2718,7 +3707,100 @@ window.GAME_DB = {
       4,
       5
     ],
-    "floatHeight": 110
+    "floatHeight": 110,
+    "identityBodyAlpha": 0.14,
+    "trailAlpha": 0.16,
+    "motionArrowWidth": 2,
+    "motionArrowSize": 7,
+    "motionLineDash": [
+      7,
+      7
+    ],
+    "rangeArcAlpha": 0.35,
+    "rangeLine": 1.5,
+    "rangeLabelOffset": 15,
+    "impactHalo": 1.3,
+    "signatureBannerWidth": 320,
+    "signatureBannerHeight": 55,
+    "signatureTitleSize": 20,
+    "signatureSubSize": 11,
+    "signatureBannerY": 36,
+    "signatureFlashAlpha": 0.16,
+    "signatureSparks": 8,
+    "signatureRays": 48,
+    "markerRadius": 9,
+    "traceThickness": 12,
+    "guardShieldRadius": 19,
+    "guardShieldAlpha": 0.5,
+    "gauntletPlate": 18,
+    "backFrameWidth": 64,
+    "backFrameHeight": 42,
+    "scarfLength": 50,
+    "ribbonLength": 60,
+    "haloRadius": 20,
+    "haloAlpha": 0.55,
+    "stanceArmDrop": 10,
+    "stanceCrouch": 10,
+    "directionArrowLife": 2.5,
+    "poseThrowTilt": 1.1,
+    "poseThrowLift": 35,
+    "poseImpactSquash": 0.6,
+    "specialPunchScale": 1.25,
+    "specialKickScale": 1.2,
+    "sweepKickScale": 0.75,
+    "stanceStrideScale": 0.4,
+    "trailIntervals": [
+      0.08,
+      0.16,
+      0.24
+    ],
+    "sigBannerAlphaTime": 0.2,
+    "identityPips": 4,
+    "portraitGlove": 15,
+    "portraitLean": 22,
+    "portraitHead": 25,
+    "portraitHeadTall": 1.12,
+    "landedPoseTime": 0.28,
+    "armedRing": 32,
+    "armedLine": 2,
+    "shieldPipRadius": 29,
+    "shieldPipY": 13,
+    "shieldPipSize": 3,
+    "trailHead": 75,
+    "trailBody": 30,
+    "backFrameTop": 8,
+    "frameStripe": 7,
+    "ribbonSpeed": 7,
+    "ribbonSway": 15,
+    "ribbonDrop": 34,
+    "ribbonWidth": 12,
+    "gauntletBorder": 4,
+    "shieldBorder": 3,
+    "frontShieldScale": 0.8,
+    "haloLine": 2,
+    "arrowWing": 0.6,
+    "lanceLine": 5,
+    "slamRingScale": 1.8,
+    "slamLine": 5,
+    "barrageLines": 5,
+    "barrageGap": 9,
+    "barrageLine": 3,
+    "sweepImpactHeight": 24,
+    "mirageLine": 5,
+    "shieldBurstAlpha": 0.25,
+    "bannerMargin": 30,
+    "bannerStripe": 5,
+    "bannerTitleY": 22,
+    "bannerSubY": 42,
+    "teamRing": 29,
+    "teamRingLine": 2,
+    "eyeGap": 3,
+    "eyeLine": 2,
+    "eyeBrow": 1,
+    "mouthY": 9,
+    "monoRadius": 5,
+    "glassGap": 3,
+    "glassLine": 2
   },
   "sounds": {
     "hit": {
@@ -2755,6 +3837,13 @@ window.GAME_DB = {
       "duration": 0.07,
       "gain": 0.025,
       "type": "sine"
+    },
+    "signature": {
+      "frequency": 160,
+      "end": 50,
+      "duration": 0.28,
+      "gain": 0.075,
+      "type": "sawtooth"
     }
   },
   "statLabels": {
@@ -2787,7 +3876,9 @@ window.GAME_DB = {
   "_docs": {
     "editing": "game-db.js가 유일한 콘텐츠 원본입니다. characters/styles/matchups/moves/options/presets/conditions/traits/statuses/modules/talents/rivals에서 수정합니다. 엔진은 index.html에 있습니다.",
     "career": "한 투사를 계약하고 영구 육성합니다. 진행은 tactics.duel.v6에 저장하며, 이전 해상전 저장은 삭제하지 않습니다. 계급명은 progression.ranks에서 수정합니다.",
-    "combat": "직접 이동·공격 입력이 없는 실시간 전술 시뮬레이션. 전술 지연, 기력, 거리, 가드, 반격·잡기·속임수, 조건 작전서와 집중이 상호작용합니다."
+    "combat": "직접 이동·공격 입력이 없는 실시간 전술 시뮬레이션. 전술 지연, 기력, 거리, 가드, 반격·잡기·속임수, 조건 작전서와 집중이 상호작용합니다.",
+    "coaching": "coaching와 characters[].commands: 필수 사전 설정 없는 세 경기 지시. 캐릭터별 계획·연계·결정기는 characters[].followups/signature와 moves에 있습니다. 준비 작전서 데이터는 호환용으로 보존하며 기본 경기에서는 실행하지 않습니다.",
+    "identity": "characters[].visual은 체형·장비·자세, identity는 고유 상태 표시, chargeTrait는 결정기 게이지 획득 조건입니다. 대표 동작·연계·지시 결과가 화면에서 연결되게 유지합니다."
   },
   "enemyTraining": {
     "strike": {
@@ -2832,13 +3923,11 @@ window.GAME_DB = {
     }
   },
   "reportEvents": [
+    "signatureUsed",
+    "followup",
     "counter",
     "guardBreak",
-    "grab",
-    "feint",
-    "focus",
-    "rule",
-    "adapt"
+    "grab"
   ],
   "tabs": [
     {
@@ -2852,14 +3941,6 @@ window.GAME_DB = {
     {
       "id": "build",
       "label": "build"
-    },
-    {
-      "id": "book",
-      "label": "book"
-    },
-    {
-      "id": "records",
-      "label": "records"
     }
   ],
   "summaryStats": [
@@ -2912,23 +3993,21 @@ window.GAME_DB = {
     }
   ],
   "visibleEvents": [
-    "counter",
+    "command",
+    "followup",
+    "signatureUsed",
     "guardBreak",
-    "grab",
-    "feint",
-    "focus",
-    "rule",
-    "adapt",
-    "trait",
-    "applied"
+    "counter",
+    "grab"
   ],
   "flashEvents": [
-    "counter",
+    "command",
+    "followup",
+    "signatureUsed",
     "guardBreak",
+    "counter",
     "grab",
-    "focus",
-    "rule",
-    "adapt"
+    "signatureArmed"
   ],
   "customPresetDefaults": [
     {
@@ -2946,5 +4025,36 @@ window.GAME_DB = {
       "name": "내 작전 3",
       "preset": "finish"
     }
-  ]
+  ],
+  "coaching": [
+    {
+      "id": "attack",
+      "name": "공세",
+      "glyph": "↗",
+      "key": "Digit1"
+    },
+    {
+      "id": "bait",
+      "name": "유인",
+      "glyph": "↶",
+      "key": "Digit2"
+    },
+    {
+      "id": "recover",
+      "name": "회복",
+      "glyph": "◌",
+      "key": "Digit3"
+    }
+  ],
+  "coachResponses": {
+    "strike": "bait",
+    "counter": "attack",
+    "grab": "attack",
+    "feint": "attack"
+  },
+  "commandReports": {
+    "attack": "명중 {hits} · 가드 피해 {guardDamage}",
+    "bait": "회피 {dodges} · 반격 {counters}",
+    "recover": "기력 +{stamina} · 가드 +{guard}"
+  }
 };
