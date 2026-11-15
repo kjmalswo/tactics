@@ -1,7 +1,7 @@
 // Editable JSON-compatible game database. Runtime logic belongs in index.html.
 window.GAME_DB = {
   "meta": {
-    "version": "8.0",
+    "version": "9.0",
     "title": "계약의 링",
     "subtitle": "서약 아래 모인 투사들의 결투",
     "description": "한 투사와 계약하고 성장시키는 1대1 실시간 전술 대전. 직접 조작 대신 작전과 대응을 지휘합니다."
@@ -85,7 +85,7 @@ window.GAME_DB = {
     "dodgeBase": 0.14,
     "dodgeCost": 3.2,
     "grabDodgeBonus": 0.11,
-    "grabGuardBonus": 1.14,
+    "grabGuardBonus": 1.2,
     "grabStaminaDamage": 13,
     "minimumDamage": 1,
     "hitChanceMin": 0.18,
@@ -96,8 +96,8 @@ window.GAME_DB = {
     "fatigueAccuracy": 0.18,
     "fatigueDamage": 0.22,
     "fatigueSpeed": 0.42,
-    "counterChance": 0.61,
-    "counterReadBonus": 0.13,
+    "counterChance": 0.78,
+    "counterReadBonus": 0.06,
     "counterStamina": 3,
     "counterFocus": 14,
     "whiffFocus": 7,
@@ -124,10 +124,10 @@ window.GAME_DB = {
     "cutoffWeight": 0.2,
     "ruleCooldown": 4,
     "manualPriority": 9999,
-    "tacticLag": 0.42,
-    "minTacticLag": 0.35,
-    "changeCooldown": 0.65,
-    "aiReview": 6.5,
+    "tacticLag": 0.9,
+    "minTacticLag": 0.28,
+    "changeCooldown": 1.0,
+    "aiReview": 5.2,
     "aiInitialDelay": 4,
     "focusCost": 60,
     "focusCooldown": 8,
@@ -289,7 +289,7 @@ window.GAME_DB = {
     "xpGrowth": 12,
     "pointsStart": 4,
     "pointsPerLevel": 2,
-    "startCoins": 75,
+    "startCoins": 140,
     "startModules": [
       "breath",
       "pad"
@@ -358,7 +358,8 @@ window.GAME_DB = {
     "counterChance": 0,
     "grabAccuracy": 0,
     "readBonus": 0,
-    "lowHpPower": 0
+    "lowHpPower": 0,
+    "strikePower": 1
   },
   "styles": {
     "strike": {
@@ -2015,6 +2016,93 @@ window.GAME_DB = {
           "value": 1.25
         }
       ]
+    },
+    "gear_spacing": {
+      "name": "추격의 간격",
+      "duration": 3,
+      "maxStacks": 1,
+      "stats": [
+        {
+          "stat": "reach",
+          "op": "multiply",
+          "value": 1.12
+        },
+        {
+          "stat": "speed",
+          "op": "multiply",
+          "value": 1.12
+        }
+      ]
+    },
+    "gear_opening": {
+      "name": "잔영의 틈",
+      "duration": 2.4,
+      "maxStacks": 1,
+      "stats": [
+        {
+          "stat": "grabPower",
+          "op": "multiply",
+          "value": 1.18
+        },
+        {
+          "stat": "strikePower",
+          "op": "multiply",
+          "value": 1.18
+        }
+      ]
+    },
+    "gear_shield": {
+      "name": "서약 축적",
+      "duration": 6,
+      "maxStacks": 3,
+      "stats": [
+        {
+          "stat": "guardDamage",
+          "op": "multiply",
+          "value": 1.08
+        }
+      ]
+    },
+    "gear_siege": {
+      "name": "붕괴 추격",
+      "duration": 3,
+      "maxStacks": 1,
+      "stats": [
+        {
+          "stat": "power",
+          "op": "multiply",
+          "value": 1.2
+        }
+      ]
+    },
+    "res_hunt": {
+      "name": "추격 공명",
+      "duration": 3,
+      "maxStacks": 1,
+      "stats": [
+        {
+          "stat": "speed",
+          "op": "multiply",
+          "value": 1.2
+        },
+        {
+          "stat": "staminaCost",
+          "op": "multiply",
+          "value": 0.88
+        }
+      ]
+    },
+    "res_iron": {
+      "name": "철벽 공명",
+      "duration": 3,
+      "maxStacks": 1,
+      "stats": [
+        {
+          "stat": "armor",
+          "op": "add",
+          "value": 0.07
+        }
+      ]
     }
   },
   "traits": {
@@ -2494,6 +2582,1588 @@ window.GAME_DB = {
           "cooldown": 0
         }
       ]
+    },
+    "gear_pad": {
+      "name": "성채 누비갑옷",
+      "description": "가드 성공 → 가드 5 회복 · 재발동 3.5초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onBlock",
+          "when": [],
+          "cooldown": 3.5,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "guard",
+              "value": 5
+            }
+          ]
+        }
+      ]
+    },
+    "gear_pad_bastion": {
+      "name": "성채",
+      "description": "가드 성공 → 가드 7 회복 · 재발동 4초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onBlock",
+          "when": [],
+          "cooldown": 4,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "guard",
+              "value": 7
+            }
+          ]
+        }
+      ]
+    },
+    "gear_pad_bastion_master": {
+      "name": "성채 · 완성",
+      "description": "가드 성공 → 가드 12 회복 · 재발동 4초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onBlock",
+          "when": [],
+          "cooldown": 4,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "guard",
+              "value": 12
+            }
+          ]
+        }
+      ]
+    },
+    "gear_pad_duelist": {
+      "name": "결투가",
+      "description": "회피 성공 → 기력 7 회복 · 재발동 4초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onDodge",
+          "when": [],
+          "cooldown": 4,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "stamina",
+              "value": 7
+            }
+          ]
+        }
+      ]
+    },
+    "gear_pad_duelist_master": {
+      "name": "결투가 · 완성",
+      "description": "회피 성공 → 기력 12 회복 · 재발동 4초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onDodge",
+          "when": [],
+          "cooldown": 4,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "stamina",
+              "value": 12
+            }
+          ]
+        }
+      ]
+    },
+    "gear_breath": {
+      "name": "성자의 숨결",
+      "description": "기력 28% 미만 → 기력 12 회복 · 재발동 14초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onLowStamina",
+          "when": [],
+          "cooldown": 14,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "stamina",
+              "value": 12
+            }
+          ]
+        }
+      ]
+    },
+    "gear_breath_endless": {
+      "name": "불굴",
+      "description": "기력 28% 미만 → 기력 10 회복 / 집중 8 획득 · 재발동 12초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onLowStamina",
+          "when": [],
+          "cooldown": 12,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "stamina",
+              "value": 10
+            },
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "focus",
+              "value": 8
+            }
+          ]
+        }
+      ]
+    },
+    "gear_breath_endless_master": {
+      "name": "불굴 · 완성",
+      "description": "기력 28% 미만 → 기력 16 회복 / 집중 13 획득 · 재발동 12초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onLowStamina",
+          "when": [],
+          "cooldown": 12,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "stamina",
+              "value": 16
+            },
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "focus",
+              "value": 13
+            }
+          ]
+        }
+      ]
+    },
+    "gear_breath_leap": {
+      "name": "도약",
+      "description": "회피 성공 → 기력 5 회복 / 집중 7 획득 · 재발동 4초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onDodge",
+          "when": [],
+          "cooldown": 4,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "stamina",
+              "value": 5
+            },
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "focus",
+              "value": 7
+            }
+          ]
+        }
+      ]
+    },
+    "gear_breath_leap_master": {
+      "name": "도약 · 완성",
+      "description": "회피 성공 → 기력 8 회복 / 집중 12 획득 · 재발동 4초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onDodge",
+          "when": [],
+          "cooldown": 4,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "stamina",
+              "value": 8
+            },
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "focus",
+              "value": 12
+            }
+          ]
+        }
+      ]
+    },
+    "gear_reach": {
+      "name": "매사냥꾼 사슬갑",
+      "description": "상대 헛침 → 3초간 타격 거리·기동 +12% · 재발동 3.5초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onFoeWhiff",
+          "when": [],
+          "cooldown": 3.5,
+          "effects": [
+            {
+              "op": "status",
+              "target": "self",
+              "id": "gear_spacing"
+            }
+          ]
+        }
+      ]
+    },
+    "gear_reach_spear": {
+      "name": "창끝",
+      "description": "적중 → 집중 6 획득 · 재발동 3초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onHit",
+          "when": [],
+          "cooldown": 3,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "focus",
+              "value": 6
+            }
+          ]
+        }
+      ]
+    },
+    "gear_reach_spear_master": {
+      "name": "창끝 · 완성",
+      "description": "적중 → 집중 10 획득 · 재발동 3초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onHit",
+          "when": [],
+          "cooldown": 3,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "focus",
+              "value": 10
+            }
+          ]
+        }
+      ]
+    },
+    "gear_reach_reel": {
+      "name": "거두기",
+      "description": "잡기 적중 → 기력 7 회복 · 재발동 4초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onGrabHit",
+          "when": [],
+          "cooldown": 4,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "stamina",
+              "value": 7
+            }
+          ]
+        }
+      ]
+    },
+    "gear_reach_reel_master": {
+      "name": "거두기 · 완성",
+      "description": "잡기 적중 → 기력 12 회복 · 재발동 4초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onGrabHit",
+          "when": [],
+          "cooldown": 4,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "stamina",
+              "value": 12
+            }
+          ]
+        }
+      ]
+    },
+    "gear_weight": {
+      "name": "파성 건틀릿",
+      "description": "가드 붕괴 유발 → 집중 14 획득 · 재발동 4초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onBreak",
+          "when": [],
+          "cooldown": 4,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "focus",
+              "value": 14
+            }
+          ]
+        }
+      ]
+    },
+    "gear_weight_crack": {
+      "name": "균열",
+      "description": "적중 → 상대 가드 5 감소 · 재발동 2.5초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onHit",
+          "when": [],
+          "cooldown": 2.5,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "foe",
+              "key": "guard",
+              "value": -5
+            }
+          ]
+        }
+      ]
+    },
+    "gear_weight_crack_master": {
+      "name": "균열 · 완성",
+      "description": "적중 → 상대 가드 8 감소 · 재발동 2.5초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onHit",
+          "when": [],
+          "cooldown": 2.5,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "foe",
+              "key": "guard",
+              "value": -8
+            }
+          ]
+        }
+      ]
+    },
+    "gear_weight_execution": {
+      "name": "일격",
+      "description": "상성 파훼 성공 → 집중 12 획득 · 재발동 4초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onTacticWin",
+          "when": [],
+          "cooldown": 4,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "focus",
+              "value": 12
+            }
+          ]
+        }
+      ]
+    },
+    "gear_weight_execution_master": {
+      "name": "일격 · 완성",
+      "description": "상성 파훼 성공 → 집중 20 획득 · 재발동 4초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onTacticWin",
+          "when": [],
+          "cooldown": 4,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "focus",
+              "value": 20
+            }
+          ]
+        }
+      ]
+    },
+    "gear_ankle": {
+      "name": "바람 사냥 장화",
+      "description": "회피 성공 → 집중 6 획득 · 재발동 3초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onDodge",
+          "when": [],
+          "cooldown": 3,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "focus",
+              "value": 6
+            }
+          ]
+        }
+      ]
+    },
+    "gear_ankle_pursuit": {
+      "name": "추격",
+      "description": "상대 헛침 → 기력 7 회복 · 재발동 3.5초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onFoeWhiff",
+          "when": [],
+          "cooldown": 3.5,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "stamina",
+              "value": 7
+            }
+          ]
+        }
+      ]
+    },
+    "gear_ankle_pursuit_master": {
+      "name": "추격 · 완성",
+      "description": "상대 헛침 → 기력 12 회복 · 재발동 3.5초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onFoeWhiff",
+          "when": [],
+          "cooldown": 3.5,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "stamina",
+              "value": 12
+            }
+          ]
+        }
+      ]
+    },
+    "gear_ankle_wander": {
+      "name": "유랑",
+      "description": "회피 성공 → 기력 7 회복 / 가드 4 회복 · 재발동 4초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onDodge",
+          "when": [],
+          "cooldown": 4,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "stamina",
+              "value": 7
+            },
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "guard",
+              "value": 4
+            }
+          ]
+        }
+      ]
+    },
+    "gear_ankle_wander_master": {
+      "name": "유랑 · 완성",
+      "description": "회피 성공 → 기력 12 회복 / 가드 7 회복 · 재발동 4초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onDodge",
+          "when": [],
+          "cooldown": 4,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "stamina",
+              "value": 12
+            },
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "guard",
+              "value": 7
+            }
+          ]
+        }
+      ]
+    },
+    "gear_deceive": {
+      "name": "잔영 망토",
+      "description": "속임수 성공 → 2.4초간 타격·잡기 피해 +18% · 재발동 2초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onFeint",
+          "when": [],
+          "cooldown": 2,
+          "effects": [
+            {
+              "op": "status",
+              "target": "self",
+              "id": "gear_opening"
+            }
+          ]
+        }
+      ]
+    },
+    "gear_deceive_illusion": {
+      "name": "허상",
+      "description": "속임수 성공 → 상대 가드 10 감소 · 재발동 3초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onFeint",
+          "when": [],
+          "cooldown": 3,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "foe",
+              "key": "guard",
+              "value": -10
+            }
+          ]
+        }
+      ]
+    },
+    "gear_deceive_illusion_master": {
+      "name": "허상 · 완성",
+      "description": "속임수 성공 → 상대 가드 16 감소 · 재발동 3초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onFeint",
+          "when": [],
+          "cooldown": 3,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "foe",
+              "key": "guard",
+              "value": -16
+            }
+          ]
+        }
+      ]
+    },
+    "gear_deceive_ambush": {
+      "name": "암습",
+      "description": "속임수 성공 → 집중 10 획득 · 재발동 3초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onFeint",
+          "when": [],
+          "cooldown": 3,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "focus",
+              "value": 10
+            }
+          ]
+        }
+      ]
+    },
+    "gear_deceive_ambush_master": {
+      "name": "암습 · 완성",
+      "description": "속임수 성공 → 집중 16 획득 · 재발동 3초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onFeint",
+          "when": [],
+          "cooldown": 3,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "focus",
+              "value": 16
+            }
+          ]
+        }
+      ]
+    },
+    "gear_lung": {
+      "name": "불씨 심장석",
+      "description": "적중 → 기력 2 회복 · 재발동 2초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onHit",
+          "when": [],
+          "cooldown": 2,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "stamina",
+              "value": 2
+            }
+          ]
+        }
+      ]
+    },
+    "gear_lung_burn": {
+      "name": "연소",
+      "description": "적중 → 집중 4 획득 · 재발동 2초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onHit",
+          "when": [],
+          "cooldown": 2,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "focus",
+              "value": 4
+            }
+          ]
+        }
+      ]
+    },
+    "gear_lung_burn_master": {
+      "name": "연소 · 완성",
+      "description": "적중 → 집중 7 획득 · 재발동 2초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onHit",
+          "when": [],
+          "cooldown": 2,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "focus",
+              "value": 7
+            }
+          ]
+        }
+      ]
+    },
+    "gear_lung_ember": {
+      "name": "잔불",
+      "description": "체력 35% 미만 → 기력 14 회복 / 가드 10 회복 · 재발동 16초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onLowHp",
+          "when": [],
+          "cooldown": 16,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "stamina",
+              "value": 14
+            },
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "guard",
+              "value": 10
+            }
+          ]
+        }
+      ]
+    },
+    "gear_lung_ember_master": {
+      "name": "잔불 · 완성",
+      "description": "체력 35% 미만 → 기력 23 회복 / 가드 16 회복 · 재발동 16초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onLowHp",
+          "when": [],
+          "cooldown": 16,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "stamina",
+              "value": 23
+            },
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "guard",
+              "value": 16
+            }
+          ]
+        }
+      ]
+    },
+    "gear_hardguard": {
+      "name": "서약의 방패",
+      "description": "가드 성공 → 가드 압박 +8%씩 최대 3회 축적 · 6초 유지 · 재발동 1초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onBlock",
+          "when": [],
+          "cooldown": 1,
+          "effects": [
+            {
+              "op": "status",
+              "target": "self",
+              "id": "gear_shield"
+            }
+          ]
+        }
+      ]
+    },
+    "gear_hardguard_echo": {
+      "name": "반향",
+      "description": "반격 성공 → 가드 12 회복 · 재발동 4초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onCounterHit",
+          "when": [],
+          "cooldown": 4,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "guard",
+              "value": 12
+            }
+          ]
+        }
+      ]
+    },
+    "gear_hardguard_echo_master": {
+      "name": "반향 · 완성",
+      "description": "반격 성공 → 가드 20 회복 · 재발동 4초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onCounterHit",
+          "when": [],
+          "cooldown": 4,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "guard",
+              "value": 20
+            }
+          ]
+        }
+      ]
+    },
+    "gear_hardguard_siege": {
+      "name": "압성",
+      "description": "가드 붕괴 유발 → 집중 14 획득 · 재발동 5초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onBreak",
+          "when": [],
+          "cooldown": 5,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "focus",
+              "value": 14
+            }
+          ]
+        }
+      ]
+    },
+    "gear_hardguard_siege_master": {
+      "name": "압성 · 완성",
+      "description": "가드 붕괴 유발 → 집중 23 획득 · 재발동 5초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onBreak",
+          "when": [],
+          "cooldown": 5,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "focus",
+              "value": 23
+            }
+          ]
+        }
+      ]
+    },
+    "gear_parry": {
+      "name": "흘림 손목띠",
+      "description": "반격 성공 → 기력 7 회복 · 재발동 3초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onCounterHit",
+          "when": [],
+          "cooldown": 3,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "stamina",
+              "value": 7
+            }
+          ]
+        }
+      ]
+    },
+    "gear_parry_read": {
+      "name": "판독",
+      "description": "상대 행동 반복 → 집중 6 획득 · 재발동 3초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onFoeRepeat",
+          "when": [],
+          "cooldown": 3,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "focus",
+              "value": 6
+            }
+          ]
+        }
+      ]
+    },
+    "gear_parry_read_master": {
+      "name": "판독 · 완성",
+      "description": "상대 행동 반복 → 집중 10 획득 · 재발동 3초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onFoeRepeat",
+          "when": [],
+          "cooldown": 3,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "focus",
+              "value": 10
+            }
+          ]
+        }
+      ]
+    },
+    "gear_parry_reverse": {
+      "name": "반전",
+      "description": "잡기 적중 → 집중 12 획득 · 재발동 4초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onGrabHit",
+          "when": [],
+          "cooldown": 4,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "focus",
+              "value": 12
+            }
+          ]
+        }
+      ]
+    },
+    "gear_parry_reverse_master": {
+      "name": "반전 · 완성",
+      "description": "잡기 적중 → 집중 20 획득 · 재발동 4초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onGrabHit",
+          "when": [],
+          "cooldown": 4,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "focus",
+              "value": 20
+            }
+          ]
+        }
+      ]
+    },
+    "gear_grip": {
+      "name": "거인의 매듭장갑",
+      "description": "잡기 적중 → 상대 기력 7 감소 · 재발동 4초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onGrabHit",
+          "when": [],
+          "cooldown": 4,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "foe",
+              "key": "stamina",
+              "value": -7
+            }
+          ]
+        }
+      ]
+    },
+    "gear_grip_crush": {
+      "name": "압착",
+      "description": "잡기 적중 → 상대 가드 8 감소 · 재발동 4초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onGrabHit",
+          "when": [],
+          "cooldown": 4,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "foe",
+              "key": "guard",
+              "value": -8
+            }
+          ]
+        }
+      ]
+    },
+    "gear_grip_crush_master": {
+      "name": "압착 · 완성",
+      "description": "잡기 적중 → 상대 가드 13 감소 · 재발동 4초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onGrabHit",
+          "when": [],
+          "cooldown": 4,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "foe",
+              "key": "guard",
+              "value": -13
+            }
+          ]
+        }
+      ]
+    },
+    "gear_grip_catch": {
+      "name": "사냥",
+      "description": "상성 파훼 성공 → 기력 10 회복 · 재발동 4초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onTacticWin",
+          "when": [],
+          "cooldown": 4,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "stamina",
+              "value": 10
+            }
+          ]
+        }
+      ]
+    },
+    "gear_grip_catch_master": {
+      "name": "사냥 · 완성",
+      "description": "상성 파훼 성공 → 기력 16 회복 · 재발동 4초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onTacticWin",
+          "when": [],
+          "cooldown": 4,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "stamina",
+              "value": 16
+            }
+          ]
+        }
+      ]
+    },
+    "gear_breaker": {
+      "name": "공성 인장",
+      "description": "가드 붕괴 유발 → 3초간 화력 +20% · 재발동 5초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onBreak",
+          "when": [],
+          "cooldown": 5,
+          "effects": [
+            {
+              "op": "status",
+              "target": "self",
+              "id": "gear_siege"
+            }
+          ]
+        }
+      ]
+    },
+    "gear_breaker_rupture": {
+      "name": "파열",
+      "description": "가드 붕괴 유발 → 상대 기력 18 감소 · 재발동 5초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onBreak",
+          "when": [],
+          "cooldown": 5,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "foe",
+              "key": "stamina",
+              "value": -18
+            }
+          ]
+        }
+      ]
+    },
+    "gear_breaker_rupture_master": {
+      "name": "파열 · 완성",
+      "description": "가드 붕괴 유발 → 상대 기력 30 감소 · 재발동 5초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onBreak",
+          "when": [],
+          "cooldown": 5,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "foe",
+              "key": "stamina",
+              "value": -30
+            }
+          ]
+        }
+      ]
+    },
+    "gear_breaker_plunder": {
+      "name": "약탈",
+      "description": "가드 붕괴 유발 → 기력 15 회복 / 집중 10 획득 · 재발동 5초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onBreak",
+          "when": [],
+          "cooldown": 5,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "stamina",
+              "value": 15
+            },
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "focus",
+              "value": 10
+            }
+          ]
+        }
+      ]
+    },
+    "gear_breaker_plunder_master": {
+      "name": "약탈 · 완성",
+      "description": "가드 붕괴 유발 → 기력 25 회복 / 집중 16 획득 · 재발동 5초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onBreak",
+          "when": [],
+          "cooldown": 5,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "stamina",
+              "value": 25
+            },
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "focus",
+              "value": 16
+            }
+          ]
+        }
+      ]
+    },
+    "gear_neural": {
+      "name": "전장의 맹세",
+      "description": "상성 파훼 성공 → 집중 8 획득 · 재발동 3초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onTacticWin",
+          "when": [],
+          "cooldown": 3,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "focus",
+              "value": 8
+            }
+          ]
+        }
+      ]
+    },
+    "gear_neural_resolve": {
+      "name": "결단",
+      "description": "상성 파훼 성공 → 집중 10 획득 / 기력 5 회복 · 재발동 3초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onTacticWin",
+          "when": [],
+          "cooldown": 3,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "focus",
+              "value": 10
+            },
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "stamina",
+              "value": 5
+            }
+          ]
+        }
+      ]
+    },
+    "gear_neural_resolve_master": {
+      "name": "결단 · 완성",
+      "description": "상성 파훼 성공 → 집중 16 획득 / 기력 8 회복 · 재발동 3초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onTacticWin",
+          "when": [],
+          "cooldown": 3,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "focus",
+              "value": 16
+            },
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "stamina",
+              "value": 8
+            }
+          ]
+        }
+      ]
+    },
+    "gear_neural_foresee": {
+      "name": "예견",
+      "description": "상대 행동 반복 → 가드 8 회복 / 집중 4 획득 · 재발동 3초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onFoeRepeat",
+          "when": [],
+          "cooldown": 3,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "guard",
+              "value": 8
+            },
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "focus",
+              "value": 4
+            }
+          ]
+        }
+      ]
+    },
+    "gear_neural_foresee_master": {
+      "name": "예견 · 완성",
+      "description": "상대 행동 반복 → 가드 13 회복 / 집중 7 획득 · 재발동 3초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onFoeRepeat",
+          "when": [],
+          "cooldown": 3,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "guard",
+              "value": 13
+            },
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "focus",
+              "value": 7
+            }
+          ]
+        }
+      ]
+    },
+    "gear_reader": {
+      "name": "용의 눈 렌즈",
+      "description": "상대 행동 반복 → 집중 4 획득 · 재발동 3초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onFoeRepeat",
+          "when": [],
+          "cooldown": 3,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "focus",
+              "value": 4
+            }
+          ]
+        }
+      ]
+    },
+    "gear_reader_punish": {
+      "name": "응징",
+      "description": "상대 헛침 → 집중 8 획득 · 재발동 3.5초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onFoeWhiff",
+          "when": [],
+          "cooldown": 3.5,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "focus",
+              "value": 8
+            }
+          ]
+        }
+      ]
+    },
+    "gear_reader_punish_master": {
+      "name": "응징 · 완성",
+      "description": "상대 헛침 → 집중 13 획득 · 재발동 3.5초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onFoeWhiff",
+          "when": [],
+          "cooldown": 3.5,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "focus",
+              "value": 13
+            }
+          ]
+        }
+      ]
+    },
+    "gear_reader_answer": {
+      "name": "대응",
+      "description": "상성 파훼 성공 → 가드 10 회복 · 재발동 3초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onTacticWin",
+          "when": [],
+          "cooldown": 3,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "guard",
+              "value": 10
+            }
+          ]
+        }
+      ]
+    },
+    "gear_reader_answer_master": {
+      "name": "대응 · 완성",
+      "description": "상성 파훼 성공 → 가드 16 회복 · 재발동 3초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onTacticWin",
+          "when": [],
+          "cooldown": 3,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "guard",
+              "value": 16
+            }
+          ]
+        }
+      ]
+    },
+    "gear_anchor": {
+      "name": "성벽 각반",
+      "description": "가드 성공 → 기력 3 회복 · 재발동 3초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onBlock",
+          "when": [],
+          "cooldown": 3,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "stamina",
+              "value": 3
+            }
+          ]
+        }
+      ]
+    },
+    "gear_anchor_fort": {
+      "name": "요새",
+      "description": "가드 성공 → 집중 6 획득 / 가드 4 회복 · 재발동 3초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onBlock",
+          "when": [],
+          "cooldown": 3,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "focus",
+              "value": 6
+            },
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "guard",
+              "value": 4
+            }
+          ]
+        }
+      ]
+    },
+    "gear_anchor_fort_master": {
+      "name": "요새 · 완성",
+      "description": "가드 성공 → 집중 10 획득 / 가드 7 회복 · 재발동 3초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onBlock",
+          "when": [],
+          "cooldown": 3,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "focus",
+              "value": 10
+            },
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "guard",
+              "value": 7
+            }
+          ]
+        }
+      ]
+    },
+    "gear_anchor_revenge": {
+      "name": "역습",
+      "description": "반격 성공 → 기력 8 회복 · 재발동 3초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onCounterHit",
+          "when": [],
+          "cooldown": 3,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "stamina",
+              "value": 8
+            }
+          ]
+        }
+      ]
+    },
+    "gear_anchor_revenge_master": {
+      "name": "역습 · 완성",
+      "description": "반격 성공 → 기력 13 회복 · 재발동 3초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onCounterHit",
+          "when": [],
+          "cooldown": 3,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "stamina",
+              "value": 13
+            }
+          ]
+        }
+      ]
+    },
+    "resonance_assault": {
+      "name": "공성 공명",
+      "description": "가드 붕괴 유발 → 기력 14 회복 · 집중 12 획득 · 재발동 5초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onBreak",
+          "when": [],
+          "cooldown": 5,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "stamina",
+              "value": 14
+            },
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "focus",
+              "value": 12
+            }
+          ]
+        }
+      ]
+    },
+    "resonance_hunt": {
+      "name": "추격 공명",
+      "description": "상대 헛침 → 3초간 이동 속도 +20% · 공격 기력 비용 -12% · 재발동 5초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onFoeWhiff",
+          "when": [],
+          "cooldown": 5,
+          "effects": [
+            {
+              "op": "status",
+              "target": "self",
+              "id": "res_hunt"
+            }
+          ]
+        }
+      ]
+    },
+    "resonance_bulwark": {
+      "name": "수호 공명",
+      "description": "가드 성공 → 3초간 피해 감소 +7%p · 재발동 5초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onBlock",
+          "when": [],
+          "cooldown": 5,
+          "effects": [
+            {
+              "op": "status",
+              "target": "self",
+              "id": "res_iron"
+            }
+          ]
+        }
+      ]
+    },
+    "resonance_insight": {
+      "name": "통찰 공명",
+      "description": "상성 파훼 성공 → 집중 16 획득 · 가드 10 회복 · 재발동 5초",
+      "source": "equipment",
+      "hooks": [
+        {
+          "trigger": "onTacticWin",
+          "when": [],
+          "cooldown": 5,
+          "effects": [
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "focus",
+              "value": 16
+            },
+            {
+              "op": "resource",
+              "target": "self",
+              "key": "guard",
+              "value": 10
+            }
+          ]
+        }
+      ]
     }
   },
   "training": [
@@ -2584,290 +4254,1194 @@ window.GAME_DB = {
   "modules": [
     {
       "id": "pad",
-      "name": "누비 갑옷",
-      "description": "내구를 늘리는 안정적인 선택.",
-      "cost": 30,
-      "upgradeCost": 21,
-      "upgradeGrowth": 1.6,
+      "name": "성채 누비갑옷",
+      "category": "bulwark",
+      "sigil": "bulwark",
+      "description": "수비를 버티는 대신 발이 무거워집니다.",
+      "cost": 45,
+      "upgradeCost": 32,
+      "upgradeGrowth": 2.15,
       "maxRank": 3,
       "stats": [
         {
           "stat": "hp",
           "op": "multiply",
-          "value": 1.06
+          "value": 1.18
+        },
+        {
+          "stat": "speed",
+          "op": "multiply",
+          "value": 0.9
+        }
+      ],
+      "trait": "gear_pad",
+      "forges": [
+        {
+          "id": "bastion",
+          "name": "성채",
+          "description": "가드를 끝까지 유지하는 중갑 특화.",
+          "stats": [
+            {
+              "stat": "guard",
+              "op": "multiply",
+              "value": 1.2
+            },
+            {
+              "stat": "moveCost",
+              "op": "multiply",
+              "value": 1.12
+            }
+          ],
+          "trait": "gear_pad_bastion",
+          "mastery": {
+            "stats": [
+              {
+                "stat": "hp",
+                "op": "multiply",
+                "value": 1.1
+              }
+            ],
+            "trait": "gear_pad_bastion_master"
+          }
+        },
+        {
+          "id": "duelist",
+          "name": "결투가",
+          "description": "무게를 덜어 회피 전투로 전환합니다.",
+          "stats": [
+            {
+              "stat": "speed",
+              "op": "multiply",
+              "value": 1.12
+            },
+            {
+              "stat": "hp",
+              "op": "multiply",
+              "value": 0.96
+            }
+          ],
+          "trait": "gear_pad_duelist",
+          "mastery": {
+            "stats": [
+              {
+                "stat": "evasion",
+                "op": "add",
+                "value": 0.04
+              }
+            ],
+            "trait": "gear_pad_duelist_master"
+          }
         }
       ]
     },
     {
       "id": "breath",
-      "name": "호흡의 부적",
-      "description": "기력 회복을 높여 긴 교환에 대비.",
-      "cost": 35,
-      "upgradeCost": 24,
-      "upgradeGrowth": 1.6,
+      "name": "성자의 숨결",
+      "category": "insight",
+      "sigil": "insight",
+      "description": "교환을 오래 이어가지만 한 방은 약해집니다.",
+      "cost": 45,
+      "upgradeCost": 34,
+      "upgradeGrowth": 2.15,
       "maxRank": 3,
       "stats": [
+        {
+          "stat": "stamina",
+          "op": "multiply",
+          "value": 1.16
+        },
         {
           "stat": "staminaRegen",
-          "op": "multiply",
-          "value": 1.12
-        }
-      ]
-    },
-    {
-      "id": "reach",
-      "name": "사슬 손목갑",
-      "description": "사거리를 늘리지만 가드가 줄어듦.",
-      "cost": 55,
-      "upgradeCost": 38,
-      "upgradeGrowth": 1.6,
-      "maxRank": 3,
-      "stats": [
-        {
-          "stat": "reach",
-          "op": "add",
-          "value": 0.22
-        },
-        {
-          "stat": "guard",
-          "op": "multiply",
-          "value": 0.94
-        }
-      ]
-    },
-    {
-      "id": "weight",
-      "name": "중철 건틀릿",
-      "description": "화력 증가. 공격 준비가 느려짐.",
-      "cost": 60,
-      "upgradeCost": 42,
-      "upgradeGrowth": 1.6,
-      "maxRank": 3,
-      "stats": [
-        {
-          "stat": "power",
-          "op": "multiply",
-          "value": 1.14
-        },
-        {
-          "stat": "attackSpeed",
-          "op": "multiply",
-          "value": 0.91
-        }
-      ]
-    },
-    {
-      "id": "ankle",
-      "name": "순풍 장화",
-      "description": "빠른 발. 이동 기력 소모 증가.",
-      "cost": 55,
-      "upgradeCost": 38,
-      "upgradeGrowth": 1.6,
-      "maxRank": 3,
-      "stats": [
-        {
-          "stat": "speed",
-          "op": "multiply",
-          "value": 1.18
-        },
-        {
-          "stat": "moveCost",
-          "op": "multiply",
-          "value": 1.15
-        }
-      ]
-    },
-    {
-      "id": "deceive",
-      "name": "잔영 망토",
-      "description": "속임수 강화. 직접 화력 감소.",
-      "cost": 50,
-      "upgradeCost": 35,
-      "upgradeGrowth": 1.6,
-      "maxRank": 3,
-      "stats": [
-        {
-          "stat": "feintPower",
           "op": "multiply",
           "value": 1.24
         },
         {
           "stat": "power",
           "op": "multiply",
-          "value": 0.96
+          "value": 0.9
+        }
+      ],
+      "trait": "gear_breath",
+      "forges": [
+        {
+          "id": "endless",
+          "name": "불굴",
+          "description": "긴 싸움의 기력 고갈을 막습니다.",
+          "stats": [
+            {
+              "stat": "staminaRegen",
+              "op": "multiply",
+              "value": 1.18
+            },
+            {
+              "stat": "power",
+              "op": "multiply",
+              "value": 0.95
+            }
+          ],
+          "trait": "gear_breath_endless",
+          "mastery": {
+            "stats": [
+              {
+                "stat": "stamina",
+                "op": "multiply",
+                "value": 1.12
+              }
+            ],
+            "trait": "gear_breath_endless_master"
+          }
+        },
+        {
+          "id": "leap",
+          "name": "도약",
+          "description": "회피를 다음 공세의 연료로 씁니다.",
+          "stats": [
+            {
+              "stat": "speed",
+              "op": "multiply",
+              "value": 1.12
+            },
+            {
+              "stat": "guard",
+              "op": "multiply",
+              "value": 0.9
+            }
+          ],
+          "trait": "gear_breath_leap",
+          "mastery": {
+            "stats": [
+              {
+                "stat": "staminaCost",
+                "op": "multiply",
+                "value": 0.91
+              }
+            ],
+            "trait": "gear_breath_leap_master"
+          }
+        }
+      ]
+    },
+    {
+      "id": "reach",
+      "name": "매사냥꾼 사슬갑",
+      "category": "hunt",
+      "sigil": "hunt",
+      "description": "긴 타격을 얻지만 근접 가드와 잡기가 약해집니다.",
+      "cost": 65,
+      "upgradeCost": 45,
+      "upgradeGrowth": 2.15,
+      "maxRank": 3,
+      "stats": [
+        {
+          "stat": "reach",
+          "op": "add",
+          "value": 0.35
+        },
+        {
+          "stat": "grabReach",
+          "op": "add",
+          "value": -0.08
+        },
+        {
+          "stat": "guard",
+          "op": "multiply",
+          "value": 0.85
+        }
+      ],
+      "trait": "gear_reach",
+      "forges": [
+        {
+          "id": "spear",
+          "name": "창끝",
+          "description": "안전 거리에서 타격 화력을 키웁니다.",
+          "stats": [
+            {
+              "stat": "strikePower",
+              "op": "multiply",
+              "value": 1.15
+            },
+            {
+              "stat": "guard",
+              "op": "multiply",
+              "value": 0.92
+            }
+          ],
+          "trait": "gear_reach_spear",
+          "mastery": {
+            "stats": [
+              {
+                "stat": "reach",
+                "op": "add",
+                "value": 0.12
+              }
+            ],
+            "trait": "gear_reach_spear_master"
+          }
+        },
+        {
+          "id": "reel",
+          "name": "거두기",
+          "description": "긴 타격 뒤 잡기로 파고듭니다.",
+          "stats": [
+            {
+              "stat": "grabReach",
+              "op": "add",
+              "value": 0.28
+            },
+            {
+              "stat": "strikePower",
+              "op": "multiply",
+              "value": 0.93
+            }
+          ],
+          "trait": "gear_reach_reel",
+          "mastery": {
+            "stats": [
+              {
+                "stat": "grabPower",
+                "op": "multiply",
+                "value": 1.12
+              }
+            ],
+            "trait": "gear_reach_reel_master"
+          }
+        }
+      ]
+    },
+    {
+      "id": "weight",
+      "name": "파성 건틀릿",
+      "category": "assault",
+      "sigil": "assault",
+      "description": "강한 정타를 얻지만 준비 동작이 느려집니다.",
+      "cost": 65,
+      "upgradeCost": 46,
+      "upgradeGrowth": 2.15,
+      "maxRank": 3,
+      "stats": [
+        {
+          "stat": "power",
+          "op": "multiply",
+          "value": 1.25
+        },
+        {
+          "stat": "attackSpeed",
+          "op": "multiply",
+          "value": 0.86
+        }
+      ],
+      "trait": "gear_weight",
+      "forges": [
+        {
+          "id": "crack",
+          "name": "균열",
+          "description": "연속 압박으로 방패를 깨뜨립니다.",
+          "stats": [
+            {
+              "stat": "guardDamage",
+              "op": "multiply",
+              "value": 1.28
+            },
+            {
+              "stat": "speed",
+              "op": "multiply",
+              "value": 0.93
+            }
+          ],
+          "trait": "gear_weight_crack",
+          "mastery": {
+            "stats": [
+              {
+                "stat": "guardDamage",
+                "op": "multiply",
+                "value": 1.15
+              }
+            ],
+            "trait": "gear_weight_crack_master"
+          }
+        },
+        {
+          "id": "execution",
+          "name": "일격",
+          "description": "상성 승리를 강력한 한 방으로 바꿉니다.",
+          "stats": [
+            {
+              "stat": "strikePower",
+              "op": "multiply",
+              "value": 1.2
+            },
+            {
+              "stat": "staminaCost",
+              "op": "multiply",
+              "value": 1.12
+            }
+          ],
+          "trait": "gear_weight_execution",
+          "mastery": {
+            "stats": [
+              {
+                "stat": "accuracy",
+                "op": "add",
+                "value": 0.04
+              }
+            ],
+            "trait": "gear_weight_execution_master"
+          }
+        }
+      ]
+    },
+    {
+      "id": "ankle",
+      "name": "바람 사냥 장화",
+      "category": "hunt",
+      "sigil": "hunt",
+      "description": "간격을 지배하지만 오래 달리면 기력이 샙니다.",
+      "cost": 60,
+      "upgradeCost": 43,
+      "upgradeGrowth": 2.15,
+      "maxRank": 3,
+      "stats": [
+        {
+          "stat": "speed",
+          "op": "multiply",
+          "value": 1.28
+        },
+        {
+          "stat": "moveCost",
+          "op": "multiply",
+          "value": 1.2
+        },
+        {
+          "stat": "guard",
+          "op": "multiply",
+          "value": 0.9
+        }
+      ],
+      "trait": "gear_ankle",
+      "forges": [
+        {
+          "id": "pursuit",
+          "name": "추격",
+          "description": "상대 헛침을 따라가 공격으로 잇습니다.",
+          "stats": [
+            {
+              "stat": "reach",
+              "op": "add",
+              "value": 0.2
+            },
+            {
+              "stat": "hp",
+              "op": "multiply",
+              "value": 0.94
+            }
+          ],
+          "trait": "gear_ankle_pursuit",
+          "mastery": {
+            "stats": [
+              {
+                "stat": "power",
+                "op": "multiply",
+                "value": 1.1
+              }
+            ],
+            "trait": "gear_ankle_pursuit_master"
+          }
+        },
+        {
+          "id": "wander",
+          "name": "유랑",
+          "description": "회피 성공으로 계속 움직입니다.",
+          "stats": [
+            {
+              "stat": "evasion",
+              "op": "add",
+              "value": 0.07
+            },
+            {
+              "stat": "power",
+              "op": "multiply",
+              "value": 0.94
+            }
+          ],
+          "trait": "gear_ankle_wander",
+          "mastery": {
+            "stats": [
+              {
+                "stat": "staminaRegen",
+                "op": "multiply",
+                "value": 1.18
+              }
+            ],
+            "trait": "gear_ankle_wander_master"
+          }
+        }
+      ]
+    },
+    {
+      "id": "deceive",
+      "name": "잔영 망토",
+      "category": "insight",
+      "sigil": "insight",
+      "description": "속임수에 성공해야 약한 정타를 보상받습니다.",
+      "cost": 60,
+      "upgradeCost": 42,
+      "upgradeGrowth": 2.15,
+      "maxRank": 3,
+      "stats": [
+        {
+          "stat": "feintPower",
+          "op": "multiply",
+          "value": 1.4
+        },
+        {
+          "stat": "power",
+          "op": "multiply",
+          "value": 0.88
+        }
+      ],
+      "trait": "gear_deceive",
+      "forges": [
+        {
+          "id": "illusion",
+          "name": "허상",
+          "description": "가드를 흔들어 다음 공격을 엽니다.",
+          "stats": [
+            {
+              "stat": "feintPower",
+              "op": "multiply",
+              "value": 1.22
+            },
+            {
+              "stat": "guard",
+              "op": "multiply",
+              "value": 0.92
+            }
+          ],
+          "trait": "gear_deceive_illusion",
+          "mastery": {
+            "stats": [
+              {
+                "stat": "feintPower",
+                "op": "multiply",
+                "value": 1.13
+              }
+            ],
+            "trait": "gear_deceive_illusion_master"
+          }
+        },
+        {
+          "id": "ambush",
+          "name": "암습",
+          "description": "속임수 뒤 잡기 결정기를 준비합니다.",
+          "stats": [
+            {
+              "stat": "grabPower",
+              "op": "multiply",
+              "value": 1.2
+            },
+            {
+              "stat": "staminaCost",
+              "op": "multiply",
+              "value": 1.08
+            }
+          ],
+          "trait": "gear_deceive_ambush",
+          "mastery": {
+            "stats": [
+              {
+                "stat": "grabAccuracy",
+                "op": "add",
+                "value": 0.06
+              }
+            ],
+            "trait": "gear_deceive_ambush_master"
+          }
         }
       ]
     },
     {
       "id": "lung",
-      "name": "활력 부적",
-      "description": "기력 여유와 회복을 확보.",
+      "name": "불씨 심장석",
+      "category": "assault",
+      "sigil": "assault",
+      "description": "연속 공격을 돕지만 피해를 더 받습니다.",
       "cost": 65,
-      "upgradeCost": 46,
-      "upgradeGrowth": 1.6,
+      "upgradeCost": 44,
+      "upgradeGrowth": 2.15,
       "maxRank": 3,
       "stats": [
         {
           "stat": "stamina",
           "op": "multiply",
-          "value": 1.12
+          "value": 1.25
         },
         {
           "stat": "staminaRegen",
           "op": "multiply",
-          "value": 1.15
+          "value": 1.12
+        },
+        {
+          "stat": "armor",
+          "op": "add",
+          "value": -0.025
+        }
+      ],
+      "trait": "gear_lung",
+      "forges": [
+        {
+          "id": "burn",
+          "name": "연소",
+          "description": "빠르게 공격해 집중을 모읍니다.",
+          "stats": [
+            {
+              "stat": "attackSpeed",
+              "op": "multiply",
+              "value": 1.14
+            },
+            {
+              "stat": "staminaCost",
+              "op": "multiply",
+              "value": 1.1
+            }
+          ],
+          "trait": "gear_lung_burn",
+          "mastery": {
+            "stats": [
+              {
+                "stat": "strikePower",
+                "op": "multiply",
+                "value": 1.12
+              }
+            ],
+            "trait": "gear_lung_burn_master"
+          }
+        },
+        {
+          "id": "ember",
+          "name": "잔불",
+          "description": "위기에서 버티며 다시 교환합니다.",
+          "stats": [
+            {
+              "stat": "hp",
+              "op": "multiply",
+              "value": 1.1
+            },
+            {
+              "stat": "speed",
+              "op": "multiply",
+              "value": 0.96
+            }
+          ],
+          "trait": "gear_lung_ember",
+          "mastery": {
+            "stats": [
+              {
+                "stat": "armor",
+                "op": "add",
+                "value": 0.035
+              }
+            ],
+            "trait": "gear_lung_ember_master"
+          }
         }
       ]
     },
     {
       "id": "hardguard",
-      "name": "강철 완갑",
-      "description": "가드를 늘리지만 발이 느려짐.",
-      "cost": 60,
-      "upgradeCost": 42,
-      "upgradeGrowth": 1.6,
+      "name": "서약의 방패",
+      "category": "bulwark",
+      "sigil": "bulwark",
+      "description": "단단한 가드를 얻지만 잡기 진입을 피하기 어렵습니다.",
+      "cost": 65,
+      "upgradeCost": 45,
+      "upgradeGrowth": 2.15,
       "maxRank": 3,
       "stats": [
         {
           "stat": "guard",
           "op": "multiply",
-          "value": 1.23
+          "value": 1.35
         },
         {
           "stat": "speed",
           "op": "multiply",
-          "value": 0.94
+          "value": 0.88
+        }
+      ],
+      "trait": "gear_hardguard",
+      "forges": [
+        {
+          "id": "echo",
+          "name": "반향",
+          "description": "막은 뒤 반격으로 되돌려줍니다.",
+          "stats": [
+            {
+              "stat": "counterPower",
+              "op": "multiply",
+              "value": 1.2
+            },
+            {
+              "stat": "grabPower",
+              "op": "multiply",
+              "value": 0.9
+            }
+          ],
+          "trait": "gear_hardguard_echo",
+          "mastery": {
+            "stats": [
+              {
+                "stat": "counterChance",
+                "op": "add",
+                "value": 0.05
+              }
+            ],
+            "trait": "gear_hardguard_echo_master"
+          }
+        },
+        {
+          "id": "siege",
+          "name": "압성",
+          "description": "버티며 상대 가드를 먼저 무너뜨립니다.",
+          "stats": [
+            {
+              "stat": "guardDamage",
+              "op": "multiply",
+              "value": 1.22
+            },
+            {
+              "stat": "staminaCost",
+              "op": "multiply",
+              "value": 1.1
+            }
+          ],
+          "trait": "gear_hardguard_siege",
+          "mastery": {
+            "stats": [
+              {
+                "stat": "guardRegen",
+                "op": "multiply",
+                "value": 1.2
+              }
+            ],
+            "trait": "gear_hardguard_siege_master"
+          }
         }
       ]
     },
     {
       "id": "parry",
       "name": "흘림 손목띠",
-      "description": "가드 효율과 반격 성공률 강화.",
+      "category": "insight",
+      "sigil": "insight",
+      "description": "타격 반격에 강해지지만 잡기 화력을 잃습니다.",
       "cost": 65,
-      "upgradeCost": 46,
-      "upgradeGrowth": 1.6,
+      "upgradeCost": 45,
+      "upgradeGrowth": 2.15,
       "maxRank": 3,
       "stats": [
         {
-          "stat": "blockBonus",
-          "op": "add",
-          "value": 0.08
-        },
-        {
           "stat": "counterChance",
           "op": "add",
-          "value": 0.045
+          "value": 0.1
+        },
+        {
+          "stat": "counterPower",
+          "op": "multiply",
+          "value": 1.16
+        },
+        {
+          "stat": "grabPower",
+          "op": "multiply",
+          "value": 0.8
+        }
+      ],
+      "trait": "gear_parry",
+      "forges": [
+        {
+          "id": "read",
+          "name": "판독",
+          "description": "같은 공격을 반복하는 상대를 노립니다.",
+          "stats": [
+            {
+              "stat": "readBonus",
+              "op": "add",
+              "value": 0.07
+            },
+            {
+              "stat": "hp",
+              "op": "multiply",
+              "value": 0.95
+            }
+          ],
+          "trait": "gear_parry_read",
+          "mastery": {
+            "stats": [
+              {
+                "stat": "counterPower",
+                "op": "multiply",
+                "value": 1.12
+              }
+            ],
+            "trait": "gear_parry_read_master"
+          }
+        },
+        {
+          "id": "reverse",
+          "name": "반전",
+          "description": "반격을 경계하는 상대를 잡기로 낚습니다.",
+          "stats": [
+            {
+              "stat": "grabAccuracy",
+              "op": "add",
+              "value": 0.12
+            },
+            {
+              "stat": "counterPower",
+              "op": "multiply",
+              "value": 0.92
+            }
+          ],
+          "trait": "gear_parry_reverse",
+          "mastery": {
+            "stats": [
+              {
+                "stat": "grabPower",
+                "op": "multiply",
+                "value": 1.18
+              }
+            ],
+            "trait": "gear_parry_reverse_master"
+          }
         }
       ]
     },
     {
       "id": "grip",
-      "name": "제압 장갑",
-      "description": "잡기의 명중과 피해 강화.",
-      "cost": 60,
-      "upgradeCost": 42,
-      "upgradeGrowth": 1.6,
+      "name": "거인의 매듭장갑",
+      "category": "assault",
+      "sigil": "assault",
+      "description": "강력한 잡기 대신 타격 거리를 포기합니다.",
+      "cost": 65,
+      "upgradeCost": 45,
+      "upgradeGrowth": 2.15,
       "maxRank": 3,
       "stats": [
         {
-          "stat": "grabAccuracy",
-          "op": "add",
-          "value": 0.07
-        },
-        {
           "stat": "grabPower",
           "op": "multiply",
-          "value": 1.13
+          "value": 1.28
+        },
+        {
+          "stat": "grabAccuracy",
+          "op": "add",
+          "value": 0.08
+        },
+        {
+          "stat": "reach",
+          "op": "add",
+          "value": -0.22
+        }
+      ],
+      "trait": "gear_grip",
+      "forges": [
+        {
+          "id": "crush",
+          "name": "압착",
+          "description": "가까이 붙어 가드와 기력을 함께 뺏습니다.",
+          "stats": [
+            {
+              "stat": "grabPower",
+              "op": "multiply",
+              "value": 1.2
+            },
+            {
+              "stat": "attackSpeed",
+              "op": "multiply",
+              "value": 0.94
+            }
+          ],
+          "trait": "gear_grip_crush",
+          "mastery": {
+            "stats": [
+              {
+                "stat": "grabReach",
+                "op": "add",
+                "value": 0.14
+              }
+            ],
+            "trait": "gear_grip_crush_master"
+          }
+        },
+        {
+          "id": "catch",
+          "name": "사냥",
+          "description": "반격 대기를 잡아 다음 공격을 잇습니다.",
+          "stats": [
+            {
+              "stat": "grabReach",
+              "op": "add",
+              "value": 0.28
+            },
+            {
+              "stat": "power",
+              "op": "multiply",
+              "value": 0.95
+            }
+          ],
+          "trait": "gear_grip_catch",
+          "mastery": {
+            "stats": [
+              {
+                "stat": "speed",
+                "op": "multiply",
+                "value": 1.1
+              }
+            ],
+            "trait": "gear_grip_catch_master"
+          }
         }
       ]
     },
     {
       "id": "breaker",
-      "name": "파성 완갑",
-      "description": "가드 압박 증가. 체력 감소.",
-      "cost": 60,
-      "upgradeCost": 42,
-      "upgradeGrowth": 1.6,
+      "name": "공성 인장",
+      "category": "assault",
+      "sigil": "assault",
+      "description": "가드를 빠르게 깨지만 체력이 낮아집니다.",
+      "cost": 65,
+      "upgradeCost": 46,
+      "upgradeGrowth": 2.15,
       "maxRank": 3,
       "stats": [
         {
           "stat": "guardDamage",
           "op": "multiply",
-          "value": 1.28
+          "value": 1.45
         },
         {
           "stat": "hp",
           "op": "multiply",
-          "value": 0.94
+          "value": 0.88
+        }
+      ],
+      "trait": "gear_breaker",
+      "forges": [
+        {
+          "id": "rupture",
+          "name": "파열",
+          "description": "붕괴 뒤 상대의 기력까지 끊습니다.",
+          "stats": [
+            {
+              "stat": "power",
+              "op": "multiply",
+              "value": 1.12
+            },
+            {
+              "stat": "guard",
+              "op": "multiply",
+              "value": 0.88
+            }
+          ],
+          "trait": "gear_breaker_rupture",
+          "mastery": {
+            "stats": [
+              {
+                "stat": "guardDamage",
+                "op": "multiply",
+                "value": 1.17
+              }
+            ],
+            "trait": "gear_breaker_rupture_master"
+          }
+        },
+        {
+          "id": "plunder",
+          "name": "약탈",
+          "description": "방패를 부수며 자신의 기력을 채웁니다.",
+          "stats": [
+            {
+              "stat": "staminaCost",
+              "op": "multiply",
+              "value": 0.9
+            },
+            {
+              "stat": "counterPower",
+              "op": "multiply",
+              "value": 0.9
+            }
+          ],
+          "trait": "gear_breaker_plunder",
+          "mastery": {
+            "stats": [
+              {
+                "stat": "focusGain",
+                "op": "multiply",
+                "value": 1.16
+              }
+            ],
+            "trait": "gear_breaker_plunder_master"
+          }
         }
       ]
     },
     {
       "id": "neural",
-      "name": "결단 인장",
-      "description": "전술 지연 감소, 집중 획득 증가.",
+      "name": "전장의 맹세",
+      "category": "insight",
+      "sigil": "insight",
+      "description": "전술 전환과 결정기가 빨라지지만 맷집이 약해집니다.",
       "cost": 65,
-      "upgradeCost": 46,
-      "upgradeGrowth": 1.6,
+      "upgradeCost": 44,
+      "upgradeGrowth": 2.15,
       "maxRank": 3,
       "stats": [
         {
           "stat": "tacticLag",
           "op": "multiply",
-          "value": 0.65
+          "value": 0.55
         },
         {
           "stat": "focusGain",
           "op": "multiply",
-          "value": 1.14
+          "value": 1.2
+        },
+        {
+          "stat": "hp",
+          "op": "multiply",
+          "value": 0.9
+        }
+      ],
+      "trait": "gear_neural",
+      "forges": [
+        {
+          "id": "resolve",
+          "name": "결단",
+          "description": "빠른 전환으로 상대의 수를 덮습니다.",
+          "stats": [
+            {
+              "stat": "attackSpeed",
+              "op": "multiply",
+              "value": 1.1
+            },
+            {
+              "stat": "moveCost",
+              "op": "multiply",
+              "value": 1.15
+            }
+          ],
+          "trait": "gear_neural_resolve",
+          "mastery": {
+            "stats": [
+              {
+                "stat": "speed",
+                "op": "multiply",
+                "value": 1.1
+              }
+            ],
+            "trait": "gear_neural_resolve_master"
+          }
+        },
+        {
+          "id": "foresee",
+          "name": "예견",
+          "description": "반복 습관을 읽고 수비를 복구합니다.",
+          "stats": [
+            {
+              "stat": "readBonus",
+              "op": "add",
+              "value": 0.055
+            },
+            {
+              "stat": "power",
+              "op": "multiply",
+              "value": 0.95
+            }
+          ],
+          "trait": "gear_neural_foresee",
+          "mastery": {
+            "stats": [
+              {
+                "stat": "counterChance",
+                "op": "add",
+                "value": 0.04
+              }
+            ],
+            "trait": "gear_neural_foresee_master"
+          }
         }
       ]
     },
     {
       "id": "reader",
-      "name": "통찰의 렌즈",
-      "description": "반복 행동에 대한 분석·반격 강화.",
-      "cost": 55,
-      "upgradeCost": 38,
-      "upgradeGrowth": 1.6,
+      "name": "용의 눈 렌즈",
+      "category": "insight",
+      "sigil": "insight",
+      "description": "습관을 읽는 반격을 강화하지만 잡기 명중이 낮아집니다.",
+      "cost": 60,
+      "upgradeCost": 43,
+      "upgradeGrowth": 2.15,
       "maxRank": 3,
       "stats": [
         {
           "stat": "readBonus",
           "op": "add",
-          "value": 0.045
+          "value": 0.09
         },
         {
           "stat": "counterPower",
           "op": "multiply",
-          "value": 1.09
+          "value": 1.18
+        },
+        {
+          "stat": "grabAccuracy",
+          "op": "add",
+          "value": -0.08
+        }
+      ],
+      "trait": "gear_reader",
+      "forges": [
+        {
+          "id": "punish",
+          "name": "응징",
+          "description": "상대의 헛친 타격을 추격합니다.",
+          "stats": [
+            {
+              "stat": "strikePower",
+              "op": "multiply",
+              "value": 1.16
+            },
+            {
+              "stat": "speed",
+              "op": "multiply",
+              "value": 0.95
+            }
+          ],
+          "trait": "gear_reader_punish",
+          "mastery": {
+            "stats": [
+              {
+                "stat": "reach",
+                "op": "add",
+                "value": 0.16
+              }
+            ],
+            "trait": "gear_reader_punish_master"
+          }
+        },
+        {
+          "id": "answer",
+          "name": "대응",
+          "description": "정확한 파훼로 가드를 유지합니다.",
+          "stats": [
+            {
+              "stat": "tacticLag",
+              "op": "multiply",
+              "value": 0.72
+            },
+            {
+              "stat": "guard",
+              "op": "multiply",
+              "value": 0.94
+            }
+          ],
+          "trait": "gear_reader_answer",
+          "mastery": {
+            "stats": [
+              {
+                "stat": "evasion",
+                "op": "add",
+                "value": 0.04
+              }
+            ],
+            "trait": "gear_reader_answer_master"
+          }
         }
       ]
     },
     {
       "id": "anchor",
-      "name": "수호 각반",
-      "description": "장갑·가드 회복. 이동 속도 감소.",
-      "cost": 55,
-      "upgradeCost": 38,
-      "upgradeGrowth": 1.6,
+      "name": "성벽 각반",
+      "category": "bulwark",
+      "sigil": "bulwark",
+      "description": "피해를 견디지만 거리 싸움에서 느려집니다.",
+      "cost": 60,
+      "upgradeCost": 43,
+      "upgradeGrowth": 2.15,
       "maxRank": 3,
       "stats": [
         {
           "stat": "armor",
           "op": "add",
-          "value": 0.025
+          "value": 0.075
         },
         {
           "stat": "guardRegen",
           "op": "multiply",
-          "value": 1.15
+          "value": 1.2
         },
         {
           "stat": "speed",
           "op": "multiply",
-          "value": 0.96
+          "value": 0.84
+        }
+      ],
+      "trait": "gear_anchor",
+      "forges": [
+        {
+          "id": "fort",
+          "name": "요새",
+          "description": "수비 성공으로 결정기를 준비합니다.",
+          "stats": [
+            {
+              "stat": "guard",
+              "op": "multiply",
+              "value": 1.2
+            },
+            {
+              "stat": "power",
+              "op": "multiply",
+              "value": 0.93
+            }
+          ],
+          "trait": "gear_anchor_fort",
+          "mastery": {
+            "stats": [
+              {
+                "stat": "hp",
+                "op": "multiply",
+                "value": 1.1
+              }
+            ],
+            "trait": "gear_anchor_fort_master"
+          }
+        },
+        {
+          "id": "revenge",
+          "name": "역습",
+          "description": "강한 반격으로 다시 공세를 가져옵니다.",
+          "stats": [
+            {
+              "stat": "counterPower",
+              "op": "multiply",
+              "value": 1.2
+            },
+            {
+              "stat": "guardRegen",
+              "op": "multiply",
+              "value": 0.92
+            }
+          ],
+          "trait": "gear_anchor_revenge",
+          "mastery": {
+            "stats": [
+              {
+                "stat": "counterChance",
+                "op": "add",
+                "value": 0.05
+              }
+            ],
+            "trait": "gear_anchor_revenge_master"
+          }
         }
       ]
     }
@@ -2934,21 +5508,26 @@ window.GAME_DB = {
     {
       "id": "jin_specialist",
       "name": "진의 숙련",
-      "description": "고유 강점을 강화하는 전문화.",
+      "description": "주력 피해를 크게 높이지만 다른 공격의 피해가 줄어듭니다.",
       "level": 4,
       "character": "jin",
       "stats": [
         {
           "stat": "power",
           "op": "multiply",
-          "value": 1.12
+          "value": 1.2
+        },
+        {
+          "stat": "grabPower",
+          "op": "multiply",
+          "value": 0.88
         }
       ]
     },
     {
       "id": "jin_balanced",
       "name": "진의 균형",
-      "description": "약점을 보완하는 다른 길.",
+      "description": "약점을 보완하는 대신 주력 화력을 조금 줄입니다.",
       "level": 4,
       "character": "jin",
       "stats": [
@@ -2956,27 +5535,37 @@ window.GAME_DB = {
           "stat": "guard",
           "op": "multiply",
           "value": 1.13
+        },
+        {
+          "stat": "power",
+          "op": "multiply",
+          "value": 0.95
         }
       ]
     },
     {
       "id": "taeo_specialist",
       "name": "태오의 숙련",
-      "description": "고유 강점을 강화하는 전문화.",
+      "description": "주력 피해를 크게 높이지만 다른 공격의 피해가 줄어듭니다.",
       "level": 4,
       "character": "taeo",
       "stats": [
         {
           "stat": "power",
           "op": "multiply",
-          "value": 1.12
+          "value": 1.2
+        },
+        {
+          "stat": "grabPower",
+          "op": "multiply",
+          "value": 0.88
         }
       ]
     },
     {
       "id": "taeo_balanced",
       "name": "태오의 균형",
-      "description": "약점을 보완하는 다른 길.",
+      "description": "약점을 보완하는 대신 주력 화력을 조금 줄입니다.",
       "level": 4,
       "character": "taeo",
       "stats": [
@@ -2984,27 +5573,37 @@ window.GAME_DB = {
           "stat": "guard",
           "op": "multiply",
           "value": 1.13
+        },
+        {
+          "stat": "power",
+          "op": "multiply",
+          "value": 0.95
         }
       ]
     },
     {
       "id": "garam_specialist",
       "name": "가람의 숙련",
-      "description": "고유 강점을 강화하는 전문화.",
+      "description": "주력 피해를 크게 높이지만 다른 공격의 피해가 줄어듭니다.",
       "level": 4,
       "character": "garam",
       "stats": [
         {
           "stat": "grabPower",
           "op": "multiply",
-          "value": 1.12
+          "value": 1.2
+        },
+        {
+          "stat": "strikePower",
+          "op": "multiply",
+          "value": 0.88
         }
       ]
     },
     {
       "id": "garam_balanced",
       "name": "가람의 균형",
-      "description": "약점을 보완하는 다른 길.",
+      "description": "약점을 보완하는 대신 주력 화력을 조금 줄입니다.",
       "level": 4,
       "character": "garam",
       "stats": [
@@ -3012,27 +5611,37 @@ window.GAME_DB = {
           "stat": "speed",
           "op": "multiply",
           "value": 1.13
+        },
+        {
+          "stat": "power",
+          "op": "multiply",
+          "value": 0.95
         }
       ]
     },
     {
       "id": "yuna_specialist",
       "name": "유나의 숙련",
-      "description": "고유 강점을 강화하는 전문화.",
+      "description": "주력 피해를 크게 높이지만 다른 공격의 피해가 줄어듭니다.",
       "level": 4,
       "character": "yuna",
       "stats": [
         {
           "stat": "grabPower",
           "op": "multiply",
-          "value": 1.12
+          "value": 1.2
+        },
+        {
+          "stat": "strikePower",
+          "op": "multiply",
+          "value": 0.88
         }
       ]
     },
     {
       "id": "yuna_balanced",
       "name": "유나의 균형",
-      "description": "약점을 보완하는 다른 길.",
+      "description": "약점을 보완하는 대신 주력 화력을 조금 줄입니다.",
       "level": 4,
       "character": "yuna",
       "stats": [
@@ -3040,27 +5649,37 @@ window.GAME_DB = {
           "stat": "speed",
           "op": "multiply",
           "value": 1.13
+        },
+        {
+          "stat": "power",
+          "op": "multiply",
+          "value": 0.95
         }
       ]
     },
     {
       "id": "sion_specialist",
       "name": "시온의 숙련",
-      "description": "고유 강점을 강화하는 전문화.",
+      "description": "주력 피해를 크게 높이지만 다른 공격의 피해가 줄어듭니다.",
       "level": 4,
       "character": "sion",
       "stats": [
         {
           "stat": "counterPower",
           "op": "multiply",
-          "value": 1.12
+          "value": 1.2
+        },
+        {
+          "stat": "strikePower",
+          "op": "multiply",
+          "value": 0.88
         }
       ]
     },
     {
       "id": "sion_balanced",
       "name": "시온의 균형",
-      "description": "약점을 보완하는 다른 길.",
+      "description": "약점을 보완하는 대신 주력 화력을 조금 줄입니다.",
       "level": 4,
       "character": "sion",
       "stats": [
@@ -3068,27 +5687,37 @@ window.GAME_DB = {
           "stat": "grabPower",
           "op": "multiply",
           "value": 1.13
+        },
+        {
+          "stat": "power",
+          "op": "multiply",
+          "value": 0.95
         }
       ]
     },
     {
       "id": "mira_specialist",
       "name": "미라의 숙련",
-      "description": "고유 강점을 강화하는 전문화.",
+      "description": "주력 피해를 크게 높이지만 다른 공격의 피해가 줄어듭니다.",
       "level": 4,
       "character": "mira",
       "stats": [
         {
           "stat": "counterPower",
           "op": "multiply",
-          "value": 1.12
+          "value": 1.2
+        },
+        {
+          "stat": "strikePower",
+          "op": "multiply",
+          "value": 0.88
         }
       ]
     },
     {
       "id": "mira_balanced",
       "name": "미라의 균형",
-      "description": "약점을 보완하는 다른 길.",
+      "description": "약점을 보완하는 대신 주력 화력을 조금 줄입니다.",
       "level": 4,
       "character": "mira",
       "stats": [
@@ -3096,6 +5725,11 @@ window.GAME_DB = {
           "stat": "grabPower",
           "op": "multiply",
           "value": 1.13
+        },
+        {
+          "stat": "power",
+          "op": "multiply",
+          "value": 0.95
         }
       ]
     }
@@ -3112,7 +5746,21 @@ window.GAME_DB = {
       "modules": [],
       "talents": [
         "steady"
-      ]
+      ],
+      "tactics": {
+        "focus": "grab",
+        "range": "auto",
+        "defense": "block"
+      },
+      "sequence": [
+        "grab",
+        "grab",
+        "strike"
+      ],
+      "scout": {
+        "habit": "붙어서 잡기를 반복합니다.",
+        "weakness": "잡기를 준비할 때 긴 타격으로 먼저 끊으세요."
+      }
     },
     {
       "id": "rival_2",
@@ -3122,10 +5770,30 @@ window.GAME_DB = {
       "name": "긴 거리의 벽",
       "preset": "keepout",
       "rewardBonus": 2,
-      "modules": [],
+      "modules": [
+        {
+          "id": "reach",
+          "rank": 1,
+          "forge": "spear"
+        }
+      ],
       "talents": [
         "steady"
-      ]
+      ],
+      "tactics": {
+        "focus": "strike",
+        "range": "auto",
+        "defense": "evade"
+      },
+      "sequence": [
+        "strike",
+        "strike",
+        "counter"
+      ],
+      "scout": {
+        "habit": "긴 타격을 두 번 누른 뒤 반격을 섞습니다.",
+        "weakness": "타격을 반격한 뒤, 대기가 길어지면 잡기로 전환하세요."
+      }
     },
     {
       "id": "rival_3",
@@ -3135,10 +5803,30 @@ window.GAME_DB = {
       "name": "굳은 가드",
       "preset": "shell",
       "rewardBonus": 4,
-      "modules": [],
+      "modules": [
+        {
+          "id": "hardguard",
+          "rank": 1,
+          "forge": "echo"
+        }
+      ],
       "talents": [
         "steady"
-      ]
+      ],
+      "tactics": {
+        "focus": "counter",
+        "range": "auto",
+        "defense": "block"
+      },
+      "sequence": [
+        "counter",
+        "counter",
+        "strike"
+      ],
+      "scout": {
+        "habit": "가드와 반격으로 체력을 지킵니다.",
+        "weakness": "잡기는 가드와 반격을 모두 무시합니다."
+      }
     },
     {
       "id": "rival_4",
@@ -3149,11 +5837,29 @@ window.GAME_DB = {
       "preset": "trick",
       "rewardBonus": 6,
       "modules": [
-        "breath"
+        {
+          "id": "deceive",
+          "rank": 1,
+          "forge": "illusion"
+        }
       ],
       "talents": [
         "steady"
-      ]
+      ],
+      "tactics": {
+        "focus": "grab",
+        "range": "auto",
+        "defense": "evade"
+      },
+      "sequence": [
+        "grab",
+        "counter",
+        "grab"
+      ],
+      "scout": {
+        "habit": "속임수 뒤 빠르게 태클을 노립니다.",
+        "weakness": "긴 간격에서 타격하고, 회피 중에는 기력을 남기세요."
+      }
     },
     {
       "id": "rival_5",
@@ -3164,11 +5870,29 @@ window.GAME_DB = {
       "preset": "pressure",
       "rewardBonus": 8,
       "modules": [
-        "breath"
+        {
+          "id": "weight",
+          "rank": 1,
+          "forge": "crack"
+        }
       ],
       "talents": [
         "steady"
-      ]
+      ],
+      "tactics": {
+        "focus": "strike",
+        "range": "auto",
+        "defense": "evade"
+      },
+      "sequence": [
+        "strike",
+        "strike",
+        "grab"
+      ],
+      "scout": {
+        "habit": "연타로 가드를 깎다가 잡기로 바꿉니다.",
+        "weakness": "연타는 반격으로 끊고 잡기 전환 때 거리를 벌리세요."
+      }
     },
     {
       "id": "rival_6",
@@ -3179,12 +5903,30 @@ window.GAME_DB = {
       "preset": "read",
       "rewardBonus": 10,
       "modules": [
-        "breath"
+        {
+          "id": "parry",
+          "rank": 1,
+          "forge": "read"
+        }
       ],
       "talents": [
         "steady",
         "precision"
-      ]
+      ],
+      "tactics": {
+        "focus": "counter",
+        "range": "auto",
+        "defense": "evade"
+      },
+      "sequence": [
+        "counter",
+        "grab",
+        "counter"
+      ],
+      "scout": {
+        "habit": "반복 행동을 읽어 대응을 바꿉니다.",
+        "weakness": "한 노림수에 머물지 말고 실제 전환을 확인하세요."
+      }
     },
     {
       "id": "rival_7",
@@ -3195,13 +5937,35 @@ window.GAME_DB = {
       "preset": "clinch",
       "rewardBonus": 12,
       "modules": [
-        "breath",
-        "pad"
+        {
+          "id": "grip",
+          "rank": 2,
+          "forge": "crush"
+        },
+        {
+          "id": "pad",
+          "rank": 2,
+          "forge": "bastion"
+        }
       ],
       "talents": [
         "steady",
         "precision"
-      ]
+      ],
+      "tactics": {
+        "focus": "grab",
+        "range": "auto",
+        "defense": "block"
+      },
+      "sequence": [
+        "grab",
+        "strike",
+        "grab"
+      ],
+      "scout": {
+        "habit": "공세를 유지하며 외곽으로 몰아붙입니다.",
+        "weakness": "가드만 믿지 말고 타격으로 진입을 끊으세요."
+      }
     },
     {
       "id": "rival_8",
@@ -3212,13 +5976,35 @@ window.GAME_DB = {
       "preset": "keepout",
       "rewardBonus": 14,
       "modules": [
-        "breath",
-        "pad"
+        {
+          "id": "reach",
+          "rank": 2,
+          "forge": "spear"
+        },
+        {
+          "id": "ankle",
+          "rank": 2,
+          "forge": "pursuit"
+        }
       ],
       "talents": [
         "steady",
         "precision"
-      ]
+      ],
+      "tactics": {
+        "focus": "strike",
+        "range": "auto",
+        "defense": "evade"
+      },
+      "sequence": [
+        "strike",
+        "counter",
+        "strike"
+      ],
+      "scout": {
+        "habit": "사거리 끝에서 헛친 공격을 추격합니다.",
+        "weakness": "반격 간격을 맞추거나 밀착해 잡기를 노리세요."
+      }
     },
     {
       "id": "rival_9",
@@ -3229,13 +6015,35 @@ window.GAME_DB = {
       "preset": "shell",
       "rewardBonus": 16,
       "modules": [
-        "breath",
-        "pad"
+        {
+          "id": "hardguard",
+          "rank": 2,
+          "forge": "echo"
+        },
+        {
+          "id": "anchor",
+          "rank": 2,
+          "forge": "fort"
+        }
       ],
       "talents": [
         "steady",
         "precision"
-      ]
+      ],
+      "tactics": {
+        "focus": "counter",
+        "range": "auto",
+        "defense": "block"
+      },
+      "sequence": [
+        "counter",
+        "strike",
+        "counter"
+      ],
+      "scout": {
+        "habit": "수호 장비로 긴 교환을 버팁니다.",
+        "weakness": "잡기로 가드를 우회하고 회복할 틈을 끊으세요."
+      }
     },
     {
       "id": "rival_10",
@@ -3246,14 +6054,35 @@ window.GAME_DB = {
       "preset": "pressure",
       "rewardBonus": 18,
       "modules": [
-        "breath",
-        "pad",
-        "reader"
+        {
+          "id": "weight",
+          "rank": 2,
+          "forge": "crack"
+        },
+        {
+          "id": "breaker",
+          "rank": 2,
+          "forge": "rupture"
+        }
       ],
       "talents": [
         "steady",
         "precision"
-      ]
+      ],
+      "tactics": {
+        "focus": "strike",
+        "range": "auto",
+        "defense": "evade"
+      },
+      "sequence": [
+        "strike",
+        "grab",
+        "strike"
+      ],
+      "scout": {
+        "habit": "공성 장비로 가드를 파괴합니다.",
+        "weakness": "회피·반격으로 정타를 줄이고 기력 소모를 유도하세요."
+      }
     },
     {
       "id": "rival_11",
@@ -3264,14 +6093,40 @@ window.GAME_DB = {
       "preset": "trick",
       "rewardBonus": 20,
       "modules": [
-        "breath",
-        "pad",
-        "reader"
+        {
+          "id": "deceive",
+          "rank": 2,
+          "forge": "illusion"
+        },
+        {
+          "id": "ankle",
+          "rank": 2,
+          "forge": "pursuit"
+        },
+        {
+          "id": "grip",
+          "rank": 2,
+          "forge": "crush"
+        }
       ],
       "talents": [
         "steady",
         "precision"
-      ]
+      ],
+      "tactics": {
+        "focus": "grab",
+        "range": "auto",
+        "defense": "evade"
+      },
+      "sequence": [
+        "grab",
+        "counter",
+        "strike"
+      ],
+      "scout": {
+        "habit": "진입과 회피를 번갈아 결정기를 준비합니다.",
+        "weakness": "타격으로 진입을 막고 회피가 이어질 때 회복하세요."
+      }
     },
     {
       "id": "rival_12",
@@ -3282,14 +6137,40 @@ window.GAME_DB = {
       "preset": "read",
       "rewardBonus": 22,
       "modules": [
-        "breath",
-        "pad",
-        "reader"
+        {
+          "id": "parry",
+          "rank": 2,
+          "forge": "read"
+        },
+        {
+          "id": "reader",
+          "rank": 2,
+          "forge": "punish"
+        },
+        {
+          "id": "neural",
+          "rank": 2,
+          "forge": "resolve"
+        }
       ],
       "talents": [
         "steady",
         "precision"
-      ]
+      ],
+      "tactics": {
+        "focus": "counter",
+        "range": "auto",
+        "defense": "evade"
+      },
+      "sequence": [
+        "counter",
+        "strike",
+        "grab"
+      ],
+      "scout": {
+        "habit": "상황에 따라 세 노림수를 모두 전환합니다.",
+        "weakness": "예고된 노림수와 최근 기술을 함께 읽으세요."
+      }
     }
   ],
   "ai": {
@@ -3299,28 +6180,32 @@ window.GAME_DB = {
         "adapt": 0.42,
         "recoverAt": 0.25,
         "focusAt": 0.3,
-        "aggression": 0.4
+        "aggression": 0.4,
+        "baitChance": 0.15
       },
       "rush": {
         "name": "공세형",
         "adapt": 0.28,
         "recoverAt": 0.15,
         "focusAt": 0.23,
-        "aggression": 0.75
+        "aggression": 0.75,
+        "baitChance": 0.1
       },
       "reader": {
         "name": "분석형",
         "adapt": 0.78,
         "recoverAt": 0.34,
         "focusAt": 0.4,
-        "aggression": 0.3
+        "aggression": 0.3,
+        "baitChance": 0.25
       },
       "trick": {
         "name": "전환형",
         "adapt": 0.62,
         "recoverAt": 0.25,
         "focusAt": 0.34,
-        "aggression": 0.5
+        "aggression": 0.5,
+        "baitChance": 0.45
       }
     },
     "responses": {
@@ -3346,8 +6231,8 @@ window.GAME_DB = {
     "callsignPlaceholder": "나의 호출명",
     "home": "길드 회관",
     "fight": "결투",
-    "training": "수련",
-    "build": "무장",
+    "training": "수련소",
+    "build": "무장 공방",
     "book": "작전서",
     "records": "결투 기록",
     "nextRival": "다음 상대",
@@ -3411,12 +6296,12 @@ window.GAME_DB = {
     "exposed": "속임수에 노출",
     "normal": "안정",
     "edge": "외곽에 몰림",
-    "hintFatigue": "기력이 낮습니다. 회복 속도로 전환하거나 집중 재정비를 고려하세요.",
+    "hintFatigue": "기력이 낮습니다. 회복 지시로 교환을 끊으세요.",
     "hintFoeTired": "상대 기력이 낮습니다. 압박할 기회입니다.",
     "hintGuard": "상대 가드가 약합니다. 타격을 이어가면 붕괴를 노릴 수 있습니다.",
-    "hintGrab": "상대가 잡기를 반복합니다. 거리를 벌리거나 피하기로 대응하세요.",
-    "hintCounter": "상대가 반격을 기다립니다. 잡기·속임수로 흔들 수 있습니다.",
-    "hintDefault": "거리와 기력을 보며 전술을 바꾸세요. 공격·이동은 투사가 실행합니다.",
+    "hintGrab": "잡기 진입을 타격으로 끊거나 긴 간격으로 대응하세요.",
+    "hintCounter": "반격 대기에는 잡기 또는 유인 지시가 유리합니다.",
+    "hintDefault": "상대의 노림수와 간격을 읽고 대응하세요.",
     "resultWin": "승리",
     "resultLoss": "패배",
     "resultDraw": "무승부",
@@ -3434,13 +6319,13 @@ window.GAME_DB = {
     "spendPoints": "훈련 포인트 사용",
     "gain": "획득",
     "kept": "투사·훈련·장비·특성은 결과와 관계없이 유지됩니다.",
-    "gear": "무장 · 3칸",
+    "gear": "장비 작업대",
     "talents": "재능 · 2칸",
     "owned": "보유",
     "buy": "구입",
     "equip": "장착",
     "unequip": "해제",
-    "upgrade": "강화",
+    "upgrade": "특화 강화",
     "maxed": "최대 강화",
     "cost": "비용",
     "level": "강화",
@@ -3476,7 +6361,7 @@ window.GAME_DB = {
     "champion": "연맹 챔피언 · 도전자전",
     "challenge": "도전자전",
     "rules": "승부 규칙",
-    "rulesBody": "2라운드 × 45초. 체력 0이면 KO. 시간 종료 시 가한 피해·제압·중앙 점유로 판정합니다.",
+    "rulesBody": "타격은 잡기 준비를 끊고, 잡기는 반격과 가드를 무너뜨리며, 반격은 타격을 받아칩니다. 사거리·기력·속임수로 불리한 노림수도 뒤집을 수 있습니다.",
     "saveSuccess": "진행을 저장했습니다.",
     "loadSuccess": "저장을 불러왔습니다.",
     "invalidSave": "저장 파일을 확인하세요.",
@@ -3508,8 +6393,8 @@ window.GAME_DB = {
     "surrenderAsk": "이 경기를 기권할까요?",
     "surrenderBody": "패배로 기록됩니다. 지금까지의 성장과 장비는 유지됩니다.",
     "characterLevel": "성장 단계",
-    "pointsReturn": "포인트를 다시 배분할 수 있습니다.",
-    "empty": "없음",
+    "pointsReturn": "필요한 능력에 투자하세요. 재분배는 무료입니다.",
+    "empty": "미보유",
     "finishBout": "진행 중인 경기를 먼저 마치세요.",
     "changeWaiting": "전환 정리 중",
     "focusNotReady": "집중이 부족하거나 재사용 대기 중입니다.",
@@ -3563,8 +6448,184 @@ window.GAME_DB = {
     "signatureBlocked": "집중이 부족하거나 재사용 대기 중입니다.",
     "fighterStats": "투사 수치 보기",
     "watchFor": "상대의 승부수",
-    "coachShort": "지시는 짧게. 실행은 투사의 방식으로.",
-    "hintRecoverActive": "회복 중에는 공격 빈도가 줄어듭니다."
+    "coachShort": "노림수와 거리·수비는 따로 조정할 수 있습니다.",
+    "hintRecoverActive": "회복 중에는 공격 빈도가 줄어듭니다.",
+    "dashboardTitle": "다음 결투를 준비하세요",
+    "dashboardSub": "상대를 읽고, 무장을 맞추고, 결투에서 증명하세요.",
+    "dashboardHero": "나의 투사",
+    "dashboardBuild": "출전 무장",
+    "dashboardPlan": "출전 전술",
+    "scoutTitle": "상대 분석",
+    "scoutHabit": "주로 쓰는 수",
+    "scoutWeak": "파훼할 틈",
+    "scoutGear": "상대 무장",
+    "noFoeGear": "장비 없이 출전",
+    "counterApply": "대응 전술 적용",
+    "counterApplied": "상대의 첫 노림수에 맞췄습니다. 전환을 계속 확인하세요.",
+    "battleReady": "바로 결투",
+    "planOptional": "기본 전술로 바로 출전할 수 있습니다.",
+    "planLocked": "진행 중인 결투에서 조정하세요.",
+    "tacticalTitle": "전술 조정",
+    "focusTitle": "공격 목표",
+    "focusSub": "상대의 현재 수에 맞춰 노림수를 바꿉니다.",
+    "rangeTitle": "간격",
+    "defenseTitle": "수비",
+    "advancedTactics": "거리·수비 조정",
+    "applyTactics": "전술 적용",
+    "tacticalApplied": "전술을 조정했습니다.",
+    "tacticsNow": "현재 노림수",
+    "foePlan": "상대 노림수",
+    "foeChanging": "전환 예고",
+    "recentMoves": "최근 기술",
+    "rpsTitle": "노림수 상성",
+    "rpsHint": "타격 → 잡기 → 반격 → 타격",
+    "rpsEmpty": "기회를 만들어 먼저 유효타를 넣으세요.",
+    "rpsWins": "상성 판정",
+    "counterHint": "대응",
+    "rangeAuto": "노림수에 맞춤",
+    "planDefault": "권장 간격",
+    "clashGuard": "가드 무시",
+    "feintName": "속임수",
+    "counterWhiff": "반격 헛침",
+    "workshopTitle": "하나를 얻고, 하나를 감수하세요",
+    "workshopSub": "고유 효과와 부작용을 조합하고 특화 방향을 고르세요.",
+    "workshopEquipment": "장비",
+    "workshopTalents": "재능",
+    "equippedTitle": "현재 장착",
+    "slotSelect": "이 칸에 교체",
+    "selectedSlot": "교체할 칸",
+    "replaceItem": "교체 대상",
+    "selectItem": "장비를 선택하세요",
+    "itemBenefit": "얻는 것",
+    "itemCost": "감수할 것",
+    "itemPassive": "고유 발동 효과",
+    "itemUsage": "전투에서의 역할",
+    "buyEquip": "구입·장착",
+    "equipSelected": "선택한 칸에 장착",
+    "ownedItem": "보유 장비",
+    "equippedItem": "장착 중",
+    "forgeTitle": "특화 방향",
+    "forgeChoose": "특화 선택",
+    "forgeRechoose": "이 특화로 변경",
+    "forgeFree": "특화 변경은 결투 사이에 무료입니다.",
+    "forgeUpgrade": "특화 강화",
+    "forgeMaster": "완성 강화",
+    "forgeMasterPreview": "완성 시 추가 효과",
+    "forgeMastered": "완성 장비",
+    "forgeRank": "제작 단계",
+    "forgeLocked": "먼저 장비를 구입하세요.",
+    "forgeChooseFirst": "특화 방향을 먼저 선택하세요.",
+    "buySuccess": "장비를 구입하고 장착했습니다.",
+    "forgeSuccess": "장비를 특화했습니다.",
+    "reforgeSuccess": "특화 방향을 변경했습니다.",
+    "forgeMasterSuccess": "장비를 완성했습니다.",
+    "compareTitle": "교체 후 변화",
+    "compareNone": "현재 장착과 같습니다.",
+    "compareUnequipped": "빈 슬롯에 추가합니다.",
+    "compareSlot": "선택한 슬롯과 비교",
+    "resonanceTitle": "장비 공명",
+    "resonanceActive": "발동 중",
+    "resonanceInactive": "같은 문장 2개 장착 시 발동",
+    "sigil": "문장",
+    "buildSaveTitle": "저장한 무장",
+    "buildSave": "현재 무장 저장",
+    "buildApply": "불러오기",
+    "buildEmpty": "저장된 무장 없음",
+    "buildSaved": "현재 무장을 저장했습니다.",
+    "buildApplied": "저장한 무장을 적용했습니다.",
+    "buildBusy": "결투 중에는 무장을 바꿀 수 없습니다.",
+    "buildProfile": "무장 성향",
+    "buildWeak": "교체는 무료 · 장비는 소모되지 않습니다.",
+    "talentHeading": "전투 재능",
+    "talentSub": "두 가지 재능으로 부족한 부분을 보완하거나 강점을 밀어주세요.",
+    "trainingTitle": "성장 방향을 정하세요",
+    "trainingPoints": "사용 가능한 수련점",
+    "trainingCurrent": "투자한 수련",
+    "trainingGain": "다음 수련 효과",
+    "ledger": "결투 기록",
+    "dashboardProgress": "리그 진행",
+    "winsProgress": "격파",
+    "noCoins": "금화가 부족합니다. 결투 보상으로 마련하세요.",
+    "invalidForge": "올바른 특화 방향을 선택하세요.",
+    "invalidBuild": "사용할 수 없는 무장입니다.",
+    "statDelta": "능력 변화",
+    "procLabel": "장비 발동",
+    "liveTactics": "거리·수비",
+    "clashDamage": "파훼 피해",
+    "neutral": "변화 없음",
+    "tacticSignal": "지시 전달 중",
+    "buildStatsTitle": "현재 전투 능력",
+    "rankBudget": "계급 · 성장",
+    "previewBranch": "이 특화의 이득과 손해",
+    "closeCompare": "비교 닫기",
+    "learnRps": "상성 보기",
+    "counterResolve": "반격 성공 시 공격을 끊습니다.",
+    "ownedCount": "보유",
+    "workshopBack": "결투 준비로",
+    "tacticPending": "변경 대기",
+    "rpsExplain": "상성은 실제 기술이 맞물릴 때 발동합니다. 장비·사거리·기력과 속임수가 결과를 바꿉니다.",
+    "buyOnly": "구입만 하기",
+    "nextReward": "첫 격파 보상",
+    "itemTierLabel": "제작",
+    "clearSlot": "장착 해제",
+    "savedBuildHint": "무장·특화·재능·출전 전술을 함께 저장합니다.",
+    "emptyBuildName": "무장",
+    "forgeOnEquip": "효과 비교는 선택한 슬롯에 장착했을 때 기준입니다.",
+    "startingGear": "기본 무장",
+    "percentPoint": "%p",
+    "percentUnit": "%",
+    "statArrow": "→",
+    "equipmentSources": "무장·공명 효과",
+    "buildTradeoff": "강점과 약점을 함께 확인하세요.",
+    "currentSlot": "교체 슬롯",
+    "currentTactics": "출전 설정",
+    "gearDetail": "장비 상세",
+    "gainLabel": "강화되는 능력",
+    "lossLabel": "약해지는 능력",
+    "noTradeoff": "추가 부작용 없음",
+    "newItem": "신규 장비",
+    "masterAdditional": "완성 시 추가 능력",
+    "upgradeCompare": "현재 → 강화 후",
+    "trainingNav": "능력 투자·재분배",
+    "fightNav": "상대 분석·결투",
+    "buildNav": "장비·특화·재능",
+    "clashWaiting": "기술이 맞물릴 때 파훼 판정",
+    "currentBuildName": "현재 무장",
+    "focusKeyTitle": "노림수",
+    "investedPoints": "투자",
+    "rankNameLabel": "계급",
+    "procs": "장비 발동",
+    "clashes": "상성 파훼",
+    "tacticsPaused": "선택 후 적용하면 결투가 이어집니다.",
+    "forgeSummary": "장비의 기본 효과에 특화가 더해집니다.",
+    "forgeMasterHint": "기본 효과와 특화는 유지하고, 아래 능력·발동 효과로 강화됩니다.",
+    "rpsGuardHint": "잡기는 가드를 무시 · 유인은 반격 대기를 흔듦",
+    "focusEffective": "유리한 상대",
+    "focusVulnerable": "주의할 상대",
+    "statsBefore": "현재",
+    "statsAfter": "교체 후",
+    "coinsUnit": "금화",
+    "savingBuilds": "결투 사이에 자유롭게 교체할 수 있습니다.",
+    "unlockTip": "승패와 관계없이 보상을 얻습니다.",
+    "leagueCaption": "승리하면 다음 상대가 열립니다.",
+    "buyLocked": "장착·강화는 결투가 끝난 뒤 가능합니다.",
+    "readiness": "준비 완료",
+    "trainIncrease": "투자",
+    "editBuild": "공방으로",
+    "emptyTalent": "재능 없음",
+    "masterEffect": "강화된 발동 효과",
+    "itemNoneGain": "별도 수치 증가 없음",
+    "procHistory": "발동 기록",
+    "tacticsHeroDefault": "투사의 기본 전술",
+    "forgeStagePrefix": "제작 단계",
+    "noGearEffect": "장비를 장착하면 고유 효과가 추가됩니다.",
+    "locked": "미개방",
+    "clashMine": "성공",
+    "clashFoe": "당함",
+    "foeGearDetails": "무장 효과 확인",
+    "resonanceGain": "새 공명 발동",
+    "resonanceLoss": "공명 해제",
+    "inBattle": "결투 진행 중"
   },
   "messages": {
     "queued": "{who} 전술 전환 예약",
@@ -3592,7 +6653,11 @@ window.GAME_DB = {
     "signatureArmed": "{who} · {name} 준비",
     "signatureUsed": "{who} · {name}!",
     "signatureCancelled": "결정기 준비 취소",
-    "signatureBlocked": "지금은 결정기를 준비할 수 없습니다."
+    "signatureBlocked": "지금은 결정기를 준비할 수 없습니다.",
+    "tacticWin": "{who} · {name}",
+    "planAdjusted": "{who} · {focus} / {range} / {defense}",
+    "gearProc": "{who} · {name}",
+    "counterWhiff": "{who} · 반격의 빈틈"
   },
   "draw": {
     "font": "\"Noto Serif KR\", \"Nanum Myeongjo\", \"Batang\", \"AppleMyungjo\", Georgia, serif",
@@ -3859,7 +6924,12 @@ window.GAME_DB = {
     "fantasyInnerBand": 0.33,
     "fantasyMiddleBand": 0.66,
     "fantasySealInner": 0.46,
-    "fantasyFloorTitleY": 0.58
+    "fantasyFloorTitleY": 0.58,
+    "tacticalLabelY": 20,
+    "tacticalLabelWidth": 102,
+    "tacticalLabelHeight": 23,
+    "tacticalFont": 11,
+    "tacticalLabelPad": 4
   },
   "sounds": {
     "hit": {
@@ -3909,8 +6979,8 @@ window.GAME_DB = {
     "hp": "체력",
     "stamina": "최대 기력",
     "guard": "가드",
-    "power": "화력",
-    "speed": "기동",
+    "power": "전체 피해",
+    "speed": "이동 속도",
     "reach": "타격 거리",
     "accuracy": "명중",
     "evasion": "회피",
@@ -3930,7 +7000,10 @@ window.GAME_DB = {
     "blockBonus": "가드 효율",
     "counterChance": "반격 성공",
     "grabAccuracy": "잡기 명중",
-    "readBonus": "반복 분석"
+    "readBonus": "반복 분석",
+    "strikePower": "타격 피해",
+    "grabReach": "잡기 거리",
+    "lowHpPower": "위기 화력"
   },
   "_docs": {
     "editing": "game-db.js가 유일한 콘텐츠 원본입니다. characters/styles/matchups/moves/options/presets/conditions/traits/statuses/modules/talents/rivals에서 수정합니다. 엔진은 index.html에 있습니다.",
@@ -3938,7 +7011,9 @@ window.GAME_DB = {
     "combat": "직접 이동·공격 입력이 없는 실시간 전술 시뮬레이션. 전술 지연, 기력, 거리, 가드, 반격·잡기·속임수, 조건 작전서와 집중이 상호작용합니다.",
     "coaching": "coaching와 characters[].commands: 필수 사전 설정 없는 세 경기 지시. 캐릭터별 계획·연계·결정기는 characters[].followups/signature와 moves에 있습니다. 준비 작전서 데이터는 호환용으로 보존하며 기본 경기에서는 실행하지 않습니다.",
     "identity": "characters[].visual은 체형·장비·자세, identity는 고유 상태 표시, chargeTrait는 결정기 게이지 획득 조건입니다. 대표 동작·연계·지시 결과가 화면에서 연결되게 유지합니다.",
-    "theme": "theme.colors/fonts/icons/labels는 중세 판타지 UI 테마의 단일 원본입니다. palette는 대비와 전투 색상, draw의 fantasy*는 석조 결투장·깃발·횃불 표현입니다. 화면 배치는 CSS 구조로 관리하며 전투 규칙과 저장 키는 바꾸지 않습니다."
+    "theme": "theme.colors/fonts/icons/labels는 중세 판타지 UI 테마의 단일 원본입니다. palette는 대비와 전투 색상, draw의 fantasy*는 석조 결투장·깃발·횃불 표현입니다. 화면 배치는 CSS 구조로 관리하며 전투 규칙과 저장 키는 바꾸지 않습니다.",
+    "forge": "modules의 기본 stats·trait는 한 번 적용합니다. 특화 단계부터 forges[].stats와 trait, 완성 단계에는 mastery.stats와 대체 trait가 추가됩니다. 문장 2개로 forge.resonances 발동. 장비 ID·v6 저장 키 유지.",
+    "tactics": "tactics.focuses의 실제 기술 상성과 clashes가 판정 원본입니다. 노림수·간격·수비는 독립 조정하고 공세·유인·회복은 실행 속도와 기만을 조정합니다. 인공 지능은 rivals[].sequence와 최근 기술을 읽습니다."
   },
   "enemyTraining": {
     "strike": {
@@ -3983,6 +7058,7 @@ window.GAME_DB = {
     }
   },
   "reportEvents": [
+    "tacticWin",
     "signatureUsed",
     "followup",
     "counter",
@@ -3992,24 +7068,30 @@ window.GAME_DB = {
   "tabs": [
     {
       "id": "fight",
-      "label": "fight"
-    },
-    {
-      "id": "training",
-      "label": "training"
+      "label": "fight",
+      "icon": "fight",
+      "hint": "fightNav"
     },
     {
       "id": "build",
-      "label": "build"
+      "label": "build",
+      "icon": "anvil",
+      "hint": "buildNav"
+    },
+    {
+      "id": "training",
+      "label": "training",
+      "icon": "training",
+      "hint": "trainingNav"
     }
   ],
   "summaryStats": [
     "hp",
-    "power",
-    "reach",
-    "speed",
+    "strikePower",
+    "grabPower",
+    "counterPower",
     "staminaRegen",
-    "guard"
+    "speed"
   ],
   "scoutStats": [
     "hp",
@@ -4036,7 +7118,8 @@ window.GAME_DB = {
     "attackSpeed",
     "moveCost",
     "tacticLag",
-    "focusGain"
+    "focusGain",
+    "strikePower"
   ],
   "speeds": [
     {
@@ -4061,6 +7144,7 @@ window.GAME_DB = {
     "grab"
   ],
   "flashEvents": [
+    "tacticWin",
     "command",
     "followup",
     "signatureUsed",
@@ -4152,29 +7236,33 @@ window.GAME_DB = {
       "bannerTrim": "#baa16d"
     },
     "icons": {
-      "brand": "\u003ccircle cx='12' cy='12' r='9'/>\u003cpath d='m12 5 3 7-3 7-3-7 3-7Zm-8 7h4m8 0h4'/>",
-      "attack": "\u003cpath d='m6 20 3-6L19 3l2 2L10 16l-4 4Zm1-7 5 5M4 22l3-3M6 4l3 2m-4 2 2 1'/>",
-      "bait": "\u003cpath d='M19 3C8 2 3 10 7 17l-3 4 7-6c7 1 10-5 8-12ZM7 17l9-10M10 13l5 1m-2-4 1-4'/>",
-      "recover": "\u003cpath d='M12 3v18M10 18C3 18 2 13 4 9c5 0 8 4 6 9Zm4-5c-1-6 2-10 7-10 1 5-1 10-7 10ZM7 6l2 2m7 10 3-3'/>",
-      "signature": "\u003cpath d='m12 2 3 6 7 1-5 5 1 8-6-4-6 4 1-8-5-5 7-1 3-6Z'/>\u003ccircle cx='12' cy='12' r='3'/>",
-      "settings": "\u003cpath d='m9 3 3-1 3 1 1 3 3 1 2 3-1 3-3 1-1 3-3 2-3-1-1-3-3-1-2-3 1-3 3-1 1-3Z'/>\u003ccircle cx='12' cy='11' r='3'/>",
-      "fullscreen": "\u003cpath d='M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5'/>",
-      "pause": "\u003cpath d='M8 4v16m8-16v16'/>",
-      "close": "\u003cpath d='m6 6 12 12M18 6 6 18'/>",
-      "home": "\u003cpath d='M3 11 12 3l9 8v10H3V11Zm6 10v-7h6v7M7 9h10'/>",
-      "resume": "\u003cpath d='m8 4 12 8-12 8V4Z'/>",
-      "save": "\u003cpath d='M4 3h14l3 3v15H3V3h1Zm3 0v6h10V3M7 21v-8h10v8'/>",
-      "load": "\u003cpath d='M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5'/>",
-      "scroll": "\u003cpath d='M6 3h13v14a4 4 0 0 1-4 4H5a3 3 0 0 1-3-3h12a3 3 0 0 0 3 3M6 3a3 3 0 0 0-3 3h6a3 3 0 0 0-3-3Zm3 4h5m-5 4h5'/>",
-      "rename": "\u003cpath d='m4 17 1 4 4-1L21 8l-5-5L4 17Zm10-12 5 5M4 17l5 3'/>",
-      "moon": "\u003cpath d='M20 15A9 9 0 0 1 9 3a9 9 0 1 0 11 12Z'/>",
-      "sound": "\u003cpath d='m3 9 5 0 5-5v16l-5-5H3V9Zm13-2a7 7 0 0 1 0 10m3-13a11 11 0 0 1 0 16'/>",
-      "training": "\u003cpath d='m4 20 6-6m4-4 6-6M7 3l14 14-4 4L3 7l4-4Z'/>",
-      "gear": "\u003cpath d='M7 3 3 7l3 5 3-2v11h6V10l3 2 3-5-4-4-5 3-5-3Z'/>",
-      "fight": "\u003cpath d='m4 3 17 18M20 3 3 20M3 3l5 1-4 4-1-5Zm18 0-5 1 4 4 1-5Z'/>",
-      "coins": "\u003cellipse cx='12' cy='12' rx='8' ry='9'/>\u003cpath d='m12 7 3 5-3 5-3-5 3-5Z'/>",
-      "rank": "\u003cpath d='m12 3 3 6 6 1-5 5 1 6-5-3-5 3 1-6-5-5 6-1 3-6Z'/>",
-      "chevron": "\u003cpath d='m9 5 7 7-7 7'/>"
+      "brand": "<circle cx='12' cy='12' r='9'/><path d='m12 5 3 7-3 7-3-7 3-7Zm-8 7h4m8 0h4'/>",
+      "attack": "<path d='m6 20 3-6L19 3l2 2L10 16l-4 4Zm1-7 5 5M4 22l3-3M6 4l3 2m-4 2 2 1'/>",
+      "bait": "<path d='M19 3C8 2 3 10 7 17l-3 4 7-6c7 1 10-5 8-12ZM7 17l9-10M10 13l5 1m-2-4 1-4'/>",
+      "recover": "<path d='M12 3v18M10 18C3 18 2 13 4 9c5 0 8 4 6 9Zm4-5c-1-6 2-10 7-10 1 5-1 10-7 10ZM7 6l2 2m7 10 3-3'/>",
+      "signature": "<path d='m12 2 3 6 7 1-5 5 1 8-6-4-6 4 1-8-5-5 7-1 3-6Z'/><circle cx='12' cy='12' r='3'/>",
+      "settings": "<path d='m9 3 3-1 3 1 1 3 3 1 2 3-1 3-3 1-1 3-3 2-3-1-1-3-3-1-2-3 1-3 3-1 1-3Z'/><circle cx='12' cy='11' r='3'/>",
+      "fullscreen": "<path d='M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5'/>",
+      "pause": "<path d='M8 4v16m8-16v16'/>",
+      "close": "<path d='m6 6 12 12M18 6 6 18'/>",
+      "home": "<path d='M3 11 12 3l9 8v10H3V11Zm6 10v-7h6v7M7 9h10'/>",
+      "resume": "<path d='m8 4 12 8-12 8V4Z'/>",
+      "save": "<path d='M4 3h14l3 3v15H3V3h1Zm3 0v6h10V3M7 21v-8h10v8'/>",
+      "load": "<path d='M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5'/>",
+      "scroll": "<path d='M6 3h13v14a4 4 0 0 1-4 4H5a3 3 0 0 1-3-3h12a3 3 0 0 0 3 3M6 3a3 3 0 0 0-3 3h6a3 3 0 0 0-3-3Zm3 4h5m-5 4h5'/>",
+      "rename": "<path d='m4 17 1 4 4-1L21 8l-5-5L4 17Zm10-12 5 5M4 17l5 3'/>",
+      "moon": "<path d='M20 15A9 9 0 0 1 9 3a9 9 0 1 0 11 12Z'/>",
+      "sound": "<path d='m3 9 5 0 5-5v16l-5-5H3V9Zm13-2a7 7 0 0 1 0 10m3-13a11 11 0 0 1 0 16'/>",
+      "training": "<path d='m4 20 6-6m4-4 6-6M7 3l14 14-4 4L3 7l4-4Z'/>",
+      "gear": "<path d='M7 3 3 7l3 5 3-2v11h6V10l3 2 3-5-4-4-5 3-5-3Z'/>",
+      "fight": "<path d='m4 3 17 18M20 3 3 20M3 3l5 1-4 4-1-5Zm18 0-5 1 4 4 1-5Z'/>",
+      "coins": "<ellipse cx='12' cy='12' rx='8' ry='9'/><path d='m12 7 3 5-3 5-3-5 3-5Z'/>",
+      "rank": "<path d='m12 3 3 6 6 1-5 5 1 6-5-3-5 3 1-6-5-5 6-1 3-6Z'/>",
+      "chevron": "<path d='m9 5 7 7-7 7'/>",
+      "grip": "<path d=\"M6 12V9a2 2 0 0 1 4 0v2-6a2 2 0 0 1 4 0v6-4a2 2 0 0 1 4 0v6l2-2 2 2-5 7H9l-5-6z\"/>",
+      "shield": "<path d=\"m12 3 8 3v6c0 5-8 9-8 9S4 17 4 12V6z\"/><path d=\"m8 12 3 3 5-6\"/>",
+      "anvil": "<path d=\"M3 6h18l-4 6h-5l-2 3v4h7v2H4v-2h4v-4l-3-3H3z\"/>",
+      "compare": "<path d=\"M8 3v18M16 3v18M3 8h10M11 16h10m-6-4-4 4 4 4M9 4l4 4-4 4\"/>"
     },
     "labels": {
       "settingsView": "화면과 소리",
@@ -4189,5 +7277,289 @@ window.GAME_DB = {
       "rankLabel": "계급",
       "closeLabel": "닫기"
     }
+  },
+  "statDirections": {
+    "staminaCost": -1,
+    "moveCost": -1,
+    "tacticLag": -1
+  },
+  "forge": {
+    "rankNames": [
+      "기본",
+      "특화",
+      "완성"
+    ],
+    "buildSlots": 3,
+    "buildNames": [
+      "무장 I",
+      "무장 II",
+      "무장 III"
+    ],
+    "deltaEpsilon": 0.0001,
+    "deltaLimit": 6,
+    "categories": [
+      {
+        "id": "all",
+        "name": "전체",
+        "icon": "gear"
+      },
+      {
+        "id": "owned",
+        "name": "보유",
+        "icon": "save"
+      },
+      {
+        "id": "assault",
+        "name": "공성",
+        "icon": "attack"
+      },
+      {
+        "id": "hunt",
+        "name": "추격",
+        "icon": "bait"
+      },
+      {
+        "id": "bulwark",
+        "name": "수호",
+        "icon": "recover"
+      },
+      {
+        "id": "insight",
+        "name": "통찰",
+        "icon": "signature"
+      }
+    ],
+    "resonances": [
+      {
+        "id": "assault",
+        "name": "공성",
+        "required": 2,
+        "trait": "resonance_assault",
+        "description": "가드 붕괴 유발 → 기력 14 회복 · 집중 12 획득 · 재발동 5초"
+      },
+      {
+        "id": "hunt",
+        "name": "추격",
+        "required": 2,
+        "trait": "resonance_hunt",
+        "description": "상대 헛침 → 3초간 이동 속도 +20% · 공격 기력 비용 -12% · 재발동 5초"
+      },
+      {
+        "id": "bulwark",
+        "name": "수호",
+        "required": 2,
+        "trait": "resonance_bulwark",
+        "description": "가드 성공 → 3초간 피해 감소 +7%p · 재발동 5초"
+      },
+      {
+        "id": "insight",
+        "name": "통찰",
+        "required": 2,
+        "trait": "resonance_insight",
+        "description": "상성 파훼 성공 → 집중 16 획득 · 가드 10 회복 · 재발동 5초"
+      }
+    ],
+    "previewStats": [
+      "hp",
+      "strikePower",
+      "grabPower",
+      "counterPower",
+      "reach",
+      "grabReach",
+      "attackSpeed",
+      "speed",
+      "staminaRegen",
+      "guard",
+      "accuracy",
+      "evasion",
+      "armor",
+      "guardDamage",
+      "staminaCost",
+      "moveCost",
+      "tacticLag",
+      "focusGain"
+    ],
+    "specializeRank": 2,
+    "masterRank": 3,
+    "mobileBreakpoint": 760
+  },
+  "tactics": {
+    "focuses": [
+      {
+        "id": "strike",
+        "name": "타격",
+        "icon": "attack",
+        "color": "#a76642",
+        "beats": "grab",
+        "weak": "counter",
+        "range": "far",
+        "weights": {
+          "strike": 0.82,
+          "grab": 0.06,
+          "counter": 0,
+          "feint": 0.12
+        },
+        "short": "잡기 진입 차단",
+        "description": "잡기 준비를 타격으로 끊습니다. 기다리는 반격에는 취약합니다.",
+        "counterPlan": {
+          "focus": "counter",
+          "range": "auto",
+          "defense": "evade"
+        }
+      },
+      {
+        "id": "grab",
+        "name": "잡기",
+        "icon": "grip",
+        "color": "#536c57",
+        "beats": "counter",
+        "weak": "strike",
+        "range": "close",
+        "weights": {
+          "strike": 0.1,
+          "grab": 0.8,
+          "counter": 0,
+          "feint": 0.1
+        },
+        "short": "반격·가드 제압",
+        "description": "반격 대기와 가드를 무시합니다. 접근 중 타격에 끊길 수 있습니다.",
+        "counterPlan": {
+          "focus": "strike",
+          "range": "far",
+          "defense": "evade"
+        }
+      },
+      {
+        "id": "counter",
+        "name": "반격",
+        "icon": "shield",
+        "color": "#6f647e",
+        "beats": "strike",
+        "weak": "grab",
+        "range": "mid",
+        "weights": {
+          "strike": 0.1,
+          "grab": 0,
+          "counter": 0.78,
+          "feint": 0.12
+        },
+        "short": "타격 받아치기",
+        "description": "타격을 받아쳐 끊습니다. 잡기와 속임수에는 빈틈을 드러냅니다.",
+        "counterPlan": {
+          "focus": "grab",
+          "range": "close",
+          "defense": "block"
+        }
+      }
+    ],
+    "ranges": [
+      {
+        "id": "auto",
+        "name": "자동 간격",
+        "description": "타격은 길게, 잡기는 밀착, 반격은 교환 거리."
+      },
+      {
+        "id": "far",
+        "name": "긴 간격",
+        "description": "타격·회복에 유리. 잡기는 접근한 적만 노립니다."
+      },
+      {
+        "id": "mid",
+        "name": "교환 거리",
+        "description": "공격을 주고받는 간격. 반격을 맞추기 쉽습니다."
+      },
+      {
+        "id": "close",
+        "name": "밀착",
+        "description": "잡기가 닿는 거리. 타격과 가드 붕괴에 주의."
+      }
+    ],
+    "defenses": [
+      {
+        "id": "auto",
+        "name": "투사 기본 수비",
+        "description": "지시와 투사의 성격에 맞춰 수비합니다."
+      },
+      {
+        "id": "block",
+        "name": "가드",
+        "description": "타격 피해를 줄입니다. 잡기는 가드를 무시합니다."
+      },
+      {
+        "id": "evade",
+        "name": "회피",
+        "description": "기력을 써 피합니다. 공격 준비 중에는 회피율이 낮아집니다."
+      }
+    ],
+    "styleFocus": {
+      "strike": "strike",
+      "grapple": "grab",
+      "counter": "counter"
+    },
+    "focusBlend": 0.82,
+    "baitFeintShare": 0.46,
+    "recoverAttackChance": 0.2,
+    "recoverWait": 0.55,
+    "grabInterruptGrace": 0.15,
+    "commitEvadeScale": 0.45,
+    "commitBlockScale": 0.58,
+    "counterMissExposure": 0.65,
+    "clashFocus": 12,
+    "clashNotice": 3.5,
+    "clashCooldown": 0.7,
+    "historyVisible": 4,
+    "clashes": {
+      "strike": {
+        "beats": "grab",
+        "power": 1.28,
+        "expose": 1.0,
+        "interrupt": 0.5,
+        "name": "진입 차단"
+      },
+      "grab": {
+        "beats": "counter",
+        "power": 1.3,
+        "expose": 1.1,
+        "interrupt": 0.5,
+        "name": "반격 제압"
+      },
+      "counter": {
+        "beats": "strike",
+        "power": 1.12,
+        "expose": 0.8,
+        "interrupt": 0.5,
+        "name": "타격 받아치기"
+      }
+    },
+    "callDescriptions": {
+      "attack": "주력 공격 · 기력 소모↑",
+      "bait": "속임수로 빈틈 유도",
+      "recover": "공격↓ · 기력 회복↑"
+    },
+    "defaults": {
+      "range": "auto",
+      "defense": "auto"
+    },
+    "exposedPower": 1.18,
+    "phaseLabels": {
+      "strike": "타격 준비",
+      "grab": "잡기 진입",
+      "counter": "반격 대기",
+      "feint": "속임수"
+    }
+  },
+  "statDisplayProducts": {
+    "strikePower": [
+      "power",
+      "strikePower"
+    ],
+    "grabPower": [
+      "power",
+      "grabPower"
+    ],
+    "counterPower": [
+      "power",
+      "counterPower"
+    ]
   }
 };
