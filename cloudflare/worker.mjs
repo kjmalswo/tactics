@@ -47,6 +47,6 @@ export class EverdawnWorld extends DurableObject {
 export default {
  async fetch(request,env){
   const url=new URL(request.url);if(url.pathname.startsWith('/api/'))return env.WORLD.get(env.WORLD.idFromName(O.realmId)).fetch(request);
-  const response=await env.ASSETS.fetch(request),headers=new Headers(response.headers);headers.set('x-content-type-options','nosniff');headers.set('referrer-policy','same-origin');headers.set('content-security-policy',"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self'; media-src 'self' blob:; frame-ancestors 'none'; object-src 'none'; base-uri 'none'");return new Response(response.body,{status:response.status,headers});
+  const response=await env.ASSETS.fetch(request),headers=new Headers(response.headers);headers.set('x-content-type-options','nosniff');headers.set('referrer-policy','same-origin');headers.set('content-security-policy',`default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' ${url.protocol==='https:'?'wss':'ws'}://${url.host}; media-src 'self' blob:; frame-ancestors 'none'; object-src 'none'; base-uri 'none'`);return new Response(response.body,{status:response.status,headers});
  }
 };
