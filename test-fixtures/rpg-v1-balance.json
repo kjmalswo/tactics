@@ -1,0 +1,119 @@
+{
+  "config": {
+    "xpBase": 22,
+    "xpGrowth": 13,
+    "xpPower": 1.18,
+    "dropBaseChance": 0.19
+  },
+  "monsters": {
+    "slime": {
+      "attack": 7,
+      "gold": [
+        2,
+        4
+      ]
+    },
+    "goblin": {
+      "attack": 10,
+      "gold": [
+        3,
+        6
+      ]
+    },
+    "wolf": {
+      "attack": 12,
+      "gold": [
+        3,
+        7
+      ]
+    },
+    "boar": {
+      "attack": 15,
+      "gold": [
+        4,
+        8
+      ]
+    },
+    "lizard": {
+      "attack": 16,
+      "gold": [
+        5,
+        9
+      ]
+    },
+    "goblin_guard": {
+      "attack": 17,
+      "gold": [
+        8,
+        13
+      ]
+    },
+    "golem": {
+      "attack": 19,
+      "gold": [
+        9,
+        14
+      ]
+    },
+    "lizard_shaman": {
+      "attack": 20,
+      "gold": [
+        10,
+        16
+      ]
+    },
+    "wolf_king": {
+      "attack": 23,
+      "gold": [
+        55,
+        75
+      ]
+    },
+    "mine_golem": {
+      "attack": 28,
+      "gold": [
+        75,
+        100
+      ]
+    },
+    "ancient_drake": {
+      "attack": 34,
+      "gold": [
+        110,
+        150
+      ]
+    }
+  },
+  "rarities": [
+    {
+      "id": "common",
+      "weight": 62
+    },
+    {
+      "id": "uncommon",
+      "weight": 28
+    },
+    {
+      "id": "rare",
+      "weight": 9
+    },
+    {
+      "id": "epic",
+      "weight": 1
+    }
+  ],
+  "counts": {
+    "shop": 2,
+    "recipes": 3,
+    "items": 18
+  },
+  "fieldCounts": {
+    "meadow": 12,
+    "forest": 13,
+    "marsh": 9
+  },
+  "manaRegen": {
+    "base": 4,
+    "magician": 6
+  }
+}

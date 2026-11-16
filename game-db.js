@@ -1,7 +1,7 @@
 // Editable JSON-compatible fantasy RPG database.
 window.GAME_DB = {
   "meta": {
-    "version": "1.0",
+    "version": "1.1",
     "title": "에버돈",
     "subtitle": "별의 계승자",
     "description": "마을에서 시작해 나만의 직업 빌드를 완성하는 판타지 액션 RPG"
@@ -75,7 +75,8 @@ window.GAME_DB = {
       "wall": "#ddcba3",
       "window": "#f3d69b",
       "hazard": "#c94c37",
-      "hazardFill": "#c94c3738"
+      "hazardFill": "#c94c3738",
+      "nightTint": "#263a5b"
     },
     "icons": {
       "brand": "<circle cx='12' cy='12' r='9'/><path d='m12 5 3 7-3 7-3-7 3-7Zm-8 7h4m8 0h4'/>",
@@ -116,7 +117,8 @@ window.GAME_DB = {
       "portal": "<path d=\"M5 21V10a7 7 0 0 1 14 0v11M2 21h20M10 7h4v14h-4z\"/>",
       "heart": "<path d=\"M12 21S1 14 3 7q3-7 9-1 6-6 9 1 2 7-9 14z\"/>",
       "tree": "<path d=\"M12 2 4 12h4l-5 6h7v4h4v-4h7l-5-6h4z\"/>",
-      "music": "<path d=\"M9 18V5l11-2v13M9 8l11-2M9 18q-2-3-5-1t1 4q4 0 4-3m11-2q-2-3-5-1t1 4q4 0 4-3\"/>"
+      "music": "<path d=\"M9 18V5l11-2v13M9 8l11-2M9 18q-2-3-5-1t1 4q4 0 4-3m11-2q-2-3-5-1t1 4q4 0 4-3\"/>",
+      "dash": "<path d=\"m13 3-8 10h6l-1 8 9-12h-7z\"/>"
     }
   },
   "config": {
@@ -133,15 +135,15 @@ window.GAME_DB = {
     "startPotions": 5,
     "startPoints": 2,
     "pointsPerLevel": 1,
-    "xpBase": 22,
-    "xpGrowth": 13,
-    "xpPower": 1.18,
+    "xpBase": 40,
+    "xpGrowth": 20,
+    "xpPower": 1.26,
     "playerRadius": 0.28,
     "interactRadius": 2.15,
     "targetRadius": 7.5,
     "pickupRadius": 1.4,
     "outOfCombat": 4,
-    "safeRegen": 0.22,
+    "safeRegen": 0,
     "manaRegenDelay": 0.25,
     "hurtInvulnerability": 0.38,
     "defenseFactor": 0.045,
@@ -178,16 +180,16 @@ window.GAME_DB = {
     "bossPhaseRatio": 0.5,
     "bossEnrageRate": 1.22,
     "dropLevelScale": 0.08,
-    "dropBaseChance": 0.19,
+    "dropBaseChance": 0.085,
     "smartWeaponChance": 0.46,
-    "lootTierChance": 0.06,
+    "lootTierChance": 0.08,
     "upgradeMax": 10,
     "upgradePower": 0.065,
-    "upgradeGoldBase": 17,
-    "upgradeGoldGrowth": 1.34,
-    "upgradeOreBase": 1,
+    "upgradeGoldBase": 26,
+    "upgradeGoldGrowth": 1.4,
+    "upgradeOreBase": 2,
     "upgradeOreStep": 3,
-    "sellValue": 7,
+    "sellValue": 4,
     "salvageOre": 1,
     "itemLevelScale": 0.09,
     "affixScale": 0.045,
@@ -197,7 +199,7 @@ window.GAME_DB = {
     "enemyHpGrowth": 0.17,
     "enemyDamageGrowth": 0.095,
     "enemyXpGrowth": 0.12,
-    "goldGrowth": 0.08,
+    "goldGrowth": 0.04,
     "runRewardGrowth": 0.18,
     "inventorySortLimit": 120,
     "toastMax": 3,
@@ -270,7 +272,7 @@ window.GAME_DB = {
     "foodBuffId": "inn_food",
     "lightningSegments": 6,
     "moveSubstep": 0.2,
-    "lootRarityTierBonus": 0.08,
+    "lootRarityTierBonus": 0.015,
     "autoSalvageRarities": [
       "common"
     ],
@@ -300,7 +302,27 @@ window.GAME_DB = {
         0,
         -1
       ]
-    ]
+    ],
+    "dashCharges": 2,
+    "dashCooldown": 5,
+    "dashDistance": 1.5,
+    "dashDuration": 0.16,
+    "dashInvulnerability": 0.12,
+    "dashDeadzone": 0.12,
+    "fieldSpawnRevision": 2,
+    "discoveryRevealRadius": 5.5,
+    "vendorRestock": 300,
+    "dayLength": 420,
+    "nightLength": 180,
+    "nightDamageMultiplier": 1.1,
+    "bossEquipmentChance": 0.65,
+    "bossUniqueChance": 0.12,
+    "defaultChestEquipmentChance": 0.3,
+    "materialDropMultiplier": 0.55,
+    "blessingRefreshTolerance": 0.1,
+    "eventInteractRadius": 2.15,
+    "healingConsumable": "healing",
+    "manaConsumable": "mana"
   },
   "controls": {
     "left": [
@@ -323,22 +345,28 @@ window.GAME_DB = {
       "KeyE"
     ],
     "potion": [
-      "KeyQ"
+      "KeyR"
     ],
     "inventory": [
+      "Tab",
       "KeyI"
     ],
     "talents": [
       "KeyK"
     ],
     "quests": [
+      "KeyQ",
       "KeyJ"
     ],
     "map": [
       "KeyM"
     ],
-    "recall": [
-      "KeyR"
+    "dash": [
+      "ShiftLeft",
+      "ShiftRight"
+    ],
+    "manaPotion": [
+      "KeyF"
     ]
   },
   "world": {
@@ -357,7 +385,7 @@ window.GAME_DB = {
     "speed": 3.1,
     "range": 1.1,
     "attackInterval": 0.8,
-    "manaRegen": 4,
+    "manaRegen": 1.8,
     "hpRegen": 0,
     "basicDamage": 1,
     "skillDamage": 1,
@@ -736,7 +764,7 @@ window.GAME_DB = {
         "speed": 2.65,
         "range": 4.5,
         "attackInterval": 1.05,
-        "manaRegen": 6
+        "manaRegen": 2.7
       },
       "growth": {
         "hp": 7,
@@ -783,7 +811,7 @@ window.GAME_DB = {
         "speed": 2.5,
         "range": 1.3,
         "attackInterval": 0.96,
-        "manaRegen": 5
+        "manaRegen": 2.25
       },
       "growth": {
         "hp": 17,
@@ -2213,7 +2241,7 @@ window.GAME_DB = {
       "color": "#746b59",
       "multiplier": 1,
       "affixes": 0,
-      "weight": 62,
+      "weight": 85.6,
       "salvage": 1
     },
     {
@@ -2222,7 +2250,7 @@ window.GAME_DB = {
       "color": "#4f8055",
       "multiplier": 1.16,
       "affixes": 1,
-      "weight": 28,
+      "weight": 13.6,
       "salvage": 2
     },
     {
@@ -2231,7 +2259,7 @@ window.GAME_DB = {
       "color": "#4d80b2",
       "multiplier": 1.36,
       "affixes": 2,
-      "weight": 9,
+      "weight": 0.75,
       "salvage": 4
     },
     {
@@ -2240,7 +2268,7 @@ window.GAME_DB = {
       "color": "#9669a4",
       "multiplier": 1.62,
       "affixes": 2,
-      "weight": 1,
+      "weight": 0.05,
       "salvage": 7
     }
   ],
@@ -2606,6 +2634,445 @@ window.GAME_DB = {
       ],
       "icon": "staff",
       "description": "평타를 희생하고 화염 기술에 집중합니다."
+    },
+    {
+      "id": "knight_blade",
+      "name": "기사단 장검",
+      "slot": "weapon",
+      "stats": [
+        {
+          "stat": "attack",
+          "op": "add",
+          "value": 8
+        },
+        {
+          "stat": "defense",
+          "op": "add",
+          "value": 1
+        }
+      ],
+      "icon": "attack",
+      "description": "공격과 방어의 균형을 잡는 장검.",
+      "classes": [
+        "warrior"
+      ]
+    },
+    {
+      "id": "berserker_axe",
+      "name": "광전사의 전투도끼",
+      "slot": "weapon",
+      "stats": [
+        {
+          "stat": "attack",
+          "op": "add",
+          "value": 11
+        },
+        {
+          "stat": "attackSpeed",
+          "op": "multiply",
+          "value": 0.92
+        }
+      ],
+      "icon": "attack",
+      "description": "느린 공격을 강한 일격으로 보상합니다.",
+      "classes": [
+        "warrior"
+      ]
+    },
+    {
+      "id": "oak_longbow",
+      "name": "참나무 장궁",
+      "slot": "weapon",
+      "stats": [
+        {
+          "stat": "attack",
+          "op": "add",
+          "value": 7
+        },
+        {
+          "stat": "range",
+          "op": "add",
+          "value": 0.35
+        },
+        {
+          "stat": "speed",
+          "op": "multiply",
+          "value": 0.97
+        }
+      ],
+      "icon": "bow",
+      "description": "거리를 늘리는 대신 발걸음이 조금 느려집니다.",
+      "classes": [
+        "archer"
+      ]
+    },
+    {
+      "id": "swift_bow",
+      "name": "속사 사냥궁",
+      "slot": "weapon",
+      "stats": [
+        {
+          "stat": "attack",
+          "op": "add",
+          "value": 6
+        },
+        {
+          "stat": "attackSpeed",
+          "op": "multiply",
+          "value": 1.08
+        }
+      ],
+      "icon": "bow",
+      "description": "끊임없이 평타 화살을 이어가는 활.",
+      "classes": [
+        "archer"
+      ]
+    },
+    {
+      "id": "ember_staff",
+      "name": "불씨 지팡이",
+      "slot": "weapon",
+      "stats": [
+        {
+          "stat": "spell",
+          "op": "add",
+          "value": 11
+        },
+        {
+          "stat": "burnChance",
+          "op": "add",
+          "value": 0.06
+        },
+        {
+          "stat": "manaRegen",
+          "op": "add",
+          "value": -0.2
+        }
+      ],
+      "icon": "staff",
+      "description": "마력 회복을 희생하고 화상을 강화합니다.",
+      "classes": [
+        "magician"
+      ]
+    },
+    {
+      "id": "silver_grimoire",
+      "name": "은빛 마도서",
+      "slot": "weapon",
+      "stats": [
+        {
+          "stat": "spell",
+          "op": "add",
+          "value": 7
+        },
+        {
+          "stat": "manaRegen",
+          "op": "add",
+          "value": 0.7
+        }
+      ],
+      "icon": "staff",
+      "description": "장기전의 마력 순환을 돕습니다.",
+      "classes": [
+        "magician"
+      ]
+    },
+    {
+      "id": "crusader_hammer",
+      "name": "성전의 망치",
+      "slot": "weapon",
+      "stats": [
+        {
+          "stat": "spell",
+          "op": "add",
+          "value": 8
+        },
+        {
+          "stat": "defense",
+          "op": "add",
+          "value": 3
+        },
+        {
+          "stat": "attackSpeed",
+          "op": "multiply",
+          "value": 0.94
+        }
+      ],
+      "icon": "shield",
+      "description": "평타 속도보다 방패 기술을 택합니다.",
+      "classes": [
+        "guardian"
+      ]
+    },
+    {
+      "id": "warden_scepter",
+      "name": "수호자의 홀",
+      "slot": "weapon",
+      "stats": [
+        {
+          "stat": "defense",
+          "op": "add",
+          "value": 4
+        },
+        {
+          "stat": "shieldOnSkill",
+          "op": "add",
+          "value": 5
+        },
+        {
+          "stat": "manaRegen",
+          "op": "add",
+          "value": -0.2
+        }
+      ],
+      "icon": "shield",
+      "description": "기술마다 보호막을 얻는 수호 무기.",
+      "classes": [
+        "guardian"
+      ]
+    },
+    {
+      "id": "soldier_mail",
+      "name": "병사의 사슬갑옷",
+      "slot": "armor",
+      "stats": [
+        {
+          "stat": "defense",
+          "op": "add",
+          "value": 3
+        },
+        {
+          "stat": "hp",
+          "op": "add",
+          "value": 22
+        },
+        {
+          "stat": "speed",
+          "op": "multiply",
+          "value": 0.96
+        }
+      ],
+      "icon": "shield",
+      "description": "병사의 사슬갑옷의 특성을 살린 모험 장비."
+    },
+    {
+      "id": "shadow_jacket",
+      "name": "그림자 사냥복",
+      "slot": "armor",
+      "stats": [
+        {
+          "stat": "defense",
+          "op": "add",
+          "value": 1
+        },
+        {
+          "stat": "hp",
+          "op": "add",
+          "value": 10
+        },
+        {
+          "stat": "attackSpeed",
+          "op": "multiply",
+          "value": 1.06
+        }
+      ],
+      "icon": "shield",
+      "description": "그림자 사냥복의 특성을 살린 모험 장비."
+    },
+    {
+      "id": "scholar_robe",
+      "name": "별빛 학자의 로브",
+      "slot": "armor",
+      "stats": [
+        {
+          "stat": "spell",
+          "op": "add",
+          "value": 6
+        },
+        {
+          "stat": "mp",
+          "op": "add",
+          "value": 25
+        }
+      ],
+      "icon": "staff",
+      "description": "별빛 학자의 로브의 특성을 살린 모험 장비."
+    },
+    {
+      "id": "bastion_plate",
+      "name": "성벽의 중갑",
+      "slot": "armor",
+      "stats": [
+        {
+          "stat": "hp",
+          "op": "add",
+          "value": 45
+        },
+        {
+          "stat": "defense",
+          "op": "add",
+          "value": 6
+        },
+        {
+          "stat": "speed",
+          "op": "multiply",
+          "value": 0.9
+        }
+      ],
+      "icon": "shield",
+      "description": "매우 단단하지만 이동이 느려집니다."
+    },
+    {
+      "id": "mana_pendant",
+      "name": "마력 순환 목걸이",
+      "slot": "accessory",
+      "stats": [
+        {
+          "stat": "manaOnHit",
+          "op": "add",
+          "value": 0.8
+        },
+        {
+          "stat": "manaRegen",
+          "op": "add",
+          "value": 0.4
+        }
+      ],
+      "icon": "staff",
+      "description": "평타와 회복으로 마력 소모를 보완합니다."
+    },
+    {
+      "id": "bloodstone_ring",
+      "name": "핏빛 돌 반지",
+      "slot": "accessory",
+      "stats": [
+        {
+          "stat": "lifesteal",
+          "op": "add",
+          "value": 0.025
+        },
+        {
+          "stat": "hp",
+          "op": "multiply",
+          "value": 0.96
+        }
+      ],
+      "icon": "heart",
+      "description": "체력을 조금 포기하고 흡혈을 얻습니다."
+    },
+    {
+      "id": "precision_ring",
+      "name": "정밀 사격 반지",
+      "slot": "accessory",
+      "stats": [
+        {
+          "stat": "crit",
+          "op": "add",
+          "value": 0.035
+        },
+        {
+          "stat": "attack",
+          "op": "add",
+          "value": 2
+        }
+      ],
+      "icon": "bow",
+      "description": "정밀 사격 반지의 특성을 살린 모험 장비."
+    },
+    {
+      "id": "pilgrim_seal",
+      "name": "순례자의 수호패",
+      "slot": "accessory",
+      "stats": [
+        {
+          "stat": "hp",
+          "op": "add",
+          "value": 25
+        },
+        {
+          "stat": "damageReduction",
+          "op": "add",
+          "value": 0.035
+        }
+      ],
+      "icon": "shield",
+      "description": "순례자의 수호패의 특성을 살린 모험 장비."
+    },
+    {
+      "id": "spirit_leaf",
+      "name": "정령의 잎",
+      "slot": "relic",
+      "stats": [
+        {
+          "stat": "hpRegen",
+          "op": "add",
+          "value": 0.5
+        },
+        {
+          "stat": "speed",
+          "op": "multiply",
+          "value": 1.03
+        }
+      ],
+      "icon": "tree",
+      "description": "정령의 잎의 특성을 살린 모험 장비."
+    },
+    {
+      "id": "frost_memory",
+      "name": "얼음 기억 수정",
+      "slot": "relic",
+      "stats": [
+        {
+          "stat": "slowChance",
+          "op": "add",
+          "value": 0.1
+        },
+        {
+          "stat": "skillDamage",
+          "op": "multiply",
+          "value": 1.05
+        }
+      ],
+      "icon": "staff",
+      "description": "얼음 기억 수정의 특성을 살린 모험 장비."
+    },
+    {
+      "id": "hunter_mark",
+      "name": "추적자의 표식",
+      "slot": "relic",
+      "stats": [
+        {
+          "stat": "extraShots",
+          "op": "add",
+          "value": 1
+        },
+        {
+          "stat": "basicDamage",
+          "op": "multiply",
+          "value": 0.88
+        }
+      ],
+      "icon": "bow",
+      "description": "각 투사체의 피해를 낮추고 추가 사격을 얻습니다."
+    },
+    {
+      "id": "forbidden_seal",
+      "name": "금단의 잿빛 인장",
+      "slot": "relic",
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "op": "multiply",
+          "value": 1.13
+        },
+        {
+          "stat": "mp",
+          "op": "multiply",
+          "value": 0.92
+        }
+      ],
+      "icon": "signature",
+      "description": "마력 총량을 희생해 기술 화력을 올립니다."
     }
   ],
   "affixes": [
@@ -2696,6 +3163,72 @@ window.GAME_DB = {
           "value": 1.055
         }
       ]
+    },
+    {
+      "id": "harvest",
+      "name": "수확의",
+      "stats": [
+        {
+          "stat": "goldGain",
+          "op": "multiply",
+          "value": 1.05
+        }
+      ]
+    },
+    {
+      "id": "scholarly",
+      "name": "학구적인",
+      "stats": [
+        {
+          "stat": "xpGain",
+          "op": "multiply",
+          "value": 1.05
+        }
+      ]
+    },
+    {
+      "id": "vampiric",
+      "name": "흡혈의",
+      "stats": [
+        {
+          "stat": "lifesteal",
+          "op": "add",
+          "value": 0.01
+        }
+      ]
+    },
+    {
+      "id": "restoring",
+      "name": "회복의",
+      "stats": [
+        {
+          "stat": "hpRegen",
+          "op": "add",
+          "value": 0.2
+        }
+      ]
+    },
+    {
+      "id": "agile",
+      "name": "기동의",
+      "stats": [
+        {
+          "stat": "speed",
+          "op": "multiply",
+          "value": 1.03
+        }
+      ]
+    },
+    {
+      "id": "warding",
+      "name": "결계의",
+      "stats": [
+        {
+          "stat": "shieldOnSkill",
+          "op": "add",
+          "value": 3
+        }
+      ]
     }
   ],
   "materials": [
@@ -2718,6 +3251,11 @@ window.GAME_DB = {
       "id": "crystal",
       "name": "마력 결정",
       "icon": "signature"
+    },
+    {
+      "id": "wood",
+      "name": "단단한 목재",
+      "icon": "tree"
     }
   ],
   "recipes": [
@@ -2727,51 +3265,576 @@ window.GAME_DB = {
       "description": "내 직업의 희귀 무기를 제작합니다.",
       "smartWeapon": true,
       "rarity": "rare",
-      "gold": 65,
+      "gold": 240,
       "materials": {
-        "ore": 7,
-        "crystal": 2
-      }
+        "ore": 18,
+        "crystal": 8,
+        "wood": 8
+      },
+      "minLevel": 6
     },
     {
       "id": "fang",
       "name": "사냥 목걸이 제작",
       "item": "wolf_charm",
       "rarity": "rare",
-      "gold": 45,
+      "gold": 180,
       "materials": {
-        "hide": 6,
-        "ore": 3
-      }
+        "hide": 14,
+        "ore": 8
+      },
+      "minLevel": 5
     },
     {
       "id": "focus",
       "name": "별빛 수정 제작",
       "item": "quartz",
       "rarity": "rare",
-      "gold": 55,
+      "gold": 220,
       "materials": {
-        "crystal": 5,
-        "ore": 3
-      }
+        "crystal": 12,
+        "ore": 8
+      },
+      "minLevel": 6
+    },
+    {
+      "id": "craft_knight_blade",
+      "name": "기사단 장검 제작",
+      "description": "공격과 방어의 균형을 잡는 장검.",
+      "item": "knight_blade",
+      "rarity": "uncommon",
+      "gold": 130,
+      "materials": {
+        "ore": 10,
+        "wood": 5
+      },
+      "minLevel": 3,
+      "classes": [
+        "warrior"
+      ]
+    },
+    {
+      "id": "craft_oak_longbow",
+      "name": "참나무 장궁 제작",
+      "description": "거리를 늘리는 대신 발걸음이 조금 느려집니다.",
+      "item": "oak_longbow",
+      "rarity": "uncommon",
+      "gold": 130,
+      "materials": {
+        "wood": 12,
+        "hide": 5
+      },
+      "minLevel": 3,
+      "classes": [
+        "archer"
+      ]
+    },
+    {
+      "id": "craft_silver_grimoire",
+      "name": "은빛 마도서 제작",
+      "description": "장기전의 마력 순환을 돕습니다.",
+      "item": "silver_grimoire",
+      "rarity": "uncommon",
+      "gold": 145,
+      "materials": {
+        "wood": 8,
+        "crystal": 5
+      },
+      "minLevel": 3,
+      "classes": [
+        "magician"
+      ]
+    },
+    {
+      "id": "craft_crusader_hammer",
+      "name": "성전의 망치 제작",
+      "description": "평타 속도보다 방패 기술을 택합니다.",
+      "item": "crusader_hammer",
+      "rarity": "uncommon",
+      "gold": 150,
+      "materials": {
+        "ore": 12,
+        "wood": 4
+      },
+      "minLevel": 3,
+      "classes": [
+        "guardian"
+      ]
+    },
+    {
+      "id": "craft_shadow_jacket",
+      "name": "그림자 사냥복 제작",
+      "description": "그림자 사냥복의 특성을 살린 모험 장비.",
+      "item": "shadow_jacket",
+      "rarity": "uncommon",
+      "gold": 140,
+      "materials": {
+        "hide": 12,
+        "wood": 3
+      },
+      "minLevel": 3,
+      "classes": null
+    },
+    {
+      "id": "craft_scholar_robe",
+      "name": "별빛 학자의 로브 제작",
+      "description": "별빛 학자의 로브의 특성을 살린 모험 장비.",
+      "item": "scholar_robe",
+      "rarity": "uncommon",
+      "gold": 165,
+      "materials": {
+        "hide": 8,
+        "crystal": 6
+      },
+      "minLevel": 4,
+      "classes": null
+    },
+    {
+      "id": "craft_bastion_plate",
+      "name": "성벽의 중갑 제작",
+      "description": "매우 단단하지만 이동이 느려집니다.",
+      "item": "bastion_plate",
+      "rarity": "uncommon",
+      "gold": 210,
+      "materials": {
+        "ore": 18,
+        "hide": 8
+      },
+      "minLevel": 5,
+      "classes": null
+    },
+    {
+      "id": "craft_bloodstone_ring",
+      "name": "핏빛 돌 반지 제작",
+      "description": "체력을 조금 포기하고 흡혈을 얻습니다.",
+      "item": "bloodstone_ring",
+      "rarity": "rare",
+      "gold": 270,
+      "materials": {
+        "ore": 12,
+        "crystal": 10
+      },
+      "minLevel": 7,
+      "classes": null
+    },
+    {
+      "id": "craft_mana_pendant",
+      "name": "마력 순환 목걸이 제작",
+      "description": "평타와 회복으로 마력 소모를 보완합니다.",
+      "item": "mana_pendant",
+      "rarity": "rare",
+      "gold": 250,
+      "materials": {
+        "ore": 8,
+        "crystal": 12
+      },
+      "minLevel": 6,
+      "classes": null
+    },
+    {
+      "id": "craft_frost_memory",
+      "name": "얼음 기억 수정 제작",
+      "description": "얼음 기억 수정의 특성을 살린 모험 장비.",
+      "item": "frost_memory",
+      "rarity": "rare",
+      "gold": 310,
+      "materials": {
+        "crystal": 16,
+        "ore": 10
+      },
+      "minLevel": 8,
+      "classes": null
+    },
+    {
+      "id": "craft_forbidden_seal",
+      "name": "금단의 잿빛 인장 제작",
+      "description": "마력 총량을 희생해 기술 화력을 올립니다.",
+      "item": "forbidden_seal",
+      "rarity": "rare",
+      "gold": 340,
+      "materials": {
+        "crystal": 18,
+        "hide": 8
+      },
+      "minLevel": 8,
+      "classes": null
+    },
+    {
+      "id": "craft_hunter_mark",
+      "name": "추적자의 표식 제작",
+      "description": "각 투사체의 피해를 낮추고 추가 사격을 얻습니다.",
+      "item": "hunter_mark",
+      "rarity": "rare",
+      "gold": 320,
+      "materials": {
+        "wood": 15,
+        "hide": 14,
+        "crystal": 5
+      },
+      "minLevel": 8,
+      "classes": null
     }
   ],
   "shop": [
     {
       "id": "potion",
+      "kind": "consumable",
+      "consumable": "healing",
       "name": "회복 물약",
-      "description": "최대 체력의 55% 회복 · 재사용 7초",
-      "price": 9,
+      "description": "최대 체력의 55% 회복",
+      "price": 22,
       "amount": 1,
       "icon": "potion"
     },
     {
       "id": "potion_bundle",
+      "kind": "consumable",
+      "consumable": "healing",
       "name": "회복 물약 5개",
-      "description": "여행을 위한 물약 묶음.",
-      "price": 40,
+      "description": "위험한 모험을 위한 물약 묶음.",
+      "price": 100,
       "amount": 5,
       "icon": "potion"
+    },
+    {
+      "id": "mana_potion",
+      "kind": "consumable",
+      "consumable": "mana",
+      "name": "마력 물약",
+      "description": "최대 마력의 45% 회복",
+      "price": 26,
+      "amount": 1,
+      "icon": "staff"
+    },
+    {
+      "id": "mana_bundle",
+      "kind": "consumable",
+      "consumable": "mana",
+      "name": "마력 물약 3개",
+      "description": "마력이 부족한 기술 빌드를 위한 준비.",
+      "price": 72,
+      "amount": 3,
+      "icon": "staff"
+    },
+    {
+      "id": "supply_ration",
+      "kind": "consumable",
+      "consumable": "ration",
+      "name": "여행자의 건량",
+      "description": "3분간 초당 체력 회복 +0.35",
+      "price": 30,
+      "amount": 1,
+      "icon": "home"
+    },
+    {
+      "id": "supply_sharpening",
+      "kind": "consumable",
+      "consumable": "sharpening",
+      "name": "숫돌 가루",
+      "description": "3분간 평타 피해 +10%",
+      "price": 42,
+      "amount": 1,
+      "icon": "attack"
+    },
+    {
+      "id": "supply_arcane_dust",
+      "kind": "consumable",
+      "consumable": "arcane_dust",
+      "name": "비전 향로",
+      "description": "3분간 기술 피해 +10%",
+      "price": 44,
+      "amount": 1,
+      "icon": "staff"
+    },
+    {
+      "id": "supply_ward_tonic",
+      "kind": "consumable",
+      "consumable": "ward_tonic",
+      "name": "수호의 영약",
+      "description": "3분간 방어력 +2, 받는 피해 -3%",
+      "price": 45,
+      "amount": 1,
+      "icon": "shield"
+    },
+    {
+      "id": "supply_wind_tonic",
+      "kind": "consumable",
+      "consumable": "wind_tonic",
+      "name": "바람의 영약",
+      "description": "3분간 이동 속도 +10%",
+      "price": 35,
+      "amount": 1,
+      "icon": "bait"
+    },
+    {
+      "id": "material_ore",
+      "kind": "material",
+      "material": "ore",
+      "name": "철광석",
+      "description": "제작에 필요한 재료 1개.",
+      "price": 18,
+      "amount": 1,
+      "icon": "anvil"
+    },
+    {
+      "id": "material_wood",
+      "kind": "material",
+      "material": "wood",
+      "name": "단단한 목재",
+      "description": "제작에 필요한 재료 1개.",
+      "price": 12,
+      "amount": 1,
+      "icon": "tree"
+    },
+    {
+      "id": "material_crystal",
+      "kind": "material",
+      "material": "crystal",
+      "name": "마력 결정",
+      "description": "제작에 필요한 재료 1개.",
+      "price": 32,
+      "amount": 1,
+      "icon": "signature"
+    },
+    {
+      "id": "gear_knight_blade",
+      "kind": "equipment",
+      "item": "knight_blade",
+      "rarity": "common",
+      "level": 3,
+      "minLevel": 3,
+      "limit": 1,
+      "name": "기사단 장검",
+      "description": "공격과 방어의 균형을 잡는 장검.",
+      "price": 95,
+      "icon": "attack"
+    },
+    {
+      "id": "gear_oak_longbow",
+      "kind": "equipment",
+      "item": "oak_longbow",
+      "rarity": "common",
+      "level": 3,
+      "minLevel": 3,
+      "limit": 1,
+      "name": "참나무 장궁",
+      "description": "거리를 늘리는 대신 발걸음이 조금 느려집니다.",
+      "price": 95,
+      "icon": "bow"
+    },
+    {
+      "id": "gear_silver_grimoire",
+      "kind": "equipment",
+      "item": "silver_grimoire",
+      "rarity": "common",
+      "level": 3,
+      "minLevel": 3,
+      "limit": 1,
+      "name": "은빛 마도서",
+      "description": "장기전의 마력 순환을 돕습니다.",
+      "price": 100,
+      "icon": "staff"
+    },
+    {
+      "id": "gear_crusader_hammer",
+      "kind": "equipment",
+      "item": "crusader_hammer",
+      "rarity": "common",
+      "level": 3,
+      "minLevel": 3,
+      "limit": 1,
+      "name": "성전의 망치",
+      "description": "평타 속도보다 방패 기술을 택합니다.",
+      "price": 105,
+      "icon": "shield"
+    },
+    {
+      "id": "gear_soldier_mail",
+      "kind": "equipment",
+      "item": "soldier_mail",
+      "rarity": "common",
+      "level": 3,
+      "minLevel": 3,
+      "limit": 1,
+      "name": "병사의 사슬갑옷",
+      "description": "병사의 사슬갑옷의 특성을 살린 모험 장비.",
+      "price": 90,
+      "icon": "shield"
+    },
+    {
+      "id": "gear_shadow_jacket",
+      "kind": "equipment",
+      "item": "shadow_jacket",
+      "rarity": "common",
+      "level": 3,
+      "minLevel": 3,
+      "limit": 1,
+      "name": "그림자 사냥복",
+      "description": "그림자 사냥복의 특성을 살린 모험 장비.",
+      "price": 100,
+      "icon": "shield"
+    },
+    {
+      "id": "gear_scholar_robe",
+      "kind": "equipment",
+      "item": "scholar_robe",
+      "rarity": "common",
+      "level": 3,
+      "minLevel": 3,
+      "limit": 1,
+      "name": "별빛 학자의 로브",
+      "description": "별빛 학자의 로브의 특성을 살린 모험 장비.",
+      "price": 105,
+      "icon": "staff"
+    },
+    {
+      "id": "gear_bastion_plate",
+      "kind": "equipment",
+      "item": "bastion_plate",
+      "rarity": "common",
+      "level": 5,
+      "minLevel": 5,
+      "limit": 1,
+      "name": "성벽의 중갑",
+      "description": "매우 단단하지만 이동이 느려집니다.",
+      "price": 155,
+      "icon": "shield"
+    },
+    {
+      "id": "gear_mana_pendant",
+      "kind": "equipment",
+      "item": "mana_pendant",
+      "rarity": "common",
+      "level": 4,
+      "minLevel": 4,
+      "limit": 1,
+      "name": "마력 순환 목걸이",
+      "description": "평타와 회복으로 마력 소모를 보완합니다.",
+      "price": 135,
+      "icon": "staff"
+    },
+    {
+      "id": "gear_precision_ring",
+      "kind": "equipment",
+      "item": "precision_ring",
+      "rarity": "common",
+      "level": 4,
+      "minLevel": 4,
+      "limit": 1,
+      "name": "정밀 사격 반지",
+      "description": "정밀 사격 반지의 특성을 살린 모험 장비.",
+      "price": 135,
+      "icon": "bow"
+    },
+    {
+      "id": "gear_pilgrim_seal",
+      "kind": "equipment",
+      "item": "pilgrim_seal",
+      "rarity": "common",
+      "level": 4,
+      "minLevel": 4,
+      "limit": 1,
+      "name": "순례자의 수호패",
+      "description": "순례자의 수호패의 특성을 살린 모험 장비.",
+      "price": 140,
+      "icon": "shield"
+    },
+    {
+      "id": "gear_spirit_leaf",
+      "kind": "equipment",
+      "item": "spirit_leaf",
+      "rarity": "common",
+      "level": 5,
+      "minLevel": 5,
+      "limit": 1,
+      "name": "정령의 잎",
+      "description": "정령의 잎의 특성을 살린 모험 장비.",
+      "price": 155,
+      "icon": "tree"
+    },
+    {
+      "id": "wander_berserker_axe",
+      "kind": "equipment",
+      "item": "berserker_axe",
+      "rarity": "rare",
+      "level": 8,
+      "minLevel": 8,
+      "limit": 1,
+      "exclusive": "wanderer",
+      "name": "광전사의 전투도끼",
+      "description": "느린 공격을 강한 일격으로 보상합니다.",
+      "price": 360,
+      "icon": "attack"
+    },
+    {
+      "id": "wander_swift_bow",
+      "kind": "equipment",
+      "item": "swift_bow",
+      "rarity": "rare",
+      "level": 8,
+      "minLevel": 8,
+      "limit": 1,
+      "exclusive": "wanderer",
+      "name": "속사 사냥궁",
+      "description": "끊임없이 평타 화살을 이어가는 활.",
+      "price": 360,
+      "icon": "bow"
+    },
+    {
+      "id": "wander_ember_staff",
+      "kind": "equipment",
+      "item": "ember_staff",
+      "rarity": "rare",
+      "level": 8,
+      "minLevel": 8,
+      "limit": 1,
+      "exclusive": "wanderer",
+      "name": "불씨 지팡이",
+      "description": "마력 회복을 희생하고 화상을 강화합니다.",
+      "price": 380,
+      "icon": "staff"
+    },
+    {
+      "id": "wander_warden_scepter",
+      "kind": "equipment",
+      "item": "warden_scepter",
+      "rarity": "rare",
+      "level": 8,
+      "minLevel": 8,
+      "limit": 1,
+      "exclusive": "wanderer",
+      "name": "수호자의 홀",
+      "description": "기술마다 보호막을 얻는 수호 무기.",
+      "price": 380,
+      "icon": "shield"
+    },
+    {
+      "id": "wander_hunter_mark",
+      "kind": "equipment",
+      "item": "hunter_mark",
+      "rarity": "rare",
+      "level": 8,
+      "minLevel": 8,
+      "limit": 1,
+      "exclusive": "wanderer",
+      "name": "추적자의 표식",
+      "description": "각 투사체의 피해를 낮추고 추가 사격을 얻습니다.",
+      "price": 430,
+      "icon": "bow"
+    },
+    {
+      "id": "wander_frost_memory",
+      "kind": "equipment",
+      "item": "frost_memory",
+      "rarity": "rare",
+      "level": 8,
+      "minLevel": 8,
+      "limit": 1,
+      "exclusive": "wanderer",
+      "name": "얼음 기억 수정",
+      "description": "얼음 기억 수정의 특성을 살린 모험 장비.",
+      "price": 400,
+      "icon": "staff"
     }
   ],
   "blessings": [
@@ -2819,7 +3882,7 @@ window.GAME_DB = {
     }
   ],
   "inn": {
-    "cost": 8,
+    "cost": 25,
     "name": "따뜻한 식사",
     "duration": 600,
     "stats": [
@@ -2834,7 +3897,8 @@ window.GAME_DB = {
         "value": 0.4
       }
     ],
-    "description": "10분간 체력 +8%, 초당 체력 회복 +0.4. 휴식은 무료입니다."
+    "description": "10분간 최대 체력 +8%, 초당 체력 회복 +0.4. 식사는 즉시 회복을 제공하지 않습니다.",
+    "restCost": 20
   },
   "dungeonTiers": [
     {
@@ -2864,7 +3928,7 @@ window.GAME_DB = {
       "name": "초원 슬라임",
       "sprite": "slime",
       "hp": 35,
-      "attack": 7,
+      "attack": 12,
       "defense": 0,
       "speed": 1.3,
       "range": 0.75,
@@ -2874,8 +3938,8 @@ window.GAME_DB = {
       "radius": 0.9,
       "xp": 8,
       "gold": [
-        2,
-        4
+        1,
+        2
       ],
       "material": {
         "herb": 0.18
@@ -2886,7 +3950,7 @@ window.GAME_DB = {
       "name": "고블린",
       "sprite": "goblin",
       "hp": 54,
-      "attack": 10,
+      "attack": 16,
       "defense": 1,
       "speed": 2,
       "range": 0.85,
@@ -2896,8 +3960,8 @@ window.GAME_DB = {
       "radius": 1,
       "xp": 11,
       "gold": [
-        3,
-        6
+        1,
+        3
       ],
       "material": {
         "ore": 0.32
@@ -2908,7 +3972,7 @@ window.GAME_DB = {
       "name": "회색 늑대",
       "sprite": "wolf",
       "hp": 62,
-      "attack": 12,
+      "attack": 20,
       "defense": 1,
       "speed": 2.75,
       "range": 0.9,
@@ -2919,8 +3983,8 @@ window.GAME_DB = {
       "length": 2.1,
       "xp": 13,
       "gold": [
-        3,
-        7
+        1,
+        3
       ],
       "material": {
         "hide": 0.48
@@ -2932,7 +3996,7 @@ window.GAME_DB = {
       "name": "숲 호그",
       "sprite": "boar",
       "hp": 88,
-      "attack": 15,
+      "attack": 24,
       "defense": 2,
       "speed": 1.8,
       "range": 2.8,
@@ -2943,8 +4007,8 @@ window.GAME_DB = {
       "length": 3.3,
       "xp": 17,
       "gold": [
-        4,
-        8
+        1,
+        4
       ],
       "material": {
         "hide": 0.6
@@ -2956,7 +4020,7 @@ window.GAME_DB = {
       "name": "늪 리자드",
       "sprite": "lizard",
       "hp": 86,
-      "attack": 16,
+      "attack": 26,
       "defense": 2,
       "speed": 2,
       "range": 3,
@@ -2966,8 +4030,8 @@ window.GAME_DB = {
       "radius": 1.05,
       "xp": 20,
       "gold": [
-        5,
-        9
+        2,
+        4
       ],
       "material": {
         "crystal": 0.32
@@ -2978,7 +4042,7 @@ window.GAME_DB = {
       "name": "봉인 고블린",
       "sprite": "goblin",
       "hp": 105,
-      "attack": 17,
+      "attack": 28,
       "defense": 4,
       "speed": 1.8,
       "range": 1,
@@ -2988,8 +4052,8 @@ window.GAME_DB = {
       "radius": 1.4,
       "xp": 28,
       "gold": [
-        8,
-        13
+        3,
+        6
       ],
       "material": {
         "ore": 0.8
@@ -3001,7 +4065,7 @@ window.GAME_DB = {
       "name": "광산 골렘",
       "sprite": "golem",
       "hp": 135,
-      "attack": 19,
+      "attack": 31,
       "defense": 5,
       "speed": 1.2,
       "range": 1.4,
@@ -3011,8 +4075,8 @@ window.GAME_DB = {
       "radius": 1.7,
       "xp": 32,
       "gold": [
-        9,
-        14
+        4,
+        7
       ],
       "material": {
         "ore": 1
@@ -3023,7 +4087,7 @@ window.GAME_DB = {
       "name": "리자드 주술사",
       "sprite": "lizard",
       "hp": 128,
-      "attack": 20,
+      "attack": 32,
       "defense": 3,
       "speed": 1.7,
       "range": 3.6,
@@ -3033,8 +4097,8 @@ window.GAME_DB = {
       "radius": 1.5,
       "xp": 37,
       "gold": [
-        10,
-        16
+        4,
+        8
       ],
       "material": {
         "crystal": 1
@@ -3047,14 +4111,14 @@ window.GAME_DB = {
       "name": "은빛 늑대왕",
       "sprite": "wolf",
       "hp": 780,
-      "attack": 23,
+      "attack": 37,
       "defense": 4,
       "speed": 2.3,
       "range": 2.6,
       "xp": 100,
       "gold": [
-        55,
-        75
+        24,
+        37
       ],
       "size": 2,
       "boss": true,
@@ -3098,14 +4162,14 @@ window.GAME_DB = {
       "name": "깨어난 광산군주",
       "sprite": "golem",
       "hp": 1200,
-      "attack": 28,
+      "attack": 45,
       "defense": 7,
       "speed": 1.1,
       "range": 2.6,
       "xp": 160,
       "gold": [
-        75,
-        100
+        33,
+        50
       ],
       "size": 2.25,
       "boss": true,
@@ -3147,14 +4211,14 @@ window.GAME_DB = {
       "name": "잿불의 원룡",
       "sprite": "drake",
       "hp": 1900,
-      "attack": 34,
+      "attack": 55,
       "defense": 8,
       "speed": 1.6,
       "range": 4.1,
       "xp": 250,
       "gold": [
-        110,
-        150
+        49,
+        75
       ],
       "size": 2,
       "boss": true,
@@ -3191,6 +4255,80 @@ window.GAME_DB = {
         "lizard",
         "lizard"
       ]
+    },
+    "goblin_captain": {
+      "name": "황야의 고블린 대장",
+      "sprite": "goblin",
+      "hp": 175,
+      "attack": 30,
+      "defense": 1,
+      "speed": 2,
+      "range": 0.85,
+      "cooldown": 1.55,
+      "windup": 0.45,
+      "kind": "circle",
+      "radius": 1,
+      "xp": 22,
+      "gold": [
+        7,
+        12
+      ],
+      "material": {
+        "ore": 0.32
+      },
+      "size": 1.4,
+      "elite": true,
+      "tint": "#b8a18a"
+    },
+    "alpha_wolf": {
+      "name": "흰갈기 우두머리",
+      "sprite": "wolf",
+      "hp": 210,
+      "attack": 35,
+      "defense": 1,
+      "speed": 2.75,
+      "range": 0.9,
+      "cooldown": 1.65,
+      "windup": 0.55,
+      "kind": "line",
+      "radius": 0.6,
+      "length": 2.1,
+      "xp": 26,
+      "gold": [
+        7,
+        12
+      ],
+      "material": {
+        "hide": 0.48
+      },
+      "size": 1.4,
+      "dash": true,
+      "elite": true,
+      "tint": "#b8a18a"
+    },
+    "lizard_chief": {
+      "name": "비늘갑옷 추적자",
+      "sprite": "lizard",
+      "hp": 255,
+      "attack": 42,
+      "defense": 2,
+      "speed": 2,
+      "range": 3,
+      "cooldown": 2.1,
+      "windup": 0.8,
+      "kind": "target",
+      "radius": 1.05,
+      "xp": 40,
+      "gold": [
+        7,
+        12
+      ],
+      "material": {
+        "crystal": 0.32
+      },
+      "size": 1.4,
+      "elite": true,
+      "tint": "#b8a18a"
     }
   },
   "quests": [
@@ -3210,7 +4348,7 @@ window.GAME_DB = {
       ],
       "rewards": {
         "xp": 12,
-        "gold": 20,
+        "gold": 13,
         "potions": 2
       }
     },
@@ -3239,9 +4377,9 @@ window.GAME_DB = {
       ],
       "rewards": {
         "xp": 34,
-        "gold": 40,
+        "gold": 26,
         "materials": {
-          "ore": 4
+          "ore": 2
         },
         "potions": 2
       }
@@ -3271,10 +4409,10 @@ window.GAME_DB = {
       ],
       "rewards": {
         "xp": 55,
-        "gold": 55,
+        "gold": 36,
         "materials": {
-          "hide": 4,
-          "ore": 3
+          "hide": 2,
+          "ore": 2
         },
         "points": 1
       }
@@ -3297,10 +4435,10 @@ window.GAME_DB = {
       ],
       "rewards": {
         "xp": 85,
-        "gold": 85,
+        "gold": 55,
         "points": 1,
         "materials": {
-          "crystal": 3
+          "crystal": 2
         }
       }
     },
@@ -3322,11 +4460,11 @@ window.GAME_DB = {
       ],
       "rewards": {
         "xp": 135,
-        "gold": 110,
+        "gold": 72,
         "points": 1,
         "materials": {
-          "ore": 8,
-          "crystal": 3
+          "ore": 5,
+          "crystal": 2
         }
       }
     },
@@ -3348,10 +4486,10 @@ window.GAME_DB = {
       ],
       "rewards": {
         "xp": 220,
-        "gold": 180,
+        "gold": 117,
         "points": 2,
         "materials": {
-          "crystal": 8
+          "crystal": 5
         }
       },
       "final": true
@@ -3374,7 +4512,7 @@ window.GAME_DB = {
       ],
       "rewards": {
         "xp": 25,
-        "gold": 25,
+        "gold": 16,
         "potions": 4
       }
     },
@@ -3396,9 +4534,9 @@ window.GAME_DB = {
       ],
       "rewards": {
         "xp": 35,
-        "gold": 35,
+        "gold": 23,
         "materials": {
-          "ore": 2
+          "ore": 1
         }
       }
     },
@@ -3420,9 +4558,9 @@ window.GAME_DB = {
       ],
       "rewards": {
         "xp": 50,
-        "gold": 45,
+        "gold": 29,
         "materials": {
-          "hide": 3
+          "hide": 2
         }
       }
     },
@@ -3444,10 +4582,64 @@ window.GAME_DB = {
       ],
       "rewards": {
         "xp": 65,
-        "gold": 60,
+        "gold": 39,
         "materials": {
-          "crystal": 2
+          "crystal": 1
         }
+      }
+    },
+    {
+      "id": "explore_meadow",
+      "name": "초원의 숨은 흔적",
+      "npc": "maren",
+      "requires": "welcome",
+      "description": "초원길의 오래된 풍차와 여명의 제단을 조사하세요.",
+      "objectives": [
+        {
+          "kind": "discover",
+          "target": "windmill",
+          "count": 1,
+          "label": "오래된 풍차 발견",
+          "map": "meadow"
+        },
+        {
+          "kind": "discover",
+          "target": "dawn_shrine",
+          "count": 1,
+          "label": "여명의 제단 발견",
+          "map": "meadow"
+        }
+      ],
+      "rewards": {
+        "xp": 35,
+        "gold": 18
+      }
+    },
+    {
+      "id": "explore_forest",
+      "name": "숲의 잊힌 발자취",
+      "npc": "rhett",
+      "requires": "forest",
+      "description": "숲의 망루와 바람의 성소를 찾아보세요.",
+      "objectives": [
+        {
+          "kind": "discover",
+          "target": "watchtower",
+          "count": 1,
+          "label": "사냥꾼의 망루 발견",
+          "map": "forest"
+        },
+        {
+          "kind": "discover",
+          "target": "wind_shrine",
+          "count": 1,
+          "label": "바람의 성소 발견",
+          "map": "forest"
+        }
+      ],
+      "rewards": {
+        "xp": 50,
+        "gold": 24
       }
     }
   ],
@@ -3720,7 +4912,9 @@ window.GAME_DB = {
       "waypoint": [
         13,
         13
-      ]
+      ],
+      "discoveries": [],
+      "events": []
     },
     "meadow": {
       "id": "meadow",
@@ -3733,13 +4927,13 @@ window.GAME_DB = {
         "t..........................................t",
         "t.t,.....t...,t..,t..t..,,t,.......t.tt..t.t",
         "t..........................................t",
-        "t.tt.t....,,..t....,..,.ttt..,::.,.t.,,..t.t",
+        "t.tt......,,..t....,..,.ttt..,::.,.t.,,..t.t",
         "t.............................::...........t",
         "t.............................::...........t",
         "t.............................::...........t",
         "t.............................::...........t",
         "t.............................::...........t",
-        "t.t,..,......t,..,,,.,t......t::.t.::::::..:",
+        "t.t,..,......t,..,,,.,t......t::...::::::..:",
         "t.............................::...::::::..t",
         "t.............................::...........t",
         "t.............................::...........t",
@@ -3747,13 +4941,13 @@ window.GAME_DB = {
         "t......::::::::::::::::::::::::::::::::::::t",
         "t..........................................t",
         "t..........................................t",
-        "t.,t.,...t,...t....t.,........t......t...,.t",
+        "t.,t.,...t,...t....t.,........t..........,.t",
         "t..........................................t",
         "t..........................................t",
         "t..........................................t",
         "t..........................................t",
         "t..........................................t",
-        "t....t,..,.,.,,..,......,t.t.t,..,.t.,,..t.t",
+        "t....t,..,.,.,,..,......,t.t..,..,...,,....t",
         "t..........................................t",
         "t..t..,..t.t.,t..t.,.,t.t.....t...t,.,,....t",
         "t..........................................t",
@@ -3822,84 +5016,166 @@ window.GAME_DB = {
           "x": 10,
           "y": 11,
           "level": 1,
-          "guardian": false
+          "guardian": false,
+          "id": "meadow_spawn_0"
         },
         {
           "monster": "slime",
           "x": 12,
           "y": 18,
           "level": 1,
-          "guardian": false
+          "guardian": false,
+          "id": "meadow_spawn_1"
         },
         {
           "monster": "slime",
           "x": 16,
           "y": 8,
           "level": 1,
-          "guardian": false
+          "guardian": false,
+          "id": "meadow_spawn_2"
         },
         {
           "monster": "slime",
           "x": 18,
           "y": 21,
           "level": 1,
-          "guardian": false
+          "guardian": false,
+          "id": "meadow_spawn_3"
         },
         {
           "monster": "slime",
           "x": 21,
           "y": 12,
           "level": 1,
-          "guardian": false
+          "guardian": false,
+          "id": "meadow_spawn_4"
         },
         {
           "monster": "slime",
           "x": 25,
           "y": 18,
           "level": 1,
-          "guardian": false
+          "guardian": false,
+          "id": "meadow_spawn_5"
         },
         {
           "monster": "slime",
           "x": 8,
           "y": 20,
           "level": 1,
-          "guardian": false
+          "guardian": false,
+          "id": "meadow_spawn_6"
         },
         {
           "monster": "goblin",
           "x": 27,
           "y": 10,
           "level": 2,
-          "guardian": false
+          "guardian": false,
+          "id": "meadow_spawn_7"
         },
         {
           "monster": "goblin",
           "x": 32,
           "y": 19,
           "level": 2,
-          "guardian": false
+          "guardian": false,
+          "id": "meadow_spawn_8"
         },
         {
           "monster": "goblin",
           "x": 36,
           "y": 8,
           "level": 2,
-          "guardian": false
+          "guardian": false,
+          "id": "meadow_spawn_9"
         },
         {
           "monster": "goblin",
           "x": 37,
           "y": 20,
           "level": 2,
-          "guardian": false
+          "guardian": false,
+          "id": "meadow_spawn_10"
         },
         {
           "monster": "goblin",
           "x": 21,
           "y": 23,
           "level": 2,
-          "guardian": false
+          "guardian": false,
+          "id": "meadow_spawn_11"
+        },
+        {
+          "monster": "slime",
+          "x": 13,
+          "y": 7,
+          "level": 1,
+          "guardian": false,
+          "id": "meadow_spawn_12"
+        },
+        {
+          "monster": "slime",
+          "x": 17,
+          "y": 16,
+          "level": 1,
+          "guardian": false,
+          "id": "meadow_spawn_13"
+        },
+        {
+          "monster": "slime",
+          "x": 23,
+          "y": 22,
+          "level": 1,
+          "guardian": false,
+          "id": "meadow_spawn_14"
+        },
+        {
+          "monster": "slime",
+          "x": 28,
+          "y": 7,
+          "level": 1,
+          "guardian": false,
+          "id": "meadow_spawn_15"
+        },
+        {
+          "monster": "goblin",
+          "x": 32,
+          "y": 9,
+          "level": 1,
+          "guardian": false,
+          "id": "meadow_spawn_16"
+        },
+        {
+          "monster": "goblin",
+          "x": 38,
+          "y": 17,
+          "level": 1,
+          "guardian": false,
+          "id": "meadow_spawn_17"
+        },
+        {
+          "monster": "goblin_captain",
+          "x": 35,
+          "y": 23,
+          "level": 2,
+          "guardian": false,
+          "id": "meadow_spawn_18",
+          "patrol": [
+            [
+              35,
+              23
+            ],
+            [
+              39,
+              19
+            ],
+            [
+              34,
+              17
+            ]
+          ]
         }
       ],
       "props": [],
@@ -3909,38 +5185,149 @@ window.GAME_DB = {
           "type": "herb",
           "x": 8,
           "y": 10,
-          "amount": 2,
-          "respawn": 50
+          "amount": 1,
+          "respawn": 90
         },
         {
           "id": "herb_1",
           "type": "herb",
           "x": 17,
           "y": 19,
-          "amount": 2,
-          "respawn": 50
+          "amount": 1,
+          "respawn": 90
         },
         {
           "id": "herb_2",
           "type": "herb",
           "x": 25,
           "y": 9,
-          "amount": 2,
-          "respawn": 50
+          "amount": 1,
+          "respawn": 90
         },
         {
           "id": "herb_3",
           "type": "herb",
           "x": 35,
           "y": 17,
-          "amount": 2,
-          "respawn": 50
+          "amount": 1,
+          "respawn": 90
+        },
+        {
+          "id": "meadow_wood_0",
+          "type": "wood",
+          "x": 9,
+          "y": 6,
+          "amount": 1,
+          "respawn": 120
+        },
+        {
+          "id": "meadow_wood_1",
+          "type": "wood",
+          "x": 29,
+          "y": 23,
+          "amount": 1,
+          "respawn": 120
         }
       ],
-      "chests": [],
+      "chests": [
+        {
+          "id": "meadow_cache_0",
+          "x": 7,
+          "y": 23,
+          "equipmentChance": 0.12,
+          "gold": 6,
+          "xp": 10,
+          "materials": {
+            "herb": 1
+          }
+        },
+        {
+          "id": "meadow_cache_1",
+          "x": 38,
+          "y": 5,
+          "equipmentChance": 0.12,
+          "gold": 6,
+          "xp": 10,
+          "materials": {
+            "ore": 1
+          }
+        }
+      ],
       "waypoint": [
         5,
         14
+      ],
+      "discoveries": [
+        {
+          "id": "windmill",
+          "name": "오래된 풍차",
+          "kind": "landmark",
+          "x": 6,
+          "y": 5,
+          "sprite": "ruin",
+          "description": "초원길이 생기기 전부터 이곳을 지켜온 풍차의 흔적입니다.",
+          "rewards": {
+            "xp": 18,
+            "gold": 5
+          }
+        },
+        {
+          "id": "dawn_shrine",
+          "name": "여명의 제단",
+          "kind": "shrine",
+          "x": 40,
+          "y": 24,
+          "sprite": "waystone",
+          "description": "제단의 서약이 몸에 남습니다. 최대 체력이 영구적으로 5 증가합니다.",
+          "stats": [
+            {
+              "stat": "hp",
+              "op": "add",
+              "value": 5
+            }
+          ],
+          "rewards": {
+            "xp": 15
+          }
+        }
+      ],
+      "events": [
+        {
+          "id": "meadow_event",
+          "name": "습격당한 행상 야영지",
+          "x": 19,
+          "y": 5,
+          "sprite": "camp",
+          "description": "주변 몬스터 무리를 처치하면 야영지의 보급품을 회수할 수 있습니다.",
+          "cooldown": 300,
+          "spawns": [
+            {
+              "monster": "goblin",
+              "x": 20,
+              "y": 6,
+              "level": 2
+            },
+            {
+              "monster": "goblin",
+              "x": 21,
+              "y": 7,
+              "level": 2
+            },
+            {
+              "monster": "goblin",
+              "x": 18,
+              "y": 7,
+              "level": 2
+            }
+          ],
+          "rewards": {
+            "xp": 30,
+            "gold": 10,
+            "materials": {
+              "ore": 2
+            }
+          }
+        }
       ]
     },
     "forest": {
@@ -3954,13 +5341,13 @@ window.GAME_DB = {
         "t,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,t",
         "t,tt,,,,,t,,,tt,,tt,,t,,...,,t,,,,,t,tt,,t,t",
         "t,,,,,,,,,,,,,,,,,,,,,,,...,,,,,,,,,,,,,,,,t",
-        "t,tt,t,,,,,t,,t,,,,t,,t,...,,,,,,,,t,tt,,t,t",
+        "t,tt,t,,,,,t,,t,,,,t,,t,...,,,,,,,,t,..,,t,t",
         "t,,,,,,,,,,,,,,,,,,,,,,,,::,,,,,,,,,,,,,,,,t",
         "t,,,,,,,,,,...,,,,,,,,,,,::...,,,,,,,,,,,,,t",
         "t,,,,,,,,,,...:::...:::::::...:::,,...,,,,,t",
         "t,,,,,,,,,,...:::...:::::::...::,,,...,,,,,t",
         "t,,,,,,...,,::,,,...,,,,,::,,...,,,...,,,,,t",
-        "t,t,,,t...,t::t,,ttt,,t,,::t,...,t,,,,,,,t,t",
+        "t,t,,,t...,t::.,,ttt,,t,,::t,...,t,,,,,,,t,t",
         "t,,,,,,...,,::,,,,,,,,,,,::,,...,,,,...,,,,t",
         "t,,,,,,,,,,,::,,,,,...,,,::,,,,,,,,,...,,,,t",
         "t...,,,,,,,,::,,,,,...,,,::,,,,,,,,,...,,..t",
@@ -3974,9 +5361,9 @@ window.GAME_DB = {
         "t,,,,,,...,,::,,,,,,,,...,,,,,,,,...,,,,,,,t",
         "t,,,,,,,,,,,::,,,...,,,,,,,,,,,,,...,,,,,,,t",
         "t,,,,,,,,,,,::,,,...,,,,,,,,,,,,,,,,,,,,,,,t",
-        "t,,,,tt,,,,,,tt,,...,,t,tt,t,tt,,t,t,,,,,t,t",
+        "t,,,,..,,,,,,tt,,...,,t,..,t,tt,,t,t,,,,,t,t",
         "t,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,t",
-        "t,,t,,,,,t,t,tt,,t,t,tt,t,,,,,t,,,t,,t,,,,,t",
+        "t,,t,,,,,t,t,tt,,t,t,tt,.,,,,,t,,,t,,t,,,,,t",
         "t,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,t",
         "t,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,t",
         "tttttttttttttttttttttttttttttttttttttttttttt"
@@ -3987,7 +5374,21 @@ window.GAME_DB = {
         2.5,
         15.5
       ],
-      "npcs": [],
+      "npcs": [
+        {
+          "id": "wander_forest",
+          "name": "떠돌이 상인 마윈",
+          "service": "merchant",
+          "x": 7,
+          "y": 24,
+          "vendorType": "wanderer",
+          "schedule": {
+            "period": 240,
+            "activeFor": 120,
+            "offset": 0
+          }
+        }
+      ],
       "portals": [
         {
           "id": "west",
@@ -4035,91 +5436,174 @@ window.GAME_DB = {
           "x": 8,
           "y": 10,
           "level": 4,
-          "guardian": false
+          "guardian": false,
+          "id": "forest_spawn_0"
         },
         {
           "monster": "wolf",
           "x": 13,
           "y": 19,
           "level": 4,
-          "guardian": false
+          "guardian": false,
+          "id": "forest_spawn_1"
         },
         {
           "monster": "wolf",
           "x": 18,
           "y": 8,
           "level": 4,
-          "guardian": false
+          "guardian": false,
+          "id": "forest_spawn_2"
         },
         {
           "monster": "wolf",
           "x": 23,
           "y": 20,
           "level": 4,
-          "guardian": false
+          "guardian": false,
+          "id": "forest_spawn_3"
         },
         {
           "monster": "wolf",
           "x": 30,
           "y": 10,
           "level": 4,
-          "guardian": false
+          "guardian": false,
+          "id": "forest_spawn_4"
         },
         {
           "monster": "wolf",
           "x": 34,
           "y": 21,
           "level": 4,
-          "guardian": false
+          "guardian": false,
+          "id": "forest_spawn_5"
         },
         {
           "monster": "wolf",
           "x": 37,
           "y": 12,
           "level": 4,
-          "guardian": false
+          "guardian": false,
+          "id": "forest_spawn_6"
         },
         {
           "monster": "boar",
           "x": 12,
           "y": 7,
           "level": 4,
-          "guardian": false
+          "guardian": false,
+          "id": "forest_spawn_7"
         },
         {
           "monster": "boar",
           "x": 18,
           "y": 23,
           "level": 4,
-          "guardian": false
+          "guardian": false,
+          "id": "forest_spawn_8"
         },
         {
           "monster": "boar",
           "x": 28,
           "y": 7,
           "level": 4,
-          "guardian": false
+          "guardian": false,
+          "id": "forest_spawn_9"
         },
         {
           "monster": "boar",
           "x": 33,
           "y": 17,
           "level": 4,
-          "guardian": false
+          "guardian": false,
+          "id": "forest_spawn_10"
         },
         {
           "monster": "goblin",
           "x": 20,
           "y": 13,
           "level": 4,
-          "guardian": false
+          "guardian": false,
+          "id": "forest_spawn_11"
         },
         {
           "monster": "goblin",
           "x": 36,
           "y": 8,
           "level": 4,
-          "guardian": false
+          "guardian": false,
+          "id": "forest_spawn_12"
+        },
+        {
+          "monster": "wolf",
+          "x": 6,
+          "y": 20,
+          "level": 4,
+          "guardian": false,
+          "id": "forest_spawn_13"
+        },
+        {
+          "monster": "wolf",
+          "x": 15,
+          "y": 11,
+          "level": 4,
+          "guardian": false,
+          "id": "forest_spawn_14"
+        },
+        {
+          "monster": "wolf",
+          "x": 26,
+          "y": 16,
+          "level": 4,
+          "guardian": false,
+          "id": "forest_spawn_15"
+        },
+        {
+          "monster": "boar",
+          "x": 20,
+          "y": 24,
+          "level": 4,
+          "guardian": false,
+          "id": "forest_spawn_16"
+        },
+        {
+          "monster": "boar",
+          "x": 31,
+          "y": 6,
+          "level": 4,
+          "guardian": false,
+          "id": "forest_spawn_17"
+        },
+        {
+          "monster": "goblin",
+          "x": 39,
+          "y": 18,
+          "level": 4,
+          "guardian": false,
+          "id": "forest_spawn_18"
+        },
+        {
+          "monster": "alpha_wolf",
+          "x": 29,
+          "y": 22,
+          "level": 5,
+          "guardian": false,
+          "id": "forest_spawn_19",
+          "patrol": [
+            [
+              29,
+              22
+            ],
+            [
+              34,
+              24
+            ],
+            [
+              34,
+              18
+            ]
+          ]
         }
       ],
       "props": [],
@@ -4129,12 +5613,131 @@ window.GAME_DB = {
           "type": "herb",
           "x": 8,
           "y": 20,
-          "amount": 2,
-          "respawn": 50
+          "amount": 1,
+          "respawn": 90
+        },
+        {
+          "id": "forest_wood_0",
+          "type": "wood",
+          "x": 9,
+          "y": 24,
+          "amount": 1,
+          "respawn": 120
+        },
+        {
+          "id": "forest_wood_1",
+          "type": "wood",
+          "x": 32,
+          "y": 7,
+          "amount": 1,
+          "respawn": 120
+        },
+        {
+          "id": "forest_wood_2",
+          "type": "wood",
+          "x": 40,
+          "y": 18,
+          "amount": 1,
+          "respawn": 120
         }
       ],
-      "chests": [],
-      "waypoint": null
+      "chests": [
+        {
+          "id": "forest_cache_0",
+          "x": 5,
+          "y": 6,
+          "equipmentChance": 0.12,
+          "gold": 6,
+          "xp": 10,
+          "materials": {
+            "herb": 1
+          }
+        },
+        {
+          "id": "forest_cache_1",
+          "x": 39,
+          "y": 24,
+          "equipmentChance": 0.12,
+          "gold": 6,
+          "xp": 10,
+          "materials": {
+            "ore": 1
+          }
+        }
+      ],
+      "waypoint": null,
+      "discoveries": [
+        {
+          "id": "watchtower",
+          "name": "사냥꾼의 망루",
+          "kind": "landmark",
+          "x": 6,
+          "y": 25,
+          "sprite": "ruin",
+          "description": "발자국과 이정표가 남아 있는 숲속 망루입니다.",
+          "rewards": {
+            "xp": 25,
+            "gold": 8
+          }
+        },
+        {
+          "id": "wind_shrine",
+          "name": "바람의 성소",
+          "kind": "shrine",
+          "x": 38,
+          "y": 5,
+          "sprite": "waystone",
+          "description": "바람의 축복이 걸음을 가볍게 합니다. 이동 속도가 영구적으로 2% 증가합니다.",
+          "stats": [
+            {
+              "stat": "speed",
+              "op": "multiply",
+              "value": 1.02
+            }
+          ],
+          "rewards": {
+            "xp": 20
+          }
+        }
+      ],
+      "events": [
+        {
+          "id": "forest_event",
+          "name": "고블린 사냥 초소",
+          "x": 25,
+          "y": 25,
+          "sprite": "camp",
+          "description": "주변 몬스터 무리를 처치하면 야영지의 보급품을 회수할 수 있습니다.",
+          "cooldown": 300,
+          "spawns": [
+            {
+              "monster": "goblin",
+              "x": 26,
+              "y": 26,
+              "level": 5
+            },
+            {
+              "monster": "goblin",
+              "x": 27,
+              "y": 27,
+              "level": 5
+            },
+            {
+              "monster": "goblin",
+              "x": 24,
+              "y": 27,
+              "level": 5
+            }
+          ],
+          "rewards": {
+            "xp": 45,
+            "gold": 14,
+            "materials": {
+              "hide": 2
+            }
+          }
+        }
+      ]
     },
     "silverhaven": {
       "id": "silverhaven",
@@ -4301,7 +5904,9 @@ window.GAME_DB = {
       "waypoint": [
         16,
         14
-      ]
+      ],
+      "discoveries": [],
+      "events": []
     },
     "marsh": {
       "id": "marsh",
@@ -4314,7 +5919,7 @@ window.GAME_DB = {
         "~mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm~",
         "~mtmmmmmmtm~~~~mmmtmmtmmmmtmm~~~~mmtmttmmtm~",
         "~mmmmmmmmmm~~~~mmmmmmmmmmmmmm~~~~mmmmmmmmmm~",
-        "~mttmtmmmmm~~~~mmmmmmmmmtttmm~~~~mmtmmm...m~",
+        "~mttm.mmmmm~~~~mmmmmmmmmtttmm~~~~mm.mmm...m~",
         "~mmmmmmmmmm~~~~mmmmmmmmmmmmmm~~~~mmmmmm...m~",
         "~mmmmmmmmmm~~~~mmmmmmmmmmmmmm~~~~mmmmmm...m~",
         "~mmmmmmmmmm~~~~mmmmmmmmmmmmmm~~~~mmmmmmm__m~",
@@ -4328,15 +5933,15 @@ window.GAME_DB = {
         "~......____________...____________________m~",
         "~...mmmmmmm~~~~mmmmmmmmmmmmmm~~~~mmmmmmmmmm~",
         "~mmmmmmmmmm~~~~mm...mmmmmmmmm~~~~mmmmmmmmmm~",
-        "~mmtmmmmmtm~~~~mm...mmmmtmtmm~~~~mmmmtmmmmm~",
+        "~mmtmmmmmtm~~~~mm...mmmm.m.mm~~~~mmmm.mmmmm~",
         "~mmmm...mmm~~~~mm...mm...mmmm~~~~mmmmm...mm~",
         "~mmmm...mmm~~~~mmmmmmm......m~~~~mmmmm...mm~",
         "~mmmm...mmm~~~~mmmmmmm......m~~~~mmmmm...mm~",
         "~mmmmmmmmmm~~~~mmmmmmmmmm...m~~~~m...mmmmmm~",
         "~mmmmmmmmmm~~~~mmmmmmmmmmmmmm~~~~m...mmmmmm~",
-        "~mmmmtmmmmm~~~~mmmmmmmtmmtmtm~~~~m...mmmmtm~",
+        "~mmmmtmmmmm~~~~mmmmmmm.mmtmtm~~~~m...mmmmtm~",
         "~mmmmmmmmmm~~~~mmmmmmmmmmmmmm~~~~mmmmmmmmmm~",
-        "~mmtmmmmmtm~~~~mmtmmmmtmtmmmm~~~~mtmmmmmmmm~",
+        "~mmtmmmmmtm~~~~mm.mmmm.mtmmmm~~~~mtmmmmmmmm~",
         "~mmmmmmmmmm~~~~mmmmmmmmmmmmmm~~~~mmmmmmmmmm~",
         "~mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm~",
         "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
@@ -4354,6 +5959,19 @@ window.GAME_DB = {
           "service": "waystone",
           "x": 5,
           "y": 14
+        },
+        {
+          "id": "wander_marsh",
+          "name": "유랑 상인 에다",
+          "service": "merchant",
+          "x": 23,
+          "y": 24,
+          "vendorType": "wanderer",
+          "schedule": {
+            "period": 240,
+            "activeFor": 120,
+            "offset": 120
+          }
         }
       ],
       "portals": [
@@ -4390,63 +6008,134 @@ window.GAME_DB = {
           "x": 8,
           "y": 9,
           "level": 8,
-          "guardian": false
+          "guardian": false,
+          "id": "marsh_spawn_0"
         },
         {
           "monster": "lizard",
           "x": 18,
           "y": 18,
           "level": 8,
-          "guardian": false
+          "guardian": false,
+          "id": "marsh_spawn_1"
         },
         {
           "monster": "lizard",
           "x": 23,
           "y": 9,
           "level": 8,
-          "guardian": false
+          "guardian": false,
+          "id": "marsh_spawn_2"
         },
         {
           "monster": "lizard",
           "x": 26,
           "y": 21,
           "level": 8,
-          "guardian": false
+          "guardian": false,
+          "id": "marsh_spawn_3"
         },
         {
           "monster": "lizard",
           "x": 36,
           "y": 9,
           "level": 8,
-          "guardian": false
+          "guardian": false,
+          "id": "marsh_spawn_4"
         },
         {
           "monster": "lizard",
           "x": 39,
           "y": 20,
           "level": 8,
-          "guardian": false
+          "guardian": false,
+          "id": "marsh_spawn_5"
         },
         {
           "monster": "slime",
           "x": 6,
           "y": 20,
           "level": 8,
-          "guardian": false
+          "guardian": false,
+          "id": "marsh_spawn_6"
         },
         {
           "monster": "slime",
           "x": 20,
           "y": 14,
           "level": 8,
-          "guardian": false
+          "guardian": false,
+          "id": "marsh_spawn_7"
         },
         {
           "monster": "slime",
           "x": 35,
           "y": 23,
           "level": 8,
-          "guardian": false
+          "guardian": false,
+          "id": "marsh_spawn_8"
+        },
+        {
+          "monster": "lizard",
+          "x": 8,
+          "y": 23,
+          "level": 8,
+          "guardian": false,
+          "id": "marsh_spawn_9"
+        },
+        {
+          "monster": "lizard",
+          "x": 19,
+          "y": 7,
+          "level": 8,
+          "guardian": false,
+          "id": "marsh_spawn_10"
+        },
+        {
+          "monster": "lizard",
+          "x": 25,
+          "y": 17,
+          "level": 8,
+          "guardian": false,
+          "id": "marsh_spawn_11"
+        },
+        {
+          "monster": "lizard",
+          "x": 37,
+          "y": 24,
+          "level": 8,
+          "guardian": false,
+          "id": "marsh_spawn_12"
+        },
+        {
+          "monster": "slime",
+          "x": 20,
+          "y": 23,
+          "level": 8,
+          "guardian": false,
+          "id": "marsh_spawn_13"
+        },
+        {
+          "monster": "lizard_chief",
+          "x": 36,
+          "y": 18,
+          "level": 9,
+          "guardian": false,
+          "id": "marsh_spawn_14",
+          "patrol": [
+            [
+              36,
+              18
+            ],
+            [
+              39,
+              22
+            ],
+            [
+              36,
+              25
+            ]
+          ]
         }
       ],
       "props": [],
@@ -4456,14 +6145,132 @@ window.GAME_DB = {
           "type": "crystal",
           "x": 23,
           "y": 20,
-          "amount": 2,
-          "respawn": 60
+          "amount": 1,
+          "respawn": 90
+        },
+        {
+          "id": "marsh_wood_0",
+          "type": "wood",
+          "x": 21,
+          "y": 7,
+          "amount": 1,
+          "respawn": 120
+        },
+        {
+          "id": "marsh_wood_1",
+          "type": "wood",
+          "x": 35,
+          "y": 24,
+          "amount": 1,
+          "respawn": 120
         }
       ],
-      "chests": [],
+      "chests": [
+        {
+          "id": "marsh_cache_0",
+          "x": 7,
+          "y": 25,
+          "equipmentChance": 0.12,
+          "gold": 6,
+          "xp": 10,
+          "materials": {
+            "herb": 1
+          }
+        },
+        {
+          "id": "marsh_cache_1",
+          "x": 35,
+          "y": 5,
+          "equipmentChance": 0.12,
+          "gold": 6,
+          "xp": 10,
+          "materials": {
+            "ore": 1
+          }
+        }
+      ],
       "waypoint": [
         5,
         14
+      ],
+      "discoveries": [
+        {
+          "id": "sunken_lab",
+          "name": "잠긴 연구소",
+          "kind": "landmark",
+          "x": 6,
+          "y": 5,
+          "sprite": "ruin",
+          "description": "늪에 잠긴 마도 연구소에서 작은 결정을 발견했습니다.",
+          "rewards": {
+            "xp": 35,
+            "materials": {
+              "crystal": 1
+            }
+          }
+        },
+        {
+          "id": "flow_shrine",
+          "name": "흐름의 성소",
+          "kind": "shrine",
+          "x": 38,
+          "y": 26,
+          "sprite": "waystone",
+          "description": "마력의 흐름을 깨닫습니다. 최대 마력 +5, 초당 마력 회복 +0.1을 영구적으로 얻습니다.",
+          "stats": [
+            {
+              "stat": "mp",
+              "op": "add",
+              "value": 5
+            },
+            {
+              "stat": "manaRegen",
+              "op": "add",
+              "value": 0.1
+            }
+          ],
+          "rewards": {
+            "xp": 25
+          }
+        }
+      ],
+      "events": [
+        {
+          "id": "marsh_event",
+          "name": "불안정한 룬의 흔적",
+          "x": 19,
+          "y": 24,
+          "sprite": "camp",
+          "description": "주변 몬스터 무리를 처치하면 야영지의 보급품을 회수할 수 있습니다.",
+          "cooldown": 300,
+          "spawns": [
+            {
+              "monster": "lizard",
+              "x": 20,
+              "y": 25,
+              "level": 9
+            },
+            {
+              "monster": "lizard",
+              "x": 21,
+              "y": 26,
+              "level": 9
+            },
+            {
+              "monster": "lizard",
+              "x": 18,
+              "y": 26,
+              "level": 9
+            }
+          ],
+          "rewards": {
+            "xp": 65,
+            "gold": 18,
+            "materials": {
+              "crystal": 2
+            }
+          }
+        }
       ]
     },
     "forest_den": {
@@ -4584,7 +6391,7 @@ window.GAME_DB = {
           "type": "ore",
           "x": 13,
           "y": 5,
-          "amount": 3,
+          "amount": 1,
           "respawn": 0
         }
       ],
@@ -4593,26 +6400,28 @@ window.GAME_DB = {
           "id": "chest_1",
           "x": 25,
           "y": 5,
-          "rarity": "uncommon",
-          "gold": 15,
+          "gold": 7,
           "materials": {
-            "ore": 3
-          }
+            "ore": 1
+          },
+          "equipmentChance": 0.3
         },
         {
           "id": "chest_2",
           "x": 6,
           "y": 19,
-          "rarity": "rare",
-          "gold": 20,
+          "gold": 10,
           "materials": {
             "crystal": 1
-          }
+          },
+          "equipmentChance": 0.3
         }
       ],
       "waypoint": null,
       "group": "wolf",
-      "guardianTotal": 2
+      "guardianTotal": 2,
+      "discoveries": [],
+      "events": []
     },
     "mine": {
       "id": "mine",
@@ -4734,7 +6543,7 @@ window.GAME_DB = {
           "type": "ore",
           "x": 13,
           "y": 5,
-          "amount": 3,
+          "amount": 1,
           "respawn": 0
         }
       ],
@@ -4743,26 +6552,28 @@ window.GAME_DB = {
           "id": "chest_1",
           "x": 27,
           "y": 5,
-          "rarity": "uncommon",
-          "gold": 15,
+          "gold": 7,
           "materials": {
-            "ore": 3
-          }
+            "ore": 1
+          },
+          "equipmentChance": 0.3
         },
         {
           "id": "chest_2",
           "x": 6,
           "y": 21,
-          "rarity": "rare",
-          "gold": 20,
+          "gold": 10,
           "materials": {
             "crystal": 1
-          }
+          },
+          "equipmentChance": 0.3
         }
       ],
       "waypoint": null,
       "group": "mine",
-      "guardianTotal": 2
+      "guardianTotal": 2,
+      "discoveries": [],
+      "events": []
     },
     "ruins": {
       "id": "ruins",
@@ -4891,7 +6702,7 @@ window.GAME_DB = {
           "type": "ore",
           "x": 13,
           "y": 5,
-          "amount": 3,
+          "amount": 1,
           "respawn": 0
         }
       ],
@@ -4900,26 +6711,28 @@ window.GAME_DB = {
           "id": "chest_1",
           "x": 29,
           "y": 5,
-          "rarity": "uncommon",
-          "gold": 15,
+          "gold": 7,
           "materials": {
-            "ore": 3
-          }
+            "ore": 1
+          },
+          "equipmentChance": 0.3
         },
         {
           "id": "chest_2",
           "x": 6,
           "y": 21,
-          "rarity": "rare",
-          "gold": 20,
+          "gold": 10,
           "materials": {
             "crystal": 1
-          }
+          },
+          "equipmentChance": 0.3
         }
       ],
       "waypoint": null,
       "group": "ruins",
-      "guardianTotal": 3
+      "guardianTotal": 3,
+      "discoveries": [],
+      "events": []
     },
     "wolf_lair": {
       "id": "wolf_lair",
@@ -5006,7 +6819,9 @@ window.GAME_DB = {
       "chests": [],
       "waypoint": null,
       "group": "wolf",
-      "boss": "wolf_king"
+      "boss": "wolf_king",
+      "discoveries": [],
+      "events": []
     },
     "forge_chamber": {
       "id": "forge_chamber",
@@ -5093,7 +6908,9 @@ window.GAME_DB = {
       "chests": [],
       "waypoint": null,
       "group": "mine",
-      "boss": "mine_golem"
+      "boss": "mine_golem",
+      "discoveries": [],
+      "events": []
     },
     "dragon_sanctum": {
       "id": "dragon_sanctum",
@@ -5180,7 +6997,9 @@ window.GAME_DB = {
       "chests": [],
       "waypoint": null,
       "group": "ruins",
-      "boss": "ancient_drake"
+      "boss": "ancient_drake",
+      "discoveries": [],
+      "events": []
     }
   },
   "mapKinds": {
@@ -5931,6 +7750,47 @@ window.GAME_DB = {
         "...bbb..bbb....."
       ],
       "palette": {}
+    },
+    "wood": {
+      "width": 12,
+      "height": 5,
+      "rows": [
+        "..bbbbbbbb..",
+        ".bbbbbbbbbb.",
+        "bbbybbbbbybb",
+        ".bbbbbbbbbb.",
+        "..bbbbbbbb.."
+      ],
+      "palette": {}
+    },
+    "ruin": {
+      "width": 14,
+      "height": 8,
+      "rows": [
+        "...mmmmmmmm...",
+        "..mm......mm..",
+        "..mm......mm..",
+        "..mm......mm..",
+        "..mm......mm..",
+        "..mm......mm..",
+        ".mmmmmmmmmmmm.",
+        "..dddddddddd.."
+      ],
+      "palette": {}
+    },
+    "camp": {
+      "width": 13,
+      "height": 7,
+      "rows": [
+        "......r......",
+        ".....ror.....",
+        "....royor....",
+        ".....ryr.....",
+        "...bbbbb.....",
+        "..bb...bb....",
+        "............."
+      ],
+      "palette": {}
     }
   },
   "projectiles": {
@@ -6068,7 +7928,9 @@ window.GAME_DB = {
       "portalColor": "#acd8d4",
       "enemyColor": "#b34b3d",
       "guardColor": "#e4a25e",
-      "playerColor": "#fff5d4"
+      "playerColor": "#fff5d4",
+      "discoveryColor": "#ead28f",
+      "eventColor": "#d4a87e"
     },
     "navigationMargin": 30,
     "navigationTop": 93,
@@ -6076,7 +7938,13 @@ window.GAME_DB = {
     "navigationRadius": 13,
     "navigationFont": 10,
     "navigationLabelOffset": 24,
-    "navigationLine": 2
+    "navigationLine": 2,
+    "dashTrailCount": 2,
+    "dashTrailSpacing": 0.22,
+    "dashTrailAlpha": 0.25,
+    "nightAlpha": 0.14,
+    "discoveryScale": 3,
+    "eventScale": 3
   },
   "audio": {
     "enabled": true,
@@ -6580,6 +8448,21 @@ window.GAME_DB = {
         "duration": 0.24,
         "gain": 0.22,
         "gap": 0.065
+      },
+      "dash": {
+        "wave": "sine",
+        "notes": [
+          540,
+          760
+        ],
+        "duration": 0.08,
+        "gain": 0.13,
+        "gap": 0.035,
+        "noise": {
+          "duration": 0.1,
+          "gain": 0.08,
+          "filter": 1700
+        }
       }
     },
     "luteDivisions": 2,
@@ -6614,8 +8497,8 @@ window.GAME_DB = {
     "name": "이름",
     "namePlaceholder": "모험가",
     "autoCombat": "이동은 직접 · 공격과 기술은 자동",
-    "controls": "WASD / 방향키 이동 · E 상호작용 · Q 물약",
-    "mobileControls": "왼쪽 조이스틱으로 이동 · 가까이 가서 상호작용",
+    "controls": "WASD / 방향키 이동 · E 상호작용 · R 물약 · Shift 대시 · Tab 장비 · Q 의뢰 · F 마력 물약",
+    "mobileControls": "조이스틱으로 이동 · 대시 버튼으로 회피 · 가까이 가서 상호작용",
     "bag": "장비",
     "talents": "직업",
     "quests": "의뢰",
@@ -6681,7 +8564,7 @@ window.GAME_DB = {
     "enhance": "강화",
     "shop": "잡화점",
     "buy": "구입",
-    "rest": "무료 휴식",
+    "rest": "여관 휴식",
     "meal": "따뜻한 식사",
     "blessing": "축복",
     "respec": "기술 재분배",
@@ -6755,7 +8638,7 @@ window.GAME_DB = {
     "levelUp": "레벨 상승! Lv. {level}",
     "paused": "메뉴를 보는 동안 전투가 멈춥니다.",
     "travel": "빠른 이동",
-    "travelHint": "방문한 여행의 돌로 이동합니다. 던전은 입구에서 진입하세요.",
+    "travelHint": "방문한 여행의 돌 근처에서 빠른 이동을 이용할 수 있습니다. 던전은 입구로 진입하세요.",
     "unvisited": "미발견",
     "selected": "선택",
     "deleteProtected": "장착 중이거나 보관한 장비는 처분할 수 없습니다.",
@@ -6763,7 +8646,7 @@ window.GAME_DB = {
     "chapterComplete": "별의 계승자",
     "chapterContinue": "모험 계속",
     "help": "조작 안내",
-    "helpBody": "WASD 또는 방향키로 이동합니다. 공격과 장착 기술은 적이 범위 안에 들어오면 자동으로 사용합니다. 마을에서 E로 대화하고, 의뢰를 해결해 장비와 기술점을 얻으세요. 붉은 예고 범위를 벗어나 보스 공격을 피하세요.",
+    "helpBody": "WASD 또는 방향키로 이동합니다. Shift는 짧은 대시이며 최대 2회, 5초마다 1회 충전됩니다. Tab 장비, Q 의뢰, R 회복 물약, F 마력 물약을 사용합니다. 평타와 기술은 자동입니다. 필드의 성소·보물상자·배회 정예와 야영지 사건을 발견하고, 여행의 돌 근처에서만 빠른 이동을 이용하세요.",
     "material": "재료",
     "held": "보유",
     "skillTab": "자동 기술",
@@ -6828,10 +8711,10 @@ window.GAME_DB = {
     "walking": "도보 이동",
     "cleared": "격파 완료",
     "sellItems": "장비 처분",
-    "merchantHint": "물약을 준비하고 필요 없는 장비를 처분하세요.",
+    "merchantHint": "장비와 보급품을 준비하세요. 판매 품목은 직업·레벨·상인에 따라 달라집니다.",
     "smithHint": "장비를 강화하거나 재료로 희귀 장비를 제작하세요.",
-    "templeHint": "축복은 하나만 유지됩니다. 성장 트리는 무료로 재분배할 수 있습니다.",
-    "restHint": "휴식으로 체력과 마력을 전부 회복합니다.",
+    "templeHint": "현재 축복과 남은 시간을 확인하세요. 축복은 중첩되지 않으며 성장 트리는 마을에서 재분배할 수 있습니다.",
+    "restHint": "20금화를 내고 체력과 마력을 전부 회복합니다.",
     "innFood": "식사 효과",
     "savedHint": "자동 저장됩니다.",
     "soundOn": "켜짐",
@@ -6850,7 +8733,7 @@ window.GAME_DB = {
     "npcTalk": "대화",
     "dungeonGuardianHint": "봉인 수호자들을 쓰러뜨리면 보스방이 열립니다.",
     "runLevel": "적 레벨",
-    "rareReward": "희귀 장비 · 강화 재료",
+    "rareReward": "장비 획득 기회 · 강화 재료",
     "firstAdventure": "새 이야기",
     "enchantLevel": "강화 단계",
     "selectedItem": "선택한 장비",
@@ -6870,14 +8753,83 @@ window.GAME_DB = {
     "targetDirection": "목표 방향",
     "respawning": "재등장 대기",
     "range": "거리",
-    "questCompletedShort": "의뢰 완료"
+    "questCompletedShort": "의뢰 완료",
+    "mealApplied": "식사 효과를 얻었습니다.",
+    "blessingCurrent": "현재 적용된 축복",
+    "blessingNone": "적용된 성당 축복이 없습니다.",
+    "blessingRemaining": "남은 시간",
+    "blessingApplied": "적용 중",
+    "blessingRefresh": "시간 갱신",
+    "blessingSwitch": "축복 교체",
+    "blessingHint": "성당 축복은 하나만 유지되며 중첩되지 않습니다. 재선택은 남은 시간을 갱신합니다.",
+    "dash": "대시",
+    "dashWait": "대시 충전이 부족합니다.",
+    "dashActive": "대시 중입니다.",
+    "dashHint": "짧은 거리 대시 · 최대 2회 · 5초마다 1회 회복",
+    "dashReady": "충전 완료",
+    "dashRecharge": "다음 충전",
+    "manaPotion": "마력 물약",
+    "fullMp": "마력이 가득합니다.",
+    "noConsumable": "해당 소모품이 없습니다.",
+    "consumableWait": "소모품 재사용 대기 중입니다.",
+    "supplies": "소모품",
+    "use": "사용",
+    "supplyHint": "전투 준비 효과는 하나만 유지됩니다.",
+    "shopConsumables": "소모품",
+    "shopEquipment": "장비",
+    "shopMaterials": "재료",
+    "stockLeft": "남은 수량",
+    "soldOut": "재입고 대기",
+    "shopLevelGate": "Lv. {level}부터 구입 가능",
+    "craftLevelGate": "Lv. {level}부터 제작 가능",
+    "night": "밤",
+    "day": "낮",
+    "nightHint": "밤에는 몬스터 피해가 10% 증가합니다.",
+    "discovery": "탐험 발견",
+    "discover": "조사",
+    "discovered": "발견 완료",
+    "discoveryBonus": "영구 탐험 보너스",
+    "explorationLog": "탐험 기록",
+    "explorationCount": "발견",
+    "worldEvent": "야영지 사건",
+    "eventStart": "사건 도전",
+    "eventActive": "몬스터를 처치하세요.",
+    "eventReady": "보급품 회수 가능",
+    "eventClaim": "보급품 받기",
+    "eventCooling": "사건이 잠잠해졌습니다.",
+    "eventCompleted": "야영지 보급품을 회수했습니다.",
+    "eventDanger": "조사하면 몬스터 무리가 나타납니다.",
+    "eventRemaining": "남은 몬스터",
+    "wanderer": "떠돌이 상인",
+    "waystoneOnly": "여행의 돌 가까이에서 이용하세요.",
+    "restPaid": "휴식 · {gold} 금화",
+    "blessingFull": "같은 축복이 이미 충분한 시간 적용 중입니다.",
+    "newDiscovery": "새로운 장소를 발견했습니다.",
+    "noDiscovery": "필드의 성소와 유적을 조사해보세요.",
+    "dayCycle": "시간대",
+    "blessingOne": "성당 축복 1 / 1",
+    "blessingRenewed": "축복 시간이 갱신됩니다.",
+    "permanent": "영구 효과",
+    "discoverUnknown": "미발견 장소",
+    "discoverSeen": "발견 후 조사 필요",
+    "vendorStock": "상인 재고",
+    "vendorLeaves": "머무는 시간",
+    "supplyReady": "사용 가능",
+    "shopRarity": "판매 등급",
+    "nightDay": "낮·밤",
+    "eventReward": "보급 보상",
+    "eventCooldown": "다음 조사",
+    "xpCost": "다음 레벨 경험치",
+    "restNoFree": "휴식 시 20금화가 소모됩니다."
   },
   "_docs": {
     "source": "game-db.js는 모든 콘텐츠·수치·지도·그림·음악·문구의 단일 원본입니다.",
     "maps": "maps의 ASCII tiles와 npc/portal/spawn/resource/chest 좌표가 실제 공간입니다. terrain.walk와 solid prop을 충돌에 사용합니다.",
     "build": "classes/races/skills/branches/talents/items/affixes의 stats를 공통 계산기로 합산합니다. 클래스 ID 분기 없이 동작합니다.",
     "save": "새 RPG 저장 키를 사용하며 이전 결투 v6 저장을 삭제하거나 덮어쓰지 않습니다.",
-    "audio": "audio.tracks의 MIDI 멜로디·화음·베이스를 오프라인 Web Audio로 합성합니다."
+    "audio": "audio.tracks의 MIDI 멜로디·화음·베이스를 오프라인 Web Audio로 합성합니다.",
+    "resourceBalance": "기본 마력 회복·적 금화·장비 드롭을 낮추고 XP 비용을 높였습니다. rarity/lootProfiles와 제작·상인 가격은 각각 DB에서 조정합니다. 희귀 장비를 고정 보장하는 일반 드롭·상자는 없습니다.",
+    "openWorld": "maps[].discoveries/events, resources, 일정이 있는 npcs와 patrol spawns가 오픈월드 콘텐츠입니다. discoveries 영구 보너스·사건 상태·상인 재고·추가된 필드 스폰은 저장·이전 저장 보완을 지원합니다."
   },
   "comparisonStats": [
     "attack",
@@ -6896,5 +8848,139 @@ window.GAME_DB = {
     "shieldOnSkill",
     "lifesteal",
     "thorns"
+  ],
+  "controlLabels": {
+    "potion": "R",
+    "inventory": "Tab",
+    "quests": "Q",
+    "dash": "Shift",
+    "manaPotion": "F",
+    "interact": "E"
+  },
+  "lootProfiles": {
+    "boss": {
+      "common": 21.6,
+      "uncommon": 70,
+      "rare": 8,
+      "epic": 0.4
+    },
+    "elite": {
+      "common": 70,
+      "uncommon": 28,
+      "rare": 1.9,
+      "epic": 0.1
+    }
+  },
+  "consumables": [
+    {
+      "id": "healing",
+      "name": "회복 물약",
+      "pool": "potions",
+      "resource": "hp",
+      "ratio": 0.55,
+      "cooldown": 7,
+      "icon": "potion",
+      "description": "최대 체력의 55% 회복 · R"
+    },
+    {
+      "id": "mana",
+      "name": "마력 물약",
+      "pool": "manaPotions",
+      "resource": "mp",
+      "ratio": 0.45,
+      "cooldown": 10,
+      "icon": "staff",
+      "description": "최대 마력의 45% 회복 · F"
+    },
+    {
+      "id": "ration",
+      "name": "여행자의 건량",
+      "buff": "ration",
+      "category": "preparation",
+      "duration": 180,
+      "stats": [
+        {
+          "stat": "hpRegen",
+          "op": "add",
+          "value": 0.35
+        }
+      ],
+      "cooldown": 3,
+      "icon": "home",
+      "description": "3분간 초당 체력 회복 +0.35"
+    },
+    {
+      "id": "sharpening",
+      "name": "숫돌 가루",
+      "buff": "sharpening",
+      "category": "preparation",
+      "duration": 180,
+      "stats": [
+        {
+          "stat": "basicDamage",
+          "op": "multiply",
+          "value": 1.1
+        }
+      ],
+      "cooldown": 3,
+      "icon": "attack",
+      "description": "3분간 평타 피해 +10%"
+    },
+    {
+      "id": "arcane_dust",
+      "name": "비전 향로",
+      "buff": "arcane_dust",
+      "category": "preparation",
+      "duration": 180,
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "op": "multiply",
+          "value": 1.1
+        }
+      ],
+      "cooldown": 3,
+      "icon": "staff",
+      "description": "3분간 기술 피해 +10%"
+    },
+    {
+      "id": "ward_tonic",
+      "name": "수호의 영약",
+      "buff": "ward_tonic",
+      "category": "preparation",
+      "duration": 180,
+      "stats": [
+        {
+          "stat": "defense",
+          "op": "add",
+          "value": 2
+        },
+        {
+          "stat": "damageReduction",
+          "op": "add",
+          "value": 0.03
+        }
+      ],
+      "cooldown": 3,
+      "icon": "shield",
+      "description": "3분간 방어력 +2, 받는 피해 -3%"
+    },
+    {
+      "id": "wind_tonic",
+      "name": "바람의 영약",
+      "buff": "wind_tonic",
+      "category": "preparation",
+      "duration": 180,
+      "stats": [
+        {
+          "stat": "speed",
+          "op": "multiply",
+          "value": 1.1
+        }
+      ],
+      "cooldown": 3,
+      "icon": "bait",
+      "description": "3분간 이동 속도 +10%"
+    }
   ]
 };
