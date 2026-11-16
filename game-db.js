@@ -1,7233 +1,10 @@
-// Editable JSON-compatible game database. Runtime logic belongs in index.html.
+// Editable JSON-compatible fantasy RPG database.
 window.GAME_DB = {
   "meta": {
-    "version": "9.1",
-    "title": "계약의 링",
-    "subtitle": "서약 아래 모인 투사들의 결투",
-    "description": "한 투사와 계약하고 성장시키는 1대1 실시간 전술 대전. 직접 조작 대신 작전과 대응을 지휘합니다."
-  },
-  "world": {
-    "title": "검 대신, 서약으로",
-    "body": "오랜 전쟁 뒤 왕국과 자유도시는 항로의 통행권과 분쟁을 서약 결투로 해결한다. 당신은 한 투사와 계약해 길드의 작은 시합에서 연맹의 왕좌까지 오른다.",
-    "rule": "투사는 스스로 움직이고 싸운다. 당신은 빌드와 작전, 전술 전환을 결정한다."
-  },
-  "palette": {
-    "bg": "#191611",
-    "panel": "#eadfc5",
-    "ink": "#30261c",
-    "muted": "#665744",
-    "line": "#c5af82",
-    "accent": "#6e3931",
-    "gold": "#775525",
-    "danger": "#963d32",
-    "strike": "#a76642",
-    "grapple": "#536c57",
-    "counter": "#6f647e",
-    "arena": "#171a16",
-    "arenaFloor": "#77715c",
-    "arenaLine": "#a09676",
-    "player": "#b4c59c",
-    "enemy": "#d2a282",
-    "arenaLight": "#34382a",
-    "ringBase": "#252820",
-    "ringRim": "#a58c55",
-    "ringPost": "#594c32",
-    "shadow": "#12140fbb",
-    "boot": "#302c25",
-    "outline": "#24251e",
-    "skin": "#d2b48d",
-    "hitFlash": "#ffedc3",
-    "actionLabel": "#252219ee",
-    "labelInk": "#f2e3bf"
-  },
-  "config": {
-    "saveVersion": 6,
-    "storageKey": "tactics.duel.v6",
-    "legacyKey": "scrapwake.campaign.v3",
-    "prefsKey": "tactics.duel.prefs.v6",
-    "saveInterval": 4,
-    "hudInterval": 0.1,
-    "maxFrame": 0.1,
-    "step": 0.025,
-    "defaultSeed": "contract-ring",
-    "coinCap": 999999,
-    "historyLimit": 24,
-    "nameLength": 14,
-    "maxDt": 0.04,
-    "random": {
-      "offset": 2166136261,
-      "prime": 16777619,
-      "multiplier": 1664525,
-      "increment": 1013904223,
-      "modulus": 4294967296
-    },
-    "toastMs": 2600,
-    "milliseconds": 1000,
-    "secondsPerMinute": 60,
-    "startRound": 1,
-    "rounds": 2,
-    "roundSeconds": 45,
-    "ringRadius": 4.8,
-    "bodyRadius": 0.33,
-    "startDistance": 3.8,
-    "moveTolerance": 0.14,
-    "moveDrain": 1.35,
-    "activeRegen": 0.18,
-    "movingRegen": 0.55,
-    "guardRecoveryDelay": 1.7,
-    "guardRegenInBlock": 0.5,
-    "guardBreakTime": 1.65,
-    "guardBreakStamina": 12,
-    "guardVulnerability": 1.2,
-    "blockFraction": 0.72,
-    "blockGuardCost": 1,
-    "blockStaminaCost": 0.12,
-    "dodgeBase": 0.14,
-    "dodgeCost": 3.2,
-    "grabDodgeBonus": 0.11,
-    "grabGuardBonus": 1.2,
-    "grabStaminaDamage": 13,
-    "minimumDamage": 1,
-    "hitChanceMin": 0.18,
-    "hitChanceMax": 0.96,
-    "rangeTolerance": 0.12,
-    "lowStamina": 0.28,
-    "emptyStamina": 0.06,
-    "fatigueAccuracy": 0.18,
-    "fatigueDamage": 0.22,
-    "fatigueSpeed": 0.42,
-    "counterChance": 0.78,
-    "counterReadBonus": 0.06,
-    "counterStamina": 3,
-    "counterFocus": 14,
-    "whiffFocus": 7,
-    "blockFocus": 3,
-    "dodgeFocus": 8,
-    "damageFocus": 0.35,
-    "feintFocus": 10,
-    "feintStaminaDamage": 7,
-    "feintExposeTime": 1.25,
-    "feintAccuracy": 0.12,
-    "feintBase": 0.66,
-    "feintCounterBonus": 0.2,
-    "feintBlockBonus": 0.1,
-    "readMemory": 7,
-    "readRepeat": 2,
-    "readPerRepeat": 0.025,
-    "maxReadBonus": 0.12,
-    "grabStun": 0.65,
-    "decisionInterval": 0.18,
-    "missWait": 0.3,
-    "edgeRatio": 0.82,
-    "edgeGrabBonus": 1.15,
-    "pivotWeight": 0.85,
-    "cutoffWeight": 0.2,
-    "ruleCooldown": 4,
-    "manualPriority": 9999,
-    "tacticLag": 0.9,
-    "minTacticLag": 0.28,
-    "changeCooldown": 1.0,
-    "aiReview": 5.2,
-    "aiInitialDelay": 4,
-    "focusCost": 60,
-    "focusCooldown": 8,
-    "cornerStamina": 0.45,
-    "cornerGuard": 0.5,
-    "judgingControl": 0.05,
-    "judgingThrow": 3,
-    "drawMargin": 2,
-    "challengeLevelStep": 2,
-    "challengeMaxLevel": 40,
-    "dprCap": 1.75,
-    "defaultSpeed": 1,
-    "sceneHitFlash": 0.18,
-    "sceneEffectLife": 0.55,
-    "sceneFloatLife": 1.1,
-    "sceneShakeDecay": 16,
-    "sceneHitShake": 2,
-    "sceneBreakShake": 7,
-    "textDigits": 1,
-    "counterConsume": 0.45,
-    "judgeDamageWeight": 1,
-    "firstFightFocus": 20,
-    "maxRules": 3,
-    "reportMoments": 4,
-    "eventLimit": 60,
-    "traitNoticeTime": 2.2,
-    "movingAttackSpeed": 0.65,
-    "exhaustWait": 0.55,
-    "actionRangeExtra": 0.2,
-    "maxEvasion": 0.65,
-    "blockMinLeak": 0.12,
-    "lowHpTrigger": 0.35,
-    "lowGuardHint": 0.3,
-    "coinFlip": 0.5,
-    "percent": 100,
-    "audioMinGain": 0.001,
-    "visibleLog": 3,
-    "flashSeconds": 2.3,
-    "migrationKey": "tactics.duel.migrated.v6",
-    "cornerSeconds": 2.8,
-    "signatureCost": 60,
-    "signatureMinStaminaRatio": 0.2,
-    "signatureArmDelay": 0.2,
-    "signatureNoticeSeconds": 1.5,
-    "followupSeconds": 2.4,
-    "commandVisualSeconds": 2.5,
-    "motionLead": 0.65,
-    "stepWindupFraction": 0.7,
-    "signatureCooldown": 4,
-    "throwAnimationSeconds": 0.65,
-    "comboNoticeSeconds": 1.4,
-    "hitHoldSeconds": 0.025,
-    "signatureHitHold": 0.07,
-    "moveTraceLife": 0.35,
-    "signatureBaseFocus": 20,
-    "statusPrefixLength": 7,
-    "minStepDuration": 0.05,
-    "signatureReactGrace": 0.12,
-    "damageMergeTime": 0.24,
-    "signatureHoldLimit": 2.8,
-    "signatureAuto": true,
-    "signatureAutoRecoveryRatio": 0.65
-  },
-  "progression": {
-    "ranks": [
-      {
-        "id": "rank_1",
-        "name": "떠돌이",
-        "minLevel": 1
-      },
-      {
-        "id": "rank_2",
-        "name": "견습 투사",
-        "minLevel": 2
-      },
-      {
-        "id": "rank_3",
-        "name": "길드 투사",
-        "minLevel": 3
-      },
-      {
-        "id": "rank_4",
-        "name": "숙련 투사",
-        "minLevel": 4
-      },
-      {
-        "id": "rank_5",
-        "name": "정예 투사",
-        "minLevel": 5
-      },
-      {
-        "id": "rank_6",
-        "name": "청동 투사",
-        "minLevel": 7
-      },
-      {
-        "id": "rank_7",
-        "name": "백은 투사",
-        "minLevel": 9
-      },
-      {
-        "id": "rank_8",
-        "name": "황금 투사",
-        "minLevel": 11
-      },
-      {
-        "id": "rank_9",
-        "name": "서약 기사",
-        "minLevel": 13
-      },
-      {
-        "id": "rank_10",
-        "name": "별빛 기사",
-        "minLevel": 15
-      },
-      {
-        "id": "rank_11",
-        "name": "여명 기사",
-        "minLevel": 17
-      },
-      {
-        "id": "rank_12",
-        "name": "성휘 기사",
-        "minLevel": 19
-      },
-      {
-        "id": "rank_13",
-        "name": "용혼 기사",
-        "minLevel": 22
-      },
-      {
-        "id": "rank_14",
-        "name": "성역 수호자",
-        "minLevel": 25
-      },
-      {
-        "id": "rank_15",
-        "name": "별의 계승자",
-        "minLevel": 28
-      },
-      {
-        "id": "rank_16",
-        "name": "신화의 영웅",
-        "minLevel": 32
-      },
-      {
-        "id": "rank_17",
-        "name": "불멸의 전설",
-        "minLevel": 36
-      },
-      {
-        "id": "rank_18",
-        "name": "영원의 서약자",
-        "minLevel": 40
-      }
-    ],
-    "startLevel": 1,
-    "maxLevel": 40,
-    "xpBase": 36,
-    "xpGrowth": 12,
-    "pointsStart": 4,
-    "pointsPerLevel": 2,
-    "startCoins": 140,
-    "startModules": [
-      "breath",
-      "pad"
-    ],
-    "startLoadout": [
-      "breath",
-      "pad",
-      null
-    ],
-    "slots": 3,
-    "talentSlots": 2,
-    "startTalents": [
-      "steady"
-    ],
-    "legacyCoinCap": 250,
-    "legacyLevelCap": 40,
-    "trainingMax": 12,
-    "trainingCostStep": 4,
-    "winXp": 42,
-    "lossXp": 26,
-    "drawXp": 30,
-    "winCoins": 34,
-    "lossCoins": 18,
-    "drawCoins": 24,
-    "firstXp": 18,
-    "firstCoins": 25,
-    "repeatFactor": 0.7,
-    "challengeBonus": 5,
-    "growth": [
-      {
-        "stat": "hp",
-        "op": "multiply",
-        "value": 1.006
-      },
-      {
-        "stat": "power",
-        "op": "multiply",
-        "value": 1.004
-      }
-    ]
-  },
-  "baseStats": {
-    "hp": 174,
-    "stamina": 106,
-    "guard": 88,
-    "power": 1,
-    "speed": 2.35,
-    "reach": 2.15,
-    "grabReach": 1.08,
-    "accuracy": 0.82,
-    "evasion": 0.11,
-    "armor": 0.05,
-    "staminaRegen": 7.2,
-    "guardRegen": 7,
-    "counterPower": 1,
-    "grabPower": 1,
-    "guardDamage": 1,
-    "feintPower": 1,
-    "staminaCost": 1,
-    "attackSpeed": 1,
-    "moveCost": 1,
-    "tacticLag": 1,
-    "focusGain": 1,
-    "focusMax": 100,
-    "blockBonus": 0,
-    "counterChance": 0,
-    "grabAccuracy": 0,
-    "readBonus": 0,
-    "lowHpPower": 0,
-    "strikePower": 1
-  },
-  "styles": {
-    "strike": {
-      "name": "타격",
-      "icon": "✦",
-      "color": "#d57d4c",
-      "beats": "grapple",
-      "weak": "counter",
-      "description": "긴 거리의 타격으로 제압의 진입을 끊습니다."
-    },
-    "grapple": {
-      "name": "제압",
-      "icon": "⬡",
-      "color": "#428a83",
-      "beats": "counter",
-      "weak": "strike",
-      "description": "붙어서 잡기로 반격과 가드를 무너뜨립니다."
-    },
-    "counter": {
-      "name": "반격",
-      "icon": "◇",
-      "color": "#7377b7",
-      "beats": "strike",
-      "weak": "grapple",
-      "description": "타격의 빈틈을 읽어 효율적으로 되받아칩니다."
-    }
-  },
-  "matchups": {
-    "strike": {
-      "strike": 1,
-      "grapple": 1.08,
-      "counter": 0.93
-    },
-    "grapple": {
-      "strike": 0.93,
-      "grapple": 1,
-      "counter": 1.08
-    },
-    "counter": {
-      "strike": 1.08,
-      "grapple": 0.93,
-      "counter": 1
-    }
-  },
-  "characters": [
-    {
-      "id": "jin",
-      "name": "진",
-      "epithet": "거리의 타격가",
-      "style": "strike",
-      "strength": "사거리 · 회피",
-      "weakness": "붙잡히면 약함",
-      "story": "외곽 도시의 호위병. 빈틈 없는 거리로 배급권을 되찾으려 한다.",
-      "color": "#a87543",
-      "accent": "#e8c88a",
-      "portrait": "visor",
-      "build": "간격을 지켜 견제하거나, 체력을 보완해 근거리 타격가로 키울 수 있습니다.",
-      "stats": {
-        "hp": 164,
-        "stamina": 104,
-        "guard": 76,
-        "speed": 2.55,
-        "reach": 2.75,
-        "evasion": 0.14,
-        "armor": 0.03
-      },
-      "moves": {
-        "strike": [
-          "long_jab",
-          "long_kick"
-        ],
-        "grab": [
-          "grab"
-        ],
-        "counter": [
-          "counter"
-        ],
-        "feint": [
-          "feint"
-        ]
-      },
-      "trait": "spacing",
-      "default": "keepout",
-      "commands": {
-        "attack": {
-          "name": "긴 차기로 압박",
-          "hint": "전진하며 긴 차기로 가드를 압박",
-          "plan": {
-            "range": "mid",
-            "pace": "steady",
-            "intent": "strike",
-            "defense": "evade"
-          },
-          "weights": {
-            "strike": 0.73,
-            "grab": 0.06,
-            "counter": 0.05,
-            "feint": 0.16
-          }
-        },
-        "bait": {
-          "name": "헛치게 만든다",
-          "hint": "한 발 빠진 뒤 긴 차기로 응징",
-          "plan": {
-            "range": "far",
-            "pace": "steady",
-            "intent": "counter",
-            "defense": "evade"
-          },
-          "weights": {
-            "strike": 0.2,
-            "grab": 0.05,
-            "counter": 0.3,
-            "feint": 0.45
-          }
-        },
-        "recover": {
-          "name": "간격 리셋",
-          "hint": "뒤로 빠지며 기력 회복",
-          "plan": {
-            "range": "far",
-            "pace": "calm",
-            "intent": "counter",
-            "defense": "block"
-          },
-          "weights": {
-            "strike": 0.16,
-            "grab": 0.03,
-            "counter": 0.74,
-            "feint": 0.07
-          }
-        }
-      },
-      "signature": {
-        "move": "signature_jin",
-        "name": "백스텝 관통차기",
-        "hint": "거리 확보 뒤 길게 뻗는 결정타",
-        "meter": "간격",
-        "seekRange": 0.9,
-        "waitForStrike": false
-      },
-      "identity": {
-        "kind": "range",
-        "threshold": 2.1,
-        "ready": "긴 거리 확보",
-        "waiting": "접근을 떼어내기"
-      },
-      "visual": {
-        "stance": "elusive",
-        "height": 1.08,
-        "width": 0.85,
-        "glove": 0.88,
-        "legs": 1.13,
-        "lean": -0.08,
-        "equipment": "scarf",
-        "mark": "diagonal",
-        "pose": "kick",
-        "face": "visor"
-      },
-      "defaultCall": "attack",
-      "followups": [
-        {
-          "trigger": "onDodge",
-          "move": "long_kick",
-          "name": "회피 → 관통차기",
-          "cooldown": 3.5
-        }
-      ],
-      "chargeTrait": "charge_jin"
-    },
-    {
-      "id": "taeo",
-      "name": "태오",
-      "epithet": "연속 타격가",
-      "style": "strike",
-      "strength": "연타 · 순간 화력",
-      "weakness": "기력 소모 · 반격 노출",
-      "story": "하층 대장간의 도제 출신. 직접 벼린 갑주를 입고 연맹의 상위 결투에 도전한다.",
-      "color": "#904b3d",
-      "accent": "#deb082",
-      "portrait": "crest",
-      "build": "연타를 극대화하거나, 속임수와 기력 회복으로 빈틈을 줄일 수 있습니다.",
-      "stats": {
-        "hp": 176,
-        "stamina": 112,
-        "guard": 82,
-        "speed": 2.4,
-        "reach": 2.05,
-        "power": 1.04
-      },
-      "moves": {
-        "strike": [
-          "jab",
-          "flurry"
-        ],
-        "grab": [
-          "grab"
-        ],
-        "counter": [
-          "counter"
-        ],
-        "feint": [
-          "feint"
-        ]
-      },
-      "trait": "rhythm",
-      "default": "pressure",
-      "commands": {
-        "attack": {
-          "name": "연타 몰아치기",
-          "hint": "연타를 이어 가드를 무너뜨림",
-          "plan": {
-            "range": "mid",
-            "pace": "burst",
-            "intent": "strike",
-            "defense": "block"
-          },
-          "weights": {
-            "strike": 0.73,
-            "grab": 0.06,
-            "counter": 0.05,
-            "feint": 0.16
-          }
-        },
-        "bait": {
-          "name": "박자 흔들기",
-          "hint": "속임수 뒤 연타로 연결",
-          "plan": {
-            "range": "mid",
-            "pace": "steady",
-            "intent": "feint",
-            "defense": "evade"
-          },
-          "weights": {
-            "strike": 0.3,
-            "grab": 0.14,
-            "counter": 0.06,
-            "feint": 0.5
-          }
-        },
-        "recover": {
-          "name": "호흡 되찾기",
-          "hint": "교환을 끊고 기력 회복",
-          "plan": {
-            "range": "far",
-            "pace": "calm",
-            "intent": "counter",
-            "defense": "block"
-          },
-          "weights": {
-            "strike": 0.16,
-            "grab": 0.03,
-            "counter": 0.74,
-            "feint": 0.07
-          }
-        }
-      },
-      "signature": {
-        "move": "signature_taeo",
-        "name": "오연 폭주",
-        "hint": "다섯 번의 연타. 반격에 끊길 수 있음",
-        "meter": "리듬",
-        "seekRange": 0.9,
-        "waitForStrike": false
-      },
-      "identity": {
-        "kind": "stacks",
-        "status": "rhythm",
-        "max": 3,
-        "ready": "연타 리듬"
-      },
-      "visual": {
-        "stance": "boxer",
-        "height": 0.96,
-        "width": 1.08,
-        "glove": 1.65,
-        "legs": 0.95,
-        "lean": 0.08,
-        "equipment": "gauntlets",
-        "mark": "fists",
-        "pose": "punch",
-        "face": "open"
-      },
-      "defaultCall": "attack",
-      "followups": [
-        {
-          "trigger": "onHit",
-          "move": "flurry",
-          "name": "적중 → 삼연격",
-          "cooldown": 4.2,
-          "when": [
-            {
-              "metric": "status_rhythm",
-              "op": "gte",
-              "value": 2
-            }
-          ]
-        }
-      ],
-      "chargeTrait": "charge_taeo"
-    },
-    {
-      "id": "garam",
-      "name": "가람",
-      "epithet": "압박 제압가",
-      "style": "grapple",
-      "strength": "내구 · 잡기 · 외곽 압박",
-      "weakness": "추격 속도 · 긴 거리",
-      "story": "서약 수비대의 전직 선봉. 작은 결투가 다시 큰 전쟁이 되지 않도록 싸운다.",
-      "color": "#5c7051",
-      "accent": "#c7c698",
-      "portrait": "heavy",
-      "build": "장갑으로 버티며 몰아붙이거나, 기동 장비로 추격 약점을 보완할 수 있습니다.",
-      "stats": {
-        "hp": 202,
-        "stamina": 112,
-        "guard": 104,
-        "speed": 1.9,
-        "reach": 1.85,
-        "power": 1.02,
-        "evasion": 0.05,
-        "armor": 0.11,
-        "grabPower": 1.17
-      },
-      "moves": {
-        "strike": [
-          "pressure_jab"
-        ],
-        "grab": [
-          "body_lock"
-        ],
-        "counter": [
-          "counter"
-        ],
-        "feint": [
-          "feint"
-        ]
-      },
-      "trait": "corner",
-      "default": "clinch",
-      "commands": {
-        "attack": {
-          "name": "붙어서 제압",
-          "hint": "막으며 접근해 붙잡아 넘김",
-          "plan": {
-            "range": "close",
-            "pace": "steady",
-            "intent": "grab",
-            "defense": "block"
-          },
-          "weights": {
-            "strike": 0.13,
-            "grab": 0.65,
-            "counter": 0.04,
-            "feint": 0.18
-          }
-        },
-        "bait": {
-          "name": "진입 받아내기",
-          "hint": "공격을 버티고 잡기로 전환",
-          "plan": {
-            "range": "mid",
-            "pace": "steady",
-            "intent": "strike",
-            "defense": "block"
-          },
-          "weights": {
-            "strike": 0.73,
-            "grab": 0.06,
-            "counter": 0.05,
-            "feint": 0.16
-          }
-        },
-        "recover": {
-          "name": "중심 빼며 재정비",
-          "hint": "거리를 두고 피하며 기력 회복",
-          "plan": {
-            "range": "mid",
-            "pace": "calm",
-            "intent": "counter",
-            "defense": "evade"
-          },
-          "weights": {
-            "strike": 0.16,
-            "grab": 0.03,
-            "counter": 0.74,
-            "feint": 0.07
-          }
-        }
-      },
-      "signature": {
-        "move": "signature_garam",
-        "name": "대지 내려찍기",
-        "hint": "가드를 무시하는 강한 잡기. 먼저 붙어야 함",
-        "meter": "압박",
-        "seekRange": 0.9,
-        "waitForStrike": false
-      },
-      "identity": {
-        "kind": "foeEdge",
-        "ready": "외곽 압박"
-      },
-      "visual": {
-        "stance": "heavy",
-        "height": 1.08,
-        "width": 1.38,
-        "glove": 1.42,
-        "legs": 0.98,
-        "lean": 0.07,
-        "equipment": "frame",
-        "mark": "square",
-        "pose": "grab",
-        "face": "jaw"
-      },
-      "defaultCall": "attack",
-      "followups": [
-        {
-          "trigger": "onBlock",
-          "move": "body_lock",
-          "name": "막기 → 제압",
-          "cooldown": 4.5
-        },
-        {
-          "trigger": "onHit",
-          "move": "body_lock",
-          "name": "외곽 압박 → 잡기",
-          "cooldown": 4.5,
-          "when": [
-            {
-              "metric": "foeEdge",
-              "op": "gt",
-              "value": 0.65
-            }
-          ]
-        }
-      ],
-      "chargeTrait": "charge_garam"
-    },
-    {
-      "id": "yuna",
-      "name": "유나",
-      "epithet": "기동 제압가",
-      "style": "grapple",
-      "strength": "속임수 · 진입 · 전환",
-      "weakness": "낮은 내구 · 정면 교환",
-      "story": "봉쇄된 항구의 밀사. 누구에게도 붙잡히지 않던 발로 상대를 넘어뜨린다.",
-      "color": "#557f76",
-      "accent": "#c5d4a7",
-      "portrait": "swept",
-      "build": "속임수 뒤의 잡기를 노리거나, 가드를 보강해 안정적인 제압가로 키울 수 있습니다.",
-      "stats": {
-        "hp": 160,
-        "stamina": 112,
-        "guard": 76,
-        "speed": 2.75,
-        "reach": 2.05,
-        "evasion": 0.17,
-        "armor": 0.025,
-        "grabPower": 1.08,
-        "feintPower": 1.08
-      },
-      "moves": {
-        "strike": [
-          "jab"
-        ],
-        "grab": [
-          "sweep"
-        ],
-        "counter": [
-          "counter"
-        ],
-        "feint": [
-          "feint"
-        ]
-      },
-      "trait": "entry",
-      "default": "trick",
-      "commands": {
-        "attack": {
-          "name": "속이고 넘어뜨리기",
-          "hint": "속임수가 통하면 즉시 태클",
-          "plan": {
-            "range": "close",
-            "pace": "steady",
-            "intent": "feint",
-            "defense": "evade"
-          },
-          "weights": {
-            "strike": 0.3,
-            "grab": 0.14,
-            "counter": 0.06,
-            "feint": 0.5
-          }
-        },
-        "bait": {
-          "name": "피하고 파고들기",
-          "hint": "회피 뒤 틈으로 태클 진입",
-          "plan": {
-            "range": "mid",
-            "pace": "steady",
-            "intent": "counter",
-            "defense": "evade"
-          },
-          "weights": {
-            "strike": 0.16,
-            "grab": 0.03,
-            "counter": 0.74,
-            "feint": 0.07
-          }
-        },
-        "recover": {
-          "name": "빠져나오기",
-          "hint": "옆으로 이탈하며 기력 회복",
-          "plan": {
-            "range": "far",
-            "pace": "calm",
-            "intent": "feint",
-            "defense": "block"
-          },
-          "weights": {
-            "strike": 0.3,
-            "grab": 0.14,
-            "counter": 0.06,
-            "feint": 0.5
-          }
-        }
-      },
-      "signature": {
-        "move": "signature_yuna",
-        "name": "잔상 태클",
-        "hint": "속임수 동작 뒤 낮게 파고드는 태클",
-        "meter": "기만",
-        "seekRange": 0.9,
-        "waitForStrike": false
-      },
-      "identity": {
-        "kind": "stacks",
-        "status": "entry",
-        "max": 1,
-        "ready": "태클 기회",
-        "waiting": "회피·속임수로 틈 만들기"
-      },
-      "visual": {
-        "stance": "low",
-        "height": 0.93,
-        "width": 0.82,
-        "glove": 0.91,
-        "legs": 1.06,
-        "lean": 0.16,
-        "equipment": "ribbons",
-        "mark": "sweep",
-        "pose": "sweep",
-        "face": "mono"
-      },
-      "defaultCall": "attack",
-      "followups": [
-        {
-          "trigger": "onFeint",
-          "move": "sweep",
-          "name": "속임수 → 태클",
-          "cooldown": 2.8
-        },
-        {
-          "trigger": "onDodge",
-          "move": "sweep",
-          "name": "회피 → 태클",
-          "cooldown": 3.5
-        }
-      ],
-      "chargeTrait": "charge_yuna"
-    },
-    {
-      "id": "sion",
-      "name": "시온",
-      "epithet": "읽는 반격가",
-      "style": "counter",
-      "strength": "패턴 분석 · 반격 피해",
-      "weakness": "잡기 · 먼저 여는 공격",
-      "story": "연맹 기록관의 견습. 상대의 습관을 읽어 자기 답을 만든다.",
-      "color": "#746580",
-      "accent": "#d3c6ad",
-      "portrait": "hood",
-      "build": "반격에 집중하거나, 타격과 사거리를 보완해 능동적으로 싸울 수 있습니다.",
-      "stats": {
-        "hp": 168,
-        "stamina": 102,
-        "guard": 84,
-        "speed": 2.45,
-        "reach": 2.5,
-        "evasion": 0.14,
-        "accuracy": 0.86,
-        "counterPower": 1.15
-      },
-      "moves": {
-        "strike": [
-          "touch"
-        ],
-        "grab": [
-          "grab"
-        ],
-        "counter": [
-          "precise_counter"
-        ],
-        "feint": [
-          "feint"
-        ]
-      },
-      "trait": "reader",
-      "default": "read",
-      "commands": {
-        "attack": {
-          "name": "허점 찌르기",
-          "hint": "상대의 회복 동작을 짧게 응징",
-          "plan": {
-            "range": "close",
-            "pace": "steady",
-            "intent": "strike",
-            "defense": "evade"
-          },
-          "weights": {
-            "strike": 0.5,
-            "grab": 0.25,
-            "counter": 0.05,
-            "feint": 0.2
-          }
-        },
-        "bait": {
-          "name": "타격 받아치기",
-          "hint": "반복 타격을 읽어 정타 반격",
-          "plan": {
-            "range": "mid",
-            "pace": "steady",
-            "intent": "counter",
-            "defense": "evade"
-          },
-          "weights": {
-            "strike": 0.16,
-            "grab": 0.03,
-            "counter": 0.74,
-            "feint": 0.07
-          }
-        },
-        "recover": {
-          "name": "흐름 다시 읽기",
-          "hint": "간격을 벌리고 기력 회복",
-          "plan": {
-            "range": "far",
-            "pace": "calm",
-            "intent": "counter",
-            "defense": "block"
-          },
-          "weights": {
-            "strike": 0.16,
-            "grab": 0.03,
-            "counter": 0.74,
-            "feint": 0.07
-          }
-        }
-      },
-      "signature": {
-        "move": "signature_sion",
-        "name": "찰나의 정타",
-        "hint": "상대 타격이 시작될 때 강한 반격",
-        "meter": "간파",
-        "seekRange": 0.9,
-        "waitForStrike": true
-      },
-      "identity": {
-        "kind": "stacks",
-        "status": "reading",
-        "max": 3,
-        "ready": "습관 간파"
-      },
-      "visual": {
-        "stance": "precise",
-        "height": 1.04,
-        "width": 0.86,
-        "glove": 0.95,
-        "legs": 1.02,
-        "lean": -0.03,
-        "equipment": "halo",
-        "mark": "eye",
-        "pose": "counter",
-        "face": "hood"
-      },
-      "defaultCall": "bait",
-      "followups": [
-        {
-          "trigger": "onCounterHit",
-          "move": "read_punish",
-          "name": "반격 → 정타",
-          "cooldown": 3
-        },
-        {
-          "trigger": "onFoeWhiff",
-          "move": "read_punish",
-          "name": "헛공격 → 응징",
-          "cooldown": 3.5
-        }
-      ],
-      "chargeTrait": "charge_sion"
-    },
-    {
-      "id": "mira",
-      "name": "미라",
-      "epithet": "방어 반격가",
-      "style": "counter",
-      "strength": "가드 · 지구전 · 되받기",
-      "weakness": "빠른 추격 · 잡기",
-      "story": "배급소를 지키던 방어 담당. 상대의 힘을 견디고 그대로 돌려준다.",
-      "color": "#5f7385",
-      "accent": "#d0ccb0",
-      "portrait": "round",
-      "build": "가드 반격을 극대화하거나, 잡기와 기동성을 보완해 먼저 압박할 수 있습니다.",
-      "stats": {
-        "hp": 190,
-        "stamina": 110,
-        "guard": 114,
-        "speed": 2.05,
-        "reach": 2.2,
-        "evasion": 0.08,
-        "armor": 0.09,
-        "counterPower": 1.06,
-        "guardRegen": 8.5
-      },
-      "moves": {
-        "strike": [
-          "touch"
-        ],
-        "grab": [
-          "grab"
-        ],
-        "counter": [
-          "guard_counter"
-        ],
-        "feint": [
-          "feint"
-        ]
-      },
-      "trait": "reservoir",
-      "default": "shell",
-      "commands": {
-        "attack": {
-          "name": "철벽 전진",
-          "hint": "막으며 전진해 힘을 축적",
-          "plan": {
-            "range": "close",
-            "pace": "steady",
-            "intent": "strike",
-            "defense": "block"
-          },
-          "weights": {
-            "strike": 0.5,
-            "grab": 0.3,
-            "counter": 0.05,
-            "feint": 0.15
-          }
-        },
-        "bait": {
-          "name": "방패 흘려치기",
-          "hint": "공격을 흘리고 축적한 힘으로 반격",
-          "plan": {
-            "range": "mid",
-            "pace": "steady",
-            "intent": "counter",
-            "defense": "evade"
-          },
-          "weights": {
-            "strike": 0.16,
-            "grab": 0.03,
-            "counter": 0.74,
-            "feint": 0.07
-          }
-        },
-        "recover": {
-          "name": "방벽 재정비",
-          "hint": "기력과 가드가 회복될 틈을 확보",
-          "plan": {
-            "range": "far",
-            "pace": "calm",
-            "intent": "counter",
-            "defense": "block"
-          },
-          "weights": {
-            "strike": 0.16,
-            "grab": 0.03,
-            "counter": 0.74,
-            "feint": 0.07
-          }
-        }
-      },
-      "signature": {
-        "move": "signature_mira",
-        "name": "방벽 해방",
-        "hint": "축적한 힘을 큰 가드 파괴 타격으로 방출",
-        "meter": "축적",
-        "seekRange": 0.9,
-        "waitForStrike": false
-      },
-      "identity": {
-        "kind": "stacks",
-        "status": "stored",
-        "max": 4,
-        "ready": "받아낸 힘"
-      },
-      "visual": {
-        "stance": "fortress",
-        "height": 1,
-        "width": 1.22,
-        "glove": 1.25,
-        "legs": 0.96,
-        "lean": 0.03,
-        "equipment": "shields",
-        "mark": "circle",
-        "pose": "guard",
-        "face": "glass"
-      },
-      "defaultCall": "bait",
-      "followups": [
-        {
-          "trigger": "onBlock",
-          "move": "guard_counter",
-          "name": "축적 → 반격",
-          "cooldown": 4,
-          "when": [
-            {
-              "metric": "status_stored",
-              "op": "gte",
-              "value": 3
-            }
-          ]
-        }
-      ],
-      "chargeTrait": "charge_mira"
-    }
-  ],
-  "moves": {
-    "jab": {
-      "name": "짧은 타격",
-      "type": "strike",
-      "startup": 0.34,
-      "hits": [
-        0
-      ],
-      "recovery": 0.46,
-      "cost": 6,
-      "damage": 13,
-      "guard": 12,
-      "reach": 1,
-      "accuracy": 0.03,
-      "weight": 3,
-      "animation": "punch"
-    },
-    "long_jab": {
-      "name": "거리 찌르기",
-      "type": "strike",
-      "startup": 0.36,
-      "hits": [
-        0
-      ],
-      "recovery": 0.5,
-      "cost": 7,
-      "damage": 14,
-      "guard": 11,
-      "reach": 1,
-      "accuracy": 0.04,
-      "weight": 3,
-      "animation": "punch"
-    },
-    "long_kick": {
-      "name": "관통 차기",
-      "type": "strike",
-      "startup": 0.68,
-      "hits": [
-        0
-      ],
-      "recovery": 0.66,
-      "cost": 13,
-      "damage": 25,
-      "guard": 22,
-      "reach": 1.08,
-      "accuracy": -0.03,
-      "weight": 1,
-      "animation": "kick",
-      "visual": "lance"
-    },
-    "flurry": {
-      "name": "삼연격",
-      "type": "strike",
-      "startup": 0.4,
-      "hits": [
-        0,
-        0.17,
-        0.34
-      ],
-      "recovery": 0.59,
-      "cost": 17,
-      "damage": 9,
-      "guard": 7,
-      "reach": 1,
-      "accuracy": 0.015,
-      "weight": 2,
-      "animation": "flurry",
-      "visual": "barrage"
-    },
-    "pressure_jab": {
-      "name": "밀어붙이기",
-      "type": "strike",
-      "startup": 0.44,
-      "hits": [
-        0
-      ],
-      "recovery": 0.53,
-      "cost": 8,
-      "damage": 15,
-      "guard": 19,
-      "reach": 1,
-      "accuracy": 0,
-      "weight": 1,
-      "animation": "punch",
-      "visual": "heavy"
-    },
-    "touch": {
-      "name": "탐색 타격",
-      "type": "strike",
-      "startup": 0.35,
-      "hits": [
-        0
-      ],
-      "recovery": 0.6,
-      "cost": 6,
-      "damage": 11,
-      "guard": 12,
-      "reach": 1,
-      "accuracy": 0.05,
-      "weight": 1,
-      "animation": "punch"
-    },
-    "grab": {
-      "name": "붙잡아 넘기기",
-      "type": "grab",
-      "startup": 0.56,
-      "hits": [
-        0
-      ],
-      "recovery": 0.8,
-      "cost": 13,
-      "damage": 21,
-      "guard": 6,
-      "reach": 1,
-      "accuracy": -0.05,
-      "weight": 1,
-      "animation": "grab"
-    },
-    "body_lock": {
-      "name": "쇄도 제압",
-      "type": "grab",
-      "startup": 0.58,
-      "hits": [
-        0
-      ],
-      "recovery": 0.78,
-      "cost": 14,
-      "damage": 24,
-      "guard": 9,
-      "reach": 1.12,
-      "accuracy": -0.02,
-      "weight": 1,
-      "animation": "grab",
-      "visual": "slam"
-    },
-    "sweep": {
-      "name": "전환 태클",
-      "type": "grab",
-      "startup": 0.45,
-      "hits": [
-        0
-      ],
-      "recovery": 0.64,
-      "cost": 12,
-      "damage": 22,
-      "guard": 6,
-      "reach": 1.08,
-      "accuracy": 0,
-      "weight": 1,
-      "animation": "sweep",
-      "visual": "mirage"
-    },
-    "counter": {
-      "name": "반격 대기",
-      "type": "counter",
-      "startup": 0.12,
-      "hits": [],
-      "window": 0.9,
-      "recovery": 0.35,
-      "cost": 6,
-      "damage": 23,
-      "guard": 18,
-      "reach": 1.04,
-      "accuracy": 0.05,
-      "weight": 1,
-      "animation": "counter"
-    },
-    "precise_counter": {
-      "name": "읽고 정타",
-      "type": "counter",
-      "startup": 0.08,
-      "hits": [],
-      "window": 1.1,
-      "recovery": 0.35,
-      "cost": 6,
-      "damage": 25,
-      "guard": 20,
-      "reach": 1.06,
-      "accuracy": 0.08,
-      "weight": 1,
-      "animation": "counter",
-      "visual": "riposte"
-    },
-    "guard_counter": {
-      "name": "흘림 반격",
-      "type": "counter",
-      "startup": 0.12,
-      "hits": [],
-      "window": 1,
-      "recovery": 0.32,
-      "cost": 5,
-      "damage": 24,
-      "guard": 22,
-      "reach": 1.04,
-      "accuracy": 0.04,
-      "weight": 1,
-      "animation": "counter",
-      "visual": "shield"
-    },
-    "feint": {
-      "name": "속임수",
-      "type": "feint",
-      "startup": 0.28,
-      "hits": [
-        0
-      ],
-      "recovery": 0.33,
-      "cost": 5,
-      "damage": 0,
-      "guard": 0,
-      "reach": 1.15,
-      "accuracy": 0,
-      "weight": 1,
-      "animation": "feint"
-    },
-    "read_punish": {
-      "name": "빈틈 정타",
-      "type": "strike",
-      "startup": 0.18,
-      "hits": [
-        0
-      ],
-      "recovery": 0.4,
-      "cost": 7,
-      "damage": 17,
-      "guard": 12,
-      "reach": 1.12,
-      "accuracy": 0.05,
-      "weight": 1,
-      "animation": "riposte",
-      "visual": "riposte"
-    },
-    "signature_jin": {
-      "name": "백스텝 관통차기",
-      "type": "strike",
-      "startup": 0.46,
-      "hits": [
-        0
-      ],
-      "recovery": 0.65,
-      "cost": 16,
-      "damage": 37,
-      "guard": 32,
-      "reach": 1.13,
-      "accuracy": -0.03,
-      "weight": 1,
-      "animation": "backkick",
-      "visual": "lance",
-      "step": -0.32,
-      "id": "signature_jin",
-      "signature": true
-    },
-    "signature_taeo": {
-      "name": "오연 폭주",
-      "type": "strike",
-      "startup": 0.3,
-      "hits": [
-        0,
-        0.11,
-        0.22,
-        0.33,
-        0.44
-      ],
-      "recovery": 0.6,
-      "cost": 24,
-      "damage": 10,
-      "guard": 9,
-      "reach": 1,
-      "accuracy": 0.015,
-      "weight": 1,
-      "animation": "barrage",
-      "visual": "barrage",
-      "step": 0.15,
-      "id": "signature_taeo",
-      "signature": true
-    },
-    "signature_garam": {
-      "name": "대지 내려찍기",
-      "type": "grab",
-      "startup": 0.62,
-      "hits": [
-        0
-      ],
-      "recovery": 0.82,
-      "cost": 21,
-      "damage": 41,
-      "guard": 20,
-      "reach": 1.14,
-      "accuracy": -0.02,
-      "weight": 1,
-      "animation": "powerthrow",
-      "visual": "slam",
-      "step": 0.18,
-      "id": "signature_garam",
-      "signature": true
-    },
-    "signature_yuna": {
-      "name": "잔상 태클",
-      "type": "grab",
-      "startup": 0.28,
-      "hits": [
-        0,
-        0.26
-      ],
-      "recovery": 0.65,
-      "cost": 19,
-      "damage": 34,
-      "guard": 13,
-      "reach": 1.22,
-      "accuracy": 0,
-      "weight": 1,
-      "animation": "mirage",
-      "stages": [
-        {
-          "type": "feint",
-          "damage": 0
-        },
-        {
-          "type": "grab",
-          "damage": 34
-        }
-      ],
-      "visual": "mirage",
-      "step": 0.35,
-      "id": "signature_yuna",
-      "signature": true
-    },
-    "signature_sion": {
-      "name": "찰나의 정타",
-      "type": "counter",
-      "startup": 0.05,
-      "hits": [],
-      "window": 1.45,
-      "recovery": 0.42,
-      "cost": 12,
-      "damage": 41,
-      "guard": 32,
-      "reach": 1.12,
-      "accuracy": 0.08,
-      "weight": 1,
-      "animation": "riposte",
-      "visual": "riposte",
-      "id": "signature_sion",
-      "signature": true
-    },
-    "signature_mira": {
-      "name": "방벽 해방",
-      "type": "strike",
-      "startup": 0.48,
-      "hits": [
-        0
-      ],
-      "recovery": 0.7,
-      "cost": 16,
-      "damage": 34,
-      "guard": 44,
-      "reach": 1.04,
-      "accuracy": 0.05,
-      "weight": 1,
-      "animation": "shieldburst",
-      "visual": "shield",
-      "step": 0.12,
-      "counterScale": true,
-      "id": "signature_mira",
-      "signature": true,
-      "consumeStatuses": [
-        "stored"
-      ]
-    }
-  },
-  "options": {
-    "range": [
-      {
-        "id": "far",
-        "name": "거리 유지",
-        "short": "멀리",
-        "factor": 0.94,
-        "offset": 0.03
-      },
-      {
-        "id": "mid",
-        "name": "교환 거리",
-        "short": "중간",
-        "factor": 0.7,
-        "offset": 0
-      },
-      {
-        "id": "close",
-        "name": "붙기",
-        "short": "근접",
-        "factor": 0,
-        "offset": 0.84
-      }
-    ],
-    "pace": [
-      {
-        "id": "calm",
-        "name": "회복",
-        "speed": 0.72,
-        "rate": 0.66,
-        "cost": 0.82,
-        "regen": 1.65,
-        "power": 0.92
-      },
-      {
-        "id": "steady",
-        "name": "균형",
-        "speed": 1,
-        "rate": 1,
-        "cost": 1,
-        "regen": 1,
-        "power": 1
-      },
-      {
-        "id": "burst",
-        "name": "몰아치기",
-        "speed": 1.14,
-        "rate": 1.22,
-        "cost": 1.3,
-        "regen": 0.8,
-        "power": 1.09
-      }
-    ],
-    "intent": [
-      {
-        "id": "strike",
-        "name": "타격",
-        "weights": {
-          "strike": 0.73,
-          "grab": 0.06,
-          "counter": 0.05,
-          "feint": 0.16
-        }
-      },
-      {
-        "id": "grab",
-        "name": "잡기",
-        "weights": {
-          "strike": 0.13,
-          "grab": 0.65,
-          "counter": 0.04,
-          "feint": 0.18
-        }
-      },
-      {
-        "id": "counter",
-        "name": "반격",
-        "weights": {
-          "strike": 0.16,
-          "grab": 0.03,
-          "counter": 0.74,
-          "feint": 0.07
-        }
-      },
-      {
-        "id": "feint",
-        "name": "속임수",
-        "weights": {
-          "strike": 0.3,
-          "grab": 0.14,
-          "counter": 0.06,
-          "feint": 0.5
-        }
-      }
-    ],
-    "defense": [
-      {
-        "id": "block",
-        "name": "막기"
-      },
-      {
-        "id": "evade",
-        "name": "피하기"
-      }
-    ]
-  },
-  "presets": [
-    {
-      "id": "keepout",
-      "name": "거리 견제",
-      "plan": {
-        "range": "far",
-        "pace": "steady",
-        "intent": "strike",
-        "defense": "evade"
-      }
-    },
-    {
-      "id": "pressure",
-      "name": "연타 압박",
-      "plan": {
-        "range": "mid",
-        "pace": "burst",
-        "intent": "strike",
-        "defense": "block"
-      }
-    },
-    {
-      "id": "clinch",
-      "name": "붙어서 제압",
-      "plan": {
-        "range": "close",
-        "pace": "steady",
-        "intent": "grab",
-        "defense": "block"
-      }
-    },
-    {
-      "id": "trick",
-      "name": "속임수 진입",
-      "plan": {
-        "range": "close",
-        "pace": "steady",
-        "intent": "feint",
-        "defense": "evade"
-      }
-    },
-    {
-      "id": "read",
-      "name": "타격 받아치기",
-      "plan": {
-        "range": "mid",
-        "pace": "steady",
-        "intent": "counter",
-        "defense": "evade"
-      }
-    },
-    {
-      "id": "shell",
-      "name": "가드 반격",
-      "plan": {
-        "range": "mid",
-        "pace": "calm",
-        "intent": "counter",
-        "defense": "block"
-      }
-    },
-    {
-      "id": "rest",
-      "name": "거리 벌려 회복",
-      "plan": {
-        "range": "far",
-        "pace": "calm",
-        "intent": "counter",
-        "defense": "evade"
-      }
-    },
-    {
-      "id": "break",
-      "name": "가드 흔들기",
-      "plan": {
-        "range": "mid",
-        "pace": "steady",
-        "intent": "feint",
-        "defense": "evade"
-      }
-    },
-    {
-      "id": "finish",
-      "name": "빈틈 몰아치기",
-      "plan": {
-        "range": "close",
-        "pace": "burst",
-        "intent": "strike",
-        "defense": "block"
-      }
-    }
-  ],
-  "conditions": [
-    {
-      "id": "low_stamina",
-      "name": "내 기력 30% 미만",
-      "source": "self",
-      "metric": "staminaRatio",
-      "op": "lt",
-      "value": 0.3
-    },
-    {
-      "id": "foe_tired",
-      "name": "상대 기력 25% 미만",
-      "source": "foe",
-      "metric": "staminaRatio",
-      "op": "lt",
-      "value": 0.25
-    },
-    {
-      "id": "foe_guard",
-      "name": "상대 가드 25% 미만",
-      "source": "foe",
-      "metric": "guardRatio",
-      "op": "lt",
-      "value": 0.25
-    },
-    {
-      "id": "low_guard",
-      "name": "내 가드 25% 미만",
-      "source": "self",
-      "metric": "guardRatio",
-      "op": "lt",
-      "value": 0.25
-    },
-    {
-      "id": "repeat_strike",
-      "name": "상대 타격 2회 반복",
-      "source": "foe",
-      "metric": "repeatStrike",
-      "op": "gte",
-      "value": 2
-    },
-    {
-      "id": "repeat_counter",
-      "name": "상대 반격 2회 반복",
-      "source": "foe",
-      "metric": "repeatCounter",
-      "op": "gte",
-      "value": 2
-    },
-    {
-      "id": "repeat_grab",
-      "name": "상대 잡기 2회 반복",
-      "source": "foe",
-      "metric": "repeatGrab",
-      "op": "gte",
-      "value": 2
-    },
-    {
-      "id": "foe_edge",
-      "name": "상대가 외곽에 몰림",
-      "source": "foe",
-      "metric": "edgeRatio",
-      "op": "gt",
-      "value": 0.82
-    },
-    {
-      "id": "self_edge",
-      "name": "내가 외곽에 몰림",
-      "source": "self",
-      "metric": "edgeRatio",
-      "op": "gt",
-      "value": 0.82
-    },
-    {
-      "id": "close",
-      "name": "상대가 1.2m 안으로 접근",
-      "source": "self",
-      "metric": "distance",
-      "op": "lt",
-      "value": 1.2
-    }
-  ],
-  "defaultRules": [
-    {
-      "condition": "low_stamina",
-      "preset": "rest",
-      "enabled": true
-    },
-    {
-      "condition": "foe_tired",
-      "preset": "finish",
-      "enabled": true
-    },
-    {
-      "condition": "repeat_counter",
-      "preset": "clinch",
-      "enabled": false
-    }
-  ],
-  "focusActions": [
-    {
-      "id": "drive",
-      "name": "돌파",
-      "description": "5초간 가드 피해 +40%, 잡기·타격 피해 +15%. 기력 소모도 증가.",
-      "duration": 5,
-      "stats": [
-        {
-          "stat": "guardDamage",
-          "op": "multiply",
-          "value": 1.4
-        },
-        {
-          "stat": "power",
-          "op": "multiply",
-          "value": 1.15
-        },
-        {
-          "stat": "staminaCost",
-          "op": "multiply",
-          "value": 1.15
-        }
-      ]
-    },
-    {
-      "id": "read",
-      "name": "간파",
-      "description": "5초간 회피 +12%p, 반격 피해 +25%. 잡기는 여전히 위협.",
-      "duration": 5,
-      "stats": [
-        {
-          "stat": "evasion",
-          "op": "add",
-          "value": 0.12
-        },
-        {
-          "stat": "counterPower",
-          "op": "multiply",
-          "value": 1.25
-        }
-      ]
-    },
-    {
-      "id": "breathe",
-      "name": "재정비",
-      "description": "기력 28과 가드 24를 즉시 회복. 체력은 회복하지 않음.",
-      "duration": 0,
-      "resources": {
-        "stamina": 28,
-        "guard": 24
-      },
-      "stats": []
-    }
-  ],
-  "statuses": {
-    "spacing": {
-      "name": "간격 확보",
-      "duration": 2,
-      "maxStacks": 1,
-      "stats": [
-        {
-          "stat": "accuracy",
-          "op": "add",
-          "value": 0.05
-        }
-      ]
-    },
-    "rhythm": {
-      "name": "연타 리듬",
-      "duration": 5,
-      "maxStacks": 3,
-      "stats": [
-        {
-          "stat": "power",
-          "op": "multiply",
-          "value": 1.045
-        }
-      ]
-    },
-    "corner": {
-      "name": "외곽 제압",
-      "duration": 1.8,
-      "maxStacks": 1,
-      "stats": [
-        {
-          "stat": "grabPower",
-          "op": "multiply",
-          "value": 1.2
-        },
-        {
-          "stat": "guardDamage",
-          "op": "multiply",
-          "value": 1.15
-        }
-      ]
-    },
-    "entry": {
-      "name": "진입 기회",
-      "duration": 3,
-      "maxStacks": 1,
-      "stats": [
-        {
-          "stat": "grabAccuracy",
-          "op": "add",
-          "value": 0.13
-        },
-        {
-          "stat": "grabPower",
-          "op": "multiply",
-          "value": 1.12
-        }
-      ]
-    },
-    "reading": {
-      "name": "패턴 읽음",
-      "duration": 6,
-      "maxStacks": 3,
-      "stats": [
-        {
-          "stat": "counterChance",
-          "op": "add",
-          "value": 0.035
-        }
-      ]
-    },
-    "stored": {
-      "name": "받아낸 힘",
-      "duration": 7,
-      "maxStacks": 4,
-      "stats": [
-        {
-          "stat": "counterPower",
-          "op": "multiply",
-          "value": 1.055
-        }
-      ]
-    },
-    "last_stand": {
-      "name": "마지막 집중",
-      "duration": 4,
-      "maxStacks": 1,
-      "stats": [
-        {
-          "stat": "power",
-          "op": "multiply",
-          "value": 1.13
-        },
-        {
-          "stat": "staminaRegen",
-          "op": "multiply",
-          "value": 1.25
-        }
-      ]
-    },
-    "gear_spacing": {
-      "name": "추격의 간격",
-      "duration": 3,
-      "maxStacks": 1,
-      "stats": [
-        {
-          "stat": "reach",
-          "op": "multiply",
-          "value": 1.12
-        },
-        {
-          "stat": "speed",
-          "op": "multiply",
-          "value": 1.12
-        }
-      ]
-    },
-    "gear_opening": {
-      "name": "잔영의 틈",
-      "duration": 2.4,
-      "maxStacks": 1,
-      "stats": [
-        {
-          "stat": "grabPower",
-          "op": "multiply",
-          "value": 1.18
-        },
-        {
-          "stat": "strikePower",
-          "op": "multiply",
-          "value": 1.18
-        }
-      ]
-    },
-    "gear_shield": {
-      "name": "서약 축적",
-      "duration": 6,
-      "maxStacks": 3,
-      "stats": [
-        {
-          "stat": "guardDamage",
-          "op": "multiply",
-          "value": 1.08
-        }
-      ]
-    },
-    "gear_siege": {
-      "name": "붕괴 추격",
-      "duration": 3,
-      "maxStacks": 1,
-      "stats": [
-        {
-          "stat": "power",
-          "op": "multiply",
-          "value": 1.2
-        }
-      ]
-    },
-    "res_hunt": {
-      "name": "추격 공명",
-      "duration": 3,
-      "maxStacks": 1,
-      "stats": [
-        {
-          "stat": "speed",
-          "op": "multiply",
-          "value": 1.2
-        },
-        {
-          "stat": "staminaCost",
-          "op": "multiply",
-          "value": 0.88
-        }
-      ]
-    },
-    "res_iron": {
-      "name": "철벽 공명",
-      "duration": 3,
-      "maxStacks": 1,
-      "stats": [
-        {
-          "stat": "armor",
-          "op": "add",
-          "value": 0.07
-        }
-      ]
-    }
-  },
-  "traits": {
-    "spacing": {
-      "name": "간격의 보상",
-      "description": "긴 거리에서 공격을 시작하면 잠시 명중률이 오르고 집중을 얻습니다.",
-      "hooks": [
-        {
-          "trigger": "onStartAttack",
-          "effects": [
-            {
-              "op": "status",
-              "target": "self",
-              "id": "spacing"
-            },
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "focus",
-              "value": 4
-            }
-          ],
-          "when": [
-            {
-              "metric": "distance",
-              "op": "gt",
-              "value": 2.1
-            }
-          ],
-          "cooldown": 2.5
-        }
-      ]
-    },
-    "rhythm": {
-      "name": "연타의 리듬",
-      "description": "타격 적중마다 피해가 최대 3단계 증가. 빗나가면 초기화됩니다.",
-      "hooks": [
-        {
-          "trigger": "onHit",
-          "effects": [
-            {
-              "op": "status",
-              "target": "self",
-              "id": "rhythm"
-            }
-          ],
-          "when": [
-            {
-              "metric": "attackStrike",
-              "op": "eq",
-              "value": 1
-            }
-          ],
-          "cooldown": 0
-        },
-        {
-          "trigger": "onMiss",
-          "effects": [
-            {
-              "op": "clear",
-              "target": "self",
-              "id": "rhythm"
-            }
-          ],
-          "when": [],
-          "cooldown": 0
-        }
-      ]
-    },
-    "corner": {
-      "name": "도망갈 곳 없음",
-      "description": "상대를 외곽에 몰면 잡기와 가드 피해가 증가합니다.",
-      "hooks": [
-        {
-          "trigger": "onStartAttack",
-          "effects": [
-            {
-              "op": "status",
-              "target": "self",
-              "id": "corner"
-            }
-          ],
-          "when": [
-            {
-              "metric": "foeEdge",
-              "op": "gt",
-              "value": 0.8
-            }
-          ],
-          "cooldown": 1
-        }
-      ]
-    },
-    "entry": {
-      "name": "진입의 틈",
-      "description": "회피·속임수 성공 뒤 잡기의 명중과 피해가 증가합니다.",
-      "hooks": [
-        {
-          "trigger": "onDodge",
-          "effects": [
-            {
-              "op": "status",
-              "target": "self",
-              "id": "entry"
-            }
-          ],
-          "when": [],
-          "cooldown": 0
-        },
-        {
-          "trigger": "onFeint",
-          "effects": [
-            {
-              "op": "status",
-              "target": "self",
-              "id": "entry"
-            }
-          ],
-          "when": [],
-          "cooldown": 0
-        },
-        {
-          "trigger": "onGrabHit",
-          "effects": [
-            {
-              "op": "clear",
-              "target": "self",
-              "id": "entry"
-            }
-          ],
-          "when": [],
-          "cooldown": 0
-        }
-      ]
-    },
-    "reader": {
-      "name": "습관 분석",
-      "description": "상대가 같은 행동을 반복하면 반격 성공률이 쌓입니다.",
-      "hooks": [
-        {
-          "trigger": "onFoeRepeat",
-          "effects": [
-            {
-              "op": "status",
-              "target": "self",
-              "id": "reading"
-            }
-          ],
-          "when": [],
-          "cooldown": 0
-        }
-      ]
-    },
-    "reservoir": {
-      "name": "받아낸 힘",
-      "description": "가드로 막을 때마다 반격 피해가 쌓이고, 반격 적중 시 소모됩니다.",
-      "hooks": [
-        {
-          "trigger": "onBlock",
-          "effects": [
-            {
-              "op": "status",
-              "target": "self",
-              "id": "stored"
-            },
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "guard",
-              "value": 2
-            }
-          ],
-          "when": [],
-          "cooldown": 0
-        },
-        {
-          "trigger": "onCounterHit",
-          "effects": [
-            {
-              "op": "clear",
-              "target": "self",
-              "id": "stored"
-            }
-          ],
-          "when": [],
-          "cooldown": 0
-        }
-      ]
-    },
-    "cooling": {
-      "name": "긴급 호흡",
-      "description": "기력이 25% 아래면 14를 회복. 16초마다 발동합니다.",
-      "hooks": [
-        {
-          "trigger": "onLowStamina",
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "stamina",
-              "value": 14
-            }
-          ],
-          "when": [],
-          "cooldown": 16
-        }
-      ]
-    },
-    "resolve": {
-      "name": "역전 집중",
-      "description": "체력 35% 아래에서 4초간 화력과 기력 회복 증가. 16초마다 발동.",
-      "hooks": [
-        {
-          "trigger": "onLowHp",
-          "effects": [
-            {
-              "op": "status",
-              "target": "self",
-              "id": "last_stand"
-            }
-          ],
-          "when": [],
-          "cooldown": 16
-        }
-      ]
-    },
-    "calm": {
-      "name": "침착한 회피",
-      "description": "회피 성공 시 기력 2 회복, 집중 3 추가 획득.",
-      "hooks": [
-        {
-          "trigger": "onDodge",
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "stamina",
-              "value": 2
-            },
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "focus",
-              "value": 3
-            }
-          ],
-          "when": [],
-          "cooldown": 0
-        }
-      ]
-    },
-    "breacher": {
-      "name": "붕괴 추격",
-      "description": "상대 가드 붕괴 시 기력 10 회복, 집중 8 획득.",
-      "hooks": [
-        {
-          "trigger": "onBreak",
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "stamina",
-              "value": 10
-            },
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "focus",
-              "value": 8
-            }
-          ],
-          "when": [],
-          "cooldown": 0
-        }
-      ]
-    },
-    "charge_jin": {
-      "name": "간격",
-      "description": "거리 확보 뒤 길게 뻗는 결정타",
-      "hooks": [
-        {
-          "trigger": "onHit",
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "focus",
-              "value": 8
-            }
-          ],
-          "when": [
-            {
-              "metric": "distance",
-              "op": "gt",
-              "value": 2.05
-            }
-          ],
-          "cooldown": 0
-        },
-        {
-          "trigger": "onDodge",
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "focus",
-              "value": 8
-            }
-          ],
-          "when": [],
-          "cooldown": 0
-        }
-      ]
-    },
-    "charge_taeo": {
-      "name": "리듬",
-      "description": "다섯 번의 연타. 반격에 끊길 수 있음",
-      "hooks": [
-        {
-          "trigger": "onHit",
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "focus",
-              "value": 6
-            }
-          ],
-          "when": [
-            {
-              "metric": "attackStrike",
-              "op": "eq",
-              "value": 1
-            }
-          ],
-          "cooldown": 0
-        }
-      ]
-    },
-    "charge_garam": {
-      "name": "압박",
-      "description": "가드를 무시하는 강한 잡기. 먼저 붙어야 함",
-      "hooks": [
-        {
-          "trigger": "onBlock",
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "focus",
-              "value": 5
-            }
-          ],
-          "when": [],
-          "cooldown": 0
-        },
-        {
-          "trigger": "onGrabHit",
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "focus",
-              "value": 13
-            }
-          ],
-          "when": [],
-          "cooldown": 0
-        }
-      ]
-    },
-    "charge_yuna": {
-      "name": "기만",
-      "description": "속임수 동작 뒤 낮게 파고드는 태클",
-      "hooks": [
-        {
-          "trigger": "onFeint",
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "focus",
-              "value": 11
-            }
-          ],
-          "when": [],
-          "cooldown": 0
-        },
-        {
-          "trigger": "onDodge",
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "focus",
-              "value": 10
-            }
-          ],
-          "when": [],
-          "cooldown": 0
-        },
-        {
-          "trigger": "onGrabHit",
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "focus",
-              "value": 9
-            }
-          ],
-          "when": [],
-          "cooldown": 0
-        }
-      ]
-    },
-    "charge_sion": {
-      "name": "간파",
-      "description": "상대 타격이 시작될 때 강한 반격",
-      "hooks": [
-        {
-          "trigger": "onFoeRepeat",
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "focus",
-              "value": 6
-            }
-          ],
-          "when": [],
-          "cooldown": 0
-        },
-        {
-          "trigger": "onCounterHit",
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "focus",
-              "value": 12
-            }
-          ],
-          "when": [],
-          "cooldown": 0
-        }
-      ]
-    },
-    "charge_mira": {
-      "name": "축적",
-      "description": "축적한 힘을 큰 가드 파괴 타격으로 방출",
-      "hooks": [
-        {
-          "trigger": "onBlock",
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "focus",
-              "value": 6
-            }
-          ],
-          "when": [],
-          "cooldown": 0
-        },
-        {
-          "trigger": "onCounterHit",
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "focus",
-              "value": 10
-            }
-          ],
-          "when": [],
-          "cooldown": 0
-        }
-      ]
-    },
-    "gear_pad": {
-      "name": "성채 누비갑옷",
-      "description": "가드 성공 → 가드 5 회복 · 재발동 3.5초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onBlock",
-          "when": [],
-          "cooldown": 3.5,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "guard",
-              "value": 5
-            }
-          ]
-        }
-      ]
-    },
-    "gear_pad_bastion": {
-      "name": "성채",
-      "description": "가드 성공 → 가드 7 회복 · 재발동 4초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onBlock",
-          "when": [],
-          "cooldown": 4,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "guard",
-              "value": 7
-            }
-          ]
-        }
-      ]
-    },
-    "gear_pad_bastion_master": {
-      "name": "성채 · 완성",
-      "description": "가드 성공 → 가드 12 회복 · 재발동 4초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onBlock",
-          "when": [],
-          "cooldown": 4,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "guard",
-              "value": 12
-            }
-          ]
-        }
-      ]
-    },
-    "gear_pad_duelist": {
-      "name": "결투가",
-      "description": "회피 성공 → 기력 7 회복 · 재발동 4초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onDodge",
-          "when": [],
-          "cooldown": 4,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "stamina",
-              "value": 7
-            }
-          ]
-        }
-      ]
-    },
-    "gear_pad_duelist_master": {
-      "name": "결투가 · 완성",
-      "description": "회피 성공 → 기력 12 회복 · 재발동 4초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onDodge",
-          "when": [],
-          "cooldown": 4,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "stamina",
-              "value": 12
-            }
-          ]
-        }
-      ]
-    },
-    "gear_breath": {
-      "name": "성자의 숨결",
-      "description": "기력 28% 미만 → 기력 12 회복 · 재발동 14초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onLowStamina",
-          "when": [],
-          "cooldown": 14,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "stamina",
-              "value": 12
-            }
-          ]
-        }
-      ]
-    },
-    "gear_breath_endless": {
-      "name": "불굴",
-      "description": "기력 28% 미만 → 기력 10 회복 / 집중 8 획득 · 재발동 12초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onLowStamina",
-          "when": [],
-          "cooldown": 12,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "stamina",
-              "value": 10
-            },
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "focus",
-              "value": 8
-            }
-          ]
-        }
-      ]
-    },
-    "gear_breath_endless_master": {
-      "name": "불굴 · 완성",
-      "description": "기력 28% 미만 → 기력 16 회복 / 집중 13 획득 · 재발동 12초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onLowStamina",
-          "when": [],
-          "cooldown": 12,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "stamina",
-              "value": 16
-            },
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "focus",
-              "value": 13
-            }
-          ]
-        }
-      ]
-    },
-    "gear_breath_leap": {
-      "name": "도약",
-      "description": "회피 성공 → 기력 5 회복 / 집중 7 획득 · 재발동 4초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onDodge",
-          "when": [],
-          "cooldown": 4,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "stamina",
-              "value": 5
-            },
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "focus",
-              "value": 7
-            }
-          ]
-        }
-      ]
-    },
-    "gear_breath_leap_master": {
-      "name": "도약 · 완성",
-      "description": "회피 성공 → 기력 8 회복 / 집중 12 획득 · 재발동 4초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onDodge",
-          "when": [],
-          "cooldown": 4,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "stamina",
-              "value": 8
-            },
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "focus",
-              "value": 12
-            }
-          ]
-        }
-      ]
-    },
-    "gear_reach": {
-      "name": "매사냥꾼 사슬갑",
-      "description": "상대 헛침 → 3초간 타격 거리·기동 +12% · 재발동 3.5초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onFoeWhiff",
-          "when": [],
-          "cooldown": 3.5,
-          "effects": [
-            {
-              "op": "status",
-              "target": "self",
-              "id": "gear_spacing"
-            }
-          ]
-        }
-      ]
-    },
-    "gear_reach_spear": {
-      "name": "창끝",
-      "description": "적중 → 집중 6 획득 · 재발동 3초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onHit",
-          "when": [],
-          "cooldown": 3,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "focus",
-              "value": 6
-            }
-          ]
-        }
-      ]
-    },
-    "gear_reach_spear_master": {
-      "name": "창끝 · 완성",
-      "description": "적중 → 집중 10 획득 · 재발동 3초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onHit",
-          "when": [],
-          "cooldown": 3,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "focus",
-              "value": 10
-            }
-          ]
-        }
-      ]
-    },
-    "gear_reach_reel": {
-      "name": "거두기",
-      "description": "잡기 적중 → 기력 7 회복 · 재발동 4초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onGrabHit",
-          "when": [],
-          "cooldown": 4,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "stamina",
-              "value": 7
-            }
-          ]
-        }
-      ]
-    },
-    "gear_reach_reel_master": {
-      "name": "거두기 · 완성",
-      "description": "잡기 적중 → 기력 12 회복 · 재발동 4초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onGrabHit",
-          "when": [],
-          "cooldown": 4,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "stamina",
-              "value": 12
-            }
-          ]
-        }
-      ]
-    },
-    "gear_weight": {
-      "name": "파성 건틀릿",
-      "description": "가드 붕괴 유발 → 집중 14 획득 · 재발동 4초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onBreak",
-          "when": [],
-          "cooldown": 4,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "focus",
-              "value": 14
-            }
-          ]
-        }
-      ]
-    },
-    "gear_weight_crack": {
-      "name": "균열",
-      "description": "적중 → 상대 가드 5 감소 · 재발동 2.5초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onHit",
-          "when": [],
-          "cooldown": 2.5,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "foe",
-              "key": "guard",
-              "value": -5
-            }
-          ]
-        }
-      ]
-    },
-    "gear_weight_crack_master": {
-      "name": "균열 · 완성",
-      "description": "적중 → 상대 가드 8 감소 · 재발동 2.5초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onHit",
-          "when": [],
-          "cooldown": 2.5,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "foe",
-              "key": "guard",
-              "value": -8
-            }
-          ]
-        }
-      ]
-    },
-    "gear_weight_execution": {
-      "name": "일격",
-      "description": "상성 파훼 성공 → 집중 12 획득 · 재발동 4초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onTacticWin",
-          "when": [],
-          "cooldown": 4,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "focus",
-              "value": 12
-            }
-          ]
-        }
-      ]
-    },
-    "gear_weight_execution_master": {
-      "name": "일격 · 완성",
-      "description": "상성 파훼 성공 → 집중 20 획득 · 재발동 4초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onTacticWin",
-          "when": [],
-          "cooldown": 4,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "focus",
-              "value": 20
-            }
-          ]
-        }
-      ]
-    },
-    "gear_ankle": {
-      "name": "바람 사냥 장화",
-      "description": "회피 성공 → 집중 6 획득 · 재발동 3초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onDodge",
-          "when": [],
-          "cooldown": 3,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "focus",
-              "value": 6
-            }
-          ]
-        }
-      ]
-    },
-    "gear_ankle_pursuit": {
-      "name": "추격",
-      "description": "상대 헛침 → 기력 7 회복 · 재발동 3.5초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onFoeWhiff",
-          "when": [],
-          "cooldown": 3.5,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "stamina",
-              "value": 7
-            }
-          ]
-        }
-      ]
-    },
-    "gear_ankle_pursuit_master": {
-      "name": "추격 · 완성",
-      "description": "상대 헛침 → 기력 12 회복 · 재발동 3.5초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onFoeWhiff",
-          "when": [],
-          "cooldown": 3.5,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "stamina",
-              "value": 12
-            }
-          ]
-        }
-      ]
-    },
-    "gear_ankle_wander": {
-      "name": "유랑",
-      "description": "회피 성공 → 기력 7 회복 / 가드 4 회복 · 재발동 4초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onDodge",
-          "when": [],
-          "cooldown": 4,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "stamina",
-              "value": 7
-            },
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "guard",
-              "value": 4
-            }
-          ]
-        }
-      ]
-    },
-    "gear_ankle_wander_master": {
-      "name": "유랑 · 완성",
-      "description": "회피 성공 → 기력 12 회복 / 가드 7 회복 · 재발동 4초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onDodge",
-          "when": [],
-          "cooldown": 4,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "stamina",
-              "value": 12
-            },
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "guard",
-              "value": 7
-            }
-          ]
-        }
-      ]
-    },
-    "gear_deceive": {
-      "name": "잔영 망토",
-      "description": "속임수 성공 → 2.4초간 타격·잡기 피해 +18% · 재발동 2초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onFeint",
-          "when": [],
-          "cooldown": 2,
-          "effects": [
-            {
-              "op": "status",
-              "target": "self",
-              "id": "gear_opening"
-            }
-          ]
-        }
-      ]
-    },
-    "gear_deceive_illusion": {
-      "name": "허상",
-      "description": "속임수 성공 → 상대 가드 10 감소 · 재발동 3초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onFeint",
-          "when": [],
-          "cooldown": 3,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "foe",
-              "key": "guard",
-              "value": -10
-            }
-          ]
-        }
-      ]
-    },
-    "gear_deceive_illusion_master": {
-      "name": "허상 · 완성",
-      "description": "속임수 성공 → 상대 가드 16 감소 · 재발동 3초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onFeint",
-          "when": [],
-          "cooldown": 3,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "foe",
-              "key": "guard",
-              "value": -16
-            }
-          ]
-        }
-      ]
-    },
-    "gear_deceive_ambush": {
-      "name": "암습",
-      "description": "속임수 성공 → 집중 10 획득 · 재발동 3초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onFeint",
-          "when": [],
-          "cooldown": 3,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "focus",
-              "value": 10
-            }
-          ]
-        }
-      ]
-    },
-    "gear_deceive_ambush_master": {
-      "name": "암습 · 완성",
-      "description": "속임수 성공 → 집중 16 획득 · 재발동 3초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onFeint",
-          "when": [],
-          "cooldown": 3,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "focus",
-              "value": 16
-            }
-          ]
-        }
-      ]
-    },
-    "gear_lung": {
-      "name": "불씨 심장석",
-      "description": "적중 → 기력 2 회복 · 재발동 2초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onHit",
-          "when": [],
-          "cooldown": 2,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "stamina",
-              "value": 2
-            }
-          ]
-        }
-      ]
-    },
-    "gear_lung_burn": {
-      "name": "연소",
-      "description": "적중 → 집중 4 획득 · 재발동 2초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onHit",
-          "when": [],
-          "cooldown": 2,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "focus",
-              "value": 4
-            }
-          ]
-        }
-      ]
-    },
-    "gear_lung_burn_master": {
-      "name": "연소 · 완성",
-      "description": "적중 → 집중 7 획득 · 재발동 2초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onHit",
-          "when": [],
-          "cooldown": 2,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "focus",
-              "value": 7
-            }
-          ]
-        }
-      ]
-    },
-    "gear_lung_ember": {
-      "name": "잔불",
-      "description": "체력 35% 미만 → 기력 14 회복 / 가드 10 회복 · 재발동 16초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onLowHp",
-          "when": [],
-          "cooldown": 16,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "stamina",
-              "value": 14
-            },
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "guard",
-              "value": 10
-            }
-          ]
-        }
-      ]
-    },
-    "gear_lung_ember_master": {
-      "name": "잔불 · 완성",
-      "description": "체력 35% 미만 → 기력 23 회복 / 가드 16 회복 · 재발동 16초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onLowHp",
-          "when": [],
-          "cooldown": 16,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "stamina",
-              "value": 23
-            },
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "guard",
-              "value": 16
-            }
-          ]
-        }
-      ]
-    },
-    "gear_hardguard": {
-      "name": "서약의 방패",
-      "description": "가드 성공 → 가드 압박 +8%씩 최대 3회 축적 · 6초 유지 · 재발동 1초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onBlock",
-          "when": [],
-          "cooldown": 1,
-          "effects": [
-            {
-              "op": "status",
-              "target": "self",
-              "id": "gear_shield"
-            }
-          ]
-        }
-      ]
-    },
-    "gear_hardguard_echo": {
-      "name": "반향",
-      "description": "반격 성공 → 가드 12 회복 · 재발동 4초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onCounterHit",
-          "when": [],
-          "cooldown": 4,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "guard",
-              "value": 12
-            }
-          ]
-        }
-      ]
-    },
-    "gear_hardguard_echo_master": {
-      "name": "반향 · 완성",
-      "description": "반격 성공 → 가드 20 회복 · 재발동 4초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onCounterHit",
-          "when": [],
-          "cooldown": 4,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "guard",
-              "value": 20
-            }
-          ]
-        }
-      ]
-    },
-    "gear_hardguard_siege": {
-      "name": "압성",
-      "description": "가드 붕괴 유발 → 집중 14 획득 · 재발동 5초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onBreak",
-          "when": [],
-          "cooldown": 5,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "focus",
-              "value": 14
-            }
-          ]
-        }
-      ]
-    },
-    "gear_hardguard_siege_master": {
-      "name": "압성 · 완성",
-      "description": "가드 붕괴 유발 → 집중 23 획득 · 재발동 5초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onBreak",
-          "when": [],
-          "cooldown": 5,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "focus",
-              "value": 23
-            }
-          ]
-        }
-      ]
-    },
-    "gear_parry": {
-      "name": "흘림 손목띠",
-      "description": "반격 성공 → 기력 7 회복 · 재발동 3초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onCounterHit",
-          "when": [],
-          "cooldown": 3,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "stamina",
-              "value": 7
-            }
-          ]
-        }
-      ]
-    },
-    "gear_parry_read": {
-      "name": "판독",
-      "description": "상대 행동 반복 → 집중 6 획득 · 재발동 3초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onFoeRepeat",
-          "when": [],
-          "cooldown": 3,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "focus",
-              "value": 6
-            }
-          ]
-        }
-      ]
-    },
-    "gear_parry_read_master": {
-      "name": "판독 · 완성",
-      "description": "상대 행동 반복 → 집중 10 획득 · 재발동 3초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onFoeRepeat",
-          "when": [],
-          "cooldown": 3,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "focus",
-              "value": 10
-            }
-          ]
-        }
-      ]
-    },
-    "gear_parry_reverse": {
-      "name": "반전",
-      "description": "잡기 적중 → 집중 12 획득 · 재발동 4초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onGrabHit",
-          "when": [],
-          "cooldown": 4,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "focus",
-              "value": 12
-            }
-          ]
-        }
-      ]
-    },
-    "gear_parry_reverse_master": {
-      "name": "반전 · 완성",
-      "description": "잡기 적중 → 집중 20 획득 · 재발동 4초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onGrabHit",
-          "when": [],
-          "cooldown": 4,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "focus",
-              "value": 20
-            }
-          ]
-        }
-      ]
-    },
-    "gear_grip": {
-      "name": "거인의 매듭장갑",
-      "description": "잡기 적중 → 상대 기력 7 감소 · 재발동 4초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onGrabHit",
-          "when": [],
-          "cooldown": 4,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "foe",
-              "key": "stamina",
-              "value": -7
-            }
-          ]
-        }
-      ]
-    },
-    "gear_grip_crush": {
-      "name": "압착",
-      "description": "잡기 적중 → 상대 가드 8 감소 · 재발동 4초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onGrabHit",
-          "when": [],
-          "cooldown": 4,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "foe",
-              "key": "guard",
-              "value": -8
-            }
-          ]
-        }
-      ]
-    },
-    "gear_grip_crush_master": {
-      "name": "압착 · 완성",
-      "description": "잡기 적중 → 상대 가드 13 감소 · 재발동 4초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onGrabHit",
-          "when": [],
-          "cooldown": 4,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "foe",
-              "key": "guard",
-              "value": -13
-            }
-          ]
-        }
-      ]
-    },
-    "gear_grip_catch": {
-      "name": "사냥",
-      "description": "상성 파훼 성공 → 기력 10 회복 · 재발동 4초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onTacticWin",
-          "when": [],
-          "cooldown": 4,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "stamina",
-              "value": 10
-            }
-          ]
-        }
-      ]
-    },
-    "gear_grip_catch_master": {
-      "name": "사냥 · 완성",
-      "description": "상성 파훼 성공 → 기력 16 회복 · 재발동 4초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onTacticWin",
-          "when": [],
-          "cooldown": 4,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "stamina",
-              "value": 16
-            }
-          ]
-        }
-      ]
-    },
-    "gear_breaker": {
-      "name": "공성 인장",
-      "description": "가드 붕괴 유발 → 3초간 화력 +20% · 재발동 5초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onBreak",
-          "when": [],
-          "cooldown": 5,
-          "effects": [
-            {
-              "op": "status",
-              "target": "self",
-              "id": "gear_siege"
-            }
-          ]
-        }
-      ]
-    },
-    "gear_breaker_rupture": {
-      "name": "파열",
-      "description": "가드 붕괴 유발 → 상대 기력 18 감소 · 재발동 5초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onBreak",
-          "when": [],
-          "cooldown": 5,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "foe",
-              "key": "stamina",
-              "value": -18
-            }
-          ]
-        }
-      ]
-    },
-    "gear_breaker_rupture_master": {
-      "name": "파열 · 완성",
-      "description": "가드 붕괴 유발 → 상대 기력 30 감소 · 재발동 5초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onBreak",
-          "when": [],
-          "cooldown": 5,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "foe",
-              "key": "stamina",
-              "value": -30
-            }
-          ]
-        }
-      ]
-    },
-    "gear_breaker_plunder": {
-      "name": "약탈",
-      "description": "가드 붕괴 유발 → 기력 15 회복 / 집중 10 획득 · 재발동 5초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onBreak",
-          "when": [],
-          "cooldown": 5,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "stamina",
-              "value": 15
-            },
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "focus",
-              "value": 10
-            }
-          ]
-        }
-      ]
-    },
-    "gear_breaker_plunder_master": {
-      "name": "약탈 · 완성",
-      "description": "가드 붕괴 유발 → 기력 25 회복 / 집중 16 획득 · 재발동 5초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onBreak",
-          "when": [],
-          "cooldown": 5,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "stamina",
-              "value": 25
-            },
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "focus",
-              "value": 16
-            }
-          ]
-        }
-      ]
-    },
-    "gear_neural": {
-      "name": "전장의 맹세",
-      "description": "상성 파훼 성공 → 집중 8 획득 · 재발동 3초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onTacticWin",
-          "when": [],
-          "cooldown": 3,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "focus",
-              "value": 8
-            }
-          ]
-        }
-      ]
-    },
-    "gear_neural_resolve": {
-      "name": "결단",
-      "description": "상성 파훼 성공 → 집중 10 획득 / 기력 5 회복 · 재발동 3초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onTacticWin",
-          "when": [],
-          "cooldown": 3,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "focus",
-              "value": 10
-            },
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "stamina",
-              "value": 5
-            }
-          ]
-        }
-      ]
-    },
-    "gear_neural_resolve_master": {
-      "name": "결단 · 완성",
-      "description": "상성 파훼 성공 → 집중 16 획득 / 기력 8 회복 · 재발동 3초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onTacticWin",
-          "when": [],
-          "cooldown": 3,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "focus",
-              "value": 16
-            },
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "stamina",
-              "value": 8
-            }
-          ]
-        }
-      ]
-    },
-    "gear_neural_foresee": {
-      "name": "예견",
-      "description": "상대 행동 반복 → 가드 8 회복 / 집중 4 획득 · 재발동 3초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onFoeRepeat",
-          "when": [],
-          "cooldown": 3,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "guard",
-              "value": 8
-            },
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "focus",
-              "value": 4
-            }
-          ]
-        }
-      ]
-    },
-    "gear_neural_foresee_master": {
-      "name": "예견 · 완성",
-      "description": "상대 행동 반복 → 가드 13 회복 / 집중 7 획득 · 재발동 3초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onFoeRepeat",
-          "when": [],
-          "cooldown": 3,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "guard",
-              "value": 13
-            },
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "focus",
-              "value": 7
-            }
-          ]
-        }
-      ]
-    },
-    "gear_reader": {
-      "name": "용의 눈 렌즈",
-      "description": "상대 행동 반복 → 집중 4 획득 · 재발동 3초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onFoeRepeat",
-          "when": [],
-          "cooldown": 3,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "focus",
-              "value": 4
-            }
-          ]
-        }
-      ]
-    },
-    "gear_reader_punish": {
-      "name": "응징",
-      "description": "상대 헛침 → 집중 8 획득 · 재발동 3.5초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onFoeWhiff",
-          "when": [],
-          "cooldown": 3.5,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "focus",
-              "value": 8
-            }
-          ]
-        }
-      ]
-    },
-    "gear_reader_punish_master": {
-      "name": "응징 · 완성",
-      "description": "상대 헛침 → 집중 13 획득 · 재발동 3.5초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onFoeWhiff",
-          "when": [],
-          "cooldown": 3.5,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "focus",
-              "value": 13
-            }
-          ]
-        }
-      ]
-    },
-    "gear_reader_answer": {
-      "name": "대응",
-      "description": "상성 파훼 성공 → 가드 10 회복 · 재발동 3초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onTacticWin",
-          "when": [],
-          "cooldown": 3,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "guard",
-              "value": 10
-            }
-          ]
-        }
-      ]
-    },
-    "gear_reader_answer_master": {
-      "name": "대응 · 완성",
-      "description": "상성 파훼 성공 → 가드 16 회복 · 재발동 3초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onTacticWin",
-          "when": [],
-          "cooldown": 3,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "guard",
-              "value": 16
-            }
-          ]
-        }
-      ]
-    },
-    "gear_anchor": {
-      "name": "성벽 각반",
-      "description": "가드 성공 → 기력 3 회복 · 재발동 3초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onBlock",
-          "when": [],
-          "cooldown": 3,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "stamina",
-              "value": 3
-            }
-          ]
-        }
-      ]
-    },
-    "gear_anchor_fort": {
-      "name": "요새",
-      "description": "가드 성공 → 집중 6 획득 / 가드 4 회복 · 재발동 3초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onBlock",
-          "when": [],
-          "cooldown": 3,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "focus",
-              "value": 6
-            },
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "guard",
-              "value": 4
-            }
-          ]
-        }
-      ]
-    },
-    "gear_anchor_fort_master": {
-      "name": "요새 · 완성",
-      "description": "가드 성공 → 집중 10 획득 / 가드 7 회복 · 재발동 3초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onBlock",
-          "when": [],
-          "cooldown": 3,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "focus",
-              "value": 10
-            },
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "guard",
-              "value": 7
-            }
-          ]
-        }
-      ]
-    },
-    "gear_anchor_revenge": {
-      "name": "역습",
-      "description": "반격 성공 → 기력 8 회복 · 재발동 3초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onCounterHit",
-          "when": [],
-          "cooldown": 3,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "stamina",
-              "value": 8
-            }
-          ]
-        }
-      ]
-    },
-    "gear_anchor_revenge_master": {
-      "name": "역습 · 완성",
-      "description": "반격 성공 → 기력 13 회복 · 재발동 3초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onCounterHit",
-          "when": [],
-          "cooldown": 3,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "stamina",
-              "value": 13
-            }
-          ]
-        }
-      ]
-    },
-    "resonance_assault": {
-      "name": "공성 공명",
-      "description": "가드 붕괴 유발 → 기력 14 회복 · 집중 12 획득 · 재발동 5초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onBreak",
-          "when": [],
-          "cooldown": 5,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "stamina",
-              "value": 14
-            },
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "focus",
-              "value": 12
-            }
-          ]
-        }
-      ]
-    },
-    "resonance_hunt": {
-      "name": "추격 공명",
-      "description": "상대 헛침 → 3초간 이동 속도 +20% · 공격 기력 비용 -12% · 재발동 5초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onFoeWhiff",
-          "when": [],
-          "cooldown": 5,
-          "effects": [
-            {
-              "op": "status",
-              "target": "self",
-              "id": "res_hunt"
-            }
-          ]
-        }
-      ]
-    },
-    "resonance_bulwark": {
-      "name": "수호 공명",
-      "description": "가드 성공 → 3초간 피해 감소 +7%p · 재발동 5초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onBlock",
-          "when": [],
-          "cooldown": 5,
-          "effects": [
-            {
-              "op": "status",
-              "target": "self",
-              "id": "res_iron"
-            }
-          ]
-        }
-      ]
-    },
-    "resonance_insight": {
-      "name": "통찰 공명",
-      "description": "상성 파훼 성공 → 집중 16 획득 · 가드 10 회복 · 재발동 5초",
-      "source": "equipment",
-      "hooks": [
-        {
-          "trigger": "onTacticWin",
-          "when": [],
-          "cooldown": 5,
-          "effects": [
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "focus",
-              "value": 16
-            },
-            {
-              "op": "resource",
-              "target": "self",
-              "key": "guard",
-              "value": 10
-            }
-          ]
-        }
-      ]
-    }
-  },
-  "training": [
-    {
-      "id": "power",
-      "name": "근력",
-      "description": "타격·잡기 피해와 가드 압박",
-      "stats": [
-        {
-          "stat": "power",
-          "op": "multiply",
-          "value": 1.022
-        },
-        {
-          "stat": "guardDamage",
-          "op": "multiply",
-          "value": 1.015
-        }
-      ]
-    },
-    {
-      "id": "agility",
-      "name": "민첩",
-      "description": "이동 속도와 회피, 공격 전환",
-      "stats": [
-        {
-          "stat": "speed",
-          "op": "multiply",
-          "value": 1.018
-        },
-        {
-          "stat": "evasion",
-          "op": "add",
-          "value": 0.006
-        },
-        {
-          "stat": "attackSpeed",
-          "op": "multiply",
-          "value": 1.008
-        }
-      ]
-    },
-    {
-      "id": "endurance",
-      "name": "지구력",
-      "description": "체력과 기력, 기력 회복",
-      "stats": [
-        {
-          "stat": "hp",
-          "op": "multiply",
-          "value": 1.034
-        },
-        {
-          "stat": "stamina",
-          "op": "multiply",
-          "value": 1.02
-        },
-        {
-          "stat": "staminaRegen",
-          "op": "multiply",
-          "value": 1.016
-        }
-      ]
-    },
-    {
-      "id": "technique",
-      "name": "기술",
-      "description": "명중과 잡기, 속임수",
-      "stats": [
-        {
-          "stat": "accuracy",
-          "op": "add",
-          "value": 0.006
-        },
-        {
-          "stat": "grabAccuracy",
-          "op": "add",
-          "value": 0.005
-        },
-        {
-          "stat": "feintPower",
-          "op": "multiply",
-          "value": 1.018
-        }
-      ]
-    }
-  ],
-  "modules": [
-    {
-      "id": "pad",
-      "name": "성채 누비갑옷",
-      "category": "bulwark",
-      "sigil": "bulwark",
-      "description": "수비를 버티는 대신 발이 무거워집니다.",
-      "cost": 45,
-      "upgradeCost": 32,
-      "upgradeGrowth": 2.15,
-      "maxRank": 3,
-      "stats": [
-        {
-          "stat": "hp",
-          "op": "multiply",
-          "value": 1.18
-        },
-        {
-          "stat": "speed",
-          "op": "multiply",
-          "value": 0.9
-        }
-      ],
-      "trait": "gear_pad",
-      "forges": [
-        {
-          "id": "bastion",
-          "name": "성채",
-          "description": "가드를 끝까지 유지하는 중갑 특화.",
-          "stats": [
-            {
-              "stat": "guard",
-              "op": "multiply",
-              "value": 1.2
-            },
-            {
-              "stat": "moveCost",
-              "op": "multiply",
-              "value": 1.12
-            }
-          ],
-          "trait": "gear_pad_bastion",
-          "mastery": {
-            "stats": [
-              {
-                "stat": "hp",
-                "op": "multiply",
-                "value": 1.1
-              }
-            ],
-            "trait": "gear_pad_bastion_master"
-          }
-        },
-        {
-          "id": "duelist",
-          "name": "결투가",
-          "description": "무게를 덜어 회피 전투로 전환합니다.",
-          "stats": [
-            {
-              "stat": "speed",
-              "op": "multiply",
-              "value": 1.12
-            },
-            {
-              "stat": "hp",
-              "op": "multiply",
-              "value": 0.96
-            }
-          ],
-          "trait": "gear_pad_duelist",
-          "mastery": {
-            "stats": [
-              {
-                "stat": "evasion",
-                "op": "add",
-                "value": 0.04
-              }
-            ],
-            "trait": "gear_pad_duelist_master"
-          }
-        }
-      ]
-    },
-    {
-      "id": "breath",
-      "name": "성자의 숨결",
-      "category": "insight",
-      "sigil": "insight",
-      "description": "교환을 오래 이어가지만 한 방은 약해집니다.",
-      "cost": 45,
-      "upgradeCost": 34,
-      "upgradeGrowth": 2.15,
-      "maxRank": 3,
-      "stats": [
-        {
-          "stat": "stamina",
-          "op": "multiply",
-          "value": 1.16
-        },
-        {
-          "stat": "staminaRegen",
-          "op": "multiply",
-          "value": 1.24
-        },
-        {
-          "stat": "power",
-          "op": "multiply",
-          "value": 0.9
-        }
-      ],
-      "trait": "gear_breath",
-      "forges": [
-        {
-          "id": "endless",
-          "name": "불굴",
-          "description": "긴 싸움의 기력 고갈을 막습니다.",
-          "stats": [
-            {
-              "stat": "staminaRegen",
-              "op": "multiply",
-              "value": 1.18
-            },
-            {
-              "stat": "power",
-              "op": "multiply",
-              "value": 0.95
-            }
-          ],
-          "trait": "gear_breath_endless",
-          "mastery": {
-            "stats": [
-              {
-                "stat": "stamina",
-                "op": "multiply",
-                "value": 1.12
-              }
-            ],
-            "trait": "gear_breath_endless_master"
-          }
-        },
-        {
-          "id": "leap",
-          "name": "도약",
-          "description": "회피를 다음 공세의 연료로 씁니다.",
-          "stats": [
-            {
-              "stat": "speed",
-              "op": "multiply",
-              "value": 1.12
-            },
-            {
-              "stat": "guard",
-              "op": "multiply",
-              "value": 0.9
-            }
-          ],
-          "trait": "gear_breath_leap",
-          "mastery": {
-            "stats": [
-              {
-                "stat": "staminaCost",
-                "op": "multiply",
-                "value": 0.91
-              }
-            ],
-            "trait": "gear_breath_leap_master"
-          }
-        }
-      ]
-    },
-    {
-      "id": "reach",
-      "name": "매사냥꾼 사슬갑",
-      "category": "hunt",
-      "sigil": "hunt",
-      "description": "긴 타격을 얻지만 근접 가드와 잡기가 약해집니다.",
-      "cost": 65,
-      "upgradeCost": 45,
-      "upgradeGrowth": 2.15,
-      "maxRank": 3,
-      "stats": [
-        {
-          "stat": "reach",
-          "op": "add",
-          "value": 0.35
-        },
-        {
-          "stat": "grabReach",
-          "op": "add",
-          "value": -0.08
-        },
-        {
-          "stat": "guard",
-          "op": "multiply",
-          "value": 0.85
-        }
-      ],
-      "trait": "gear_reach",
-      "forges": [
-        {
-          "id": "spear",
-          "name": "창끝",
-          "description": "안전 거리에서 타격 화력을 키웁니다.",
-          "stats": [
-            {
-              "stat": "strikePower",
-              "op": "multiply",
-              "value": 1.15
-            },
-            {
-              "stat": "guard",
-              "op": "multiply",
-              "value": 0.92
-            }
-          ],
-          "trait": "gear_reach_spear",
-          "mastery": {
-            "stats": [
-              {
-                "stat": "reach",
-                "op": "add",
-                "value": 0.12
-              }
-            ],
-            "trait": "gear_reach_spear_master"
-          }
-        },
-        {
-          "id": "reel",
-          "name": "거두기",
-          "description": "긴 타격 뒤 잡기로 파고듭니다.",
-          "stats": [
-            {
-              "stat": "grabReach",
-              "op": "add",
-              "value": 0.28
-            },
-            {
-              "stat": "strikePower",
-              "op": "multiply",
-              "value": 0.93
-            }
-          ],
-          "trait": "gear_reach_reel",
-          "mastery": {
-            "stats": [
-              {
-                "stat": "grabPower",
-                "op": "multiply",
-                "value": 1.12
-              }
-            ],
-            "trait": "gear_reach_reel_master"
-          }
-        }
-      ]
-    },
-    {
-      "id": "weight",
-      "name": "파성 건틀릿",
-      "category": "assault",
-      "sigil": "assault",
-      "description": "강한 정타를 얻지만 준비 동작이 느려집니다.",
-      "cost": 65,
-      "upgradeCost": 46,
-      "upgradeGrowth": 2.15,
-      "maxRank": 3,
-      "stats": [
-        {
-          "stat": "power",
-          "op": "multiply",
-          "value": 1.25
-        },
-        {
-          "stat": "attackSpeed",
-          "op": "multiply",
-          "value": 0.86
-        }
-      ],
-      "trait": "gear_weight",
-      "forges": [
-        {
-          "id": "crack",
-          "name": "균열",
-          "description": "연속 압박으로 방패를 깨뜨립니다.",
-          "stats": [
-            {
-              "stat": "guardDamage",
-              "op": "multiply",
-              "value": 1.28
-            },
-            {
-              "stat": "speed",
-              "op": "multiply",
-              "value": 0.93
-            }
-          ],
-          "trait": "gear_weight_crack",
-          "mastery": {
-            "stats": [
-              {
-                "stat": "guardDamage",
-                "op": "multiply",
-                "value": 1.15
-              }
-            ],
-            "trait": "gear_weight_crack_master"
-          }
-        },
-        {
-          "id": "execution",
-          "name": "일격",
-          "description": "상성 승리를 강력한 한 방으로 바꿉니다.",
-          "stats": [
-            {
-              "stat": "strikePower",
-              "op": "multiply",
-              "value": 1.2
-            },
-            {
-              "stat": "staminaCost",
-              "op": "multiply",
-              "value": 1.12
-            }
-          ],
-          "trait": "gear_weight_execution",
-          "mastery": {
-            "stats": [
-              {
-                "stat": "accuracy",
-                "op": "add",
-                "value": 0.04
-              }
-            ],
-            "trait": "gear_weight_execution_master"
-          }
-        }
-      ]
-    },
-    {
-      "id": "ankle",
-      "name": "바람 사냥 장화",
-      "category": "hunt",
-      "sigil": "hunt",
-      "description": "간격을 지배하지만 오래 달리면 기력이 샙니다.",
-      "cost": 60,
-      "upgradeCost": 43,
-      "upgradeGrowth": 2.15,
-      "maxRank": 3,
-      "stats": [
-        {
-          "stat": "speed",
-          "op": "multiply",
-          "value": 1.28
-        },
-        {
-          "stat": "moveCost",
-          "op": "multiply",
-          "value": 1.2
-        },
-        {
-          "stat": "guard",
-          "op": "multiply",
-          "value": 0.9
-        }
-      ],
-      "trait": "gear_ankle",
-      "forges": [
-        {
-          "id": "pursuit",
-          "name": "추격",
-          "description": "상대 헛침을 따라가 공격으로 잇습니다.",
-          "stats": [
-            {
-              "stat": "reach",
-              "op": "add",
-              "value": 0.2
-            },
-            {
-              "stat": "hp",
-              "op": "multiply",
-              "value": 0.94
-            }
-          ],
-          "trait": "gear_ankle_pursuit",
-          "mastery": {
-            "stats": [
-              {
-                "stat": "power",
-                "op": "multiply",
-                "value": 1.1
-              }
-            ],
-            "trait": "gear_ankle_pursuit_master"
-          }
-        },
-        {
-          "id": "wander",
-          "name": "유랑",
-          "description": "회피 성공으로 계속 움직입니다.",
-          "stats": [
-            {
-              "stat": "evasion",
-              "op": "add",
-              "value": 0.07
-            },
-            {
-              "stat": "power",
-              "op": "multiply",
-              "value": 0.94
-            }
-          ],
-          "trait": "gear_ankle_wander",
-          "mastery": {
-            "stats": [
-              {
-                "stat": "staminaRegen",
-                "op": "multiply",
-                "value": 1.18
-              }
-            ],
-            "trait": "gear_ankle_wander_master"
-          }
-        }
-      ]
-    },
-    {
-      "id": "deceive",
-      "name": "잔영 망토",
-      "category": "insight",
-      "sigil": "insight",
-      "description": "속임수에 성공해야 약한 정타를 보상받습니다.",
-      "cost": 60,
-      "upgradeCost": 42,
-      "upgradeGrowth": 2.15,
-      "maxRank": 3,
-      "stats": [
-        {
-          "stat": "feintPower",
-          "op": "multiply",
-          "value": 1.4
-        },
-        {
-          "stat": "power",
-          "op": "multiply",
-          "value": 0.88
-        }
-      ],
-      "trait": "gear_deceive",
-      "forges": [
-        {
-          "id": "illusion",
-          "name": "허상",
-          "description": "가드를 흔들어 다음 공격을 엽니다.",
-          "stats": [
-            {
-              "stat": "feintPower",
-              "op": "multiply",
-              "value": 1.22
-            },
-            {
-              "stat": "guard",
-              "op": "multiply",
-              "value": 0.92
-            }
-          ],
-          "trait": "gear_deceive_illusion",
-          "mastery": {
-            "stats": [
-              {
-                "stat": "feintPower",
-                "op": "multiply",
-                "value": 1.13
-              }
-            ],
-            "trait": "gear_deceive_illusion_master"
-          }
-        },
-        {
-          "id": "ambush",
-          "name": "암습",
-          "description": "속임수 뒤 잡기 결정기를 준비합니다.",
-          "stats": [
-            {
-              "stat": "grabPower",
-              "op": "multiply",
-              "value": 1.2
-            },
-            {
-              "stat": "staminaCost",
-              "op": "multiply",
-              "value": 1.08
-            }
-          ],
-          "trait": "gear_deceive_ambush",
-          "mastery": {
-            "stats": [
-              {
-                "stat": "grabAccuracy",
-                "op": "add",
-                "value": 0.06
-              }
-            ],
-            "trait": "gear_deceive_ambush_master"
-          }
-        }
-      ]
-    },
-    {
-      "id": "lung",
-      "name": "불씨 심장석",
-      "category": "assault",
-      "sigil": "assault",
-      "description": "연속 공격을 돕지만 피해를 더 받습니다.",
-      "cost": 65,
-      "upgradeCost": 44,
-      "upgradeGrowth": 2.15,
-      "maxRank": 3,
-      "stats": [
-        {
-          "stat": "stamina",
-          "op": "multiply",
-          "value": 1.25
-        },
-        {
-          "stat": "staminaRegen",
-          "op": "multiply",
-          "value": 1.12
-        },
-        {
-          "stat": "armor",
-          "op": "add",
-          "value": -0.025
-        }
-      ],
-      "trait": "gear_lung",
-      "forges": [
-        {
-          "id": "burn",
-          "name": "연소",
-          "description": "빠르게 공격해 집중을 모읍니다.",
-          "stats": [
-            {
-              "stat": "attackSpeed",
-              "op": "multiply",
-              "value": 1.14
-            },
-            {
-              "stat": "staminaCost",
-              "op": "multiply",
-              "value": 1.1
-            }
-          ],
-          "trait": "gear_lung_burn",
-          "mastery": {
-            "stats": [
-              {
-                "stat": "strikePower",
-                "op": "multiply",
-                "value": 1.12
-              }
-            ],
-            "trait": "gear_lung_burn_master"
-          }
-        },
-        {
-          "id": "ember",
-          "name": "잔불",
-          "description": "위기에서 버티며 다시 교환합니다.",
-          "stats": [
-            {
-              "stat": "hp",
-              "op": "multiply",
-              "value": 1.1
-            },
-            {
-              "stat": "speed",
-              "op": "multiply",
-              "value": 0.96
-            }
-          ],
-          "trait": "gear_lung_ember",
-          "mastery": {
-            "stats": [
-              {
-                "stat": "armor",
-                "op": "add",
-                "value": 0.035
-              }
-            ],
-            "trait": "gear_lung_ember_master"
-          }
-        }
-      ]
-    },
-    {
-      "id": "hardguard",
-      "name": "서약의 방패",
-      "category": "bulwark",
-      "sigil": "bulwark",
-      "description": "단단한 가드를 얻지만 잡기 진입을 피하기 어렵습니다.",
-      "cost": 65,
-      "upgradeCost": 45,
-      "upgradeGrowth": 2.15,
-      "maxRank": 3,
-      "stats": [
-        {
-          "stat": "guard",
-          "op": "multiply",
-          "value": 1.35
-        },
-        {
-          "stat": "speed",
-          "op": "multiply",
-          "value": 0.88
-        }
-      ],
-      "trait": "gear_hardguard",
-      "forges": [
-        {
-          "id": "echo",
-          "name": "반향",
-          "description": "막은 뒤 반격으로 되돌려줍니다.",
-          "stats": [
-            {
-              "stat": "counterPower",
-              "op": "multiply",
-              "value": 1.2
-            },
-            {
-              "stat": "grabPower",
-              "op": "multiply",
-              "value": 0.9
-            }
-          ],
-          "trait": "gear_hardguard_echo",
-          "mastery": {
-            "stats": [
-              {
-                "stat": "counterChance",
-                "op": "add",
-                "value": 0.05
-              }
-            ],
-            "trait": "gear_hardguard_echo_master"
-          }
-        },
-        {
-          "id": "siege",
-          "name": "압성",
-          "description": "버티며 상대 가드를 먼저 무너뜨립니다.",
-          "stats": [
-            {
-              "stat": "guardDamage",
-              "op": "multiply",
-              "value": 1.22
-            },
-            {
-              "stat": "staminaCost",
-              "op": "multiply",
-              "value": 1.1
-            }
-          ],
-          "trait": "gear_hardguard_siege",
-          "mastery": {
-            "stats": [
-              {
-                "stat": "guardRegen",
-                "op": "multiply",
-                "value": 1.2
-              }
-            ],
-            "trait": "gear_hardguard_siege_master"
-          }
-        }
-      ]
-    },
-    {
-      "id": "parry",
-      "name": "흘림 손목띠",
-      "category": "insight",
-      "sigil": "insight",
-      "description": "타격 반격에 강해지지만 잡기 화력을 잃습니다.",
-      "cost": 65,
-      "upgradeCost": 45,
-      "upgradeGrowth": 2.15,
-      "maxRank": 3,
-      "stats": [
-        {
-          "stat": "counterChance",
-          "op": "add",
-          "value": 0.1
-        },
-        {
-          "stat": "counterPower",
-          "op": "multiply",
-          "value": 1.16
-        },
-        {
-          "stat": "grabPower",
-          "op": "multiply",
-          "value": 0.8
-        }
-      ],
-      "trait": "gear_parry",
-      "forges": [
-        {
-          "id": "read",
-          "name": "판독",
-          "description": "같은 공격을 반복하는 상대를 노립니다.",
-          "stats": [
-            {
-              "stat": "readBonus",
-              "op": "add",
-              "value": 0.07
-            },
-            {
-              "stat": "hp",
-              "op": "multiply",
-              "value": 0.95
-            }
-          ],
-          "trait": "gear_parry_read",
-          "mastery": {
-            "stats": [
-              {
-                "stat": "counterPower",
-                "op": "multiply",
-                "value": 1.12
-              }
-            ],
-            "trait": "gear_parry_read_master"
-          }
-        },
-        {
-          "id": "reverse",
-          "name": "반전",
-          "description": "반격을 경계하는 상대를 잡기로 낚습니다.",
-          "stats": [
-            {
-              "stat": "grabAccuracy",
-              "op": "add",
-              "value": 0.12
-            },
-            {
-              "stat": "counterPower",
-              "op": "multiply",
-              "value": 0.92
-            }
-          ],
-          "trait": "gear_parry_reverse",
-          "mastery": {
-            "stats": [
-              {
-                "stat": "grabPower",
-                "op": "multiply",
-                "value": 1.18
-              }
-            ],
-            "trait": "gear_parry_reverse_master"
-          }
-        }
-      ]
-    },
-    {
-      "id": "grip",
-      "name": "거인의 매듭장갑",
-      "category": "assault",
-      "sigil": "assault",
-      "description": "강력한 잡기 대신 타격 거리를 포기합니다.",
-      "cost": 65,
-      "upgradeCost": 45,
-      "upgradeGrowth": 2.15,
-      "maxRank": 3,
-      "stats": [
-        {
-          "stat": "grabPower",
-          "op": "multiply",
-          "value": 1.28
-        },
-        {
-          "stat": "grabAccuracy",
-          "op": "add",
-          "value": 0.08
-        },
-        {
-          "stat": "reach",
-          "op": "add",
-          "value": -0.22
-        }
-      ],
-      "trait": "gear_grip",
-      "forges": [
-        {
-          "id": "crush",
-          "name": "압착",
-          "description": "가까이 붙어 가드와 기력을 함께 뺏습니다.",
-          "stats": [
-            {
-              "stat": "grabPower",
-              "op": "multiply",
-              "value": 1.2
-            },
-            {
-              "stat": "attackSpeed",
-              "op": "multiply",
-              "value": 0.94
-            }
-          ],
-          "trait": "gear_grip_crush",
-          "mastery": {
-            "stats": [
-              {
-                "stat": "grabReach",
-                "op": "add",
-                "value": 0.14
-              }
-            ],
-            "trait": "gear_grip_crush_master"
-          }
-        },
-        {
-          "id": "catch",
-          "name": "사냥",
-          "description": "반격 대기를 잡아 다음 공격을 잇습니다.",
-          "stats": [
-            {
-              "stat": "grabReach",
-              "op": "add",
-              "value": 0.28
-            },
-            {
-              "stat": "power",
-              "op": "multiply",
-              "value": 0.95
-            }
-          ],
-          "trait": "gear_grip_catch",
-          "mastery": {
-            "stats": [
-              {
-                "stat": "speed",
-                "op": "multiply",
-                "value": 1.1
-              }
-            ],
-            "trait": "gear_grip_catch_master"
-          }
-        }
-      ]
-    },
-    {
-      "id": "breaker",
-      "name": "공성 인장",
-      "category": "assault",
-      "sigil": "assault",
-      "description": "가드를 빠르게 깨지만 체력이 낮아집니다.",
-      "cost": 65,
-      "upgradeCost": 46,
-      "upgradeGrowth": 2.15,
-      "maxRank": 3,
-      "stats": [
-        {
-          "stat": "guardDamage",
-          "op": "multiply",
-          "value": 1.45
-        },
-        {
-          "stat": "hp",
-          "op": "multiply",
-          "value": 0.88
-        }
-      ],
-      "trait": "gear_breaker",
-      "forges": [
-        {
-          "id": "rupture",
-          "name": "파열",
-          "description": "붕괴 뒤 상대의 기력까지 끊습니다.",
-          "stats": [
-            {
-              "stat": "power",
-              "op": "multiply",
-              "value": 1.12
-            },
-            {
-              "stat": "guard",
-              "op": "multiply",
-              "value": 0.88
-            }
-          ],
-          "trait": "gear_breaker_rupture",
-          "mastery": {
-            "stats": [
-              {
-                "stat": "guardDamage",
-                "op": "multiply",
-                "value": 1.17
-              }
-            ],
-            "trait": "gear_breaker_rupture_master"
-          }
-        },
-        {
-          "id": "plunder",
-          "name": "약탈",
-          "description": "방패를 부수며 자신의 기력을 채웁니다.",
-          "stats": [
-            {
-              "stat": "staminaCost",
-              "op": "multiply",
-              "value": 0.9
-            },
-            {
-              "stat": "counterPower",
-              "op": "multiply",
-              "value": 0.9
-            }
-          ],
-          "trait": "gear_breaker_plunder",
-          "mastery": {
-            "stats": [
-              {
-                "stat": "focusGain",
-                "op": "multiply",
-                "value": 1.16
-              }
-            ],
-            "trait": "gear_breaker_plunder_master"
-          }
-        }
-      ]
-    },
-    {
-      "id": "neural",
-      "name": "전장의 맹세",
-      "category": "insight",
-      "sigil": "insight",
-      "description": "전술 전환과 결정기가 빨라지지만 맷집이 약해집니다.",
-      "cost": 65,
-      "upgradeCost": 44,
-      "upgradeGrowth": 2.15,
-      "maxRank": 3,
-      "stats": [
-        {
-          "stat": "tacticLag",
-          "op": "multiply",
-          "value": 0.55
-        },
-        {
-          "stat": "focusGain",
-          "op": "multiply",
-          "value": 1.2
-        },
-        {
-          "stat": "hp",
-          "op": "multiply",
-          "value": 0.9
-        }
-      ],
-      "trait": "gear_neural",
-      "forges": [
-        {
-          "id": "resolve",
-          "name": "결단",
-          "description": "빠른 전환으로 상대의 수를 덮습니다.",
-          "stats": [
-            {
-              "stat": "attackSpeed",
-              "op": "multiply",
-              "value": 1.1
-            },
-            {
-              "stat": "moveCost",
-              "op": "multiply",
-              "value": 1.15
-            }
-          ],
-          "trait": "gear_neural_resolve",
-          "mastery": {
-            "stats": [
-              {
-                "stat": "speed",
-                "op": "multiply",
-                "value": 1.1
-              }
-            ],
-            "trait": "gear_neural_resolve_master"
-          }
-        },
-        {
-          "id": "foresee",
-          "name": "예견",
-          "description": "반복 습관을 읽고 수비를 복구합니다.",
-          "stats": [
-            {
-              "stat": "readBonus",
-              "op": "add",
-              "value": 0.055
-            },
-            {
-              "stat": "power",
-              "op": "multiply",
-              "value": 0.95
-            }
-          ],
-          "trait": "gear_neural_foresee",
-          "mastery": {
-            "stats": [
-              {
-                "stat": "counterChance",
-                "op": "add",
-                "value": 0.04
-              }
-            ],
-            "trait": "gear_neural_foresee_master"
-          }
-        }
-      ]
-    },
-    {
-      "id": "reader",
-      "name": "용의 눈 렌즈",
-      "category": "insight",
-      "sigil": "insight",
-      "description": "습관을 읽는 반격을 강화하지만 잡기 명중이 낮아집니다.",
-      "cost": 60,
-      "upgradeCost": 43,
-      "upgradeGrowth": 2.15,
-      "maxRank": 3,
-      "stats": [
-        {
-          "stat": "readBonus",
-          "op": "add",
-          "value": 0.09
-        },
-        {
-          "stat": "counterPower",
-          "op": "multiply",
-          "value": 1.18
-        },
-        {
-          "stat": "grabAccuracy",
-          "op": "add",
-          "value": -0.08
-        }
-      ],
-      "trait": "gear_reader",
-      "forges": [
-        {
-          "id": "punish",
-          "name": "응징",
-          "description": "상대의 헛친 타격을 추격합니다.",
-          "stats": [
-            {
-              "stat": "strikePower",
-              "op": "multiply",
-              "value": 1.16
-            },
-            {
-              "stat": "speed",
-              "op": "multiply",
-              "value": 0.95
-            }
-          ],
-          "trait": "gear_reader_punish",
-          "mastery": {
-            "stats": [
-              {
-                "stat": "reach",
-                "op": "add",
-                "value": 0.16
-              }
-            ],
-            "trait": "gear_reader_punish_master"
-          }
-        },
-        {
-          "id": "answer",
-          "name": "대응",
-          "description": "정확한 파훼로 가드를 유지합니다.",
-          "stats": [
-            {
-              "stat": "tacticLag",
-              "op": "multiply",
-              "value": 0.72
-            },
-            {
-              "stat": "guard",
-              "op": "multiply",
-              "value": 0.94
-            }
-          ],
-          "trait": "gear_reader_answer",
-          "mastery": {
-            "stats": [
-              {
-                "stat": "evasion",
-                "op": "add",
-                "value": 0.04
-              }
-            ],
-            "trait": "gear_reader_answer_master"
-          }
-        }
-      ]
-    },
-    {
-      "id": "anchor",
-      "name": "성벽 각반",
-      "category": "bulwark",
-      "sigil": "bulwark",
-      "description": "피해를 견디지만 거리 싸움에서 느려집니다.",
-      "cost": 60,
-      "upgradeCost": 43,
-      "upgradeGrowth": 2.15,
-      "maxRank": 3,
-      "stats": [
-        {
-          "stat": "armor",
-          "op": "add",
-          "value": 0.075
-        },
-        {
-          "stat": "guardRegen",
-          "op": "multiply",
-          "value": 1.2
-        },
-        {
-          "stat": "speed",
-          "op": "multiply",
-          "value": 0.84
-        }
-      ],
-      "trait": "gear_anchor",
-      "forges": [
-        {
-          "id": "fort",
-          "name": "요새",
-          "description": "수비 성공으로 결정기를 준비합니다.",
-          "stats": [
-            {
-              "stat": "guard",
-              "op": "multiply",
-              "value": 1.2
-            },
-            {
-              "stat": "power",
-              "op": "multiply",
-              "value": 0.93
-            }
-          ],
-          "trait": "gear_anchor_fort",
-          "mastery": {
-            "stats": [
-              {
-                "stat": "hp",
-                "op": "multiply",
-                "value": 1.1
-              }
-            ],
-            "trait": "gear_anchor_fort_master"
-          }
-        },
-        {
-          "id": "revenge",
-          "name": "역습",
-          "description": "강한 반격으로 다시 공세를 가져옵니다.",
-          "stats": [
-            {
-              "stat": "counterPower",
-              "op": "multiply",
-              "value": 1.2
-            },
-            {
-              "stat": "guardRegen",
-              "op": "multiply",
-              "value": 0.92
-            }
-          ],
-          "trait": "gear_anchor_revenge",
-          "mastery": {
-            "stats": [
-              {
-                "stat": "counterChance",
-                "op": "add",
-                "value": 0.05
-              }
-            ],
-            "trait": "gear_anchor_revenge_master"
-          }
-        }
-      ]
-    }
-  ],
-  "talents": [
-    {
-      "id": "steady",
-      "name": "기초 호흡",
-      "description": "기력 회복 +8%.",
-      "level": 1,
-      "stats": [
-        {
-          "stat": "staminaRegen",
-          "op": "multiply",
-          "value": 1.08
-        }
-      ]
-    },
-    {
-      "id": "precision",
-      "name": "정확한 첫 수",
-      "description": "명중 +4%p.",
-      "level": 1,
-      "stats": [
-        {
-          "stat": "accuracy",
-          "op": "add",
-          "value": 0.04
-        }
-      ]
-    },
-    {
-      "id": "cooling",
-      "name": "긴급 호흡",
-      "description": "기력이 25% 아래면 14를 회복. 16초마다 발동합니다.",
-      "level": 2,
-      "trait": "cooling",
-      "stats": []
-    },
-    {
-      "id": "resolve",
-      "name": "역전 집중",
-      "description": "체력 35% 아래에서 4초간 화력과 기력 회복 증가. 16초마다 발동.",
-      "level": 3,
-      "trait": "resolve",
-      "stats": []
-    },
-    {
-      "id": "calm",
-      "name": "침착한 회피",
-      "description": "회피 성공 시 기력 2 회복, 집중 3 추가 획득.",
-      "level": 2,
-      "trait": "calm",
-      "stats": []
-    },
-    {
-      "id": "breacher",
-      "name": "붕괴 추격",
-      "description": "상대 가드 붕괴 시 기력 10 회복, 집중 8 획득.",
-      "level": 3,
-      "trait": "breacher",
-      "stats": []
-    },
-    {
-      "id": "jin_specialist",
-      "name": "진의 숙련",
-      "description": "주력 피해를 크게 높이지만 다른 공격의 피해가 줄어듭니다.",
-      "level": 4,
-      "character": "jin",
-      "stats": [
-        {
-          "stat": "power",
-          "op": "multiply",
-          "value": 1.2
-        },
-        {
-          "stat": "grabPower",
-          "op": "multiply",
-          "value": 0.88
-        }
-      ]
-    },
-    {
-      "id": "jin_balanced",
-      "name": "진의 균형",
-      "description": "약점을 보완하는 대신 주력 화력을 조금 줄입니다.",
-      "level": 4,
-      "character": "jin",
-      "stats": [
-        {
-          "stat": "guard",
-          "op": "multiply",
-          "value": 1.13
-        },
-        {
-          "stat": "power",
-          "op": "multiply",
-          "value": 0.95
-        }
-      ]
-    },
-    {
-      "id": "taeo_specialist",
-      "name": "태오의 숙련",
-      "description": "주력 피해를 크게 높이지만 다른 공격의 피해가 줄어듭니다.",
-      "level": 4,
-      "character": "taeo",
-      "stats": [
-        {
-          "stat": "power",
-          "op": "multiply",
-          "value": 1.2
-        },
-        {
-          "stat": "grabPower",
-          "op": "multiply",
-          "value": 0.88
-        }
-      ]
-    },
-    {
-      "id": "taeo_balanced",
-      "name": "태오의 균형",
-      "description": "약점을 보완하는 대신 주력 화력을 조금 줄입니다.",
-      "level": 4,
-      "character": "taeo",
-      "stats": [
-        {
-          "stat": "guard",
-          "op": "multiply",
-          "value": 1.13
-        },
-        {
-          "stat": "power",
-          "op": "multiply",
-          "value": 0.95
-        }
-      ]
-    },
-    {
-      "id": "garam_specialist",
-      "name": "가람의 숙련",
-      "description": "주력 피해를 크게 높이지만 다른 공격의 피해가 줄어듭니다.",
-      "level": 4,
-      "character": "garam",
-      "stats": [
-        {
-          "stat": "grabPower",
-          "op": "multiply",
-          "value": 1.2
-        },
-        {
-          "stat": "strikePower",
-          "op": "multiply",
-          "value": 0.88
-        }
-      ]
-    },
-    {
-      "id": "garam_balanced",
-      "name": "가람의 균형",
-      "description": "약점을 보완하는 대신 주력 화력을 조금 줄입니다.",
-      "level": 4,
-      "character": "garam",
-      "stats": [
-        {
-          "stat": "speed",
-          "op": "multiply",
-          "value": 1.13
-        },
-        {
-          "stat": "power",
-          "op": "multiply",
-          "value": 0.95
-        }
-      ]
-    },
-    {
-      "id": "yuna_specialist",
-      "name": "유나의 숙련",
-      "description": "주력 피해를 크게 높이지만 다른 공격의 피해가 줄어듭니다.",
-      "level": 4,
-      "character": "yuna",
-      "stats": [
-        {
-          "stat": "grabPower",
-          "op": "multiply",
-          "value": 1.2
-        },
-        {
-          "stat": "strikePower",
-          "op": "multiply",
-          "value": 0.88
-        }
-      ]
-    },
-    {
-      "id": "yuna_balanced",
-      "name": "유나의 균형",
-      "description": "약점을 보완하는 대신 주력 화력을 조금 줄입니다.",
-      "level": 4,
-      "character": "yuna",
-      "stats": [
-        {
-          "stat": "speed",
-          "op": "multiply",
-          "value": 1.13
-        },
-        {
-          "stat": "power",
-          "op": "multiply",
-          "value": 0.95
-        }
-      ]
-    },
-    {
-      "id": "sion_specialist",
-      "name": "시온의 숙련",
-      "description": "주력 피해를 크게 높이지만 다른 공격의 피해가 줄어듭니다.",
-      "level": 4,
-      "character": "sion",
-      "stats": [
-        {
-          "stat": "counterPower",
-          "op": "multiply",
-          "value": 1.2
-        },
-        {
-          "stat": "strikePower",
-          "op": "multiply",
-          "value": 0.88
-        }
-      ]
-    },
-    {
-      "id": "sion_balanced",
-      "name": "시온의 균형",
-      "description": "약점을 보완하는 대신 주력 화력을 조금 줄입니다.",
-      "level": 4,
-      "character": "sion",
-      "stats": [
-        {
-          "stat": "grabPower",
-          "op": "multiply",
-          "value": 1.13
-        },
-        {
-          "stat": "power",
-          "op": "multiply",
-          "value": 0.95
-        }
-      ]
-    },
-    {
-      "id": "mira_specialist",
-      "name": "미라의 숙련",
-      "description": "주력 피해를 크게 높이지만 다른 공격의 피해가 줄어듭니다.",
-      "level": 4,
-      "character": "mira",
-      "stats": [
-        {
-          "stat": "counterPower",
-          "op": "multiply",
-          "value": 1.2
-        },
-        {
-          "stat": "strikePower",
-          "op": "multiply",
-          "value": 0.88
-        }
-      ]
-    },
-    {
-      "id": "mira_balanced",
-      "name": "미라의 균형",
-      "description": "약점을 보완하는 대신 주력 화력을 조금 줄입니다.",
-      "level": 4,
-      "character": "mira",
-      "stats": [
-        {
-          "stat": "grabPower",
-          "op": "multiply",
-          "value": 1.13
-        },
-        {
-          "stat": "power",
-          "op": "multiply",
-          "value": 0.95
-        }
-      ]
-    }
-  ],
-  "rivals": [
-    {
-      "id": "rival_1",
-      "character": "garam",
-      "level": 1,
-      "ai": "steady",
-      "name": "지역 예선",
-      "preset": "clinch",
-      "rewardBonus": 0,
-      "modules": [],
-      "talents": [
-        "steady"
-      ],
-      "tactics": {
-        "focus": "grab",
-        "range": "auto",
-        "defense": "block"
-      },
-      "sequence": [
-        "grab",
-        "grab",
-        "strike"
-      ],
-      "scout": {
-        "habit": "붙어서 잡기를 반복합니다.",
-        "weakness": "잡기를 준비할 때 긴 타격으로 먼저 끊으세요."
-      }
-    },
-    {
-      "id": "rival_2",
-      "character": "jin",
-      "level": 2,
-      "ai": "steady",
-      "name": "긴 거리의 벽",
-      "preset": "keepout",
-      "rewardBonus": 2,
-      "modules": [
-        {
-          "id": "reach",
-          "rank": 1,
-          "forge": "spear"
-        }
-      ],
-      "talents": [
-        "steady"
-      ],
-      "tactics": {
-        "focus": "strike",
-        "range": "auto",
-        "defense": "evade"
-      },
-      "sequence": [
-        "strike",
-        "strike",
-        "counter"
-      ],
-      "scout": {
-        "habit": "긴 타격을 두 번 누른 뒤 반격을 섞습니다.",
-        "weakness": "타격을 반격한 뒤, 대기가 길어지면 잡기로 전환하세요."
-      }
-    },
-    {
-      "id": "rival_3",
-      "character": "mira",
-      "level": 3,
-      "ai": "reader",
-      "name": "굳은 가드",
-      "preset": "shell",
-      "rewardBonus": 4,
-      "modules": [
-        {
-          "id": "hardguard",
-          "rank": 1,
-          "forge": "echo"
-        }
-      ],
-      "talents": [
-        "steady"
-      ],
-      "tactics": {
-        "focus": "counter",
-        "range": "auto",
-        "defense": "block"
-      },
-      "sequence": [
-        "counter",
-        "counter",
-        "strike"
-      ],
-      "scout": {
-        "habit": "가드와 반격으로 체력을 지킵니다.",
-        "weakness": "잡기는 가드와 반격을 모두 무시합니다."
-      }
-    },
-    {
-      "id": "rival_4",
-      "character": "yuna",
-      "level": 4,
-      "ai": "trick",
-      "name": "전환의 함정",
-      "preset": "trick",
-      "rewardBonus": 6,
-      "modules": [
-        {
-          "id": "deceive",
-          "rank": 1,
-          "forge": "illusion"
-        }
-      ],
-      "talents": [
-        "steady"
-      ],
-      "tactics": {
-        "focus": "grab",
-        "range": "auto",
-        "defense": "evade"
-      },
-      "sequence": [
-        "grab",
-        "counter",
-        "grab"
-      ],
-      "scout": {
-        "habit": "속임수 뒤 빠르게 태클을 노립니다.",
-        "weakness": "긴 간격에서 타격하고, 회피 중에는 기력을 남기세요."
-      }
-    },
-    {
-      "id": "rival_5",
-      "character": "taeo",
-      "level": 5,
-      "ai": "rush",
-      "name": "연속 압박",
-      "preset": "pressure",
-      "rewardBonus": 8,
-      "modules": [
-        {
-          "id": "weight",
-          "rank": 1,
-          "forge": "crack"
-        }
-      ],
-      "talents": [
-        "steady"
-      ],
-      "tactics": {
-        "focus": "strike",
-        "range": "auto",
-        "defense": "evade"
-      },
-      "sequence": [
-        "strike",
-        "strike",
-        "grab"
-      ],
-      "scout": {
-        "habit": "연타로 가드를 깎다가 잡기로 바꿉니다.",
-        "weakness": "연타는 반격으로 끊고 잡기 전환 때 거리를 벌리세요."
-      }
-    },
-    {
-      "id": "rival_6",
-      "character": "sion",
-      "level": 6,
-      "ai": "reader",
-      "name": "습관을 읽는 상대",
-      "preset": "read",
-      "rewardBonus": 10,
-      "modules": [
-        {
-          "id": "parry",
-          "rank": 1,
-          "forge": "read"
-        }
-      ],
-      "talents": [
-        "steady",
-        "precision"
-      ],
-      "tactics": {
-        "focus": "counter",
-        "range": "auto",
-        "defense": "evade"
-      },
-      "sequence": [
-        "counter",
-        "grab",
-        "counter"
-      ],
-      "scout": {
-        "habit": "반복 행동을 읽어 대응을 바꿉니다.",
-        "weakness": "한 노림수에 머물지 말고 실제 전환을 확인하세요."
-      }
-    },
-    {
-      "id": "rival_7",
-      "character": "garam",
-      "level": 8,
-      "ai": "rush",
-      "name": "중앙 리그 · 제압",
-      "preset": "clinch",
-      "rewardBonus": 12,
-      "modules": [
-        {
-          "id": "grip",
-          "rank": 2,
-          "forge": "crush"
-        },
-        {
-          "id": "pad",
-          "rank": 2,
-          "forge": "bastion"
-        }
-      ],
-      "talents": [
-        "steady",
-        "precision"
-      ],
-      "tactics": {
-        "focus": "grab",
-        "range": "auto",
-        "defense": "block"
-      },
-      "sequence": [
-        "grab",
-        "strike",
-        "grab"
-      ],
-      "scout": {
-        "habit": "공세를 유지하며 외곽으로 몰아붙입니다.",
-        "weakness": "가드만 믿지 말고 타격으로 진입을 끊으세요."
-      }
-    },
-    {
-      "id": "rival_8",
-      "character": "jin",
-      "level": 10,
-      "ai": "reader",
-      "name": "중앙 리그 · 거리",
-      "preset": "keepout",
-      "rewardBonus": 14,
-      "modules": [
-        {
-          "id": "reach",
-          "rank": 2,
-          "forge": "spear"
-        },
-        {
-          "id": "ankle",
-          "rank": 2,
-          "forge": "pursuit"
-        }
-      ],
-      "talents": [
-        "steady",
-        "precision"
-      ],
-      "tactics": {
-        "focus": "strike",
-        "range": "auto",
-        "defense": "evade"
-      },
-      "sequence": [
-        "strike",
-        "counter",
-        "strike"
-      ],
-      "scout": {
-        "habit": "사거리 끝에서 헛친 공격을 추격합니다.",
-        "weakness": "반격 간격을 맞추거나 밀착해 잡기를 노리세요."
-      }
-    },
-    {
-      "id": "rival_9",
-      "character": "mira",
-      "level": 12,
-      "ai": "steady",
-      "name": "준결승 · 방어",
-      "preset": "shell",
-      "rewardBonus": 16,
-      "modules": [
-        {
-          "id": "hardguard",
-          "rank": 2,
-          "forge": "echo"
-        },
-        {
-          "id": "anchor",
-          "rank": 2,
-          "forge": "fort"
-        }
-      ],
-      "talents": [
-        "steady",
-        "precision"
-      ],
-      "tactics": {
-        "focus": "counter",
-        "range": "auto",
-        "defense": "block"
-      },
-      "sequence": [
-        "counter",
-        "strike",
-        "counter"
-      ],
-      "scout": {
-        "habit": "수호 장비로 긴 교환을 버팁니다.",
-        "weakness": "잡기로 가드를 우회하고 회복할 틈을 끊으세요."
-      }
-    },
-    {
-      "id": "rival_10",
-      "character": "taeo",
-      "level": 14,
-      "ai": "trick",
-      "name": "준결승 · 공세",
-      "preset": "pressure",
-      "rewardBonus": 18,
-      "modules": [
-        {
-          "id": "weight",
-          "rank": 2,
-          "forge": "crack"
-        },
-        {
-          "id": "breaker",
-          "rank": 2,
-          "forge": "rupture"
-        }
-      ],
-      "talents": [
-        "steady",
-        "precision"
-      ],
-      "tactics": {
-        "focus": "strike",
-        "range": "auto",
-        "defense": "evade"
-      },
-      "sequence": [
-        "strike",
-        "grab",
-        "strike"
-      ],
-      "scout": {
-        "habit": "공성 장비로 가드를 파괴합니다.",
-        "weakness": "회피·반격으로 정타를 줄이고 기력 소모를 유도하세요."
-      }
-    },
-    {
-      "id": "rival_11",
-      "character": "yuna",
-      "level": 17,
-      "ai": "trick",
-      "name": "결승 진출전",
-      "preset": "trick",
-      "rewardBonus": 20,
-      "modules": [
-        {
-          "id": "deceive",
-          "rank": 2,
-          "forge": "illusion"
-        },
-        {
-          "id": "ankle",
-          "rank": 2,
-          "forge": "pursuit"
-        },
-        {
-          "id": "grip",
-          "rank": 2,
-          "forge": "crush"
-        }
-      ],
-      "talents": [
-        "steady",
-        "precision"
-      ],
-      "tactics": {
-        "focus": "grab",
-        "range": "auto",
-        "defense": "evade"
-      },
-      "sequence": [
-        "grab",
-        "counter",
-        "strike"
-      ],
-      "scout": {
-        "habit": "진입과 회피를 번갈아 결정기를 준비합니다.",
-        "weakness": "타격으로 진입을 막고 회피가 이어질 때 회복하세요."
-      }
-    },
-    {
-      "id": "rival_12",
-      "character": "sion",
-      "level": 20,
-      "ai": "reader",
-      "name": "연맹 챔피언전",
-      "preset": "read",
-      "rewardBonus": 22,
-      "modules": [
-        {
-          "id": "parry",
-          "rank": 2,
-          "forge": "read"
-        },
-        {
-          "id": "reader",
-          "rank": 2,
-          "forge": "punish"
-        },
-        {
-          "id": "neural",
-          "rank": 2,
-          "forge": "resolve"
-        }
-      ],
-      "talents": [
-        "steady",
-        "precision"
-      ],
-      "tactics": {
-        "focus": "counter",
-        "range": "auto",
-        "defense": "evade"
-      },
-      "sequence": [
-        "counter",
-        "strike",
-        "grab"
-      ],
-      "scout": {
-        "habit": "상황에 따라 세 노림수를 모두 전환합니다.",
-        "weakness": "예고된 노림수와 최근 기술을 함께 읽으세요."
-      }
-    }
-  ],
-  "ai": {
-    "profiles": {
-      "steady": {
-        "name": "안정형",
-        "adapt": 0.42,
-        "recoverAt": 0.25,
-        "focusAt": 0.3,
-        "aggression": 0.4,
-        "baitChance": 0.15
-      },
-      "rush": {
-        "name": "공세형",
-        "adapt": 0.28,
-        "recoverAt": 0.15,
-        "focusAt": 0.23,
-        "aggression": 0.75,
-        "baitChance": 0.1
-      },
-      "reader": {
-        "name": "분석형",
-        "adapt": 0.78,
-        "recoverAt": 0.34,
-        "focusAt": 0.4,
-        "aggression": 0.3,
-        "baitChance": 0.25
-      },
-      "trick": {
-        "name": "전환형",
-        "adapt": 0.62,
-        "recoverAt": 0.25,
-        "focusAt": 0.34,
-        "aggression": 0.5,
-        "baitChance": 0.45
-      }
-    },
-    "responses": {
-      "strike": "read",
-      "counter": "clinch",
-      "grab": "keepout",
-      "feint": "pressure"
-    },
-    "openers": {
-      "steady": "keepout",
-      "rush": "pressure",
-      "reader": "read",
-      "trick": "trick"
-    }
-  },
-  "ui": {
-    "title": "계약의 링",
-    "yourFighter": "내 투사",
-    "selectCharacter": "한 명의 투사와 계약하세요",
-    "choose": "이 투사와 계약",
-    "chooseNote": "한 투사를 선택해 계속 성장시킵니다. 바로 경기를 시작할 수 있습니다.",
-    "callsign": "호출명",
-    "callsignPlaceholder": "나의 호출명",
-    "home": "길드 회관",
-    "fight": "결투",
-    "training": "수련소",
-    "build": "무장 공방",
-    "book": "작전서",
-    "records": "결투 기록",
-    "nextRival": "다음 상대",
-    "aiBout": "AI 투사와의 결투",
-    "prepare": "결투장 입장",
-    "start": "결투 시작",
-    "back": "돌아가기",
-    "rank": "등급",
-    "coins": "금화",
-    "points": "훈련 포인트",
-    "xp": "경험",
-    "nextRank": "다음 등급",
-    "maxRank": "최고 등급",
-    "wins": "승",
-    "losses": "패",
-    "draws": "무",
-    "matchupGood": "유리한 상성",
-    "matchupBad": "불리한 상성",
-    "matchupEven": "같은 계열",
-    "matchupNote": "기본 피해 차이는 작습니다. 거리·기력·잡기·속임수로 상성을 뒤집을 수 있습니다.",
-    "strength": "강점",
-    "weakness": "약점",
-    "trait": "고유 특성",
-    "scout": "상대 분석",
-    "initialPlan": "시작 전술",
-    "autoBook": "조건별 자동 대응",
-    "manualNote": "수동 지시는 7초간 작전서보다 우선합니다.",
-    "ruleSlots": "위에서부터 먼저 맞는 조건 하나만 실행합니다.",
-    "addRule": "대응 추가",
-    "savePlan": "현재 전술 저장",
-    "preset": "작전 프리셋",
-    "custom": "내 작전",
-    "current": "현재",
-    "draft": "변경할 전술",
-    "range": "거리",
-    "pace": "속도",
-    "intent": "노림수",
-    "defense": "방어",
-    "apply": "전술 적용",
-    "pending": "전환 중",
-    "manual": "수동 지시 우선",
-    "auto": "작전서 대응",
-    "pause": "정지",
-    "resume": "계속",
-    "speed": "속도",
-    "round": "라운드",
-    "corner": "휴식",
-    "nextRound": "다음 라운드",
-    "hp": "체력",
-    "stamina": "기력",
-    "guard": "가드",
-    "focus": "집중",
-    "useFocus": "집중 사용 · 60",
-    "focusAvailable": "집중 사용 가능",
-    "opponent": "상대",
-    "distance": "간격",
-    "observed": "관찰한 행동",
-    "noPattern": "아직 패턴을 관찰 중",
-    "fatigued": "기력 부족",
-    "broken": "가드 붕괴",
-    "exposed": "속임수에 노출",
-    "normal": "안정",
-    "edge": "외곽에 몰림",
-    "hintFatigue": "기력이 낮습니다. 회복 지시로 교환을 끊으세요.",
-    "hintFoeTired": "상대 기력이 낮습니다. 압박할 기회입니다.",
-    "hintGuard": "상대 가드가 약합니다. 타격을 이어가면 붕괴를 노릴 수 있습니다.",
-    "hintGrab": "잡기 진입을 타격으로 끊거나 긴 간격으로 대응하세요.",
-    "hintCounter": "반격 대기에는 잡기 또는 유인 지시가 유리합니다.",
-    "hintDefault": "상대의 노림수와 간격을 읽고 대응하세요.",
-    "resultWin": "승리",
-    "resultLoss": "패배",
-    "resultDraw": "무승부",
-    "ko": "KO",
-    "decision": "판정",
-    "surrender": "기권",
-    "reward": "결투 보상",
-    "damage": "피해량",
-    "counters": "반격 성공",
-    "throws": "잡기 성공",
-    "breaks": "가드 붕괴",
-    "bestMoment": "경기의 전환점",
-    "rematch": "재대결",
-    "nextMatch": "다음 결투",
-    "spendPoints": "훈련 포인트 사용",
-    "gain": "획득",
-    "kept": "투사·훈련·장비·특성은 결과와 관계없이 유지됩니다.",
-    "gear": "장비 작업대",
-    "talents": "재능 · 2칸",
-    "owned": "보유",
-    "buy": "구입",
-    "equip": "장착",
-    "unequip": "해제",
-    "upgrade": "특화 강화",
-    "maxed": "최대 강화",
-    "cost": "비용",
-    "level": "강화",
-    "unlock": "개방 조건",
-    "train": "훈련",
-    "respec": "훈련 재분배",
-    "respecNote": "배분한 포인트를 전부 돌려받습니다. 비용은 없습니다.",
-    "equipped": "장착 중",
-    "unavailable": "재료 부족",
-    "emptySlot": "빈 장비칸",
-    "chooseSlot": "장착할 칸",
-    "talentSlot": "장착할 특성칸",
-    "save": "저장 내보내기",
-    "load": "저장 불러오기",
-    "newGame": "새 계약",
-    "newTitle": "새 투사와 계약할까요?",
-    "newBody": "현재 투사의 성장과 진행을 초기화합니다. 먼저 저장을 내보낼 수 있습니다.",
-    "confirmReset": "초기화하고 선택",
-    "cancel": "취소",
-    "settings": "설정",
-    "sound": "효과음",
-    "reduced": "효과 줄이기",
-    "fullscreen": "화면 최대화",
-    "db": "DB 편집",
-    "dbHelp": "색상·글꼴·문양은 theme, 결투장 표현은 palette/draw에서 편집합니다. 투사·기술·장비·문구도 이 DB에서 관리합니다.",
-    "dbExport": "game-db.js 내려받기",
-    "htmlExport": "단일 HTML 내려받기",
-    "validate": "DB 검사",
-    "valid": "DB 검사 통과",
-    "exportName": "계약의_링_저장.json",
-    "htmlName": "계약의_링.html",
-    "dbName": "game-db.js",
-    "champion": "연맹 챔피언 · 도전자전",
-    "challenge": "도전자전",
-    "rules": "승부 규칙",
-    "rulesBody": "타격은 잡기 준비를 끊고, 잡기는 반격과 가드를 무너뜨리며, 반격은 타격을 받아칩니다. 사거리·기력·속임수로 불리한 노림수도 뒤집을 수 있습니다.",
-    "saveSuccess": "진행을 저장했습니다.",
-    "loadSuccess": "저장을 불러왔습니다.",
-    "invalidSave": "저장 파일을 확인하세요.",
-    "profileLocked": "계약한 투사는 새 계약 전까지 유지됩니다.",
-    "legacy": "이전 등급과 자원을 새 계약에 이어받았습니다.",
-    "first": "첫 승리 추가 보상",
-    "habitRange": "선호 거리",
-    "habitPace": "선호 속도",
-    "habitIntent": "주로 노리는 것",
-    "status": "상태",
-    "selectStyle": "타격 → 제압 → 반격 → 타격",
-    "profileName": "호칭 변경",
-    "saveName": "호칭 저장",
-    "ruleIf": "조건",
-    "ruleThen": "전환할 작전",
-    "enabled": "사용",
-    "remove": "삭제",
-    "up": "위로",
-    "down": "아래로",
-    "bookSaved": "작전서를 저장했습니다.",
-    "storePreset": "프리셋 저장",
-    "planName": "작전 이름",
-    "planSaved": "내 작전에 저장했습니다.",
-    "activeTrait": "발동 특성",
-    "historyEmpty": "첫 경기를 시작하세요.",
-    "noPoints": "훈련 포인트가 부족합니다.",
-    "notReady": "이 대전은 아직 열리지 않았습니다.",
-    "lockedTalent": "아직 개방되지 않은 특성입니다.",
-    "surrenderAsk": "이 경기를 기권할까요?",
-    "surrenderBody": "패배로 기록됩니다. 지금까지의 성장과 장비는 유지됩니다.",
-    "characterLevel": "성장 단계",
-    "pointsReturn": "필요한 능력에 투자하세요. 재분배는 무료입니다.",
-    "empty": "미보유",
-    "finishBout": "진행 중인 경기를 먼저 마치세요.",
-    "changeWaiting": "전환 정리 중",
-    "focusNotReady": "집중이 부족하거나 재사용 대기 중입니다.",
-    "readyApply": "변경은 전술 지연 후 적용됩니다.",
-    "seconds": "초",
-    "meters": "m",
-    "manualOnly": "자동 대응 꺼짐",
-    "wait": "대기",
-    "arenaLabel": "스스로 싸우는 두 투사. 공격 목표·거리·수비와 공세·유인·회복을 지시합니다. 결정기는 자동 발동합니다.",
-    "fullscreenHint": "전체 화면은 지원되는 브라우저에서 사용할 수 있습니다.",
-    "legacyChoose": "이전 등급과 자원을 이어받을 투사를 선택하세요.",
-    "background": "투사의 이야기",
-    "challengeTier": "도전자전 {tier}",
-    "directFight": "결투장 입장",
-    "signature": "결정기",
-    "signatureReady": "기회에 맞춰 자동 발동",
-    "signatureArm": "자동 발동 대기",
-    "signatureSeeking": "발동을 준비하는 중",
-    "signatureWaitRange": "사거리 진입 후 자동 발동",
-    "signatureWaitStamina": "기력을 회복하는 중",
-    "signatureWaitAttack": "상대 타격에 자동 반격",
-    "coach": "경기 중에는 세 지시만 선택하세요",
-    "coachHint": "공세·유인·회복을 지시하세요. 결정기는 집중이 차면 기력·사거리·기회에 맞춰 자동 발동합니다.",
-    "coachCurrent": "지금 실행 중",
-    "coachPending": "지시 전달 중",
-    "characterIdentity": "내 투사의 리듬",
-    "identityActive": "특성 발동",
-    "flowApproach": "파고드는 중",
-    "flowRetreat": "간격을 벌리는 중",
-    "flowRecover": "기력 회복 중",
-    "flowCounter": "반격을 기다리는 중",
-    "flowHold": "내 거리 유지",
-    "flowSignature": "결정기 진입",
-    "flowFollowup": "연계 기술 준비",
-    "leagueTable": "리그 상대 보기",
-    "optionalBuild": "육성과 장비는 경기 사이에 바꿀 수 있습니다.",
-    "iconicMove": "대표 기술",
-    "signatureCost": "집중 {cost}",
-    "hotkeys": "1 공세 · 2 유인 · 3 회복",
-    "cornerAuto": "곧 다음 라운드",
-    "combatGuide": "상대와 기력을 보고 흐름을 바꾸세요",
-    "next": "다음",
-    "keepFighter": "투사·성장·장비는 그대로 이어집니다.",
-    "rankShort": "등급",
-    "strengthShort": "잘하는 것",
-    "weaknessShort": "주의할 것",
-    "basicAI": "1대1 결투 · AI",
-    "recordButton": "결투 기록",
-    "backToRing": "결투로 복귀",
-    "signatureBlocked": "집중·기력·재사용 대기 조건을 갖추면 자동 발동합니다.",
-    "fighterStats": "투사 수치 보기",
-    "watchFor": "상대의 승부수",
-    "coachShort": "노림수와 거리·수비는 따로 조정할 수 있습니다.",
-    "hintRecoverActive": "회복 중에는 공격 빈도가 줄어듭니다.",
-    "dashboardTitle": "다음 결투를 준비하세요",
-    "dashboardSub": "상대를 읽고, 무장을 맞추고, 결투에서 증명하세요.",
-    "dashboardHero": "나의 투사",
-    "dashboardBuild": "출전 무장",
-    "dashboardPlan": "출전 전술",
-    "scoutTitle": "상대 분석",
-    "scoutHabit": "주로 쓰는 수",
-    "scoutWeak": "파훼할 틈",
-    "scoutGear": "상대 무장",
-    "noFoeGear": "장비 없이 출전",
-    "counterApply": "대응 전술 적용",
-    "counterApplied": "상대의 첫 노림수에 맞췄습니다. 전환을 계속 확인하세요.",
-    "battleReady": "바로 결투",
-    "planOptional": "기본 전술로 바로 출전할 수 있습니다.",
-    "planLocked": "진행 중인 결투에서 조정하세요.",
-    "tacticalTitle": "전술 조정",
-    "focusTitle": "공격 목표",
-    "focusSub": "상대의 현재 수에 맞춰 노림수를 바꿉니다.",
-    "rangeTitle": "간격",
-    "defenseTitle": "수비",
-    "advancedTactics": "거리·수비 조정",
-    "applyTactics": "전술 적용",
-    "tacticalApplied": "전술을 조정했습니다.",
-    "tacticsNow": "현재 노림수",
-    "foePlan": "상대 노림수",
-    "foeChanging": "전환 예고",
-    "recentMoves": "최근 기술",
-    "rpsTitle": "노림수 상성",
-    "rpsHint": "타격 → 잡기 → 반격 → 타격",
-    "rpsEmpty": "기회를 만들어 먼저 유효타를 넣으세요.",
-    "rpsWins": "상성 판정",
-    "counterHint": "대응",
-    "rangeAuto": "노림수에 맞춤",
-    "planDefault": "권장 간격",
-    "clashGuard": "가드 무시",
-    "feintName": "속임수",
-    "counterWhiff": "반격 헛침",
-    "workshopTitle": "하나를 얻고, 하나를 감수하세요",
-    "workshopSub": "고유 효과와 부작용을 조합하고 특화 방향을 고르세요.",
-    "workshopEquipment": "장비",
-    "workshopTalents": "재능",
-    "equippedTitle": "출전 장비",
-    "slotSelect": "교체 대상으로 선택",
-    "selectedSlot": "교체 대상",
-    "replaceItem": "교체 대상",
-    "selectItem": "장비를 선택하세요",
-    "itemBenefit": "얻는 것",
-    "itemCost": "감수할 것",
-    "itemPassive": "고유 발동 효과",
-    "itemUsage": "전투에서의 역할",
-    "buyEquip": "구입·장착",
-    "equipSelected": "선택한 칸에 장착",
-    "ownedItem": "보유 장비",
-    "equippedItem": "장착 중",
-    "forgeTitle": "특화 방향",
-    "forgeChoose": "특화 선택",
-    "forgeRechoose": "이 특화로 변경",
-    "forgeFree": "특화 변경은 결투 사이에 무료입니다.",
-    "forgeUpgrade": "특화 강화",
-    "forgeMaster": "완성 강화",
-    "forgeMasterPreview": "완성 시 추가 효과",
-    "forgeMastered": "완성 장비",
-    "forgeRank": "제작 단계",
-    "forgeLocked": "먼저 장비를 구입하세요.",
-    "forgeChooseFirst": "특화 방향을 먼저 선택하세요.",
-    "buySuccess": "장비를 구입하고 장착했습니다.",
-    "forgeSuccess": "장비를 특화했습니다.",
-    "reforgeSuccess": "특화 방향을 변경했습니다.",
-    "forgeMasterSuccess": "장비를 완성했습니다.",
-    "compareTitle": "교체 후 변화",
-    "compareNone": "현재 장착과 같습니다.",
-    "compareUnequipped": "빈 슬롯에 추가합니다.",
-    "compareSlot": "선택한 슬롯과 비교",
-    "resonanceTitle": "장비 공명",
-    "resonanceActive": "발동 중",
-    "resonanceInactive": "같은 문장 2개 장착 시 발동",
-    "sigil": "문장",
-    "buildSaveTitle": "저장한 무장",
-    "buildSave": "현재 무장 저장",
-    "buildApply": "불러오기",
-    "buildEmpty": "저장된 무장 없음",
-    "buildSaved": "현재 무장을 저장했습니다.",
-    "buildApplied": "저장한 무장을 적용했습니다.",
-    "buildBusy": "결투 중에는 무장을 바꿀 수 없습니다.",
-    "buildProfile": "무장 성향",
-    "buildWeak": "교체는 무료 · 장비는 소모되지 않습니다.",
-    "talentHeading": "전투 재능",
-    "talentSub": "두 가지 재능으로 부족한 부분을 보완하거나 강점을 밀어주세요.",
-    "trainingTitle": "성장 방향을 정하세요",
-    "trainingPoints": "사용 가능한 수련점",
-    "trainingCurrent": "투자한 수련",
-    "trainingGain": "다음 수련 효과",
-    "ledger": "결투 기록",
-    "dashboardProgress": "리그 진행",
-    "winsProgress": "격파",
-    "noCoins": "금화가 부족합니다. 결투 보상으로 마련하세요.",
-    "invalidForge": "올바른 특화 방향을 선택하세요.",
-    "invalidBuild": "사용할 수 없는 무장입니다.",
-    "statDelta": "능력 변화",
-    "procLabel": "장비 발동",
-    "liveTactics": "거리·수비",
-    "clashDamage": "파훼 피해",
-    "neutral": "변화 없음",
-    "tacticSignal": "지시 전달 중",
-    "buildStatsTitle": "현재 전투 능력",
-    "rankBudget": "등급 · 성장",
-    "previewBranch": "이 특화의 이득과 손해",
-    "closeCompare": "비교 닫기",
-    "learnRps": "상성 보기",
-    "counterResolve": "반격 성공 시 공격을 끊습니다.",
-    "ownedCount": "보유",
-    "workshopBack": "결투 준비로",
-    "tacticPending": "변경 대기",
-    "rpsExplain": "상성은 실제 기술이 맞물릴 때 발동합니다. 장비·사거리·기력과 속임수가 결과를 바꿉니다.",
-    "buyOnly": "구입만 하기",
-    "nextReward": "첫 격파 보상",
-    "itemTierLabel": "제작",
-    "clearSlot": "장착 해제",
-    "savedBuildHint": "무장·특화·재능·출전 전술을 함께 저장합니다.",
-    "emptyBuildName": "무장",
-    "forgeOnEquip": "효과 비교는 선택한 슬롯에 장착했을 때 기준입니다.",
-    "startingGear": "기본 무장",
-    "percentPoint": "%p",
-    "percentUnit": "%",
-    "statArrow": "→",
-    "equipmentSources": "무장·공명 효과",
-    "buildTradeoff": "강점과 약점을 함께 확인하세요.",
-    "currentSlot": "교체 슬롯",
-    "currentTactics": "출전 설정",
-    "gearDetail": "장비 상세",
-    "gainLabel": "강화되는 능력",
-    "lossLabel": "약해지는 능력",
-    "noTradeoff": "추가 부작용 없음",
-    "newItem": "신규 장비",
-    "masterAdditional": "완성 시 추가 능력",
-    "upgradeCompare": "현재 → 강화 후",
-    "trainingNav": "능력 투자·재분배",
-    "fightNav": "상대 분석·결투",
-    "buildNav": "장비·특화·재능",
-    "clashWaiting": "기술이 맞물릴 때 파훼 판정",
-    "currentBuildName": "현재 무장",
-    "focusKeyTitle": "노림수",
-    "investedPoints": "투자",
-    "rankNameLabel": "등급",
-    "procs": "장비 발동",
-    "clashes": "상성 파훼",
-    "tacticsPaused": "선택 후 적용하면 결투가 이어집니다.",
-    "forgeSummary": "장비의 기본 효과에 특화가 더해집니다.",
-    "forgeMasterHint": "기본 효과와 특화는 유지하고, 아래 능력·발동 효과로 강화됩니다.",
-    "rpsGuardHint": "잡기는 가드를 무시 · 유인은 반격 대기를 흔듦",
-    "focusEffective": "유리한 상대",
-    "focusVulnerable": "주의할 상대",
-    "statsBefore": "현재",
-    "statsAfter": "교체 후",
-    "coinsUnit": "금화",
-    "savingBuilds": "결투 사이에 자유롭게 교체할 수 있습니다.",
-    "unlockTip": "승패와 관계없이 보상을 얻습니다.",
-    "leagueCaption": "승리하면 다음 상대가 열립니다.",
-    "buyLocked": "장착·강화는 결투가 끝난 뒤 가능합니다.",
-    "readiness": "준비 완료",
-    "trainIncrease": "투자",
-    "editBuild": "공방으로",
-    "emptyTalent": "재능 없음",
-    "masterEffect": "강화된 발동 효과",
-    "itemNoneGain": "별도 수치 증가 없음",
-    "procHistory": "발동 기록",
-    "tacticsHeroDefault": "투사의 기본 전술",
-    "forgeStagePrefix": "제작 단계",
-    "noGearEffect": "장비를 장착하면 고유 효과가 추가됩니다.",
-    "locked": "미개방",
-    "clashMine": "성공",
-    "clashFoe": "당함",
-    "foeGearDetails": "무장 효과 확인",
-    "resonanceGain": "새 공명 발동",
-    "resonanceLoss": "공명 해제",
-    "inBattle": "결투 진행 중",
-    "signatureAuto": "자동 발동",
-    "signatureCharging": "집중 충전 중",
-    "signatureCooling": "재사용 대기 {seconds}초",
-    "signatureExecuting": "자동 발동 중",
-    "slotEmpty": "빈 장비칸",
-    "slotEquipped": "장착 중",
-    "slotInspect": "상세",
-    "slotRemove": "해제",
-    "slotRackHelp": "바꿀 칸을 고르고, 아래 목록에서 교체할 장비를 선택하세요.",
-    "slotTargetFormat": "선택한 교체칸 · {slot}",
-    "slotEquippedFormat": "{slot}에 장착 중",
-    "slotEquipFormat": "{slot}에 장착",
-    "slotBuyEquipFormat": "{slot} · 구입·장착",
-    "slotFreeHint": "모든 칸에 원하는 장비를 장착할 수 있습니다.",
-    "slotCountFormat": "{count} / {total} 장착",
-    "slotSelectedHint": "아래에서 선택한 장비가 이 칸을 교체합니다.",
-    "slotEmptyHint": "장비를 장착할 수 있습니다.",
-    "slotOwnedHint": "장착 중인 장비는 초록색으로 표시됩니다."
-  },
-  "messages": {
-    "queued": "{who} 전술 전환 예약",
-    "applied": "{who}: {plan}",
-    "rule": "{who} 작전서 · {condition} → {plan}",
-    "adapt": "상대가 {plan} 전술로 바꿉니다",
-    "counter": "{who} 반격 성공",
-    "dodge": "{who} 회피",
-    "whiff": "{who} 공격이 닿지 않음",
-    "guardBreak": "{who} 가드 붕괴",
-    "feint": "{who} 속임수 성공",
-    "grab": "{who} 잡기 성공",
-    "focus": "{who} 집중 · {name}",
-    "trait": "{who} · {name}",
-    "round": "{round}라운드 시작",
-    "ko": "{who} KO",
-    "promote": "{rank} 진급",
-    "purchased": "{name} 구입",
-    "upgraded": "{name} 강화",
-    "equipped": "{name} 장착",
-    "newRival": "다음 상대 개방",
-    "noCoins": "코인이 부족합니다.",
-    "command": "{who} · {name}",
-    "followup": "{who} · {name}",
-    "signatureArmed": "{who} · {name} 자동 준비",
-    "signatureUsed": "{who} · {name}!",
-    "signatureCancelled": "결정기 준비 취소",
-    "signatureBlocked": "지금은 결정기를 준비할 수 없습니다.",
-    "tacticWin": "{who} · {name}",
-    "planAdjusted": "{who} · {focus} / {range} / {defense}",
-    "gearProc": "{who} · {name}",
-    "counterWhiff": "{who} · 반격의 빈틈"
-  },
-  "draw": {
-    "font": "\"Noto Serif KR\", \"Nanum Myeongjo\", \"Batang\", \"AppleMyungjo\", Georgia, serif",
-    "ringScale": 0.4,
-    "ringY": 0.58,
-    "ringPerspective": 0.48,
-    "fighterHeight": 95,
-    "fighterScale": 0.85,
-    "head": 13,
-    "shoulder": 22,
-    "hip": 13,
-    "leg": 33,
-    "arm": 25,
-    "glove": 9,
-    "boot": 8,
-    "line": 3,
-    "nameFont": 14,
-    "floatFont": 22,
-    "statusFont": 12,
-    "labelOffset": 112,
-    "cameraEase": 5,
-    "shadowWidth": 27,
-    "shadowHeight": 8,
-    "floorRings": 3,
-    "ropeHeight": 23,
-    "crowdRows": 3,
-    "crowdCount": 20,
-    "crowdSpacing": 42,
-    "damageRise": 24,
-    "effectSize": 36,
-    "portraitSize": 220,
-    "hitTilt": 0.24,
-    "breathRate": 3.2,
-    "breathAmount": 1.1,
-    "shakeRate": 47,
-    "circleSegments": 48,
-    "particleSize": 3,
-    "roundDigits": 0,
-    "fallbackWidth": 750,
-    "fallbackHeight": 440,
-    "ringVerticalScale": 0.42,
-    "half": 0.5,
-    "crowdAlpha": 0.16,
-    "crowdY": 0.12,
-    "crowdGap": 12,
-    "crowdHead": 4,
-    "crowdBody": 17,
-    "crowdStroke": 7,
-    "platformDepth": 20,
-    "rim": 8,
-    "floorMarkAlpha": 0.13,
-    "floorMarkSize": 26,
-    "posts": 8,
-    "postWidth": 5,
-    "postCap": 4,
-    "edgeRing": 29,
-    "edgeWidth": 2,
-    "minFighterScale": 0.64,
-    "maxFighterScale": 1.22,
-    "fighterScaleDivisor": 420,
-    "animationLead": 0.12,
-    "animationSpan": 0.4,
-    "flurryRate": 25,
-    "stunTilt": 0.35,
-    "hipRaise": 12,
-    "torsoHeight": 34,
-    "neck": 7,
-    "stepRate": 8,
-    "stepDistance": 7,
-    "legWidth": 12,
-    "bootAngle": 8,
-    "kickLength": 40,
-    "kickLift": 0.45,
-    "armorOverhang": 4,
-    "chestWidth": 13,
-    "chestOffset": 10,
-    "chestLine": 4,
-    "beltGap": 6,
-    "punchLength": 46,
-    "grabLength": 30,
-    "feintLength": 18,
-    "guardHandY": 12,
-    "looseHandY": 17,
-    "elbow": 9,
-    "elbowDrop": 17,
-    "backHandX": 3,
-    "frontHandX": 26,
-    "armWidth": 11,
-    "punchLift": 0.2,
-    "neckWidth": 12,
-    "headTall": 2,
-    "helmetExtra": 2,
-    "helmetHeight": 17,
-    "visorWidth": 10,
-    "visorY": 1,
-    "visorHeight": 5,
-    "crestHeight": 13,
-    "crestWidth": 7,
-    "hoodExtra": 4,
-    "hoodLine": 5,
-    "labelGap": 30,
-    "actionWidth": 152,
-    "actionHeight": 24,
-    "traitY": 27,
-    "statusY": 44,
-    "impactHeight": 73,
-    "counterLine": 6,
-    "effectStart": 0.1,
-    "breakLine": 6,
-    "effectLine": 3,
-    "feintDash": [
-      4,
-      5
-    ],
-    "floatHeight": 110,
-    "identityBodyAlpha": 0.14,
-    "trailAlpha": 0.16,
-    "motionArrowWidth": 2,
-    "motionArrowSize": 7,
-    "motionLineDash": [
-      7,
-      7
-    ],
-    "rangeArcAlpha": 0.35,
-    "rangeLine": 1.5,
-    "rangeLabelOffset": 15,
-    "impactHalo": 1.3,
-    "signatureBannerWidth": 320,
-    "signatureBannerHeight": 55,
-    "signatureTitleSize": 20,
-    "signatureSubSize": 11,
-    "signatureBannerY": 36,
-    "signatureFlashAlpha": 0.16,
-    "signatureSparks": 8,
-    "signatureRays": 48,
-    "markerRadius": 9,
-    "traceThickness": 12,
-    "guardShieldRadius": 19,
-    "guardShieldAlpha": 0.5,
-    "gauntletPlate": 18,
-    "backFrameWidth": 64,
-    "backFrameHeight": 42,
-    "scarfLength": 50,
-    "ribbonLength": 60,
-    "haloRadius": 20,
-    "haloAlpha": 0.55,
-    "stanceArmDrop": 10,
-    "stanceCrouch": 10,
-    "directionArrowLife": 2.5,
-    "poseThrowTilt": 1.1,
-    "poseThrowLift": 35,
-    "poseImpactSquash": 0.6,
-    "specialPunchScale": 1.25,
-    "specialKickScale": 1.2,
-    "sweepKickScale": 0.75,
-    "stanceStrideScale": 0.4,
-    "trailIntervals": [
-      0.08,
-      0.16,
-      0.24
-    ],
-    "sigBannerAlphaTime": 0.2,
-    "identityPips": 4,
-    "portraitGlove": 15,
-    "portraitLean": 22,
-    "portraitHead": 25,
-    "portraitHeadTall": 1.12,
-    "landedPoseTime": 0.28,
-    "armedRing": 32,
-    "armedLine": 2,
-    "shieldPipRadius": 29,
-    "shieldPipY": 13,
-    "shieldPipSize": 3,
-    "trailHead": 75,
-    "trailBody": 30,
-    "backFrameTop": 8,
-    "frameStripe": 7,
-    "ribbonSpeed": 7,
-    "ribbonSway": 15,
-    "ribbonDrop": 34,
-    "ribbonWidth": 12,
-    "gauntletBorder": 4,
-    "shieldBorder": 3,
-    "frontShieldScale": 0.8,
-    "haloLine": 2,
-    "arrowWing": 0.6,
-    "lanceLine": 5,
-    "slamRingScale": 1.8,
-    "slamLine": 5,
-    "barrageLines": 5,
-    "barrageGap": 9,
-    "barrageLine": 3,
-    "sweepImpactHeight": 24,
-    "mirageLine": 5,
-    "shieldBurstAlpha": 0.25,
-    "bannerMargin": 30,
-    "bannerStripe": 5,
-    "bannerTitleY": 22,
-    "bannerSubY": 42,
-    "teamRing": 29,
-    "teamRingLine": 2,
-    "eyeGap": 3,
-    "eyeLine": 2,
-    "eyeBrow": 1,
-    "mouthY": 9,
-    "monoRadius": 5,
-    "glassGap": 3,
-    "glassLine": 2,
-    "fantasyArchWidth": 0.17,
-    "fantasyArchHeight": 0.58,
-    "fantasyArchY": 0.08,
-    "fantasyArchX": [
-      0.11,
-      0.89
-    ],
-    "fantasyArchLine": 10,
-    "fantasyBannerWidth": 42,
-    "fantasyBannerHeight": 91,
-    "fantasyBannerY": 0.06,
-    "fantasyBannerX": [
-      0.27,
-      0.73
-    ],
-    "fantasyBannerMark": 14,
-    "fantasyTorchX": [
-      0.045,
-      0.955
-    ],
-    "fantasyTorchY": 0.47,
-    "fantasyTorchSize": 10,
-    "fantasyTorchGlow": 78,
-    "fantasyTorchGlowAlpha": 0.16,
-    "fantasyFlameSway": 2.5,
-    "fantasyStoneSegments": 20,
-    "fantasyStoneBand": 0.88,
-    "fantasyStoneLine": 1.4,
-    "fantasyInset": 0.94,
-    "fantasyRopeAlpha": 0.6,
-    "fantasyChainLine": 1.8,
-    "fantasyLightAlpha": 0.42,
-    "fantasyLightRadius": 0.72,
-    "fantasyStarPoints": 8,
-    "fantasySealRadius": 25,
-    "fantasySealAlpha": 0.2,
-    "fantasySigInset": 4,
-    "fantasySigLine": 1.1,
-    "fantasySigCorner": 10,
-    "fantasyTextOutline": 3,
-    "fantasyLightY": 0.26,
-    "fantasyArchShoulder": 0.45,
-    "fantasyArchCurve": 0.1,
-    "fantasyBannerFraction": 0.27,
-    "fantasyBannerTail": 12,
-    "fantasyBannerLine": 1.3,
-    "fantasyBannerRod": 6,
-    "fantasyBannerRodLine": 3,
-    "fantasyBannerEmblemY": 0.43,
-    "fantasyFlameRate": 4,
-    "fantasyTorchStem": 32,
-    "fantasyTorchStemWidth": 6,
-    "fantasyTorchBowlLine": 4,
-    "fantasyFlameHeight": 2.2,
-    "fantasyCoreWidth": 0.45,
-    "fantasyInnerBand": 0.33,
-    "fantasyMiddleBand": 0.66,
-    "fantasySealInner": 0.46,
-    "fantasyFloorTitleY": 0.58,
-    "tacticalLabelY": 20,
-    "tacticalLabelWidth": 102,
-    "tacticalLabelHeight": 23,
-    "tacticalFont": 11,
-    "tacticalLabelPad": 4
-  },
-  "sounds": {
-    "hit": {
-      "frequency": 130,
-      "end": 60,
-      "duration": 0.07,
-      "gain": 0.06,
-      "type": "triangle"
-    },
-    "counter": {
-      "frequency": 340,
-      "end": 180,
-      "duration": 0.13,
-      "gain": 0.06,
-      "type": "square"
-    },
-    "break": {
-      "frequency": 95,
-      "end": 30,
-      "duration": 0.2,
-      "gain": 0.07,
-      "type": "sawtooth"
-    },
-    "reward": {
-      "frequency": 520,
-      "end": 1100,
-      "duration": 0.3,
-      "gain": 0.05,
-      "type": "sine"
-    },
-    "apply": {
-      "frequency": 300,
-      "end": 450,
-      "duration": 0.07,
-      "gain": 0.025,
-      "type": "sine"
-    },
-    "signature": {
-      "frequency": 160,
-      "end": 50,
-      "duration": 0.28,
-      "gain": 0.075,
-      "type": "sawtooth"
-    }
-  },
-  "statLabels": {
-    "hp": "체력",
-    "stamina": "최대 기력",
-    "guard": "가드",
-    "power": "전체 피해",
-    "speed": "이동 속도",
-    "reach": "타격 거리",
-    "accuracy": "명중",
-    "evasion": "회피",
-    "armor": "피해 감소",
-    "staminaRegen": "기력 회복",
-    "guardRegen": "가드 회복",
-    "counterPower": "반격 피해",
-    "grabPower": "잡기 피해",
-    "guardDamage": "가드 압박",
-    "feintPower": "속임수",
-    "staminaCost": "공격 기력 비용",
-    "attackSpeed": "공격 속도",
-    "moveCost": "이동 기력 비용",
-    "tacticLag": "전술 전환 지연",
-    "focusGain": "집중 획득",
-    "focusMax": "최대 집중",
-    "blockBonus": "가드 효율",
-    "counterChance": "반격 성공",
-    "grabAccuracy": "잡기 명중",
-    "readBonus": "반복 분석",
-    "strikePower": "타격 피해",
-    "grabReach": "잡기 거리",
-    "lowHpPower": "위기 화력"
-  },
-  "_docs": {
-    "editing": "game-db.js가 유일한 콘텐츠 원본입니다. characters/styles/matchups/moves/options/presets/conditions/traits/statuses/modules/talents/rivals에서 수정합니다. 엔진은 index.html에 있습니다.",
-    "career": "한 투사를 계약하고 영구 육성합니다. 진행은 tactics.duel.v6에 저장하며, 이전 해상전 저장은 삭제하지 않습니다. 계급명은 progression.ranks에서 수정합니다.",
-    "combat": "직접 이동·공격 입력이 없는 실시간 전술 시뮬레이션. 전술 지연, 기력, 거리, 가드, 반격·잡기·속임수, 조건 작전서와 집중이 상호작용합니다.",
-    "coaching": "coaching와 characters[].commands: 필수 사전 설정 없는 세 경기 지시. 캐릭터별 계획·연계·결정기는 characters[].followups/signature와 moves에 있습니다. 준비 작전서 데이터는 호환용으로 보존하며 기본 경기에서는 실행하지 않습니다.",
-    "identity": "characters[].visual은 체형·장비·자세, identity는 고유 상태 표시, chargeTrait는 결정기 게이지 획득 조건입니다. 대표 동작·연계·지시 결과가 화면에서 연결되게 유지합니다.",
-    "theme": "theme.colors/fonts/icons/labels는 중세 판타지 UI 테마의 단일 원본입니다. palette는 대비와 전투 색상, draw의 fantasy*는 석조 결투장·깃발·횃불 표현입니다. 화면 배치는 CSS 구조로 관리하며 전투 규칙과 저장 키는 바꾸지 않습니다.",
-    "forge": "modules의 기본 stats·trait는 한 번 적용합니다. 특화 단계부터 forges[].stats와 trait, 완성 단계에는 mastery.stats와 대체 trait가 추가됩니다. 문장 2개로 forge.resonances 발동. 장비 ID·v6 저장 키 유지.",
-    "tactics": "tactics.focuses의 실제 기술 상성과 clashes가 판정 원본입니다. 노림수·간격·수비는 독립 조정하고 공세·유인·회복은 실행 속도와 기만을 조정합니다. 인공 지능은 rivals[].sequence와 최근 기술을 읽습니다.",
-    "autoSignature": "config.signatureAuto와 signatureAutoRecoveryRatio로 자동 발동을 관리합니다. 양측 모두 집중·재사용 대기·기력을 충족하면 준비하고, 사거리와 고유 기회에 맞춰 자동 실행합니다. 회복 지시 중 기력이 낮으면 진입을 보류합니다. 수동 버튼·단축키 없음.",
-    "rankTitles": "progression.ranks의 이름만 판타지 등급으로 교체합니다. id·minLevel·경험치·v6 저장 키는 보존합니다."
-  },
-  "enemyTraining": {
-    "strike": {
-      "power": 0.25,
-      "agility": 0.18,
-      "endurance": 0.25,
-      "technique": 0.18
-    },
-    "grapple": {
-      "power": 0.25,
-      "agility": 0.18,
-      "endurance": 0.25,
-      "technique": 0.18
-    },
-    "counter": {
-      "power": 0.25,
-      "agility": 0.18,
-      "endurance": 0.25,
-      "technique": 0.18
-    }
-  },
-  "statCaps": {
-    "accuracy": {
-      "min": 0.4,
-      "max": 0.96
-    },
-    "evasion": {
-      "min": 0,
-      "max": 0.48
-    },
-    "armor": {
-      "min": 0,
-      "max": 0.35
-    },
-    "counterChance": {
-      "min": 0,
-      "max": 0.25
-    },
-    "blockBonus": {
-      "min": 0,
-      "max": 0.18
-    }
-  },
-  "reportEvents": [
-    "tacticWin",
-    "signatureUsed",
-    "followup",
-    "counter",
-    "guardBreak",
-    "grab"
-  ],
-  "tabs": [
-    {
-      "id": "fight",
-      "label": "fight",
-      "icon": "fight",
-      "hint": "fightNav"
-    },
-    {
-      "id": "build",
-      "label": "build",
-      "icon": "anvil",
-      "hint": "buildNav"
-    },
-    {
-      "id": "training",
-      "label": "training",
-      "icon": "training",
-      "hint": "trainingNav"
-    }
-  ],
-  "summaryStats": [
-    "hp",
-    "strikePower",
-    "grabPower",
-    "counterPower",
-    "staminaRegen",
-    "speed"
-  ],
-  "scoutStats": [
-    "hp",
-    "reach",
-    "speed",
-    "guard"
-  ],
-  "percentStats": [
-    "accuracy",
-    "evasion",
-    "armor",
-    "blockBonus",
-    "counterChance",
-    "grabAccuracy",
-    "readBonus"
-  ],
-  "multiplierStats": [
-    "power",
-    "counterPower",
-    "grabPower",
-    "guardDamage",
-    "feintPower",
-    "staminaCost",
-    "attackSpeed",
-    "moveCost",
-    "tacticLag",
-    "focusGain",
-    "strikePower"
-  ],
-  "speeds": [
-    {
-      "label": "0.5×",
-      "value": 0.5
-    },
-    {
-      "label": "1×",
-      "value": 1
-    },
-    {
-      "label": "2×",
-      "value": 2
-    },
-    {
-      "label": "4×",
-      "value": 4
-    },
-    {
-      "label": "8×",
-      "value": 8
-    }
-  ],
-  "visibleEvents": [
-    "command",
-    "followup",
-    "signatureUsed",
-    "guardBreak",
-    "counter",
-    "grab"
-  ],
-  "flashEvents": [
-    "tacticWin",
-    "command",
-    "followup",
-    "signatureUsed",
-    "guardBreak",
-    "counter",
-    "grab",
-    "signatureArmed"
-  ],
-  "customPresetDefaults": [
-    {
-      "id": "slot_1",
-      "name": "내 작전 1",
-      "preset": null
-    },
-    {
-      "id": "slot_2",
-      "name": "내 작전 2",
-      "preset": "rest"
-    },
-    {
-      "id": "slot_3",
-      "name": "내 작전 3",
-      "preset": "finish"
-    }
-  ],
-  "coaching": [
-    {
-      "id": "attack",
-      "name": "공세",
-      "glyph": "↗",
-      "key": "Digit1"
-    },
-    {
-      "id": "bait",
-      "name": "유인",
-      "glyph": "↶",
-      "key": "Digit2"
-    },
-    {
-      "id": "recover",
-      "name": "회복",
-      "glyph": "◌",
-      "key": "Digit3"
-    }
-  ],
-  "coachResponses": {
-    "strike": "bait",
-    "counter": "attack",
-    "grab": "attack",
-    "feint": "attack"
-  },
-  "commandReports": {
-    "attack": "명중 {hits} · 가드 피해 {guardDamage}",
-    "bait": "회피 {dodges} · 반격 {counters}",
-    "recover": "기력 +{stamina} · 가드 +{guard}"
+    "version": "1.0",
+    "title": "에버돈",
+    "subtitle": "별의 계승자",
+    "description": "마을에서 시작해 나만의 직업 빌드를 완성하는 판타지 액션 RPG"
   },
   "theme": {
     "fonts": {
@@ -7235,27 +12,27 @@ window.GAME_DB = {
       "display": "\"Noto Serif KR\", \"Nanum Myeongjo\", \"Batang\", \"AppleMyungjo\", Georgia, serif"
     },
     "colors": {
-      "paper": "#eadfc5",
-      "paperLight": "#f4ead5",
-      "paperShade": "#dbc9a3",
+      "paper": "#f0e5cd",
+      "paperLight": "#fff6e1",
+      "paperShade": "#e4d3ae",
       "paperEdge": "#c4aa77",
-      "wood": "#30271d",
-      "woodLight": "#463727",
-      "woodDeep": "#1a1712",
-      "brass": "#a98b52",
-      "brassLight": "#d9c18b",
-      "brassDark": "#6f552c",
-      "ivory": "#f3e7ca",
-      "oxblood": "#6e3931",
-      "oxbloodLight": "#84473a",
-      "olive": "#4b5c44",
+      "wood": "#403426",
+      "woodLight": "#55432e",
+      "woodDeep": "#29241c",
+      "brass": "#b49558",
+      "brassLight": "#e8cf94",
+      "brassDark": "#816535",
+      "ivory": "#fff1d1",
+      "oxblood": "#7f4436",
+      "oxbloodLight": "#995644",
+      "olive": "#4e6949",
       "iron": "#687568",
       "deepInk": "#2b241b",
       "shadowColor": "#080705",
       "hpFill": "#944d3e",
       "staminaFill": "#b08a43",
       "guardFill": "#708078",
-      "stoneDark": "#464938",
+      "stoneDark": "#717c70",
       "stoneJoint": "#5b5b47",
       "stoneTop": "#9d9276",
       "torch": "#f1c078",
@@ -7266,7 +43,39 @@ window.GAME_DB = {
       "equippedWoodLight": "#34513e",
       "equippedBorder": "#8b9d75",
       "equippedPaper": "#e1e8d3",
-      "equippedInk": "#304b33"
+      "equippedInk": "#304b33",
+      "bg": "#29271f",
+      "ink": "#302a20",
+      "muted": "#6d604a",
+      "danger": "#a34538",
+      "hp": "#bd5b4a",
+      "mp": "#668caf",
+      "xp": "#b89849",
+      "good": "#3f7151",
+      "rare": "#4c83b8",
+      "epic": "#925ea4",
+      "loot": "#efce77",
+      "shadow": "#16251b88",
+      "outline": "#252b24",
+      "grass": "#8aab6a",
+      "grassAlt": "#83a263",
+      "path": "#cab28a",
+      "water": "#689fa5",
+      "waterDeep": "#4b858f",
+      "stone": "#929887",
+      "floor": "#a5a18c",
+      "mud": "#8c9868",
+      "sand": "#dbc894",
+      "lava": "#ce6f42",
+      "bark": "#765c3a",
+      "leaf": "#557b4e",
+      "leafLight": "#739258",
+      "roof": "#9a6550",
+      "roofDark": "#744d40",
+      "wall": "#ddcba3",
+      "window": "#f3d69b",
+      "hazard": "#c94c37",
+      "hazardFill": "#c94c3738"
     },
     "icons": {
       "brand": "<circle cx='12' cy='12' r='9'/><path d='m12 5 3 7-3 7-3-7 3-7Zm-8 7h4m8 0h4'/>",
@@ -7277,8 +86,8 @@ window.GAME_DB = {
       "settings": "<path d='m9 3 3-1 3 1 1 3 3 1 2 3-1 3-3 1-1 3-3 2-3-1-1-3-3-1-2-3 1-3 3-1 1-3Z'/><circle cx='12' cy='11' r='3'/>",
       "fullscreen": "<path d='M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5'/>",
       "pause": "<path d='M8 4v16m8-16v16'/>",
-      "close": "<path d='m6 6 12 12M18 6 6 18'/>",
-      "home": "<path d='M3 11 12 3l9 8v10H3V11Zm6 10v-7h6v7M7 9h10'/>",
+      "close": "<path d=\"m5 5 14 14M19 5 5 19\"/>",
+      "home": "<path d=\"m2 11 10-9 10 9M5 9v13h5v-7h4v7h5V9\"/>",
       "resume": "<path d='m8 4 12 8-12 8V4Z'/>",
       "save": "<path d='M4 3h14l3 3v15H3V3h1Zm3 0v6h10V3M7 21v-8h10v8'/>",
       "load": "<path d='M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5'/>",
@@ -7293,313 +102,6799 @@ window.GAME_DB = {
       "rank": "<path d='m12 3 3 6 6 1-5 5 1 6-5-3-5 3 1-6-5-5 6-1 3-6Z'/>",
       "chevron": "<path d='m9 5 7 7-7 7'/>",
       "grip": "<path d=\"M6 12V9a2 2 0 0 1 4 0v2-6a2 2 0 0 1 4 0v6-4a2 2 0 0 1 4 0v6l2-2 2 2-5 7H9l-5-6z\"/>",
-      "shield": "<path d=\"m12 3 8 3v6c0 5-8 9-8 9S4 17 4 12V6z\"/><path d=\"m8 12 3 3 5-6\"/>",
+      "shield": "<path d=\"m12 2 8 4v6q-1 6-8 10-7-4-8-10V6zM8 12l3 3 5-6\"/>",
       "anvil": "<path d=\"M3 6h18l-4 6h-5l-2 3v4h7v2H4v-2h4v-4l-3-3H3z\"/>",
       "compare": "<path d=\"M8 3v18M16 3v18M3 8h10M11 16h10m-6-4-4 4 4 4M9 4l4 4-4 4\"/>",
-      "check": "<path d=\"m5 12 4 4L19 6\"/>",
-      "plus": "<path d=\"M12 5v14M5 12h14\"/>"
-    },
-    "labels": {
-      "settingsView": "화면과 소리",
-      "settingsArchive": "기록 보관함",
-      "settingsIdentity": "투사 관리",
-      "settingsAdvanced": "고급 설정",
-      "contentEditor": "콘텐츠 편집",
-      "resetCaption": "현재 계약을 끝내고 새 투사와 계약합니다.",
-      "commandTitle": "전술 지시",
-      "arenaTitle": "서약의 결투장",
-      "coinLabel": "금화",
-      "rankLabel": "등급",
-      "closeLabel": "닫기"
+      "check": "<path d=\"m4 12 5 5L20 5\"/>",
+      "plus": "<path d=\"M12 4v16M4 12h16\"/>",
+      "bag": "<path d=\"M5 7h14l2 14H3zM8 7V5a4 4 0 0 1 8 0v2\"/>",
+      "quest": "<path d=\"M6 3h12v18H6zM9 7h6m-6 4h6m-6 4h3\"/>",
+      "map": "<path d=\"m3 5 6-2 6 3 6-2v15l-6 2-6-3-6 2zM9 3v15m6-12v15\"/>",
+      "potion": "<path d=\"M9 3h6m-5 0v6L5 17q-1 4 3 4h8q4 0 3-4l-5-8V3M8 15h8\"/>",
+      "staff": "<path d=\"m5 21 9-14m-2-5 7 2 1 6-6 2-4-5z\"/>",
+      "bow": "<path d=\"M6 3q16 9 0 18L10 12zM3 12h18m-4-4 4 4-4 4\"/>",
+      "portal": "<path d=\"M5 21V10a7 7 0 0 1 14 0v11M2 21h20M10 7h4v14h-4z\"/>",
+      "heart": "<path d=\"M12 21S1 14 3 7q3-7 9-1 6-6 9 1 2 7-9 14z\"/>",
+      "tree": "<path d=\"M12 2 4 12h4l-5 6h7v4h4v-4h7l-5-6h4z\"/>",
+      "music": "<path d=\"M9 18V5l11-2v13M9 8l11-2M9 18q-2-3-5-1t1 4q4 0 4-3m11-2q-2-3-5-1t1 4q4 0 4-3\"/>"
     }
   },
+  "config": {
+    "saveVersion": 1,
+    "storageKey": "tactics.everdawn.rpg.v1",
+    "prefsKey": "tactics.everdawn.prefs.v1",
+    "saveInterval": 4,
+    "step": 0.025,
+    "maxFrame": 0.1,
+    "milliseconds": 1000,
+    "maxLevel": 20,
+    "maxMonsterLevel": 30,
+    "startGold": 55,
+    "startPotions": 5,
+    "startPoints": 2,
+    "pointsPerLevel": 1,
+    "xpBase": 22,
+    "xpGrowth": 13,
+    "xpPower": 1.18,
+    "playerRadius": 0.28,
+    "interactRadius": 2.15,
+    "targetRadius": 7.5,
+    "pickupRadius": 1.4,
+    "outOfCombat": 4,
+    "safeRegen": 0.22,
+    "manaRegenDelay": 0.25,
+    "hurtInvulnerability": 0.38,
+    "defenseFactor": 0.045,
+    "minDamage": 1,
+    "critBase": 1.65,
+    "aggroRange": 5.5,
+    "leashRange": 10,
+    "returnHeal": 0.2,
+    "meleeReach": 0.85,
+    "mobSeparation": 0.5,
+    "mobSeparationForce": 1.9,
+    "spawnClearance": 0.5,
+    "respawnField": 18,
+    "maxProjectiles": 120,
+    "maxFloats": 32,
+    "floatTime": 1.1,
+    "effectTime": 0.4,
+    "noticeTime": 3.2,
+    "lootFeedCount": 4,
+    "deathGoldRatio": 0.06,
+    "deathGoldCap": 65,
+    "potionHealRatio": 0.55,
+    "potionCooldown": 7,
+    "recallCooldown": 12,
+    "respawnHpRatio": 1,
+    "shieldCapRatio": 0.65,
+    "statusTick": 0.5,
+    "dotDuration": 4,
+    "slowDuration": 2.8,
+    "slowFactor": 0.6,
+    "cleaveRadius": 1.4,
+    "chainRange": 3,
+    "maxChain": 4,
+    "bossPhaseRatio": 0.5,
+    "bossEnrageRate": 1.22,
+    "dropLevelScale": 0.08,
+    "dropBaseChance": 0.19,
+    "smartWeaponChance": 0.46,
+    "lootTierChance": 0.06,
+    "upgradeMax": 10,
+    "upgradePower": 0.065,
+    "upgradeGoldBase": 17,
+    "upgradeGoldGrowth": 1.34,
+    "upgradeOreBase": 1,
+    "upgradeOreStep": 3,
+    "sellValue": 7,
+    "salvageOre": 1,
+    "itemLevelScale": 0.09,
+    "affixScale": 0.045,
+    "eliteXp": 1.6,
+    "eliteHp": 1.65,
+    "eliteDamage": 1.18,
+    "enemyHpGrowth": 0.17,
+    "enemyDamageGrowth": 0.095,
+    "enemyXpGrowth": 0.12,
+    "goldGrowth": 0.08,
+    "runRewardGrowth": 0.18,
+    "inventorySortLimit": 120,
+    "toastMax": 3,
+    "renderDpr": 1.8,
+    "portraitPixels": 3,
+    "musicLookAhead": 0.24,
+    "musicInterval": 0.08,
+    "effectVolume": 0.28,
+    "musicVolume": 0.14,
+    "maxGold": 9999999,
+    "maxMaterials": 99999,
+    "maxInventory": 160,
+    "initialQuest": "welcome",
+    "startMap": "oakwood",
+    "startPosition": [
+      17.5,
+      12.5
+    ],
+    "nameLength": 14,
+    "hashSeed": 2166136261,
+    "hashPrime": 16777619,
+    "randomMultiplier": 1664525,
+    "randomIncrement": 1013904223,
+    "randomModulus": 4294967296,
+    "percentage": 100,
+    "decimalDigits": 1,
+    "inputDeadzone": 0.1,
+    "joystickRadius": 42,
+    "cameraLerp": 9,
+    "cameraMinZoom": 0.68,
+    "cameraZoomWidth": 1000,
+    "cameraMaxZoom": 1,
+    "dropMagnetSpeed": 8,
+    "bossRewardItemChance": 1,
+    "trainingRespecTownOnly": true,
+    "skillSlots": 2,
+    "lowHpThreshold": 0.5,
+    "echoDamageRatio": 0.65,
+    "extraShotDamage": 0.66,
+    "projectileLife": 2.5,
+    "projectileFanAngle": 0.15,
+    "enemyThinkDelay": 0.45,
+    "enemyAttackStartDelay": 1,
+    "hazardActiveTime": 0.24,
+    "hazardDashFraction": 0.68,
+    "floatMergeTime": 0.16,
+    "buffMax": 12,
+    "bossAddOffsets": [
+      [
+        -2,
+        1
+      ],
+      [
+        2,
+        1
+      ]
+    ],
+    "itemDropJitter": 0.35,
+    "orbCount": 3,
+    "orbAttraction": 7.5,
+    "orbDelay": 0.3,
+    "nearbyNpcRange": 6,
+    "autoSkillGap": 0.25,
+    "interactionRepeatDelay": 0.3,
+    "startingArmor": "padded_armor",
+    "startingRing": "copper_ring",
+    "maxProjectileHits": 8,
+    "enemyAttackMinimum": 0.6,
+    "minimumCooldown": 0.3,
+    "foodBuffId": "inn_food",
+    "lightningSegments": 6,
+    "moveSubstep": 0.2,
+    "lootRarityTierBonus": 0.08,
+    "autoSalvageRarities": [
+      "common"
+    ],
+    "secondsPerMinute": 60,
+    "hudInterval": 0.1,
+    "comparisonLimit": 7,
+    "titlePreviewScale": 5,
+    "joystickSize": 112,
+    "mobileMenuWidth": 720,
+    "enemyPathReview": 0.75,
+    "pathMaxNodes": 1000,
+    "pathWaypointTolerance": 0.24,
+    "pathNeighborOffsets": [
+      [
+        1,
+        0
+      ],
+      [
+        -1,
+        0
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        0,
+        -1
+      ]
+    ]
+  },
+  "controls": {
+    "left": [
+      "KeyA",
+      "ArrowLeft"
+    ],
+    "right": [
+      "KeyD",
+      "ArrowRight"
+    ],
+    "up": [
+      "KeyW",
+      "ArrowUp"
+    ],
+    "down": [
+      "KeyS",
+      "ArrowDown"
+    ],
+    "interact": [
+      "KeyE"
+    ],
+    "potion": [
+      "KeyQ"
+    ],
+    "inventory": [
+      "KeyI"
+    ],
+    "talents": [
+      "KeyK"
+    ],
+    "quests": [
+      "KeyJ"
+    ],
+    "map": [
+      "KeyM"
+    ],
+    "recall": [
+      "KeyR"
+    ]
+  },
+  "world": {
+    "title": "꺼져가는 별의 봉인",
+    "body": "에버돈 왕국의 동쪽에서 오래된 봉인이 흔들립니다. 작은 길드의 모험가로 시작해 숲과 폐광, 잊힌 성역을 탐험하세요.",
+    "chapter": "에버돈 동부",
+    "goal": "세 던전의 보스를 쓰러뜨리고 별의 봉인을 되찾으세요.",
+    "completed": "별의 봉인을 지켰습니다. 더 높은 던전 등급과 장비 빌드에 도전하세요."
+  },
+  "baseStats": {
+    "hp": 100,
+    "mp": 60,
+    "attack": 12,
+    "spell": 12,
+    "defense": 3,
+    "speed": 3.1,
+    "range": 1.1,
+    "attackInterval": 0.8,
+    "manaRegen": 4,
+    "hpRegen": 0,
+    "basicDamage": 1,
+    "skillDamage": 1,
+    "attackSpeed": 1,
+    "cooldownRate": 1,
+    "crit": 0.06,
+    "critDamage": 1.65,
+    "lifesteal": 0,
+    "lifeOnKill": 0,
+    "manaOnHit": 0,
+    "burnChance": 0,
+    "burnDamage": 0.24,
+    "poisonChance": 0,
+    "poisonDamage": 0.22,
+    "slowChance": 0,
+    "extraShots": 0,
+    "chain": 0,
+    "cleave": 0,
+    "shieldOnSkill": 0,
+    "thorns": 0,
+    "xpGain": 1,
+    "goldGain": 1,
+    "lowHpDamage": 0,
+    "damageReduction": 0,
+    "skillEcho": 0,
+    "potionPower": 1
+  },
+  "statCaps": {
+    "crit": [
+      0,
+      0.7
+    ],
+    "damageReduction": [
+      0,
+      0.6
+    ],
+    "lifesteal": [
+      0,
+      0.3
+    ],
+    "attackSpeed": [
+      0.4,
+      2.8
+    ],
+    "cooldownRate": [
+      0.35,
+      2
+    ],
+    "speed": [
+      1.7,
+      5.4
+    ],
+    "extraShots": [
+      0,
+      3
+    ],
+    "chain": [
+      0,
+      4
+    ],
+    "burnChance": [
+      0,
+      1
+    ],
+    "poisonChance": [
+      0,
+      1
+    ],
+    "slowChance": [
+      0,
+      0.8
+    ],
+    "skillEcho": [
+      0,
+      0.75
+    ]
+  },
+  "statLabels": {
+    "hp": "최대 체력",
+    "mp": "최대 마력",
+    "attack": "공격력",
+    "spell": "주문력",
+    "defense": "방어력",
+    "speed": "이동 속도",
+    "range": "공격 거리",
+    "attackInterval": "기본 공격 간격",
+    "manaRegen": "마력 회복",
+    "hpRegen": "체력 회복",
+    "basicDamage": "평타 피해",
+    "skillDamage": "기술 피해",
+    "attackSpeed": "공격 속도",
+    "cooldownRate": "기술 재사용 시간",
+    "crit": "치명타 확률",
+    "critDamage": "치명타 피해",
+    "lifesteal": "흡혈",
+    "lifeOnKill": "처치 시 회복",
+    "manaOnHit": "평타 적중 마력",
+    "burnChance": "화상 확률",
+    "burnDamage": "화상 피해",
+    "poisonChance": "중독 확률",
+    "poisonDamage": "중독 피해",
+    "slowChance": "둔화 확률",
+    "extraShots": "추가 투사체",
+    "chain": "연쇄 횟수",
+    "cleave": "평타 광역 피해",
+    "shieldOnSkill": "기술 사용 보호막",
+    "thorns": "근접 반사 피해",
+    "xpGain": "경험치 획득",
+    "goldGain": "금화 획득",
+    "lowHpDamage": "위기 화력",
+    "damageReduction": "받는 피해 감소",
+    "skillEcho": "기술 메아리 확률",
+    "potionPower": "물약 효율"
+  },
+  "percentStats": [
+    "crit",
+    "lifesteal",
+    "lifeOnKill",
+    "burnChance",
+    "poisonChance",
+    "slowChance",
+    "cleave",
+    "lowHpDamage",
+    "damageReduction",
+    "skillEcho"
+  ],
+  "multiplierStats": [
+    "basicDamage",
+    "skillDamage",
+    "attackSpeed",
+    "cooldownRate",
+    "critDamage",
+    "xpGain",
+    "goldGain",
+    "potionPower"
+  ],
   "statDirections": {
-    "staminaCost": -1,
-    "moveCost": -1,
-    "tacticLag": -1
+    "cooldownRate": -1,
+    "attackInterval": -1
   },
-  "forge": {
-    "rankNames": [
-      "기본",
-      "특화",
-      "완성"
-    ],
-    "buildSlots": 3,
-    "buildNames": [
-      "무장 I",
-      "무장 II",
-      "무장 III"
-    ],
-    "deltaEpsilon": 0.0001,
-    "deltaLimit": 6,
-    "categories": [
-      {
-        "id": "all",
-        "name": "전체",
-        "icon": "gear"
-      },
-      {
-        "id": "owned",
-        "name": "보유",
-        "icon": "save"
-      },
-      {
-        "id": "assault",
-        "name": "공성",
-        "icon": "attack"
-      },
-      {
-        "id": "hunt",
-        "name": "추격",
-        "icon": "bait"
-      },
-      {
-        "id": "bulwark",
-        "name": "수호",
-        "icon": "recover"
-      },
-      {
-        "id": "insight",
-        "name": "통찰",
-        "icon": "signature"
-      }
-    ],
-    "resonances": [
-      {
-        "id": "assault",
-        "name": "공성",
-        "required": 2,
-        "trait": "resonance_assault",
-        "description": "가드 붕괴 유발 → 기력 14 회복 · 집중 12 획득 · 재발동 5초"
-      },
-      {
-        "id": "hunt",
-        "name": "추격",
-        "required": 2,
-        "trait": "resonance_hunt",
-        "description": "상대 헛침 → 3초간 이동 속도 +20% · 공격 기력 비용 -12% · 재발동 5초"
-      },
-      {
-        "id": "bulwark",
-        "name": "수호",
-        "required": 2,
-        "trait": "resonance_bulwark",
-        "description": "가드 성공 → 3초간 피해 감소 +7%p · 재발동 5초"
-      },
-      {
-        "id": "insight",
-        "name": "통찰",
-        "required": 2,
-        "trait": "resonance_insight",
-        "description": "상성 파훼 성공 → 집중 16 획득 · 가드 10 회복 · 재발동 5초"
-      }
-    ],
-    "previewStats": [
-      "hp",
-      "strikePower",
-      "grabPower",
-      "counterPower",
-      "reach",
-      "grabReach",
-      "attackSpeed",
-      "speed",
-      "staminaRegen",
-      "guard",
-      "accuracy",
-      "evasion",
-      "armor",
-      "guardDamage",
-      "staminaCost",
-      "moveCost",
-      "tacticLag",
-      "focusGain"
-    ],
-    "specializeRank": 2,
-    "masterRank": 3,
-    "mobileBreakpoint": 760,
-    "slotLabels": [
-      "장비 1",
-      "장비 2",
-      "장비 3"
-    ]
-  },
-  "tactics": {
-    "focuses": [
-      {
-        "id": "strike",
-        "name": "타격",
-        "icon": "attack",
-        "color": "#a76642",
-        "beats": "grab",
-        "weak": "counter",
-        "range": "far",
-        "weights": {
-          "strike": 0.82,
-          "grab": 0.06,
-          "counter": 0,
-          "feint": 0.12
-        },
-        "short": "잡기 진입 차단",
-        "description": "잡기 준비를 타격으로 끊습니다. 기다리는 반격에는 취약합니다.",
-        "counterPlan": {
-          "focus": "counter",
-          "range": "auto",
-          "defense": "evade"
+  "races": [
+    {
+      "id": "human",
+      "name": "인간",
+      "tag": "균형 · 빠른 성장",
+      "description": "어느 길에도 잘 적응하는 에버돈의 모험가.",
+      "stats": [
+        {
+          "stat": "xpGain",
+          "op": "multiply",
+          "value": 1.1
         }
-      },
-      {
-        "id": "grab",
-        "name": "잡기",
-        "icon": "grip",
-        "color": "#536c57",
-        "beats": "counter",
-        "weak": "strike",
-        "range": "close",
-        "weights": {
-          "strike": 0.1,
-          "grab": 0.8,
-          "counter": 0,
-          "feint": 0.1
+      ],
+      "skin": "#e5bd91",
+      "hair": "#725039",
+      "overlay": null,
+      "scale": 1
+    },
+    {
+      "id": "elf",
+      "name": "엘프",
+      "tag": "긴 사거리 · 풍부한 마력",
+      "description": "숲의 감각으로 먼 표적을 노리지만 체력이 낮습니다.",
+      "stats": [
+        {
+          "stat": "range",
+          "op": "multiply",
+          "value": 1.12
         },
-        "short": "반격·가드 제압",
-        "description": "반격 대기와 가드를 무시합니다. 접근 중 타격에 끊길 수 있습니다.",
-        "counterPlan": {
-          "focus": "strike",
-          "range": "far",
-          "defense": "evade"
-        }
-      },
-      {
-        "id": "counter",
-        "name": "반격",
-        "icon": "shield",
-        "color": "#6f647e",
-        "beats": "strike",
-        "weak": "grab",
-        "range": "mid",
-        "weights": {
-          "strike": 0.1,
-          "grab": 0,
-          "counter": 0.78,
-          "feint": 0.12
+        {
+          "stat": "mp",
+          "op": "multiply",
+          "value": 1.16
         },
-        "short": "타격 받아치기",
-        "description": "타격을 받아쳐 끊습니다. 잡기와 속임수에는 빈틈을 드러냅니다.",
-        "counterPlan": {
-          "focus": "grab",
-          "range": "close",
-          "defense": "block"
+        {
+          "stat": "hp",
+          "op": "multiply",
+          "value": 0.92
         }
-      }
-    ],
-    "ranges": [
-      {
-        "id": "auto",
-        "name": "자동 간격",
-        "description": "타격은 길게, 잡기는 밀착, 반격은 교환 거리."
-      },
-      {
-        "id": "far",
-        "name": "긴 간격",
-        "description": "타격·회복에 유리. 잡기는 접근한 적만 노립니다."
-      },
-      {
-        "id": "mid",
-        "name": "교환 거리",
-        "description": "공격을 주고받는 간격. 반격을 맞추기 쉽습니다."
-      },
-      {
-        "id": "close",
-        "name": "밀착",
-        "description": "잡기가 닿는 거리. 타격과 가드 붕괴에 주의."
-      }
-    ],
-    "defenses": [
-      {
-        "id": "auto",
-        "name": "투사 기본 수비",
-        "description": "지시와 투사의 성격에 맞춰 수비합니다."
-      },
-      {
-        "id": "block",
-        "name": "가드",
-        "description": "타격 피해를 줄입니다. 잡기는 가드를 무시합니다."
-      },
-      {
-        "id": "evade",
-        "name": "회피",
-        "description": "기력을 써 피합니다. 공격 준비 중에는 회피율이 낮아집니다."
-      }
-    ],
-    "styleFocus": {
-      "strike": "strike",
-      "grapple": "grab",
-      "counter": "counter"
+      ],
+      "skin": "#e9d0a5",
+      "hair": "#d7be74",
+      "overlay": "elf_ears",
+      "scale": 1
     },
-    "focusBlend": 0.82,
-    "baitFeintShare": 0.46,
-    "recoverAttackChance": 0.2,
-    "recoverWait": 0.55,
-    "grabInterruptGrace": 0.15,
-    "commitEvadeScale": 0.45,
-    "commitBlockScale": 0.58,
-    "counterMissExposure": 0.65,
-    "clashFocus": 12,
-    "clashNotice": 3.5,
-    "clashCooldown": 0.7,
-    "historyVisible": 4,
-    "clashes": {
-      "strike": {
-        "beats": "grab",
-        "power": 1.28,
-        "expose": 1.0,
-        "interrupt": 0.5,
-        "name": "진입 차단"
+    {
+      "id": "dragon",
+      "name": "드래고뉴트",
+      "tag": "강한 기술 · 단단한 비늘",
+      "description": "용의 피가 기술을 강화하지만 걸음이 조금 느립니다.",
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "op": "multiply",
+          "value": 1.12
+        },
+        {
+          "stat": "defense",
+          "op": "add",
+          "value": 1.5
+        },
+        {
+          "stat": "speed",
+          "op": "multiply",
+          "value": 0.95
+        }
+      ],
+      "skin": "#c98c60",
+      "hair": "#774933",
+      "overlay": "dragon_horns",
+      "scale": 1.05
+    },
+    {
+      "id": "dwarf",
+      "name": "드워프",
+      "tag": "높은 체력 · 방어",
+      "description": "작고 강인한 산악 민족. 기동보다 생존을 택합니다.",
+      "stats": [
+        {
+          "stat": "hp",
+          "op": "multiply",
+          "value": 1.18
+        },
+        {
+          "stat": "defense",
+          "op": "add",
+          "value": 2
+        },
+        {
+          "stat": "speed",
+          "op": "multiply",
+          "value": 0.92
+        }
+      ],
+      "skin": "#d6af89",
+      "hair": "#a6957b",
+      "overlay": "dwarf_beard",
+      "scale": 0.92
+    },
+    {
+      "id": "beast",
+      "name": "수인",
+      "tag": "빠른 이동 · 연속 공격",
+      "description": "민첩한 사냥꾼. 마력이 적은 대신 공세가 빠릅니다.",
+      "stats": [
+        {
+          "stat": "speed",
+          "op": "multiply",
+          "value": 1.12
+        },
+        {
+          "stat": "attackSpeed",
+          "op": "multiply",
+          "value": 1.08
+        },
+        {
+          "stat": "mp",
+          "op": "multiply",
+          "value": 0.9
+        }
+      ],
+      "skin": "#d4ae83",
+      "hair": "#a76c42",
+      "overlay": "beast_ears",
+      "scale": 1
+    }
+  ],
+  "classes": [
+    {
+      "id": "warrior",
+      "name": "워리어",
+      "role": "딜·체력 균형 / 평타·기술 혼합",
+      "description": "검과 체력으로 전선을 지키는 근접 브루저.",
+      "icon": "attack",
+      "sprite": "warrior",
+      "cloth": "#68877c",
+      "accent": "#d5bd73",
+      "stats": {
+        "hp": 145,
+        "mp": 64,
+        "attack": 15,
+        "spell": 12,
+        "defense": 5,
+        "speed": 3.1,
+        "range": 1.2,
+        "attackInterval": 0.76
       },
-      "grab": {
-        "beats": "counter",
-        "power": 1.3,
-        "expose": 1.1,
-        "interrupt": 0.5,
-        "name": "반격 제압"
+      "growth": {
+        "hp": 12,
+        "mp": 3,
+        "attack": 1.6,
+        "spell": 1.1,
+        "defense": 0.35
       },
-      "counter": {
-        "beats": "strike",
-        "power": 1.12,
-        "expose": 0.8,
-        "interrupt": 0.5,
-        "name": "타격 받아치기"
-      }
+      "basic": {
+        "kind": "melee",
+        "sound": "sword",
+        "effect": "slash",
+        "coefficient": 1
+      },
+      "skills": [
+        "sweeping_blade",
+        "war_cry",
+        "runic_wave",
+        "steel_rush"
+      ],
+      "starter": "iron_sword",
+      "branches": [
+        "gladiator",
+        "berserker",
+        "rune"
+      ],
+      "backSprite": "warrior_back"
     },
-    "callDescriptions": {
-      "attack": "주력 공격 · 기력 소모↑",
-      "bait": "속임수로 빈틈 유도",
-      "recover": "공격↓ · 기력 회복↑"
+    {
+      "id": "archer",
+      "name": "아처",
+      "role": "높은 평타 피해 / 낮은 체력",
+      "description": "멀리서 화살을 쏘고 간격을 지키는 사냥꾼.",
+      "icon": "bow",
+      "sprite": "archer",
+      "cloth": "#638353",
+      "accent": "#dac08a",
+      "stats": {
+        "hp": 92,
+        "mp": 54,
+        "attack": 20,
+        "spell": 10,
+        "defense": 2,
+        "speed": 3.1,
+        "range": 5.2,
+        "attackInterval": 0.7
+      },
+      "growth": {
+        "hp": 8,
+        "mp": 2,
+        "attack": 2,
+        "spell": 0.8,
+        "defense": 0.2
+      },
+      "basic": {
+        "kind": "projectile",
+        "projectile": "arrow",
+        "sound": "arrow",
+        "coefficient": 1
+      },
+      "skills": [
+        "arrow_rain",
+        "hunter_mark",
+        "piercing_shot",
+        "wind_step"
+      ],
+      "starter": "hunting_bow",
+      "branches": [
+        "marksman",
+        "ranger",
+        "venom"
+      ],
+      "backSprite": "archer_back"
     },
-    "defaults": {
-      "range": "auto",
-      "defense": "auto"
+    {
+      "id": "magician",
+      "name": "매지션",
+      "role": "매우 높은 기술 피해 / 낮은 체력·이동",
+      "description": "마력을 관리하며 넓은 범위에 주문을 펼칩니다.",
+      "icon": "staff",
+      "sprite": "magician",
+      "cloth": "#8b7397",
+      "accent": "#d9b965",
+      "stats": {
+        "hp": 78,
+        "mp": 108,
+        "attack": 11,
+        "spell": 28,
+        "defense": 1.5,
+        "speed": 2.65,
+        "range": 4.5,
+        "attackInterval": 1.05,
+        "manaRegen": 6
+      },
+      "growth": {
+        "hp": 7,
+        "mp": 6,
+        "attack": 0.7,
+        "spell": 2.7,
+        "defense": 0.18
+      },
+      "basic": {
+        "kind": "projectile",
+        "projectile": "spark",
+        "sound": "magic",
+        "coefficient": 1
+      },
+      "skills": [
+        "fire_orb",
+        "frost_nova",
+        "arcane_chain",
+        "meteor"
+      ],
+      "starter": "apprentice_staff",
+      "branches": [
+        "pyromancer",
+        "frost",
+        "arcanist"
+      ],
+      "backSprite": "magician_back"
     },
-    "exposedPower": 1.18,
-    "phaseLabels": {
-      "strike": "타격 준비",
-      "grab": "잡기 진입",
-      "counter": "반격 대기",
-      "feint": "속임수"
+    {
+      "id": "guardian",
+      "name": "가디언",
+      "role": "높은 체력 / 기술 중심 / 느린 이동",
+      "description": "방패와 성역 기술로 버티며 반격하는 수호자.",
+      "icon": "shield",
+      "sprite": "guardian",
+      "cloth": "#82939a",
+      "accent": "#d9bb75",
+      "stats": {
+        "hp": 210,
+        "mp": 82,
+        "attack": 11,
+        "spell": 15,
+        "defense": 10,
+        "speed": 2.5,
+        "range": 1.3,
+        "attackInterval": 0.96,
+        "manaRegen": 5
+      },
+      "growth": {
+        "hp": 17,
+        "mp": 4,
+        "attack": 1,
+        "spell": 1.4,
+        "defense": 0.65
+      },
+      "basic": {
+        "kind": "melee",
+        "sound": "shield",
+        "effect": "slash",
+        "coefficient": 1
+      },
+      "skills": [
+        "shield_bash",
+        "sacred_ground",
+        "judgment",
+        "iron_oath"
+      ],
+      "starter": "oath_mace",
+      "branches": [
+        "fortress",
+        "paladin",
+        "avenger"
+      ],
+      "backSprite": "guardian_back"
+    }
+  ],
+  "skills": {
+    "sweeping_blade": {
+      "name": "회전 베기",
+      "icon": "attack",
+      "unlock": 1,
+      "kind": "nova",
+      "scale": "attack",
+      "coefficient": 2.2,
+      "radius": 1.8,
+      "range": 1.8,
+      "cooldown": 5,
+      "cost": 12,
+      "color": "#e0ca90",
+      "sound": "sword"
+    },
+    "war_cry": {
+      "name": "전장의 함성",
+      "icon": "heart",
+      "unlock": 3,
+      "kind": "self",
+      "cooldown": 10,
+      "cost": 15,
+      "heal": 0.12,
+      "buff": {
+        "duration": 5,
+        "stats": [
+          {
+            "stat": "basicDamage",
+            "op": "multiply",
+            "value": 1.2
+          }
+        ]
+      },
+      "conditionHp": 0.8,
+      "color": "#d9af6d",
+      "sound": "buff"
+    },
+    "runic_wave": {
+      "name": "룬의 파동",
+      "icon": "staff",
+      "unlock": 6,
+      "kind": "projectile",
+      "projectile": "rune",
+      "scale": "attack",
+      "coefficient": 2.4,
+      "range": 5,
+      "radius": 1.1,
+      "cooldown": 7,
+      "cost": 18,
+      "color": "#9fcac2",
+      "sound": "magic"
+    },
+    "steel_rush": {
+      "name": "강철 충격",
+      "icon": "shield",
+      "unlock": 10,
+      "kind": "nova",
+      "scale": "attack",
+      "coefficient": 3.3,
+      "radius": 2.4,
+      "range": 2.4,
+      "cooldown": 8,
+      "cost": 21,
+      "knockback": 1.2,
+      "color": "#d5ddd3",
+      "sound": "heavy"
+    },
+    "arrow_rain": {
+      "name": "화살비",
+      "icon": "bow",
+      "unlock": 1,
+      "kind": "targetArea",
+      "scale": "attack",
+      "coefficient": 2,
+      "range": 5.7,
+      "radius": 1.6,
+      "cooldown": 7,
+      "cost": 12,
+      "color": "#e2d39c",
+      "sound": "arrow"
+    },
+    "hunter_mark": {
+      "name": "사냥꾼의 눈",
+      "icon": "signature",
+      "unlock": 3,
+      "kind": "self",
+      "cooldown": 11,
+      "cost": 10,
+      "buff": {
+        "duration": 6,
+        "stats": [
+          {
+            "stat": "crit",
+            "op": "add",
+            "value": 0.2
+          },
+          {
+            "stat": "basicDamage",
+            "op": "multiply",
+            "value": 1.15
+          }
+        ]
+      },
+      "color": "#aac57d",
+      "sound": "buff"
+    },
+    "piercing_shot": {
+      "name": "관통 사격",
+      "icon": "bow",
+      "unlock": 6,
+      "kind": "projectile",
+      "projectile": "arrow",
+      "scale": "attack",
+      "coefficient": 3.1,
+      "range": 6,
+      "radius": 0.9,
+      "cooldown": 8,
+      "cost": 15,
+      "pierce": 3,
+      "color": "#f5ddb2",
+      "sound": "arrow"
+    },
+    "wind_step": {
+      "name": "바람의 가호",
+      "icon": "bait",
+      "unlock": 10,
+      "kind": "self",
+      "cooldown": 12,
+      "cost": 13,
+      "buff": {
+        "duration": 6,
+        "stats": [
+          {
+            "stat": "speed",
+            "op": "multiply",
+            "value": 1.25
+          },
+          {
+            "stat": "attackSpeed",
+            "op": "multiply",
+            "value": 1.2
+          }
+        ]
+      },
+      "color": "#c8ddc1",
+      "sound": "buff"
+    },
+    "fire_orb": {
+      "name": "화염구",
+      "icon": "staff",
+      "unlock": 1,
+      "kind": "projectile",
+      "projectile": "fire",
+      "scale": "spell",
+      "coefficient": 2.2,
+      "range": 5.5,
+      "radius": 1.5,
+      "cooldown": 3.8,
+      "cost": 18,
+      "burn": true,
+      "color": "#edb16f",
+      "sound": "fire"
+    },
+    "frost_nova": {
+      "name": "서리 고리",
+      "icon": "signature",
+      "unlock": 3,
+      "kind": "nova",
+      "scale": "spell",
+      "coefficient": 1.7,
+      "radius": 2.8,
+      "range": 2.8,
+      "cooldown": 6,
+      "cost": 20,
+      "slow": true,
+      "color": "#b4dce2",
+      "sound": "ice"
+    },
+    "arcane_chain": {
+      "name": "비전 연쇄",
+      "icon": "staff",
+      "unlock": 6,
+      "kind": "chain",
+      "scale": "spell",
+      "coefficient": 2,
+      "range": 5.8,
+      "chain": 4,
+      "cooldown": 5.5,
+      "cost": 22,
+      "color": "#d1bbe8",
+      "sound": "magic"
+    },
+    "meteor": {
+      "name": "낙성",
+      "icon": "signature",
+      "unlock": 10,
+      "kind": "targetArea",
+      "scale": "spell",
+      "coefficient": 4,
+      "range": 6,
+      "radius": 2.5,
+      "cooldown": 9,
+      "cost": 32,
+      "burn": true,
+      "color": "#efad78",
+      "sound": "heavy"
+    },
+    "shield_bash": {
+      "name": "방패 강타",
+      "icon": "shield",
+      "unlock": 1,
+      "kind": "nova",
+      "scale": "spell",
+      "defenseScale": 1.4,
+      "coefficient": 1.8,
+      "radius": 1.7,
+      "range": 1.7,
+      "cooldown": 4.8,
+      "cost": 12,
+      "knockback": 0.65,
+      "color": "#e4d3a2",
+      "sound": "shield"
+    },
+    "sacred_ground": {
+      "name": "성역",
+      "icon": "heart",
+      "unlock": 3,
+      "kind": "self",
+      "cooldown": 10,
+      "cost": 18,
+      "heal": 0.2,
+      "shield": 0.08,
+      "conditionHp": 0.8,
+      "color": "#f0e2ac",
+      "sound": "heal"
+    },
+    "judgment": {
+      "name": "빛의 심판",
+      "icon": "signature",
+      "unlock": 6,
+      "kind": "targetArea",
+      "scale": "spell",
+      "defenseScale": 1.8,
+      "coefficient": 2.5,
+      "range": 4.5,
+      "radius": 2,
+      "cooldown": 7,
+      "cost": 20,
+      "color": "#f6e7b9",
+      "sound": "magic"
+    },
+    "iron_oath": {
+      "name": "강철 서약",
+      "icon": "shield",
+      "unlock": 10,
+      "kind": "self",
+      "cooldown": 12,
+      "cost": 19,
+      "shield": 0.25,
+      "buff": {
+        "duration": 6,
+        "stats": [
+          {
+            "stat": "damageReduction",
+            "op": "add",
+            "value": 0.2
+          },
+          {
+            "stat": "thorns",
+            "op": "add",
+            "value": 8
+          }
+        ]
+      },
+      "color": "#d8dccf",
+      "sound": "buff"
     }
   },
-  "statDisplayProducts": {
-    "strikePower": [
-      "power",
-      "strikePower"
+  "branches": {
+    "gladiator": {
+      "id": "gladiator",
+      "name": "검투사",
+      "class": "warrior",
+      "description": "평타와 치명타로 꾸준히 밀어붙입니다."
+    },
+    "berserker": {
+      "id": "berserker",
+      "name": "버서커",
+      "class": "warrior",
+      "description": "생존 여유를 화력과 흡혈로 바꿉니다."
+    },
+    "rune": {
+      "id": "rune",
+      "name": "룬 기사",
+      "class": "warrior",
+      "description": "마력을 순환시켜 기술 전투에 집중합니다."
+    },
+    "marksman": {
+      "id": "marksman",
+      "name": "명사수",
+      "class": "archer",
+      "description": "먼 거리에서 치명적인 평타를 노립니다."
+    },
+    "ranger": {
+      "id": "ranger",
+      "name": "추적자",
+      "class": "archer",
+      "description": "화살을 늘려 무리를 빠르게 정리합니다."
+    },
+    "venom": {
+      "id": "venom",
+      "name": "독 사냥꾼",
+      "class": "archer",
+      "description": "독과 둔화로 추격을 끊고 누적 피해를 줍니다."
+    },
+    "pyromancer": {
+      "id": "pyromancer",
+      "name": "화염술사",
+      "class": "magician",
+      "description": "화염 주문과 화상으로 무리를 녹입니다."
+    },
+    "frost": {
+      "id": "frost",
+      "name": "빙결술사",
+      "class": "magician",
+      "description": "느려진 적을 제어하고 보호막으로 버팁니다."
+    },
+    "arcanist": {
+      "id": "arcanist",
+      "name": "비전술사",
+      "class": "magician",
+      "description": "마력 회복과 메아리로 주문을 연속 사용합니다."
+    },
+    "fortress": {
+      "id": "fortress",
+      "name": "철벽",
+      "class": "guardian",
+      "description": "막강한 체력과 보호막으로 전선을 지킵니다."
+    },
+    "paladin": {
+      "id": "paladin",
+      "name": "성기사",
+      "class": "guardian",
+      "description": "성역과 심판의 힘을 키우는 기술 수호자."
+    },
+    "avenger": {
+      "id": "avenger",
+      "name": "응징자",
+      "class": "guardian",
+      "description": "맞을수록 반사와 근접 화력이 강해집니다."
+    }
+  },
+  "talents": [
+    {
+      "id": "gladiator_1",
+      "name": "검의 기본",
+      "branch": "gladiator",
+      "class": "warrior",
+      "tier": 0,
+      "maxRank": 3,
+      "requires": 0,
+      "cost": 1,
+      "stats": [
+        {
+          "stat": "basicDamage",
+          "op": "multiply",
+          "value": 1.09
+        }
+      ],
+      "description": "평타 피해 +9%",
+      "capstone": false
+    },
+    {
+      "id": "gladiator_2",
+      "name": "검의 연계",
+      "branch": "gladiator",
+      "class": "warrior",
+      "tier": 1,
+      "maxRank": 2,
+      "requires": 2,
+      "cost": 1,
+      "stats": [
+        {
+          "stat": "attackSpeed",
+          "op": "multiply",
+          "value": 1.07
+        }
+      ],
+      "description": "공격 속도 +7%",
+      "capstone": false
+    },
+    {
+      "id": "gladiator_3",
+      "name": "가벼운 갑옷",
+      "branch": "gladiator",
+      "class": "warrior",
+      "tier": 2,
+      "maxRank": 2,
+      "requires": 4,
+      "cost": 1,
+      "stats": [
+        {
+          "stat": "crit",
+          "op": "add",
+          "value": 0.05
+        },
+        {
+          "stat": "hp",
+          "op": "multiply",
+          "value": 0.96
+        }
+      ],
+      "description": "치명타 +5%p / 최대 체력 -4%",
+      "capstone": false
+    },
+    {
+      "id": "gladiator_4",
+      "name": "칼날의 원",
+      "branch": "gladiator",
+      "class": "warrior",
+      "tier": 3,
+      "maxRank": 1,
+      "requires": 6,
+      "cost": 1,
+      "stats": [
+        {
+          "stat": "cleave",
+          "op": "add",
+          "value": 0.45
+        }
+      ],
+      "description": "평타가 주변에 45% 피해",
+      "capstone": true
+    },
+    {
+      "id": "berserker_1",
+      "name": "맹공",
+      "branch": "berserker",
+      "class": "warrior",
+      "tier": 0,
+      "maxRank": 3,
+      "requires": 0,
+      "cost": 1,
+      "stats": [
+        {
+          "stat": "attack",
+          "op": "multiply",
+          "value": 1.08
+        }
+      ],
+      "description": "공격력 +8%",
+      "capstone": false
+    },
+    {
+      "id": "berserker_2",
+      "name": "피의 호흡",
+      "branch": "berserker",
+      "class": "warrior",
+      "tier": 1,
+      "maxRank": 2,
+      "requires": 2,
+      "cost": 1,
+      "stats": [
+        {
+          "stat": "lifesteal",
+          "op": "add",
+          "value": 0.025
+        }
+      ],
+      "description": "흡혈 +2.5%p",
+      "capstone": false
+    },
+    {
+      "id": "berserker_3",
+      "name": "격노",
+      "branch": "berserker",
+      "class": "warrior",
+      "tier": 2,
+      "maxRank": 2,
+      "requires": 4,
+      "cost": 1,
+      "stats": [
+        {
+          "stat": "lowHpDamage",
+          "op": "add",
+          "value": 0.12
+        },
+        {
+          "stat": "defense",
+          "op": "multiply",
+          "value": 0.92
+        }
+      ],
+      "description": "체력 절반 아래 화력 +12% / 방어 -8%",
+      "capstone": false
+    },
+    {
+      "id": "berserker_4",
+      "name": "불굴의 피",
+      "branch": "berserker",
+      "class": "warrior",
+      "tier": 3,
+      "maxRank": 1,
+      "requires": 6,
+      "cost": 1,
+      "stats": [
+        {
+          "stat": "lifesteal",
+          "op": "add",
+          "value": 0.08
+        },
+        {
+          "stat": "lifeOnKill",
+          "op": "add",
+          "value": 0.04
+        }
+      ],
+      "description": "흡혈 +8%p / 처치 시 최대 체력 4% 회복",
+      "capstone": true
+    },
+    {
+      "id": "rune_1",
+      "name": "룬 각인",
+      "branch": "rune",
+      "class": "warrior",
+      "tier": 0,
+      "maxRank": 3,
+      "requires": 0,
+      "cost": 1,
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "op": "multiply",
+          "value": 1.09
+        }
+      ],
+      "description": "기술 피해 +9%",
+      "capstone": false
+    },
+    {
+      "id": "rune_2",
+      "name": "마력 순환",
+      "branch": "rune",
+      "class": "warrior",
+      "tier": 1,
+      "maxRank": 2,
+      "requires": 2,
+      "cost": 1,
+      "stats": [
+        {
+          "stat": "manaOnHit",
+          "op": "add",
+          "value": 1.2
+        }
+      ],
+      "description": "평타 적중 시 마력 1.2 회복",
+      "capstone": false
+    },
+    {
+      "id": "rune_3",
+      "name": "주문의 무게",
+      "branch": "rune",
+      "class": "warrior",
+      "tier": 2,
+      "maxRank": 2,
+      "requires": 4,
+      "cost": 1,
+      "stats": [
+        {
+          "stat": "cooldownRate",
+          "op": "multiply",
+          "value": 0.92
+        },
+        {
+          "stat": "basicDamage",
+          "op": "multiply",
+          "value": 0.96
+        }
+      ],
+      "description": "기술 재사용 -8% / 평타 피해 -4%",
+      "capstone": false
+    },
+    {
+      "id": "rune_4",
+      "name": "메아리 검",
+      "branch": "rune",
+      "class": "warrior",
+      "tier": 3,
+      "maxRank": 1,
+      "requires": 6,
+      "cost": 1,
+      "stats": [
+        {
+          "stat": "skillEcho",
+          "op": "add",
+          "value": 0.4
+        }
+      ],
+      "description": "피해 기술이 40% 확률로 메아리 발동",
+      "capstone": true
+    },
+    {
+      "id": "marksman_1",
+      "name": "정밀 사격",
+      "branch": "marksman",
+      "class": "archer",
+      "tier": 0,
+      "maxRank": 3,
+      "requires": 0,
+      "cost": 1,
+      "stats": [
+        {
+          "stat": "basicDamage",
+          "op": "multiply",
+          "value": 1.1
+        }
+      ],
+      "description": "평타 피해 +10%",
+      "capstone": false
+    },
+    {
+      "id": "marksman_2",
+      "name": "먼 시야",
+      "branch": "marksman",
+      "class": "archer",
+      "tier": 1,
+      "maxRank": 2,
+      "requires": 2,
+      "cost": 1,
+      "stats": [
+        {
+          "stat": "range",
+          "op": "add",
+          "value": 0.35
+        }
+      ],
+      "description": "공격 거리 +0.35",
+      "capstone": false
+    },
+    {
+      "id": "marksman_3",
+      "name": "저격 자세",
+      "branch": "marksman",
+      "class": "archer",
+      "tier": 2,
+      "maxRank": 2,
+      "requires": 4,
+      "cost": 1,
+      "stats": [
+        {
+          "stat": "crit",
+          "op": "add",
+          "value": 0.06
+        },
+        {
+          "stat": "speed",
+          "op": "multiply",
+          "value": 0.97
+        }
+      ],
+      "description": "치명타 +6%p / 이동 속도 -3%",
+      "capstone": false
+    },
+    {
+      "id": "marksman_4",
+      "name": "급소 관통",
+      "branch": "marksman",
+      "class": "archer",
+      "tier": 3,
+      "maxRank": 1,
+      "requires": 6,
+      "cost": 1,
+      "stats": [
+        {
+          "stat": "critDamage",
+          "op": "add",
+          "value": 0.6
+        },
+        {
+          "stat": "crit",
+          "op": "add",
+          "value": 0.12
+        }
+      ],
+      "description": "치명타 피해 +0.6배 / 확률 +12%p",
+      "capstone": true
+    },
+    {
+      "id": "ranger_1",
+      "name": "빠른 시위",
+      "branch": "ranger",
+      "class": "archer",
+      "tier": 0,
+      "maxRank": 3,
+      "requires": 0,
+      "cost": 1,
+      "stats": [
+        {
+          "stat": "attackSpeed",
+          "op": "multiply",
+          "value": 1.08
+        }
+      ],
+      "description": "공격 속도 +8%",
+      "capstone": false
+    },
+    {
+      "id": "ranger_2",
+      "name": "추격자의 발",
+      "branch": "ranger",
+      "class": "archer",
+      "tier": 1,
+      "maxRank": 2,
+      "requires": 2,
+      "cost": 1,
+      "stats": [
+        {
+          "stat": "speed",
+          "op": "multiply",
+          "value": 1.06
+        }
+      ],
+      "description": "이동 속도 +6%",
+      "capstone": false
+    },
+    {
+      "id": "ranger_3",
+      "name": "분산 사격",
+      "branch": "ranger",
+      "class": "archer",
+      "tier": 2,
+      "maxRank": 2,
+      "requires": 4,
+      "cost": 1,
+      "stats": [
+        {
+          "stat": "extraShots",
+          "op": "add",
+          "value": 1
+        },
+        {
+          "stat": "basicDamage",
+          "op": "multiply",
+          "value": 0.91
+        }
+      ],
+      "description": "추가 화살 +1 / 평타 피해 -9%",
+      "capstone": false
+    },
+    {
+      "id": "ranger_4",
+      "name": "쏟아지는 화살",
+      "branch": "ranger",
+      "class": "archer",
+      "tier": 3,
+      "maxRank": 1,
+      "requires": 6,
+      "cost": 1,
+      "stats": [
+        {
+          "stat": "extraShots",
+          "op": "add",
+          "value": 1
+        },
+        {
+          "stat": "manaOnHit",
+          "op": "add",
+          "value": 1
+        }
+      ],
+      "description": "추가 화살 +1 / 적중 마력 +1",
+      "capstone": true
+    },
+    {
+      "id": "venom_1",
+      "name": "독 바르기",
+      "branch": "venom",
+      "class": "archer",
+      "tier": 0,
+      "maxRank": 3,
+      "requires": 0,
+      "cost": 1,
+      "stats": [
+        {
+          "stat": "poisonChance",
+          "op": "add",
+          "value": 0.16
+        }
+      ],
+      "description": "중독 확률 +16%p",
+      "capstone": false
+    },
+    {
+      "id": "venom_2",
+      "name": "늪의 발걸음",
+      "branch": "venom",
+      "class": "archer",
+      "tier": 1,
+      "maxRank": 2,
+      "requires": 2,
+      "cost": 1,
+      "stats": [
+        {
+          "stat": "slowChance",
+          "op": "add",
+          "value": 0.1
+        }
+      ],
+      "description": "둔화 확률 +10%p",
+      "capstone": false
+    },
+    {
+      "id": "venom_3",
+      "name": "지독한 독",
+      "branch": "venom",
+      "class": "archer",
+      "tier": 2,
+      "maxRank": 2,
+      "requires": 4,
+      "cost": 1,
+      "stats": [
+        {
+          "stat": "poisonDamage",
+          "op": "multiply",
+          "value": 1.25
+        },
+        {
+          "stat": "attack",
+          "op": "multiply",
+          "value": 0.96
+        }
+      ],
+      "description": "중독 피해 +25% / 공격력 -4%",
+      "capstone": false
+    },
+    {
+      "id": "venom_4",
+      "name": "맹독의 사냥",
+      "branch": "venom",
+      "class": "archer",
+      "tier": 3,
+      "maxRank": 1,
+      "requires": 6,
+      "cost": 1,
+      "stats": [
+        {
+          "stat": "poisonChance",
+          "op": "add",
+          "value": 0.5
+        },
+        {
+          "stat": "poisonDamage",
+          "op": "multiply",
+          "value": 1.7
+        }
+      ],
+      "description": "중독 확률 +50%p / 중독 피해 +70%",
+      "capstone": true
+    },
+    {
+      "id": "pyromancer_1",
+      "name": "화염 학파",
+      "branch": "pyromancer",
+      "class": "magician",
+      "tier": 0,
+      "maxRank": 3,
+      "requires": 0,
+      "cost": 1,
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "op": "multiply",
+          "value": 1.1
+        }
+      ],
+      "description": "기술 피해 +10%",
+      "capstone": false
+    },
+    {
+      "id": "pyromancer_2",
+      "name": "불씨",
+      "branch": "pyromancer",
+      "class": "magician",
+      "tier": 1,
+      "maxRank": 2,
+      "requires": 2,
+      "cost": 1,
+      "stats": [
+        {
+          "stat": "burnChance",
+          "op": "add",
+          "value": 0.16
+        }
+      ],
+      "description": "화상 확률 +16%p",
+      "capstone": false
+    },
+    {
+      "id": "pyromancer_3",
+      "name": "과열",
+      "branch": "pyromancer",
+      "class": "magician",
+      "tier": 2,
+      "maxRank": 2,
+      "requires": 4,
+      "cost": 1,
+      "stats": [
+        {
+          "stat": "spell",
+          "op": "multiply",
+          "value": 1.12
+        },
+        {
+          "stat": "hp",
+          "op": "multiply",
+          "value": 0.95
+        }
+      ],
+      "description": "주문력 +12% / 최대 체력 -5%",
+      "capstone": false
+    },
+    {
+      "id": "pyromancer_4",
+      "name": "불꽃의 왕관",
+      "branch": "pyromancer",
+      "class": "magician",
+      "tier": 3,
+      "maxRank": 1,
+      "requires": 6,
+      "cost": 1,
+      "stats": [
+        {
+          "stat": "burnChance",
+          "op": "add",
+          "value": 0.5
+        },
+        {
+          "stat": "burnDamage",
+          "op": "multiply",
+          "value": 1.8
+        }
+      ],
+      "description": "화상 확률 +50%p / 화상 피해 +80%",
+      "capstone": true
+    },
+    {
+      "id": "frost_1",
+      "name": "서리 감각",
+      "branch": "frost",
+      "class": "magician",
+      "tier": 0,
+      "maxRank": 3,
+      "requires": 0,
+      "cost": 1,
+      "stats": [
+        {
+          "stat": "slowChance",
+          "op": "add",
+          "value": 0.15
+        }
+      ],
+      "description": "둔화 확률 +15%p",
+      "capstone": false
+    },
+    {
+      "id": "frost_2",
+      "name": "얼음 보호",
+      "branch": "frost",
+      "class": "magician",
+      "tier": 1,
+      "maxRank": 2,
+      "requires": 2,
+      "cost": 1,
+      "stats": [
+        {
+          "stat": "shieldOnSkill",
+          "op": "add",
+          "value": 5
+        }
+      ],
+      "description": "기술 사용 시 보호막 +5",
+      "capstone": false
+    },
+    {
+      "id": "frost_3",
+      "name": "얼음 장벽",
+      "branch": "frost",
+      "class": "magician",
+      "tier": 2,
+      "maxRank": 2,
+      "requires": 4,
+      "cost": 1,
+      "stats": [
+        {
+          "stat": "defense",
+          "op": "add",
+          "value": 2
+        },
+        {
+          "stat": "speed",
+          "op": "multiply",
+          "value": 0.97
+        }
+      ],
+      "description": "방어력 +2 / 이동 속도 -3%",
+      "capstone": false
+    },
+    {
+      "id": "frost_4",
+      "name": "겨울의 심장",
+      "branch": "frost",
+      "class": "magician",
+      "tier": 3,
+      "maxRank": 1,
+      "requires": 6,
+      "cost": 1,
+      "stats": [
+        {
+          "stat": "shieldOnSkill",
+          "op": "add",
+          "value": 18
+        },
+        {
+          "stat": "slowChance",
+          "op": "add",
+          "value": 0.25
+        }
+      ],
+      "description": "기술 보호막 +18 / 둔화 확률 +25%p",
+      "capstone": true
+    },
+    {
+      "id": "arcanist_1",
+      "name": "마력의 샘",
+      "branch": "arcanist",
+      "class": "magician",
+      "tier": 0,
+      "maxRank": 3,
+      "requires": 0,
+      "cost": 1,
+      "stats": [
+        {
+          "stat": "manaRegen",
+          "op": "add",
+          "value": 0.9
+        }
+      ],
+      "description": "마력 회복 +0.9/초",
+      "capstone": false
+    },
+    {
+      "id": "arcanist_2",
+      "name": "빠른 시전",
+      "branch": "arcanist",
+      "class": "magician",
+      "tier": 1,
+      "maxRank": 2,
+      "requires": 2,
+      "cost": 1,
+      "stats": [
+        {
+          "stat": "cooldownRate",
+          "op": "multiply",
+          "value": 0.94
+        }
+      ],
+      "description": "기술 재사용 -6%",
+      "capstone": false
+    },
+    {
+      "id": "arcanist_3",
+      "name": "비전 집중",
+      "branch": "arcanist",
+      "class": "magician",
+      "tier": 2,
+      "maxRank": 2,
+      "requires": 4,
+      "cost": 1,
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "op": "multiply",
+          "value": 1.12
+        },
+        {
+          "stat": "basicDamage",
+          "op": "multiply",
+          "value": 0.93
+        }
+      ],
+      "description": "기술 피해 +12% / 평타 피해 -7%",
+      "capstone": false
+    },
+    {
+      "id": "arcanist_4",
+      "name": "이중 시전",
+      "branch": "arcanist",
+      "class": "magician",
+      "tier": 3,
+      "maxRank": 1,
+      "requires": 6,
+      "cost": 1,
+      "stats": [
+        {
+          "stat": "skillEcho",
+          "op": "add",
+          "value": 0.5
+        }
+      ],
+      "description": "피해 기술이 50% 확률로 메아리 발동",
+      "capstone": true
+    },
+    {
+      "id": "fortress_1",
+      "name": "강인함",
+      "branch": "fortress",
+      "class": "guardian",
+      "tier": 0,
+      "maxRank": 3,
+      "requires": 0,
+      "cost": 1,
+      "stats": [
+        {
+          "stat": "hp",
+          "op": "multiply",
+          "value": 1.09
+        }
+      ],
+      "description": "최대 체력 +9%",
+      "capstone": false
+    },
+    {
+      "id": "fortress_2",
+      "name": "방패 단련",
+      "branch": "fortress",
+      "class": "guardian",
+      "tier": 1,
+      "maxRank": 2,
+      "requires": 2,
+      "cost": 1,
+      "stats": [
+        {
+          "stat": "defense",
+          "op": "add",
+          "value": 1.8
+        }
+      ],
+      "description": "방어력 +1.8",
+      "capstone": false
+    },
+    {
+      "id": "fortress_3",
+      "name": "중갑 서약",
+      "branch": "fortress",
+      "class": "guardian",
+      "tier": 2,
+      "maxRank": 2,
+      "requires": 4,
+      "cost": 1,
+      "stats": [
+        {
+          "stat": "damageReduction",
+          "op": "add",
+          "value": 0.045
+        },
+        {
+          "stat": "speed",
+          "op": "multiply",
+          "value": 0.97
+        }
+      ],
+      "description": "받는 피해 -4.5% / 이동 속도 -3%",
+      "capstone": false
+    },
+    {
+      "id": "fortress_4",
+      "name": "움직이는 성채",
+      "branch": "fortress",
+      "class": "guardian",
+      "tier": 3,
+      "maxRank": 1,
+      "requires": 6,
+      "cost": 1,
+      "stats": [
+        {
+          "stat": "shieldOnSkill",
+          "op": "add",
+          "value": 25
+        },
+        {
+          "stat": "damageReduction",
+          "op": "add",
+          "value": 0.1
+        }
+      ],
+      "description": "기술 보호막 +25 / 받는 피해 -10%",
+      "capstone": true
+    },
+    {
+      "id": "paladin_1",
+      "name": "성스러운 힘",
+      "branch": "paladin",
+      "class": "guardian",
+      "tier": 0,
+      "maxRank": 3,
+      "requires": 0,
+      "cost": 1,
+      "stats": [
+        {
+          "stat": "spell",
+          "op": "multiply",
+          "value": 1.1
+        }
+      ],
+      "description": "주문력 +10%",
+      "capstone": false
+    },
+    {
+      "id": "paladin_2",
+      "name": "마력 기도",
+      "branch": "paladin",
+      "class": "guardian",
+      "tier": 1,
+      "maxRank": 2,
+      "requires": 2,
+      "cost": 1,
+      "stats": [
+        {
+          "stat": "manaRegen",
+          "op": "add",
+          "value": 0.8
+        }
+      ],
+      "description": "마력 회복 +0.8/초",
+      "capstone": false
+    },
+    {
+      "id": "paladin_3",
+      "name": "엄숙한 심판",
+      "branch": "paladin",
+      "class": "guardian",
+      "tier": 2,
+      "maxRank": 2,
+      "requires": 4,
+      "cost": 1,
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "op": "multiply",
+          "value": 1.13
+        },
+        {
+          "stat": "attackSpeed",
+          "op": "multiply",
+          "value": 0.96
+        }
+      ],
+      "description": "기술 피해 +13% / 공격 속도 -4%",
+      "capstone": false
+    },
+    {
+      "id": "paladin_4",
+      "name": "빛의 서약",
+      "branch": "paladin",
+      "class": "guardian",
+      "tier": 3,
+      "maxRank": 1,
+      "requires": 6,
+      "cost": 1,
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "op": "multiply",
+          "value": 1.3
+        },
+        {
+          "stat": "lifeOnKill",
+          "op": "add",
+          "value": 0.05
+        }
+      ],
+      "description": "기술 피해 +30% / 처치 시 체력 5% 회복",
+      "capstone": true
+    },
+    {
+      "id": "avenger_1",
+      "name": "응징의 갑주",
+      "branch": "avenger",
+      "class": "guardian",
+      "tier": 0,
+      "maxRank": 3,
+      "requires": 0,
+      "cost": 1,
+      "stats": [
+        {
+          "stat": "thorns",
+          "op": "add",
+          "value": 2.5
+        }
+      ],
+      "description": "근접 반사 피해 +2.5",
+      "capstone": false
+    },
+    {
+      "id": "avenger_2",
+      "name": "전투 회복",
+      "branch": "avenger",
+      "class": "guardian",
+      "tier": 1,
+      "maxRank": 2,
+      "requires": 2,
+      "cost": 1,
+      "stats": [
+        {
+          "stat": "hpRegen",
+          "op": "add",
+          "value": 0.6
+        }
+      ],
+      "description": "체력 회복 +0.6/초",
+      "capstone": false
+    },
+    {
+      "id": "avenger_3",
+      "name": "가시의 맹세",
+      "branch": "avenger",
+      "class": "guardian",
+      "tier": 2,
+      "maxRank": 2,
+      "requires": 4,
+      "cost": 1,
+      "stats": [
+        {
+          "stat": "thorns",
+          "op": "add",
+          "value": 4
+        },
+        {
+          "stat": "mp",
+          "op": "multiply",
+          "value": 0.96
+        }
+      ],
+      "description": "근접 반사 피해 +4 / 최대 마력 -4%",
+      "capstone": false
+    },
+    {
+      "id": "avenger_4",
+      "name": "불패의 방패",
+      "branch": "avenger",
+      "class": "guardian",
+      "tier": 3,
+      "maxRank": 1,
+      "requires": 6,
+      "cost": 1,
+      "stats": [
+        {
+          "stat": "thorns",
+          "op": "add",
+          "value": 15
+        },
+        {
+          "stat": "lifesteal",
+          "op": "add",
+          "value": 0.06
+        }
+      ],
+      "description": "근접 반사 피해 +15 / 흡혈 +6%p",
+      "capstone": true
+    }
+  ],
+  "slots": [
+    {
+      "id": "weapon",
+      "name": "무기",
+      "icon": "attack"
+    },
+    {
+      "id": "armor",
+      "name": "갑옷",
+      "icon": "shield"
+    },
+    {
+      "id": "accessory",
+      "name": "장신구",
+      "icon": "signature"
+    },
+    {
+      "id": "relic",
+      "name": "유물",
+      "icon": "staff"
+    }
+  ],
+  "rarities": [
+    {
+      "id": "common",
+      "name": "일반",
+      "color": "#746b59",
+      "multiplier": 1,
+      "affixes": 0,
+      "weight": 62,
+      "salvage": 1
+    },
+    {
+      "id": "uncommon",
+      "name": "고급",
+      "color": "#4f8055",
+      "multiplier": 1.16,
+      "affixes": 1,
+      "weight": 28,
+      "salvage": 2
+    },
+    {
+      "id": "rare",
+      "name": "희귀",
+      "color": "#4d80b2",
+      "multiplier": 1.36,
+      "affixes": 2,
+      "weight": 9,
+      "salvage": 4
+    },
+    {
+      "id": "epic",
+      "name": "영웅",
+      "color": "#9669a4",
+      "multiplier": 1.62,
+      "affixes": 2,
+      "weight": 1,
+      "salvage": 7
+    }
+  ],
+  "items": [
+    {
+      "id": "iron_sword",
+      "name": "철제 장검",
+      "slot": "weapon",
+      "classes": [
+        "warrior"
+      ],
+      "stats": [
+        {
+          "stat": "attack",
+          "op": "add",
+          "value": 5
+        }
+      ],
+      "icon": "attack",
+      "description": "균형 잡힌 모험가의 검."
+    },
+    {
+      "id": "hunting_bow",
+      "name": "사냥꾼의 활",
+      "slot": "weapon",
+      "classes": [
+        "archer"
+      ],
+      "stats": [
+        {
+          "stat": "attack",
+          "op": "add",
+          "value": 5
+        }
+      ],
+      "icon": "bow",
+      "description": "평타 사격을 돕는 튼튼한 활."
+    },
+    {
+      "id": "apprentice_staff",
+      "name": "견습 지팡이",
+      "slot": "weapon",
+      "classes": [
+        "magician"
+      ],
+      "stats": [
+        {
+          "stat": "spell",
+          "op": "add",
+          "value": 7
+        }
+      ],
+      "icon": "staff",
+      "description": "마력을 증폭시키는 나무 지팡이."
+    },
+    {
+      "id": "oath_mace",
+      "name": "서약의 철퇴",
+      "slot": "weapon",
+      "classes": [
+        "guardian"
+      ],
+      "stats": [
+        {
+          "stat": "spell",
+          "op": "add",
+          "value": 4
+        },
+        {
+          "stat": "defense",
+          "op": "add",
+          "value": 2
+        }
+      ],
+      "icon": "shield",
+      "description": "방패 기술과 함께 사용하는 철퇴."
+    },
+    {
+      "id": "padded_armor",
+      "name": "누비 갑옷",
+      "slot": "armor",
+      "stats": [
+        {
+          "stat": "hp",
+          "op": "add",
+          "value": 18
+        },
+        {
+          "stat": "defense",
+          "op": "add",
+          "value": 1
+        }
+      ],
+      "icon": "shield",
+      "description": "가볍고 편안한 기본 방호구."
+    },
+    {
+      "id": "hunter_leather",
+      "name": "추적자의 가죽갑옷",
+      "slot": "armor",
+      "stats": [
+        {
+          "stat": "defense",
+          "op": "add",
+          "value": 2
+        },
+        {
+          "stat": "crit",
+          "op": "add",
+          "value": 0.025
+        }
+      ],
+      "icon": "shield",
+      "description": "치명타 사격과 가벼운 전투에 적합."
+    },
+    {
+      "id": "rune_robe",
+      "name": "룬 비단 로브",
+      "slot": "armor",
+      "stats": [
+        {
+          "stat": "mp",
+          "op": "add",
+          "value": 16
+        },
+        {
+          "stat": "spell",
+          "op": "add",
+          "value": 4
+        }
+      ],
+      "icon": "staff",
+      "description": "방어보다 주문 전투에 집중."
+    },
+    {
+      "id": "knight_plate",
+      "name": "기사의 판금갑옷",
+      "slot": "armor",
+      "stats": [
+        {
+          "stat": "hp",
+          "op": "add",
+          "value": 30
+        },
+        {
+          "stat": "defense",
+          "op": "add",
+          "value": 4
+        },
+        {
+          "stat": "speed",
+          "op": "multiply",
+          "value": 0.94
+        }
+      ],
+      "icon": "shield",
+      "description": "단단한 대신 움직임이 느려집니다."
+    },
+    {
+      "id": "copper_ring",
+      "name": "동빛 반지",
+      "slot": "accessory",
+      "stats": [
+        {
+          "stat": "attack",
+          "op": "add",
+          "value": 2
+        },
+        {
+          "stat": "spell",
+          "op": "add",
+          "value": 2
+        }
+      ],
+      "icon": "signature",
+      "description": "모든 전투에 도움이 되는 작은 반지."
+    },
+    {
+      "id": "wolf_charm",
+      "name": "늑대 송곳니 목걸이",
+      "slot": "accessory",
+      "stats": [
+        {
+          "stat": "crit",
+          "op": "add",
+          "value": 0.05
+        },
+        {
+          "stat": "basicDamage",
+          "op": "multiply",
+          "value": 1.1
+        }
+      ],
+      "icon": "signature",
+      "description": "평타와 치명타를 위한 사냥꾼의 장신구."
+    },
+    {
+      "id": "sapphire_ring",
+      "name": "사파이어 반지",
+      "slot": "accessory",
+      "stats": [
+        {
+          "stat": "manaRegen",
+          "op": "add",
+          "value": 1.1
+        },
+        {
+          "stat": "mp",
+          "op": "add",
+          "value": 12
+        }
+      ],
+      "icon": "signature",
+      "description": "마력 소모가 큰 기술 빌드를 보조합니다."
+    },
+    {
+      "id": "oak_amulet",
+      "name": "고목 수호 부적",
+      "slot": "accessory",
+      "stats": [
+        {
+          "stat": "hp",
+          "op": "add",
+          "value": 28
+        },
+        {
+          "stat": "hpRegen",
+          "op": "add",
+          "value": 0.4
+        }
+      ],
+      "icon": "heart",
+      "description": "생존에 집중하는 모험가를 위한 부적."
+    },
+    {
+      "id": "quartz",
+      "name": "별빛 수정",
+      "slot": "relic",
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "op": "multiply",
+          "value": 1.13
+        },
+        {
+          "stat": "cooldownRate",
+          "op": "multiply",
+          "value": 0.96
+        }
+      ],
+      "icon": "staff",
+      "description": "기술의 위력을 높이고 재사용 시간을 줄입니다."
+    },
+    {
+      "id": "wind_feather",
+      "name": "바람의 깃털",
+      "slot": "relic",
+      "stats": [
+        {
+          "stat": "speed",
+          "op": "multiply",
+          "value": 1.08
+        },
+        {
+          "stat": "attackSpeed",
+          "op": "multiply",
+          "value": 1.06
+        }
+      ],
+      "icon": "bait",
+      "description": "빠른 이동과 평타를 함께 강화합니다."
+    },
+    {
+      "id": "thorn_seed",
+      "name": "가시나무 씨앗",
+      "slot": "relic",
+      "stats": [
+        {
+          "stat": "thorns",
+          "op": "add",
+          "value": 5
+        },
+        {
+          "stat": "defense",
+          "op": "add",
+          "value": 1
+        }
+      ],
+      "icon": "tree",
+      "description": "근접 공격자에게 피해를 돌려줍니다."
+    },
+    {
+      "id": "wolf_crown",
+      "name": "은빛 늑대왕의 이빨",
+      "slot": "relic",
+      "boss": "wolf_king",
+      "stats": [
+        {
+          "stat": "basicDamage",
+          "op": "multiply",
+          "value": 1.2
+        },
+        {
+          "stat": "lifesteal",
+          "op": "add",
+          "value": 0.035
+        },
+        {
+          "stat": "hp",
+          "op": "multiply",
+          "value": 0.95
+        }
+      ],
+      "icon": "bow",
+      "description": "평타 피해와 흡혈을 얻는 대신 체력을 조금 잃습니다."
+    },
+    {
+      "id": "golem_heart",
+      "name": "고대 골렘의 심장",
+      "slot": "relic",
+      "boss": "mine_golem",
+      "stats": [
+        {
+          "stat": "shieldOnSkill",
+          "op": "add",
+          "value": 14
+        },
+        {
+          "stat": "defense",
+          "op": "add",
+          "value": 4
+        },
+        {
+          "stat": "speed",
+          "op": "multiply",
+          "value": 0.96
+        }
+      ],
+      "icon": "shield",
+      "description": "기술마다 보호막을 얻지만 무게가 있습니다."
+    },
+    {
+      "id": "drake_ember",
+      "name": "원룡의 불씨",
+      "slot": "relic",
+      "boss": "ancient_drake",
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "op": "multiply",
+          "value": 1.28
+        },
+        {
+          "stat": "burnChance",
+          "op": "add",
+          "value": 0.3
+        },
+        {
+          "stat": "basicDamage",
+          "op": "multiply",
+          "value": 0.92
+        }
+      ],
+      "icon": "staff",
+      "description": "평타를 희생하고 화염 기술에 집중합니다."
+    }
+  ],
+  "affixes": [
+    {
+      "id": "fierce",
+      "name": "맹렬한",
+      "stats": [
+        {
+          "stat": "attack",
+          "op": "add",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "id": "arcane",
+      "name": "비전의",
+      "stats": [
+        {
+          "stat": "spell",
+          "op": "add",
+          "value": 3
+        }
+      ]
+    },
+    {
+      "id": "vital",
+      "name": "강인한",
+      "stats": [
+        {
+          "stat": "hp",
+          "op": "add",
+          "value": 14
+        }
+      ]
+    },
+    {
+      "id": "swift",
+      "name": "날렵한",
+      "stats": [
+        {
+          "stat": "attackSpeed",
+          "op": "multiply",
+          "value": 1.055
+        }
+      ]
+    },
+    {
+      "id": "keen",
+      "name": "예리한",
+      "stats": [
+        {
+          "stat": "crit",
+          "op": "add",
+          "value": 0.025
+        }
+      ]
+    },
+    {
+      "id": "flow",
+      "name": "순환의",
+      "stats": [
+        {
+          "stat": "manaRegen",
+          "op": "add",
+          "value": 0.6
+        }
+      ]
+    },
+    {
+      "id": "stout",
+      "name": "수호의",
+      "stats": [
+        {
+          "stat": "defense",
+          "op": "add",
+          "value": 1.2
+        }
+      ]
+    },
+    {
+      "id": "wise",
+      "name": "현자의",
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "op": "multiply",
+          "value": 1.055
+        }
+      ]
+    }
+  ],
+  "materials": [
+    {
+      "id": "ore",
+      "name": "철광석",
+      "icon": "anvil"
+    },
+    {
+      "id": "herb",
+      "name": "약초",
+      "icon": "recover"
+    },
+    {
+      "id": "hide",
+      "name": "질긴 가죽",
+      "icon": "shield"
+    },
+    {
+      "id": "crystal",
+      "name": "마력 결정",
+      "icon": "signature"
+    }
+  ],
+  "recipes": [
+    {
+      "id": "weapon",
+      "name": "직업 무기 제작",
+      "description": "내 직업의 희귀 무기를 제작합니다.",
+      "smartWeapon": true,
+      "rarity": "rare",
+      "gold": 65,
+      "materials": {
+        "ore": 7,
+        "crystal": 2
+      }
+    },
+    {
+      "id": "fang",
+      "name": "사냥 목걸이 제작",
+      "item": "wolf_charm",
+      "rarity": "rare",
+      "gold": 45,
+      "materials": {
+        "hide": 6,
+        "ore": 3
+      }
+    },
+    {
+      "id": "focus",
+      "name": "별빛 수정 제작",
+      "item": "quartz",
+      "rarity": "rare",
+      "gold": 55,
+      "materials": {
+        "crystal": 5,
+        "ore": 3
+      }
+    }
+  ],
+  "shop": [
+    {
+      "id": "potion",
+      "name": "회복 물약",
+      "description": "최대 체력의 55% 회복 · 재사용 7초",
+      "price": 9,
+      "amount": 1,
+      "icon": "potion"
+    },
+    {
+      "id": "potion_bundle",
+      "name": "회복 물약 5개",
+      "description": "여행을 위한 물약 묶음.",
+      "price": 40,
+      "amount": 5,
+      "icon": "potion"
+    }
+  ],
+  "blessings": [
+    {
+      "id": "valor",
+      "name": "용기의 축복",
+      "description": "평타 피해 +10%",
+      "stats": [
+        {
+          "stat": "basicDamage",
+          "op": "multiply",
+          "value": 1.1
+        }
+      ],
+      "duration": 600,
+      "cost": 12
+    },
+    {
+      "id": "wisdom",
+      "name": "지혜의 축복",
+      "description": "기술 피해 +10%",
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "op": "multiply",
+          "value": 1.1
+        }
+      ],
+      "duration": 600,
+      "cost": 12
+    },
+    {
+      "id": "vigor",
+      "name": "생명의 축복",
+      "description": "최대 체력 +12%",
+      "stats": [
+        {
+          "stat": "hp",
+          "op": "multiply",
+          "value": 1.12
+        }
+      ],
+      "duration": 600,
+      "cost": 12
+    }
+  ],
+  "inn": {
+    "cost": 8,
+    "name": "따뜻한 식사",
+    "duration": 600,
+    "stats": [
+      {
+        "stat": "hp",
+        "op": "multiply",
+        "value": 1.08
+      },
+      {
+        "stat": "hpRegen",
+        "op": "add",
+        "value": 0.4
+      }
     ],
-    "grabPower": [
-      "power",
-      "grabPower"
+    "description": "10분간 체력 +8%, 초당 체력 회복 +0.4. 휴식은 무료입니다."
+  },
+  "dungeonTiers": [
+    {
+      "id": 0,
+      "name": "이야기",
+      "levelBonus": 0,
+      "reward": 1,
+      "requiredClears": 0
+    },
+    {
+      "id": 1,
+      "name": "수련",
+      "levelBonus": 3,
+      "reward": 1.4,
+      "requiredClears": 1
+    },
+    {
+      "id": 2,
+      "name": "영웅",
+      "levelBonus": 6,
+      "reward": 1.85,
+      "requiredClears": 3
+    }
+  ],
+  "monsters": {
+    "slime": {
+      "name": "초원 슬라임",
+      "sprite": "slime",
+      "hp": 35,
+      "attack": 7,
+      "defense": 0,
+      "speed": 1.3,
+      "range": 0.75,
+      "cooldown": 1.7,
+      "windup": 0.5,
+      "kind": "circle",
+      "radius": 0.9,
+      "xp": 8,
+      "gold": [
+        2,
+        4
+      ],
+      "material": {
+        "herb": 0.18
+      },
+      "size": 0.9
+    },
+    "goblin": {
+      "name": "고블린",
+      "sprite": "goblin",
+      "hp": 54,
+      "attack": 10,
+      "defense": 1,
+      "speed": 2,
+      "range": 0.85,
+      "cooldown": 1.55,
+      "windup": 0.45,
+      "kind": "circle",
+      "radius": 1,
+      "xp": 11,
+      "gold": [
+        3,
+        6
+      ],
+      "material": {
+        "ore": 0.32
+      },
+      "size": 1
+    },
+    "wolf": {
+      "name": "회색 늑대",
+      "sprite": "wolf",
+      "hp": 62,
+      "attack": 12,
+      "defense": 1,
+      "speed": 2.75,
+      "range": 0.9,
+      "cooldown": 1.65,
+      "windup": 0.55,
+      "kind": "line",
+      "radius": 0.6,
+      "length": 2.1,
+      "xp": 13,
+      "gold": [
+        3,
+        7
+      ],
+      "material": {
+        "hide": 0.48
+      },
+      "size": 1.1,
+      "dash": true
+    },
+    "boar": {
+      "name": "숲 호그",
+      "sprite": "boar",
+      "hp": 88,
+      "attack": 15,
+      "defense": 2,
+      "speed": 1.8,
+      "range": 2.8,
+      "cooldown": 2.6,
+      "windup": 1,
+      "kind": "line",
+      "radius": 0.85,
+      "length": 3.3,
+      "xp": 17,
+      "gold": [
+        4,
+        8
+      ],
+      "material": {
+        "hide": 0.6
+      },
+      "size": 1.2,
+      "dash": true
+    },
+    "lizard": {
+      "name": "늪 리자드",
+      "sprite": "lizard",
+      "hp": 86,
+      "attack": 16,
+      "defense": 2,
+      "speed": 2,
+      "range": 3,
+      "cooldown": 2.1,
+      "windup": 0.8,
+      "kind": "target",
+      "radius": 1.05,
+      "xp": 20,
+      "gold": [
+        5,
+        9
+      ],
+      "material": {
+        "crystal": 0.32
+      },
+      "size": 1.1
+    },
+    "goblin_guard": {
+      "name": "봉인 고블린",
+      "sprite": "goblin",
+      "hp": 105,
+      "attack": 17,
+      "defense": 4,
+      "speed": 1.8,
+      "range": 1,
+      "cooldown": 1.9,
+      "windup": 0.65,
+      "kind": "circle",
+      "radius": 1.4,
+      "xp": 28,
+      "gold": [
+        8,
+        13
+      ],
+      "material": {
+        "ore": 0.8
+      },
+      "size": 1.25,
+      "elite": true
+    },
+    "golem": {
+      "name": "광산 골렘",
+      "sprite": "golem",
+      "hp": 135,
+      "attack": 19,
+      "defense": 5,
+      "speed": 1.2,
+      "range": 1.4,
+      "cooldown": 2.6,
+      "windup": 1,
+      "kind": "circle",
+      "radius": 1.7,
+      "xp": 32,
+      "gold": [
+        9,
+        14
+      ],
+      "material": {
+        "ore": 1
+      },
+      "size": 1.4
+    },
+    "lizard_shaman": {
+      "name": "리자드 주술사",
+      "sprite": "lizard",
+      "hp": 128,
+      "attack": 20,
+      "defense": 3,
+      "speed": 1.7,
+      "range": 3.6,
+      "cooldown": 2.8,
+      "windup": 0.95,
+      "kind": "target",
+      "radius": 1.5,
+      "xp": 37,
+      "gold": [
+        10,
+        16
+      ],
+      "material": {
+        "crystal": 1
+      },
+      "size": 1.3,
+      "elite": true,
+      "tint": "#9a8ca3"
+    },
+    "wolf_king": {
+      "name": "은빛 늑대왕",
+      "sprite": "wolf",
+      "hp": 780,
+      "attack": 23,
+      "defense": 4,
+      "speed": 2.3,
+      "range": 2.6,
+      "xp": 100,
+      "gold": [
+        55,
+        75
+      ],
+      "size": 2,
+      "boss": true,
+      "tint": "#ced2c3",
+      "group": "wolf",
+      "drop": "wolf_crown",
+      "patterns": [
+        {
+          "name": "송곳니 휩쓸기",
+          "kind": "circle",
+          "radius": 1.9,
+          "windup": 0.9,
+          "cooldown": 2.3,
+          "damage": 1
+        },
+        {
+          "name": "늑대왕의 돌진",
+          "kind": "line",
+          "length": 5.8,
+          "radius": 1,
+          "windup": 1.2,
+          "cooldown": 3,
+          "damage": 1.25,
+          "dash": true
+        },
+        {
+          "name": "사냥의 울음",
+          "kind": "target",
+          "radius": 2,
+          "windup": 1.2,
+          "cooldown": 3,
+          "damage": 0.9
+        }
+      ],
+      "adds": [
+        "wolf",
+        "wolf"
+      ]
+    },
+    "mine_golem": {
+      "name": "깨어난 광산군주",
+      "sprite": "golem",
+      "hp": 1200,
+      "attack": 28,
+      "defense": 7,
+      "speed": 1.1,
+      "range": 2.6,
+      "xp": 160,
+      "gold": [
+        75,
+        100
+      ],
+      "size": 2.25,
+      "boss": true,
+      "group": "mine",
+      "drop": "golem_heart",
+      "patterns": [
+        {
+          "name": "육중한 강타",
+          "kind": "circle",
+          "radius": 2.3,
+          "windup": 1.1,
+          "cooldown": 2.7,
+          "damage": 1.15
+        },
+        {
+          "name": "땅울림",
+          "kind": "target",
+          "radius": 2,
+          "windup": 1.25,
+          "cooldown": 2.7,
+          "damage": 1
+        },
+        {
+          "name": "균열의 길",
+          "kind": "line",
+          "radius": 1.1,
+          "length": 6,
+          "windup": 1.4,
+          "cooldown": 3,
+          "damage": 1.3
+        }
+      ],
+      "adds": [
+        "goblin",
+        "goblin"
+      ]
+    },
+    "ancient_drake": {
+      "name": "잿불의 원룡",
+      "sprite": "drake",
+      "hp": 1900,
+      "attack": 34,
+      "defense": 8,
+      "speed": 1.6,
+      "range": 4.1,
+      "xp": 250,
+      "gold": [
+        110,
+        150
+      ],
+      "size": 2,
+      "boss": true,
+      "group": "ruins",
+      "drop": "drake_ember",
+      "patterns": [
+        {
+          "name": "화염 숨결",
+          "kind": "line",
+          "length": 7,
+          "radius": 1.4,
+          "windup": 1.35,
+          "cooldown": 3,
+          "damage": 1.25
+        },
+        {
+          "name": "불꽃 낙인",
+          "kind": "target",
+          "radius": 2.25,
+          "windup": 1.2,
+          "cooldown": 2.6,
+          "damage": 1
+        },
+        {
+          "name": "꼬리 휩쓸기",
+          "kind": "circle",
+          "radius": 2.9,
+          "windup": 1.25,
+          "cooldown": 3,
+          "damage": 1.1
+        }
+      ],
+      "adds": [
+        "lizard",
+        "lizard"
+      ]
+    }
+  },
+  "quests": [
+    {
+      "id": "welcome",
+      "name": "길드에 첫발을",
+      "npc": "maren",
+      "main": true,
+      "description": "오크우드의 길드 안내인 마렌에게 모험가로 등록하세요.",
+      "objectives": [
+        {
+          "kind": "interact",
+          "target": "maren",
+          "count": 1,
+          "label": "마렌과 대화"
+        }
+      ],
+      "rewards": {
+        "xp": 12,
+        "gold": 20,
+        "potions": 2
+      }
+    },
+    {
+      "id": "meadow",
+      "name": "초원의 작은 위협",
+      "npc": "maren",
+      "main": true,
+      "requires": "welcome",
+      "description": "동쪽 초원길의 몬스터를 정리하세요.",
+      "objectives": [
+        {
+          "kind": "kill",
+          "target": "slime",
+          "count": 5,
+          "label": "슬라임 처치",
+          "map": "meadow"
+        },
+        {
+          "kind": "kill",
+          "target": "goblin",
+          "count": 3,
+          "label": "고블린 처치",
+          "map": "meadow"
+        }
+      ],
+      "rewards": {
+        "xp": 34,
+        "gold": 40,
+        "materials": {
+          "ore": 4
+        },
+        "potions": 2
+      }
+    },
+    {
+      "id": "forest",
+      "name": "숲길을 열어라",
+      "npc": "maren",
+      "main": true,
+      "requires": "meadow",
+      "description": "속삭임 숲의 늑대와 호그를 정리하면 숲 동굴의 봉인을 조사할 수 있습니다.",
+      "objectives": [
+        {
+          "kind": "kill",
+          "target": "wolf",
+          "count": 4,
+          "label": "늑대 처치",
+          "map": "forest"
+        },
+        {
+          "kind": "kill",
+          "target": "boar",
+          "count": 3,
+          "label": "호그 처치",
+          "map": "forest"
+        }
+      ],
+      "rewards": {
+        "xp": 55,
+        "gold": 55,
+        "materials": {
+          "hide": 4,
+          "ore": 3
+        },
+        "points": 1
+      }
+    },
+    {
+      "id": "wolf",
+      "name": "은빛 울음의 주인",
+      "npc": "rhett",
+      "main": true,
+      "requires": "forest",
+      "description": "숲 동굴의 봉인 수호자들을 쓰러뜨리고 늑대왕을 처치하세요. 은빛나루의 레트에게 보고하세요.",
+      "objectives": [
+        {
+          "kind": "boss",
+          "target": "wolf_king",
+          "count": 1,
+          "label": "은빛 늑대왕 처치",
+          "map": "wolf_lair"
+        }
+      ],
+      "rewards": {
+        "xp": 85,
+        "gold": 85,
+        "points": 1,
+        "materials": {
+          "crystal": 3
+        }
+      }
+    },
+    {
+      "id": "mine",
+      "name": "폐광의 심장",
+      "npc": "rhett",
+      "main": true,
+      "requires": "wolf",
+      "description": "초원길 북쪽의 잊힌 폐광에서 깨어난 광산군주를 처치하세요.",
+      "objectives": [
+        {
+          "kind": "boss",
+          "target": "mine_golem",
+          "count": 1,
+          "label": "광산군주 처치",
+          "map": "forge_chamber"
+        }
+      ],
+      "rewards": {
+        "xp": 135,
+        "gold": 110,
+        "points": 1,
+        "materials": {
+          "ore": 8,
+          "crystal": 3
+        }
+      }
+    },
+    {
+      "id": "drake",
+      "name": "별의 봉인을 되찾아라",
+      "npc": "rhett",
+      "main": true,
+      "requires": "mine",
+      "description": "안개늪 너머 별의 유적에서 원룡을 쓰러뜨리세요.",
+      "objectives": [
+        {
+          "kind": "boss",
+          "target": "ancient_drake",
+          "count": 1,
+          "label": "잿불의 원룡 처치",
+          "map": "dragon_sanctum"
+        }
+      ],
+      "rewards": {
+        "xp": 220,
+        "gold": 180,
+        "points": 2,
+        "materials": {
+          "crystal": 8
+        }
+      },
+      "final": true
+    },
+    {
+      "id": "herbs",
+      "name": "사제의 약초",
+      "npc": "eliane",
+      "requires": "welcome",
+      "description": "초원에서 약초를 모아 오크우드 사제에게 가져가세요.",
+      "objectives": [
+        {
+          "kind": "material",
+          "target": "herb",
+          "count": 3,
+          "label": "약초 모으기",
+          "map": "meadow",
+          "consume": true
+        }
+      ],
+      "rewards": {
+        "xp": 25,
+        "gold": 25,
+        "potions": 4
+      }
+    },
+    {
+      "id": "contract_slime",
+      "name": "길드 의뢰 · 슬라임",
+      "npc": "board",
+      "requires": "meadow",
+      "repeatable": true,
+      "description": "초원 슬라임을 처치하고 게시판에서 보상을 받으세요.",
+      "objectives": [
+        {
+          "kind": "kill",
+          "target": "slime",
+          "count": 8,
+          "label": "슬라임 처치",
+          "map": "meadow"
+        }
+      ],
+      "rewards": {
+        "xp": 35,
+        "gold": 35,
+        "materials": {
+          "ore": 2
+        }
+      }
+    },
+    {
+      "id": "contract_wolf",
+      "name": "길드 의뢰 · 늑대",
+      "npc": "board",
+      "requires": "forest",
+      "repeatable": true,
+      "description": "숲의 늑대를 처치하세요.",
+      "objectives": [
+        {
+          "kind": "kill",
+          "target": "wolf",
+          "count": 7,
+          "label": "늑대 처치",
+          "map": "forest"
+        }
+      ],
+      "rewards": {
+        "xp": 50,
+        "gold": 45,
+        "materials": {
+          "hide": 3
+        }
+      }
+    },
+    {
+      "id": "contract_lizard",
+      "name": "길드 의뢰 · 리자드",
+      "npc": "board",
+      "requires": "wolf",
+      "repeatable": true,
+      "description": "안개늪의 리자드를 정리하세요.",
+      "objectives": [
+        {
+          "kind": "kill",
+          "target": "lizard",
+          "count": 6,
+          "label": "리자드 처치",
+          "map": "marsh"
+        }
+      ],
+      "rewards": {
+        "xp": 65,
+        "gold": 60,
+        "materials": {
+          "crystal": 2
+        }
+      }
+    }
+  ],
+  "npcTypes": {
+    "guild": {
+      "name": "모험가 길드",
+      "icon": "quest",
+      "sprite": "villager"
+    },
+    "smith": {
+      "name": "대장간",
+      "icon": "anvil",
+      "sprite": "smith"
+    },
+    "merchant": {
+      "name": "잡화점",
+      "icon": "bag",
+      "sprite": "villager"
+    },
+    "inn": {
+      "name": "여관",
+      "icon": "home",
+      "sprite": "villager"
+    },
+    "temple": {
+      "name": "성당",
+      "icon": "heart",
+      "sprite": "healer"
+    },
+    "board": {
+      "name": "의뢰 게시판",
+      "icon": "scroll",
+      "sprite": "board",
+      "scale": 3
+    },
+    "waystone": {
+      "name": "여행의 돌",
+      "icon": "portal",
+      "sprite": "waystone",
+      "scale": 3
+    }
+  },
+  "terrain": {
+    ".": {
+      "name": "grass",
+      "walk": true,
+      "color": "grass"
+    },
+    ",": {
+      "name": "grass",
+      "walk": true,
+      "color": "grassAlt"
+    },
+    ":": {
+      "name": "path",
+      "walk": true,
+      "color": "path"
+    },
+    "~": {
+      "name": "water",
+      "walk": false,
+      "color": "water"
+    },
+    "#": {
+      "name": "rock",
+      "walk": false,
+      "color": "stoneDark"
+    },
+    "t": {
+      "name": "tree",
+      "walk": false,
+      "color": "grassAlt"
+    },
+    "_": {
+      "name": "stone",
+      "walk": true,
+      "color": "stone"
+    },
+    "m": {
+      "name": "mud",
+      "walk": true,
+      "color": "mud"
+    },
+    "s": {
+      "name": "sand",
+      "walk": true,
+      "color": "sand"
+    },
+    "f": {
+      "name": "floor",
+      "walk": true,
+      "color": "floor"
+    },
+    "l": {
+      "name": "lava",
+      "walk": false,
+      "color": "lava"
+    }
+  },
+  "maps": {
+    "oakwood": {
+      "id": "oakwood",
+      "name": "오크우드",
+      "kind": "town",
+      "width": 36,
+      "height": 26,
+      "tiles": [
+        "tttttttttttttttttttttttttttttttttttt",
+        "t..................................t",
+        "t................::................t",
+        "t...______....______.....______....t",
+        "t...______....______.....______....t",
+        "t...______....______.....______....t",
+        "t...______....______.....______....t",
+        "t................::................t",
+        "t................::................t",
+        "t..................................t",
+        "t..................................t",
+        "t..................................t",
+        "t.::::::::::...:...::::::::::::::..:",
+        "t.::::::::::...:...::::::::::::::..t",
+        "t................::................t",
+        "t................::................t",
+        "t................::................t",
+        "t....__..._......::......__..._....t",
+        "t....______......::......______....t",
+        "t....______......::......______....t",
+        "t....______......::......______....t",
+        "t................::................t",
+        "t................::................t",
+        "t................::................t",
+        "t..................................t",
+        "tttttttttttttttttttttttttttttttttttt"
+      ],
+      "level": 1,
+      "music": "town",
+      "spawn": [
+        17.5,
+        12.5
+      ],
+      "npcs": [
+        {
+          "id": "maren",
+          "name": "마렌",
+          "service": "guild",
+          "x": 17.5,
+          "y": 10.5
+        },
+        {
+          "id": "owen",
+          "name": "오언",
+          "service": "smith",
+          "x": 7.5,
+          "y": 9.5
+        },
+        {
+          "id": "lina",
+          "name": "리나",
+          "service": "merchant",
+          "x": 28.5,
+          "y": 9.5
+        },
+        {
+          "id": "rowan",
+          "name": "로웬",
+          "service": "inn",
+          "x": 8.5,
+          "y": 16
+        },
+        {
+          "id": "eliane",
+          "name": "엘리안",
+          "service": "temple",
+          "x": 28,
+          "y": 16
+        },
+        {
+          "id": "board",
+          "name": "의뢰 게시판",
+          "service": "board",
+          "x": 21,
+          "y": 10
+        },
+        {
+          "id": "stone_oak",
+          "name": "여행의 돌",
+          "service": "waystone",
+          "x": 13,
+          "y": 13
+        }
+      ],
+      "portals": [
+        {
+          "id": "east",
+          "name": "초원길",
+          "x": 34,
+          "y": 12,
+          "to": "meadow",
+          "spawn": [
+            2.5,
+            14.5
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": false
+        }
+      ],
+      "spawns": [],
+      "props": [
+        {
+          "type": "house",
+          "x": 4,
+          "y": 3,
+          "width": 6,
+          "height": 4,
+          "roof": "roof",
+          "solid": true,
+          "name": "대장간"
+        },
+        {
+          "type": "house",
+          "x": 14,
+          "y": 3,
+          "width": 6,
+          "height": 4,
+          "roof": "roofDark",
+          "solid": true,
+          "name": "길드"
+        },
+        {
+          "type": "house",
+          "x": 25,
+          "y": 3,
+          "width": 6,
+          "height": 4,
+          "roof": "roof",
+          "solid": true,
+          "name": "잡화점"
+        },
+        {
+          "type": "house",
+          "x": 5,
+          "y": 17,
+          "width": 6,
+          "height": 4,
+          "roof": "roofDark",
+          "solid": true,
+          "name": "여관"
+        },
+        {
+          "type": "house",
+          "x": 25,
+          "y": 17,
+          "width": 6,
+          "height": 4,
+          "roof": "roof",
+          "solid": true,
+          "name": "성당"
+        },
+        {
+          "type": "fountain",
+          "x": 17,
+          "y": 17,
+          "width": 2,
+          "height": 2,
+          "solid": true
+        }
+      ],
+      "resources": [],
+      "chests": [],
+      "waypoint": [
+        13,
+        13
+      ]
+    },
+    "meadow": {
+      "id": "meadow",
+      "name": "새벽 초원길",
+      "kind": "field",
+      "width": 44,
+      "height": 30,
+      "tiles": [
+        "tttttttttttttttttttttttttttttttttttttttttttt",
+        "t..........................................t",
+        "t.t,.....t...,t..,t..t..,,t,.......t.tt..t.t",
+        "t..........................................t",
+        "t.tt.t....,,..t....,..,.ttt..,::.,.t.,,..t.t",
+        "t.............................::...........t",
+        "t.............................::...........t",
+        "t.............................::...........t",
+        "t.............................::...........t",
+        "t.............................::...........t",
+        "t.t,..,......t,..,,,.,t......t::.t.::::::..:",
+        "t.............................::...::::::..t",
+        "t.............................::...........t",
+        "t.............................::...........t",
+        "t......:::::::::::::::::::::::::::::::::::::",
+        "t......::::::::::::::::::::::::::::::::::::t",
+        "t..........................................t",
+        "t..........................................t",
+        "t.,t.,...t,...t....t.,........t......t...,.t",
+        "t..........................................t",
+        "t..........................................t",
+        "t..........................................t",
+        "t..........................................t",
+        "t..........................................t",
+        "t....t,..,.,.,,..,......,t.t.t,..,.t.,,..t.t",
+        "t..........................................t",
+        "t..t..,..t.t.,t..t.,.,t.t.....t...t,.,,....t",
+        "t..........................................t",
+        "t..........................................t",
+        "tttttttttttttttttttttttttttttttttttttttttttt"
+      ],
+      "level": 1,
+      "music": "field",
+      "spawn": [
+        2.5,
+        15.5
+      ],
+      "npcs": [
+        {
+          "id": "stone_meadow",
+          "name": "초원의 돌",
+          "service": "waystone",
+          "x": 5,
+          "y": 14
+        }
+      ],
+      "portals": [
+        {
+          "id": "west",
+          "name": "오크우드",
+          "x": 2,
+          "y": 14,
+          "to": "oakwood",
+          "spawn": [
+            33,
+            12.5
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": false
+        },
+        {
+          "id": "east",
+          "name": "속삭임 숲",
+          "x": 42,
+          "y": 10,
+          "to": "forest",
+          "spawn": [
+            2.5,
+            14.5
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": false
+        },
+        {
+          "id": "mine",
+          "name": "잊힌 폐광",
+          "x": 30,
+          "y": 2,
+          "to": "mine",
+          "spawn": [
+            2.5,
+            12.5
+          ],
+          "requiresQuest": "wolf",
+          "requiresGuardians": false
+        }
+      ],
+      "spawns": [
+        {
+          "monster": "slime",
+          "x": 10,
+          "y": 11,
+          "level": 1,
+          "guardian": false
+        },
+        {
+          "monster": "slime",
+          "x": 12,
+          "y": 18,
+          "level": 1,
+          "guardian": false
+        },
+        {
+          "monster": "slime",
+          "x": 16,
+          "y": 8,
+          "level": 1,
+          "guardian": false
+        },
+        {
+          "monster": "slime",
+          "x": 18,
+          "y": 21,
+          "level": 1,
+          "guardian": false
+        },
+        {
+          "monster": "slime",
+          "x": 21,
+          "y": 12,
+          "level": 1,
+          "guardian": false
+        },
+        {
+          "monster": "slime",
+          "x": 25,
+          "y": 18,
+          "level": 1,
+          "guardian": false
+        },
+        {
+          "monster": "slime",
+          "x": 8,
+          "y": 20,
+          "level": 1,
+          "guardian": false
+        },
+        {
+          "monster": "goblin",
+          "x": 27,
+          "y": 10,
+          "level": 2,
+          "guardian": false
+        },
+        {
+          "monster": "goblin",
+          "x": 32,
+          "y": 19,
+          "level": 2,
+          "guardian": false
+        },
+        {
+          "monster": "goblin",
+          "x": 36,
+          "y": 8,
+          "level": 2,
+          "guardian": false
+        },
+        {
+          "monster": "goblin",
+          "x": 37,
+          "y": 20,
+          "level": 2,
+          "guardian": false
+        },
+        {
+          "monster": "goblin",
+          "x": 21,
+          "y": 23,
+          "level": 2,
+          "guardian": false
+        }
+      ],
+      "props": [],
+      "resources": [
+        {
+          "id": "herb_0",
+          "type": "herb",
+          "x": 8,
+          "y": 10,
+          "amount": 2,
+          "respawn": 50
+        },
+        {
+          "id": "herb_1",
+          "type": "herb",
+          "x": 17,
+          "y": 19,
+          "amount": 2,
+          "respawn": 50
+        },
+        {
+          "id": "herb_2",
+          "type": "herb",
+          "x": 25,
+          "y": 9,
+          "amount": 2,
+          "respawn": 50
+        },
+        {
+          "id": "herb_3",
+          "type": "herb",
+          "x": 35,
+          "y": 17,
+          "amount": 2,
+          "respawn": 50
+        }
+      ],
+      "chests": [],
+      "waypoint": [
+        5,
+        14
+      ]
+    },
+    "forest": {
+      "id": "forest",
+      "name": "속삭임 숲",
+      "kind": "field",
+      "width": 44,
+      "height": 30,
+      "tiles": [
+        "tttttttttttttttttttttttttttttttttttttttttttt",
+        "t,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,t",
+        "t,tt,,,,,t,,,tt,,tt,,t,,...,,t,,,,,t,tt,,t,t",
+        "t,,,,,,,,,,,,,,,,,,,,,,,...,,,,,,,,,,,,,,,,t",
+        "t,tt,t,,,,,t,,t,,,,t,,t,...,,,,,,,,t,tt,,t,t",
+        "t,,,,,,,,,,,,,,,,,,,,,,,,::,,,,,,,,,,,,,,,,t",
+        "t,,,,,,,,,,...,,,,,,,,,,,::...,,,,,,,,,,,,,t",
+        "t,,,,,,,,,,...:::...:::::::...:::,,...,,,,,t",
+        "t,,,,,,,,,,...:::...:::::::...::,,,...,,,,,t",
+        "t,,,,,,...,,::,,,...,,,,,::,,...,,,...,,,,,t",
+        "t,t,,,t...,t::t,,ttt,,t,,::t,...,t,,,,,,,t,t",
+        "t,,,,,,...,,::,,,,,,,,,,,::,,...,,,,...,,,,t",
+        "t,,,,,,,,,,,::,,,,,...,,,::,,,,,,,,,...,,,,t",
+        "t...,,,,,,,,::,,,,,...,,,::,,,,,,,,,...,,..t",
+        "t...:::::::::::::::...:::::::::::::::::::..:",
+        "t...:::::::::::::::::::::::::::::::::::::..t",
+        "t...,,,,,,,,::,,,,,,,,,,,,,,,,,,...,,,,,,,,t",
+        "t,,,,,,,,,,,::,,,,,,,,,,,,,,,,,,...,,,,,,,,t",
+        "t,tt,t,,,t,t...,,,tt,t,,ttt,,,t,...t,t,,,,,t",
+        "t,,,,,,...,,...,,,,,,,...,,,,,,,,,,,,,,,,,,t",
+        "t,,,,,,...,,...,,,,,,,...,,,,,,,,...,,,,,,,t",
+        "t,,,,,,...,,::,,,,,,,,...,,,,,,,,...,,,,,,,t",
+        "t,,,,,,,,,,,::,,,...,,,,,,,,,,,,,...,,,,,,,t",
+        "t,,,,,,,,,,,::,,,...,,,,,,,,,,,,,,,,,,,,,,,t",
+        "t,,,,tt,,,,,,tt,,...,,t,tt,t,tt,,t,t,,,,,t,t",
+        "t,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,t",
+        "t,,t,,,,,t,t,tt,,t,t,tt,t,,,,,t,,,t,,t,,,,,t",
+        "t,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,t",
+        "t,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,t",
+        "tttttttttttttttttttttttttttttttttttttttttttt"
+      ],
+      "level": 4,
+      "music": "field",
+      "spawn": [
+        2.5,
+        15.5
+      ],
+      "npcs": [],
+      "portals": [
+        {
+          "id": "west",
+          "name": "초원길",
+          "x": 2,
+          "y": 14,
+          "to": "meadow",
+          "spawn": [
+            41,
+            10.5
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": false
+        },
+        {
+          "id": "east",
+          "name": "은빛나루",
+          "x": 42,
+          "y": 14,
+          "to": "silverhaven",
+          "spawn": [
+            2.5,
+            12.5
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": false
+        },
+        {
+          "id": "den",
+          "name": "늑대숲 동굴",
+          "x": 25,
+          "y": 3,
+          "to": "forest_den",
+          "spawn": [
+            2.5,
+            12.5
+          ],
+          "requiresQuest": "forest",
+          "requiresGuardians": false
+        }
+      ],
+      "spawns": [
+        {
+          "monster": "wolf",
+          "x": 8,
+          "y": 10,
+          "level": 4,
+          "guardian": false
+        },
+        {
+          "monster": "wolf",
+          "x": 13,
+          "y": 19,
+          "level": 4,
+          "guardian": false
+        },
+        {
+          "monster": "wolf",
+          "x": 18,
+          "y": 8,
+          "level": 4,
+          "guardian": false
+        },
+        {
+          "monster": "wolf",
+          "x": 23,
+          "y": 20,
+          "level": 4,
+          "guardian": false
+        },
+        {
+          "monster": "wolf",
+          "x": 30,
+          "y": 10,
+          "level": 4,
+          "guardian": false
+        },
+        {
+          "monster": "wolf",
+          "x": 34,
+          "y": 21,
+          "level": 4,
+          "guardian": false
+        },
+        {
+          "monster": "wolf",
+          "x": 37,
+          "y": 12,
+          "level": 4,
+          "guardian": false
+        },
+        {
+          "monster": "boar",
+          "x": 12,
+          "y": 7,
+          "level": 4,
+          "guardian": false
+        },
+        {
+          "monster": "boar",
+          "x": 18,
+          "y": 23,
+          "level": 4,
+          "guardian": false
+        },
+        {
+          "monster": "boar",
+          "x": 28,
+          "y": 7,
+          "level": 4,
+          "guardian": false
+        },
+        {
+          "monster": "boar",
+          "x": 33,
+          "y": 17,
+          "level": 4,
+          "guardian": false
+        },
+        {
+          "monster": "goblin",
+          "x": 20,
+          "y": 13,
+          "level": 4,
+          "guardian": false
+        },
+        {
+          "monster": "goblin",
+          "x": 36,
+          "y": 8,
+          "level": 4,
+          "guardian": false
+        }
+      ],
+      "props": [],
+      "resources": [
+        {
+          "id": "h1",
+          "type": "herb",
+          "x": 8,
+          "y": 20,
+          "amount": 2,
+          "respawn": 50
+        }
+      ],
+      "chests": [],
+      "waypoint": null
+    },
+    "silverhaven": {
+      "id": "silverhaven",
+      "name": "은빛나루",
+      "kind": "town",
+      "width": 32,
+      "height": 24,
+      "tiles": [
+        "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+        "~ssssssssssssssssssssssssssssss~",
+        "~ssssssssssssss__ssssssssssssss~",
+        "~sssss______sss__sssss______sss~",
+        "~sssss______sss__sssss______sss~",
+        "~sssss______sss__sssss______sss~",
+        "~sssss______sss__sssss______sss~",
+        "~ssssssssssssss__ssssssssssssss~",
+        "~ssssssssssssss__ssssssssssssss~",
+        "~sssssssss......_sssssss...ssss~",
+        "~sssssssss......_sssssss...ssss~",
+        "~...ssssss......_ss...ss...ss..~",
+        "~..._______________..._______.._",
+        "~...___________..._..._______..~",
+        "~ssssssssssssss...sssssssssssss~",
+        "~ssssssss...sss...ssssss...ssss~",
+        "~ssssssss...sss__sssssss...ssss~",
+        "~sssss___...sss__sssss__..._sss~",
+        "~sssss______sss__sssss______sss~",
+        "~sssss______sss__sssss______sss~",
+        "~sssss______sss__sssss______sss~",
+        "~ssssssssssssss__ssssssssssssss~",
+        "~ssssssssssssssssssssssssssssss~",
+        "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+      ],
+      "level": 6,
+      "music": "town",
+      "spawn": [
+        2.5,
+        12.5
+      ],
+      "npcs": [
+        {
+          "id": "rhett",
+          "name": "레트",
+          "service": "guild",
+          "x": 11,
+          "y": 10
+        },
+        {
+          "id": "smith_haven",
+          "name": "브람",
+          "service": "smith",
+          "x": 25,
+          "y": 10
+        },
+        {
+          "id": "merchant_haven",
+          "name": "세라",
+          "service": "merchant",
+          "x": 20,
+          "y": 12
+        },
+        {
+          "id": "inn_haven",
+          "name": "노엘",
+          "service": "inn",
+          "x": 10,
+          "y": 16
+        },
+        {
+          "id": "priest_haven",
+          "name": "루시안",
+          "service": "temple",
+          "x": 25,
+          "y": 16
+        },
+        {
+          "id": "board",
+          "name": "의뢰 게시판",
+          "service": "board",
+          "x": 14,
+          "y": 10
+        },
+        {
+          "id": "stone_haven",
+          "name": "나루의 돌",
+          "service": "waystone",
+          "x": 16,
+          "y": 14
+        }
+      ],
+      "portals": [
+        {
+          "id": "west",
+          "name": "속삭임 숲",
+          "x": 2,
+          "y": 12,
+          "to": "forest",
+          "spawn": [
+            41,
+            14.5
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": false
+        },
+        {
+          "id": "east",
+          "name": "안개늪",
+          "x": 30,
+          "y": 12,
+          "to": "marsh",
+          "spawn": [
+            2.5,
+            14.5
+          ],
+          "requiresQuest": "wolf",
+          "requiresGuardians": false
+        }
+      ],
+      "spawns": [],
+      "props": [
+        {
+          "type": "house",
+          "x": 6,
+          "y": 3,
+          "width": 6,
+          "height": 4,
+          "roof": "roofDark",
+          "solid": true,
+          "name": "나루 길드"
+        },
+        {
+          "type": "house",
+          "x": 22,
+          "y": 3,
+          "width": 6,
+          "height": 4,
+          "roof": "roof",
+          "solid": true,
+          "name": "대장간"
+        },
+        {
+          "type": "house",
+          "x": 6,
+          "y": 17,
+          "width": 6,
+          "height": 4,
+          "roof": "roof",
+          "solid": true,
+          "name": "여관"
+        },
+        {
+          "type": "house",
+          "x": 22,
+          "y": 17,
+          "width": 6,
+          "height": 4,
+          "roof": "roofDark",
+          "solid": true,
+          "name": "성당"
+        }
+      ],
+      "resources": [],
+      "chests": [],
+      "waypoint": [
+        16,
+        14
+      ]
+    },
+    "marsh": {
+      "id": "marsh",
+      "name": "안개늪",
+      "kind": "field",
+      "width": 44,
+      "height": 30,
+      "tiles": [
+        "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+        "~mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm~",
+        "~mtmmmmmmtm~~~~mmmtmmtmmmmtmm~~~~mmtmttmmtm~",
+        "~mmmmmmmmmm~~~~mmmmmmmmmmmmmm~~~~mmmmmmmmmm~",
+        "~mttmtmmmmm~~~~mmmmmmmmmtttmm~~~~mmtmmm...m~",
+        "~mmmmmmmmmm~~~~mmmmmmmmmmmmmm~~~~mmmmmm...m~",
+        "~mmmmmmmmmm~~~~mmmmmmmmmmmmmm~~~~mmmmmm...m~",
+        "~mmmmmmmmmm~~~~mmmmmmmmmmmmmm~~~~mmmmmmm__m~",
+        "~mmmmmm...m~~~~mmmmmmm...mmmm~~~~mm...mm__m~",
+        "~mmmmmm...m~~~~mmmmmmm...mmmm~~~~mm...mm__m~",
+        "~mtmmmm...m~~~~mmmmmmm...mmtm~~~~tm...mm__m~",
+        "~mmmmmmmmmm~~~~mmmmmmmmmmmmmm~~~~mmmmmmm__m~",
+        "~mmmmmmmmmm~~~~mmmmmmmmmmmmmm~~~~mmmmmmm__m~",
+        "~......mmmm~~~~mmmm...mmmmmmm~~~~mmmmmmm__m~",
+        "~......____________..._____________________~",
+        "~......____________...____________________m~",
+        "~...mmmmmmm~~~~mmmmmmmmmmmmmm~~~~mmmmmmmmmm~",
+        "~mmmmmmmmmm~~~~mm...mmmmmmmmm~~~~mmmmmmmmmm~",
+        "~mmtmmmmmtm~~~~mm...mmmmtmtmm~~~~mmmmtmmmmm~",
+        "~mmmm...mmm~~~~mm...mm...mmmm~~~~mmmmm...mm~",
+        "~mmmm...mmm~~~~mmmmmmm......m~~~~mmmmm...mm~",
+        "~mmmm...mmm~~~~mmmmmmm......m~~~~mmmmm...mm~",
+        "~mmmmmmmmmm~~~~mmmmmmmmmm...m~~~~m...mmmmmm~",
+        "~mmmmmmmmmm~~~~mmmmmmmmmmmmmm~~~~m...mmmmmm~",
+        "~mmmmtmmmmm~~~~mmmmmmmtmmtmtm~~~~m...mmmmtm~",
+        "~mmmmmmmmmm~~~~mmmmmmmmmmmmmm~~~~mmmmmmmmmm~",
+        "~mmtmmmmmtm~~~~mmtmmmmtmtmmmm~~~~mtmmmmmmmm~",
+        "~mmmmmmmmmm~~~~mmmmmmmmmmmmmm~~~~mmmmmmmmmm~",
+        "~mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm~",
+        "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+      ],
+      "level": 8,
+      "music": "field",
+      "spawn": [
+        2.5,
+        15.5
+      ],
+      "npcs": [
+        {
+          "id": "stone_marsh",
+          "name": "늪의 돌",
+          "service": "waystone",
+          "x": 5,
+          "y": 14
+        }
+      ],
+      "portals": [
+        {
+          "id": "west",
+          "name": "은빛나루",
+          "x": 2,
+          "y": 14,
+          "to": "silverhaven",
+          "spawn": [
+            29,
+            12.5
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": false
+        },
+        {
+          "id": "ruins",
+          "name": "별의 유적",
+          "x": 40,
+          "y": 5,
+          "to": "ruins",
+          "spawn": [
+            2.5,
+            12.5
+          ],
+          "requiresQuest": "mine",
+          "requiresGuardians": false
+        }
+      ],
+      "spawns": [
+        {
+          "monster": "lizard",
+          "x": 8,
+          "y": 9,
+          "level": 8,
+          "guardian": false
+        },
+        {
+          "monster": "lizard",
+          "x": 18,
+          "y": 18,
+          "level": 8,
+          "guardian": false
+        },
+        {
+          "monster": "lizard",
+          "x": 23,
+          "y": 9,
+          "level": 8,
+          "guardian": false
+        },
+        {
+          "monster": "lizard",
+          "x": 26,
+          "y": 21,
+          "level": 8,
+          "guardian": false
+        },
+        {
+          "monster": "lizard",
+          "x": 36,
+          "y": 9,
+          "level": 8,
+          "guardian": false
+        },
+        {
+          "monster": "lizard",
+          "x": 39,
+          "y": 20,
+          "level": 8,
+          "guardian": false
+        },
+        {
+          "monster": "slime",
+          "x": 6,
+          "y": 20,
+          "level": 8,
+          "guardian": false
+        },
+        {
+          "monster": "slime",
+          "x": 20,
+          "y": 14,
+          "level": 8,
+          "guardian": false
+        },
+        {
+          "monster": "slime",
+          "x": 35,
+          "y": 23,
+          "level": 8,
+          "guardian": false
+        }
+      ],
+      "props": [],
+      "resources": [
+        {
+          "id": "cr1",
+          "type": "crystal",
+          "x": 23,
+          "y": 20,
+          "amount": 2,
+          "respawn": 60
+        }
+      ],
+      "chests": [],
+      "waypoint": [
+        5,
+        14
+      ]
+    },
+    "forest_den": {
+      "id": "forest_den",
+      "name": "늑대숲 동굴",
+      "kind": "dungeon",
+      "width": 30,
+      "height": 24,
+      "tiles": [
+        "##############################",
+        "#ffffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffffff#",
+        "#fffffff##fffffff##fffffff##f#",
+        "#fffffff##fffffff##ffffffff#f#",
+        "#fffffff##fffffff##ffffffff#f#",
+        "#fffffff##fffffff##ffffffff#f#",
+        "#fffffff##fffffff##fffffff##f#",
+        "#fffffff##fffffff##fffffff##f#",
+        "#fffffff##fffffff##fffffff##f#",
+        "#ffffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffffff#",
+        "#fffffffffffffffffffffffffffff",
+        "#ffffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffffff#",
+        "#fffffff##fffffff##fffffff##f#",
+        "#fffffff##fffffff##fffffff##f#",
+        "#fffffff##fffffff##fffffff##f#",
+        "#fffffff##fffffff##fffffff##f#",
+        "#fffffff##fffffff##fffffff##f#",
+        "#ffffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffffff#",
+        "##############################"
+      ],
+      "level": 5,
+      "music": "dungeon",
+      "spawn": [
+        2.5,
+        12.5
+      ],
+      "npcs": [],
+      "portals": [
+        {
+          "id": "exit",
+          "name": "바깥으로",
+          "x": 2,
+          "y": 12,
+          "to": "forest",
+          "spawn": [
+            25,
+            4.5
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": false
+        },
+        {
+          "id": "boss",
+          "name": "보스의 방",
+          "x": 28,
+          "y": 12,
+          "to": "wolf_lair",
+          "spawn": [
+            3.5,
+            11.5
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": true
+        }
+      ],
+      "spawns": [
+        {
+          "monster": "goblin_guard",
+          "x": 11,
+          "y": 7,
+          "level": 5,
+          "guardian": true
+        },
+        {
+          "monster": "goblin_guard",
+          "x": 21,
+          "y": 17,
+          "level": 5,
+          "guardian": true
+        },
+        {
+          "monster": "wolf",
+          "x": 6,
+          "y": 8,
+          "level": 5,
+          "guardian": false
+        },
+        {
+          "monster": "wolf",
+          "x": 13,
+          "y": 15,
+          "level": 5,
+          "guardian": false
+        },
+        {
+          "monster": "wolf",
+          "x": 20,
+          "y": 10,
+          "level": 5,
+          "guardian": false
+        },
+        {
+          "monster": "wolf",
+          "x": 24,
+          "y": 18,
+          "level": 5,
+          "guardian": false
+        }
+      ],
+      "props": [],
+      "resources": [
+        {
+          "id": "ore_1",
+          "type": "ore",
+          "x": 13,
+          "y": 5,
+          "amount": 3,
+          "respawn": 0
+        }
+      ],
+      "chests": [
+        {
+          "id": "chest_1",
+          "x": 25,
+          "y": 5,
+          "rarity": "uncommon",
+          "gold": 15,
+          "materials": {
+            "ore": 3
+          }
+        },
+        {
+          "id": "chest_2",
+          "x": 6,
+          "y": 19,
+          "rarity": "rare",
+          "gold": 20,
+          "materials": {
+            "crystal": 1
+          }
+        }
+      ],
+      "waypoint": null,
+      "group": "wolf",
+      "guardianTotal": 2
+    },
+    "mine": {
+      "id": "mine",
+      "name": "잊힌 폐광",
+      "kind": "dungeon",
+      "width": 32,
+      "height": 26,
+      "tiles": [
+        "################################",
+        "#ffffffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffffffff#",
+        "#fffffff##fffffff##fffffff##fff#",
+        "#fffffff##fffffff##ffffffffffff#",
+        "#fffffff##fffffff##ffffffffffff#",
+        "#fffffff##fffffff##ffffffffffff#",
+        "#fffffff##fffffff##fffffff##fff#",
+        "#fffffff##fffffff##fffffff##fff#",
+        "#fffffff##fffffff##fffffff##fff#",
+        "#ffffffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffffffff#",
+        "#fffffffffffffffffffffffffffffff",
+        "#ffffffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffffffff#",
+        "#fffffff##fffffff##fffffff##fff#",
+        "#fffffff##fffffff##ffffffffffff#",
+        "#fffffff##fffffff##ffffffffffff#",
+        "#fffffff##fffffff##ffffffffffff#",
+        "#fffffff##fffffff##fffffff##fff#",
+        "#fffffff##fffffff##fffffff##fff#",
+        "#fffffff##fffffff##fffffff##fff#",
+        "#ffffffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffffffff#",
+        "################################"
+      ],
+      "level": 8,
+      "music": "dungeon",
+      "spawn": [
+        2.5,
+        13.5
+      ],
+      "npcs": [],
+      "portals": [
+        {
+          "id": "exit",
+          "name": "바깥으로",
+          "x": 2,
+          "y": 12,
+          "to": "meadow",
+          "spawn": [
+            30,
+            3.5
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": false
+        },
+        {
+          "id": "boss",
+          "name": "보스의 방",
+          "x": 30,
+          "y": 12,
+          "to": "forge_chamber",
+          "spawn": [
+            3.5,
+            11.5
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": true
+        }
+      ],
+      "spawns": [
+        {
+          "monster": "golem",
+          "x": 12,
+          "y": 7,
+          "level": 8,
+          "guardian": true
+        },
+        {
+          "monster": "golem",
+          "x": 23,
+          "y": 19,
+          "level": 8,
+          "guardian": true
+        },
+        {
+          "monster": "goblin",
+          "x": 6,
+          "y": 8,
+          "level": 8,
+          "guardian": false
+        },
+        {
+          "monster": "goblin",
+          "x": 13,
+          "y": 15,
+          "level": 8,
+          "guardian": false
+        },
+        {
+          "monster": "goblin",
+          "x": 20,
+          "y": 10,
+          "level": 8,
+          "guardian": false
+        },
+        {
+          "monster": "goblin",
+          "x": 26,
+          "y": 18,
+          "level": 8,
+          "guardian": false
+        }
+      ],
+      "props": [],
+      "resources": [
+        {
+          "id": "ore_1",
+          "type": "ore",
+          "x": 13,
+          "y": 5,
+          "amount": 3,
+          "respawn": 0
+        }
+      ],
+      "chests": [
+        {
+          "id": "chest_1",
+          "x": 27,
+          "y": 5,
+          "rarity": "uncommon",
+          "gold": 15,
+          "materials": {
+            "ore": 3
+          }
+        },
+        {
+          "id": "chest_2",
+          "x": 6,
+          "y": 21,
+          "rarity": "rare",
+          "gold": 20,
+          "materials": {
+            "crystal": 1
+          }
+        }
+      ],
+      "waypoint": null,
+      "group": "mine",
+      "guardianTotal": 2
+    },
+    "ruins": {
+      "id": "ruins",
+      "name": "별의 유적",
+      "kind": "dungeon",
+      "width": 34,
+      "height": 26,
+      "tiles": [
+        "##################################",
+        "#ffffffffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffffffffff#",
+        "#fffffff##fffffff##fffffff##fffff#",
+        "#ffffllf##fffffff##fffffff##fffff#",
+        "#ffffllf##fffffff##fffffff##fffff#",
+        "#ffffllf##fffffff##fffffff##fffff#",
+        "#fffffff##fffffff##ffffffffffffff#",
+        "#fffffff##fffffff##ffffffffffffff#",
+        "#fffffff##fffffff##ffffffffffffff#",
+        "#ffffffffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffffffffff#",
+        "#fffffffffffffffffffffffffffffffff",
+        "#ffffffffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffffffffff#",
+        "#fffffff##fffffff##fffffff##fffff#",
+        "#fffffff##fffffff##fffffff#ffflff#",
+        "#fffffff##fffffff##fffffff#ffflff#",
+        "#fffffff##fffffff##fffffff#ffflff#",
+        "#fffffff##fffffff##fffffff##fllff#",
+        "#fffffff##fffffff##fffffff##fllff#",
+        "#fffffff##fffffff##fffffff##fffff#",
+        "#ffffffffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffffffffff#",
+        "##################################"
+      ],
+      "level": 12,
+      "music": "dungeon",
+      "spawn": [
+        2.5,
+        13.5
+      ],
+      "npcs": [],
+      "portals": [
+        {
+          "id": "exit",
+          "name": "바깥으로",
+          "x": 2,
+          "y": 12,
+          "to": "marsh",
+          "spawn": [
+            40,
+            6.5
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": false
+        },
+        {
+          "id": "boss",
+          "name": "보스의 방",
+          "x": 32,
+          "y": 12,
+          "to": "dragon_sanctum",
+          "spawn": [
+            3.5,
+            11.5
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": true
+        }
+      ],
+      "spawns": [
+        {
+          "monster": "lizard_shaman",
+          "x": 12,
+          "y": 7,
+          "level": 12,
+          "guardian": true
+        },
+        {
+          "monster": "lizard_shaman",
+          "x": 22,
+          "y": 19,
+          "level": 12,
+          "guardian": true
+        },
+        {
+          "monster": "lizard_shaman",
+          "x": 27,
+          "y": 8,
+          "level": 12,
+          "guardian": true
+        },
+        {
+          "monster": "lizard",
+          "x": 6,
+          "y": 8,
+          "level": 12,
+          "guardian": false
+        },
+        {
+          "monster": "lizard",
+          "x": 13,
+          "y": 15,
+          "level": 12,
+          "guardian": false
+        },
+        {
+          "monster": "lizard",
+          "x": 20,
+          "y": 10,
+          "level": 12,
+          "guardian": false
+        },
+        {
+          "monster": "lizard",
+          "x": 28,
+          "y": 18,
+          "level": 12,
+          "guardian": false
+        }
+      ],
+      "props": [],
+      "resources": [
+        {
+          "id": "ore_1",
+          "type": "ore",
+          "x": 13,
+          "y": 5,
+          "amount": 3,
+          "respawn": 0
+        }
+      ],
+      "chests": [
+        {
+          "id": "chest_1",
+          "x": 29,
+          "y": 5,
+          "rarity": "uncommon",
+          "gold": 15,
+          "materials": {
+            "ore": 3
+          }
+        },
+        {
+          "id": "chest_2",
+          "x": 6,
+          "y": 21,
+          "rarity": "rare",
+          "gold": 20,
+          "materials": {
+            "crystal": 1
+          }
+        }
+      ],
+      "waypoint": null,
+      "group": "ruins",
+      "guardianTotal": 3
+    },
+    "wolf_lair": {
+      "id": "wolf_lair",
+      "name": "늑대왕의 둥지",
+      "kind": "boss",
+      "width": 28,
+      "height": 24,
+      "tiles": [
+        "############################",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "############################"
+      ],
+      "level": 5,
+      "music": "boss",
+      "spawn": [
+        3.5,
+        11.5
+      ],
+      "npcs": [],
+      "portals": [
+        {
+          "id": "exit",
+          "name": "입구로",
+          "x": 2,
+          "y": 11,
+          "to": "forest_den",
+          "spawn": [
+            27,
+            12.5
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": false
+        }
+      ],
+      "spawns": [
+        {
+          "monster": "wolf_king",
+          "x": 19,
+          "y": 12,
+          "level": 5,
+          "guardian": false
+        }
+      ],
+      "props": [
+        {
+          "type": "crystal",
+          "x": 23,
+          "y": 5,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        },
+        {
+          "type": "crystal",
+          "x": 23,
+          "y": 19,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        }
+      ],
+      "resources": [],
+      "chests": [],
+      "waypoint": null,
+      "group": "wolf",
+      "boss": "wolf_king"
+    },
+    "forge_chamber": {
+      "id": "forge_chamber",
+      "name": "광산군주의 전당",
+      "kind": "boss",
+      "width": 28,
+      "height": 24,
+      "tiles": [
+        "############################",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "############################"
+      ],
+      "level": 9,
+      "music": "boss",
+      "spawn": [
+        3.5,
+        11.5
+      ],
+      "npcs": [],
+      "portals": [
+        {
+          "id": "exit",
+          "name": "입구로",
+          "x": 2,
+          "y": 11,
+          "to": "mine",
+          "spawn": [
+            29,
+            12.5
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": false
+        }
+      ],
+      "spawns": [
+        {
+          "monster": "mine_golem",
+          "x": 19,
+          "y": 12,
+          "level": 9,
+          "guardian": false
+        }
+      ],
+      "props": [
+        {
+          "type": "crystal",
+          "x": 23,
+          "y": 5,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        },
+        {
+          "type": "crystal",
+          "x": 23,
+          "y": 19,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        }
+      ],
+      "resources": [],
+      "chests": [],
+      "waypoint": null,
+      "group": "mine",
+      "boss": "mine_golem"
+    },
+    "dragon_sanctum": {
+      "id": "dragon_sanctum",
+      "name": "원룡의 성역",
+      "kind": "boss",
+      "width": 28,
+      "height": 24,
+      "tiles": [
+        "############################",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffff#",
+        "############################"
+      ],
+      "level": 14,
+      "music": "boss",
+      "spawn": [
+        3.5,
+        11.5
+      ],
+      "npcs": [],
+      "portals": [
+        {
+          "id": "exit",
+          "name": "입구로",
+          "x": 2,
+          "y": 11,
+          "to": "ruins",
+          "spawn": [
+            31,
+            12.5
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": false
+        }
+      ],
+      "spawns": [
+        {
+          "monster": "ancient_drake",
+          "x": 19,
+          "y": 12,
+          "level": 14,
+          "guardian": false
+        }
+      ],
+      "props": [
+        {
+          "type": "crystal",
+          "x": 23,
+          "y": 5,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        },
+        {
+          "type": "crystal",
+          "x": 23,
+          "y": 19,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        }
+      ],
+      "resources": [],
+      "chests": [],
+      "waypoint": null,
+      "group": "ruins",
+      "boss": "ancient_drake"
+    }
+  },
+  "mapKinds": {
+    "town": "마을",
+    "field": "필드",
+    "dungeon": "던전",
+    "boss": "보스방"
+  },
+  "spritePalette": {
+    "k": "#28312a",
+    "s": "@skin",
+    "h": "@hair",
+    "c": "@cloth",
+    "a": "@accent",
+    "m": "#bcc5b2",
+    "d": "#5e6e60",
+    "w": "#f4e8c5",
+    "r": "#b85b43",
+    "g": "#73985c",
+    "b": "#7c613c",
+    "y": "#d6bb73",
+    "o": "#d39758",
+    "v": "#967f9e",
+    "e": "#302f26",
+    "f": "#afd2bc",
+    "n": "#8095a3"
+  },
+  "sprites": {
+    "warrior": {
+      "width": 16,
+      "height": 20,
+      "rows": [
+        "......hhhh......",
+        ".....hhhhhh.....",
+        ".....hssssh.....",
+        ".....sskssk.....",
+        "......ssss......",
+        "......hssh......",
+        "....aacccca.....",
+        "...aacccccca....",
+        "...accmcmcca....",
+        "..ssccmmmccss...",
+        "..sscccccccss...",
+        "..aacccmcccaa...",
+        "...acccccca.m...",
+        "...acccccca.m...",
+        "....cbbbbc..m...",
+        "....dd..dd..m...",
+        "....dd..dd..m...",
+        "....dd..dd..y...",
+        "...bbb..bbb.....",
+        "...bbb..bbb....."
+      ],
+      "palette": {}
+    },
+    "archer": {
+      "width": 16,
+      "height": 20,
+      "rows": [
+        "......cccc......",
+        ".....cccccc.....",
+        "....ccssshcc....",
+        "....csksskcc....",
+        ".....cssssc.....",
+        "......sssh......",
+        "....aacccca.....",
+        "...acccbccca....",
+        "...cccbcccaa.y..",
+        "..ssccbcccss..y.",
+        "..sscccbccss..y.",
+        "...accccbca...y.",
+        "...accccbca..y..",
+        "....ccbbcc..y...",
+        "....dd..dd......",
+        "....dd..dd......",
+        "....dd..dd......",
+        "...bbb..bbb.....",
+        "...bbb..bbb.....",
+        "................"
+      ],
+      "palette": {}
+    },
+    "magician": {
+      "width": 16,
+      "height": 20,
+      "rows": [
+        ".......a........",
+        "......ccc.......",
+        ".....ccccc......",
+        "....ccccccc.....",
+        "...aaaacaaaa....",
+        ".....hssssh.....",
+        ".....sskssk.....",
+        "......ssss......",
+        "....aacccca..f..",
+        "...accccccca.f..",
+        "..sscccccccs.b..",
+        "..ssccaaaccs.b..",
+        "...acccccca..b..",
+        "...acccccca..b..",
+        "...acccccca..b..",
+        "...cccaaccc..b..",
+        "..cccccccccc.b..",
+        "..cccccccccc.b..",
+        "...bbb..bbb.....",
+        "................"
+      ],
+      "palette": {}
+    },
+    "guardian": {
+      "width": 16,
+      "height": 20,
+      "rows": [
+        "......mmmm......",
+        ".....mmmmmm.....",
+        ".....mssmss.....",
+        ".....mskskm.....",
+        "......ssss......",
+        "....aammmmaa....",
+        "...ammmmmmma....",
+        "..mmmmccmmmm....",
+        "..mmmcccmmaa....",
+        "..ssmmmmmmss....",
+        "..mmmaaaammss...",
+        "..maaaaaamm.....",
+        "..maamaaaam..m..",
+        "..maaaaaaam..m..",
+        "...aaaaaam..b...",
+        "....dd..dd..b...",
+        "....dd..dd......",
+        "....dd..dd......",
+        "...mmm..mmm.....",
+        "...bbb..bbb....."
+      ],
+      "palette": {}
+    },
+    "elf_ears": {
+      "width": 16,
+      "height": 20,
+      "rows": [
+        "................",
+        "................",
+        "................",
+        "...s........s...",
+        "..ss........ss..",
+        "................",
+        "................",
+        "................",
+        "................",
+        "................",
+        "................",
+        "................",
+        "................",
+        "................",
+        "................",
+        "................",
+        "................",
+        "................",
+        "................",
+        "................"
+      ],
+      "palette": {}
+    },
+    "dragon_horns": {
+      "width": 16,
+      "height": 20,
+      "rows": [
+        "....a......a....",
+        "....aa....aa....",
+        ".....a....a.....",
+        "................",
+        "................",
+        "................",
+        "................",
+        "................",
+        "................",
+        "................",
+        "................",
+        "................",
+        "................",
+        "................",
+        ".............a..",
+        ".............aa.",
+        "..............a.",
+        ".............aa.",
+        "............aa..",
+        "................"
+      ],
+      "palette": {}
+    },
+    "dwarf_beard": {
+      "width": 16,
+      "height": 20,
+      "rows": [
+        "................",
+        "................",
+        "................",
+        "................",
+        "................",
+        ".....hhhhhh.....",
+        ".....hwhhwh.....",
+        "......hhhh......",
+        "......hhhh......",
+        ".......hh.......",
+        "................",
+        "................",
+        "................",
+        "................",
+        "................",
+        "................",
+        "................",
+        "................",
+        "................",
+        "................"
+      ],
+      "palette": {}
+    },
+    "beast_ears": {
+      "width": 16,
+      "height": 20,
+      "rows": [
+        "....h......h....",
+        "....ha....ah....",
+        "....hh....hh....",
+        "................",
+        "................",
+        "................",
+        "................",
+        "................",
+        "................",
+        "................",
+        "................",
+        "................",
+        "................",
+        "................",
+        "................",
+        "..............h.",
+        ".............hh.",
+        "............hhh.",
+        "............hh..",
+        "................"
+      ],
+      "palette": {}
+    },
+    "slime": {
+      "width": 16,
+      "height": 12,
+      "rows": [
+        "................",
+        "......gggg......",
+        "....gggggggg....",
+        "...ggfffffggg...",
+        "..gggffffffggg..",
+        "..gggggggggggg..",
+        ".ggggkggggkgggg.",
+        ".ggggkggggkgggg.",
+        ".gggggggggggggg.",
+        "..gggggwwggggg..",
+        "...gggggggggg...",
+        "....dddddddd...."
+      ],
+      "palette": {
+        "g": "#89b68a",
+        "f": "#bdd5a4",
+        "d": "#668568"
+      }
+    },
+    "goblin": {
+      "width": 16,
+      "height": 14,
+      "rows": [
+        ".....ggggg......",
+        "..g.ggggggg.g...",
+        "..gggkggkgggg...",
+        "...ggggggggg....",
+        "....ggwwwgg.....",
+        ".....ggggg......",
+        "....bbccbb......",
+        "...bbccccbb.....",
+        "..ggbccccbgg.m..",
+        "..ggbccccbgg.m..",
+        "....bbbbbb...m..",
+        "....bb..bb...y..",
+        "....gg..gg......",
+        "...bbb..bbb....."
+      ],
+      "palette": {
+        "c": "#8a7350"
+      }
+    },
+    "wolf": {
+      "width": 18,
+      "height": 14,
+      "rows": [
+        "..................",
+        "...dd........dd...",
+        "...dndddddddndd...",
+        "....nnnnnnnnnn....",
+        "...nnkwnnnwknnn...",
+        "...nnnnnwnnnnnn...",
+        "....nnnnknnnnn....",
+        ".....nwwwwnn......",
+        "....nnnnnnnnn.....",
+        "...nnnnnnnnnnnn...",
+        "..nnnnnnnnnnnnnd..",
+        ".dnnnnnnnnnnnnn.d.",
+        "..nn..nn..nn..nn..",
+        "..dd..dd..dd..dd.."
+      ],
+      "palette": {
+        "n": "#9daba6",
+        "d": "#66766b"
+      }
+    },
+    "boar": {
+      "width": 18,
+      "height": 12,
+      "rows": [
+        "..................",
+        "....bbbbbbbb......",
+        "..bbbbbbbbbbbb....",
+        ".bbbbbbbbbbbbbb...",
+        "bbbbbbbbbbbbbbbb..",
+        "bbbkbbbbbbbbkbbb..",
+        "bbwwbbboobbwwbbb..",
+        ".bbbbooooobbbbb...",
+        "..bbbooeeoobbbb...",
+        "...bbbbbbbbbbb....",
+        "...bb..bb..bb.....",
+        "...kk..kk..kk....."
+      ],
+      "palette": {
+        "b": "#96714c",
+        "o": "#b28b68"
+      }
+    },
+    "lizard": {
+      "width": 16,
+      "height": 14,
+      "rows": [
+        ".....gggg.......",
+        "....gggggg......",
+        "...ggkgkgsg.....",
+        "....ggwwwg......",
+        ".....gggg.......",
+        "....aaccca......",
+        "...ggcccccgg....",
+        "..gg.ccccc.gg...",
+        ".....ccccc...g..",
+        ".....ccccc...gg.",
+        ".....gg.gg..gg..",
+        "....ggg.ggggg...",
+        "....ddd.ddd.....",
+        "................"
+      ],
+      "palette": {
+        "g": "#6b9b75",
+        "c": "#847951"
+      }
+    },
+    "golem": {
+      "width": 16,
+      "height": 14,
+      "rows": [
+        "....mmmmmmmm....",
+        "...mmddddddmm...",
+        "..mmmfmmmmfmmm..",
+        "..mmmmmmmmmmmm..",
+        "...mmmwwwwmmm...",
+        "..mmmmmmmmmmmm..",
+        ".mmmmdmmmmdmmm..",
+        "mmmmdmmmmmmdmmm.",
+        "mmm.mmmffmmm.mmm",
+        "mmm.mmmmmmmm.mmm",
+        "....mmmmmmmm....",
+        "....mm..mm......",
+        "...mmm..mmm.....",
+        "...ddd..ddd....."
+      ],
+      "palette": {
+        "m": "#a5afa0",
+        "f": "#b3d7be"
+      }
+    },
+    "drake": {
+      "width": 24,
+      "height": 18,
+      "rows": [
+        "..rr................rr..",
+        "..rrr..............rrr..",
+        ".rrrrr....aa......rrrrr.",
+        "rrrrrrr..arra....rrrrrrr",
+        "rrrrr.rrarrrrarrr.rrrrrr",
+        "rrrr..rrrrrrrrrrr..rrrrr",
+        "rrr...rrrkwkwrrrr...rrrr",
+        "rr.....rrrrwwrrrr....rrr",
+        "r.......rrrrrrrrr.....rr",
+        ".......rrrrrrrrrrr.....r",
+        "......rrrroooorrrrr.....",
+        ".....rrrrrooooorrrrr....",
+        "......rrrrrooorrrrrr....",
+        ".......rrrrrrrrrrr......",
+        ".......rrr...rrr..rr....",
+        "......rrrr...rrrr..rr...",
+        "......kkkk...kkkk...rr..",
+        ".....................rr."
+      ],
+      "palette": {
+        "r": "#a9674d",
+        "o": "#d3a376",
+        "a": "#e3c590"
+      }
+    },
+    "villager": {
+      "width": 16,
+      "height": 20,
+      "rows": [
+        "......hhhh......",
+        ".....hhhhhh.....",
+        ".....hssssh.....",
+        ".....sskssk.....",
+        "......ssss......",
+        "......hssh......",
+        "....aacccca.....",
+        "...aacccccca....",
+        "...accmcmcca....",
+        "..ssccmmmccss...",
+        "..sscccccccss...",
+        "..aacccmcccaa...",
+        "...acccccca.....",
+        "...acccccca.....",
+        "....cbbbbc......",
+        "....dd..dd......",
+        "....dd..dd......",
+        "....dd..dd......",
+        "...bbb..bbb.....",
+        "...bbb..bbb....."
+      ],
+      "palette": {
+        "c": "#a18b67",
+        "a": "#d6b987",
+        "m": "#c3b59a"
+      }
+    },
+    "smith": {
+      "width": 16,
+      "height": 20,
+      "rows": [
+        "......hhhh......",
+        ".....hhhhhh.....",
+        ".....hssssh.....",
+        ".....sskssk.....",
+        "......ssss......",
+        "......hssh......",
+        "....aacccca.....",
+        "...aacccccca....",
+        "...accmcmcca....",
+        "..ssccmmmccsmmmm",
+        "..sscccccccsmmmm",
+        "..aacccmcccaab..",
+        "...acccccca..b..",
+        "...acccccca..b..",
+        "....cbbbbc......",
+        "....dd..dd......",
+        "....dd..dd......",
+        "....dd..dd......",
+        "...bbb..bbb.....",
+        "...bbb..bbb....."
+      ],
+      "palette": {
+        "c": "#7b6a58",
+        "a": "#a9916b",
+        "b": "#72583c"
+      }
+    },
+    "healer": {
+      "width": 16,
+      "height": 20,
+      "rows": [
+        ".......a........",
+        "......ccc.......",
+        ".....ccccc......",
+        "....ccccccc.....",
+        "...aaaacaaaa....",
+        ".....hssssh.....",
+        ".....sskssk.....",
+        "......ssss......",
+        "....aacccca..f..",
+        "...accccccca.f..",
+        "..sscccccccs.b..",
+        "..ssccaaaccs.b..",
+        "...acccccca..b..",
+        "...acccccca..b..",
+        "...acccccca..b..",
+        "...cccaaccc..b..",
+        "..cccccccccc.b..",
+        "..cccccccccc.b..",
+        "...bbb..bbb.....",
+        "................"
+      ],
+      "palette": {
+        "c": "#ded7bd",
+        "a": "#8fa9ad",
+        "f": "#e8d89b"
+      }
+    },
+    "tree": {
+      "width": 20,
+      "height": 15,
+      "rows": [
+        ".......gggggg.......",
+        ".....gggggggggg.....",
+        "...ggggffffffgggg...",
+        "..ggggffffffgggggg..",
+        ".ggggffffffgggggggg.",
+        "gggggggggggggggggggg",
+        "gggggggggggggggggggg",
+        ".gggggggggggggggggg.",
+        "..gggggggggggggggg..",
+        "...gggggggggggggg...",
+        "......bbbbbbbb......",
+        ".......bbbbbb.......",
+        ".......bbbbbb.......",
+        ".......bbbbbb.......",
+        "......bbbbbbbb......"
+      ],
+      "palette": {
+        "g": "#587b50",
+        "f": "#79965c"
+      }
+    },
+    "rock": {
+      "width": 14,
+      "height": 6,
+      "rows": [
+        "....mmmmmm....",
+        "..mmmmmmmmmm..",
+        ".mmmffffmmmmm.",
+        "mmmmmmmmmmmmmm",
+        ".mmmmmmmmmmmm.",
+        "..dddddddddd.."
+      ],
+      "palette": {
+        "m": "#8a9585",
+        "f": "#a7af9b",
+        "d": "#707d70"
+      }
+    },
+    "herb": {
+      "width": 10,
+      "height": 6,
+      "rows": [
+        "...g..g...",
+        "..gg..gg..",
+        ".ggg.gggg.",
+        "..gggggg..",
+        "...gggg...",
+        "....bb...."
+      ],
+      "palette": {
+        "g": "#729657"
+      }
+    },
+    "ore": {
+      "width": 11,
+      "height": 6,
+      "rows": [
+        "...mmmmm...",
+        "..mmmmmmm..",
+        ".mmmffmmmm.",
+        "mmmmfffmmmm",
+        ".mmmmmmmmm.",
+        "..ddddddd.."
+      ],
+      "palette": {}
+    },
+    "crystal": {
+      "width": 9,
+      "height": 7,
+      "rows": [
+        "....f....",
+        "...fff...",
+        "..ffvff..",
+        ".ffvvvff.",
+        "..fvvvf..",
+        "...fvf...",
+        "....f...."
+      ],
+      "palette": {
+        "f": "#aecbcc",
+        "v": "#819ba9"
+      }
+    },
+    "chest": {
+      "width": 14,
+      "height": 8,
+      "rows": [
+        "..bbbbbbbbbb..",
+        ".bbyyyyyyyybb.",
+        "bbbbbbbbbbbbbb",
+        "bbbyyyyyyyybbb",
+        "bbbbbyyybbbbbb",
+        "bbbbbyyybbbbbb",
+        "bbbbbbbbbbbbbb",
+        ".dddddddddddd."
+      ],
+      "palette": {
+        "b": "#9a7548",
+        "y": "#d0b26f"
+      }
+    },
+    "board": {
+      "width": 14,
+      "height": 9,
+      "rows": [
+        "..bbbbbbbbbb..",
+        "..bwwwwwwwwb..",
+        "..bwkkkkkkwb..",
+        "..bwwwwwwwwb..",
+        "..bwkkkkwwwb..",
+        "..bwwwwwwwwb..",
+        "..bbbbbbbbbb..",
+        "....b....b....",
+        "....b....b...."
+      ],
+      "palette": {}
+    },
+    "waystone": {
+      "width": 12,
+      "height": 9,
+      "rows": [
+        ".....mm.....",
+        "....mffm....",
+        "...mmffmm...",
+        "...mmvvmm...",
+        "...mmvvmm...",
+        "...mmffmm...",
+        "...mmmmmm...",
+        "..mmmmmmmm..",
+        "..dddddddd.."
+      ],
+      "palette": {}
+    },
+    "warrior_back": {
+      "width": 16,
+      "height": 20,
+      "rows": [
+        "......hhhh......",
+        ".....hhhhhh.....",
+        ".....hhhhhh.....",
+        ".....hhhhhh.....",
+        "......hhhh......",
+        "......hhhh......",
+        "....aacccca.....",
+        "...aacccccca....",
+        "...accmcmcca....",
+        "..ssccmmmccss...",
+        "..sscccccccss...",
+        "..aacccmcccaa...",
+        "...acccccca.m...",
+        "...acccccca.m...",
+        "....cbbbbc..m...",
+        "....dd..dd..m...",
+        "....dd..dd..m...",
+        "....dd..dd..y...",
+        "...bbb..bbb.....",
+        "...bbb..bbb....."
+      ],
+      "palette": {}
+    },
+    "archer_back": {
+      "width": 16,
+      "height": 20,
+      "rows": [
+        "......cccc......",
+        ".....cccccc.....",
+        "....cchhhhcc....",
+        "....chhhhhcc....",
+        ".....chhhhc.....",
+        "......hhhh......",
+        "....aacccca.....",
+        "...acccbccca....",
+        "...cccbcccaa.y..",
+        "..ssccbcccss..y.",
+        "..sscccbccss..y.",
+        "...accccbca...y.",
+        "...accccbca..y..",
+        "....ccbbcc..y...",
+        "....dd..dd......",
+        "....dd..dd......",
+        "....dd..dd......",
+        "...bbb..bbb.....",
+        "...bbb..bbb.....",
+        "................"
+      ],
+      "palette": {}
+    },
+    "magician_back": {
+      "width": 16,
+      "height": 20,
+      "rows": [
+        ".......a........",
+        "......ccc.......",
+        ".....ccccc......",
+        "....ccccccc.....",
+        "...aaaacaaaa....",
+        ".....hhhhhh.....",
+        ".....sskssk.....",
+        "......ssss......",
+        "....aacccca..f..",
+        "...accccccca.f..",
+        "..sscccccccs.b..",
+        "..ssccaaaccs.b..",
+        "...acccccca..b..",
+        "...acccccca..b..",
+        "...acccccca..b..",
+        "...cccaaccc..b..",
+        "..cccccccccc.b..",
+        "..cccccccccc.b..",
+        "...bbb..bbb.....",
+        "................"
+      ],
+      "palette": {}
+    },
+    "guardian_back": {
+      "width": 16,
+      "height": 20,
+      "rows": [
+        "......mmmm......",
+        ".....mmmmmm.....",
+        ".....mhhmhh.....",
+        ".....mhhhhm.....",
+        "......hhhh......",
+        "....aammmmaa....",
+        "...ammmmmmma....",
+        "..mmmmccmmmm....",
+        "..mmmcccmmaa....",
+        "..ssmmmmmmss....",
+        "..mmmaaaammss...",
+        "..maaaaaamm.....",
+        "..maamaaaam..m..",
+        "..maaaaaaam..m..",
+        "...aaaaaam..b...",
+        "....dd..dd..b...",
+        "....dd..dd......",
+        "....dd..dd......",
+        "...mmm..mmm.....",
+        "...bbb..bbb....."
+      ],
+      "palette": {}
+    }
+  },
+  "projectiles": {
+    "arrow": {
+      "speed": 11,
+      "radius": 0.13,
+      "color": "#e7cf92",
+      "width": 0.48,
+      "trail": false
+    },
+    "spark": {
+      "speed": 8,
+      "radius": 0.17,
+      "color": "#bfacd9",
+      "width": 0.24,
+      "trail": true
+    },
+    "fire": {
+      "speed": 7,
+      "radius": 0.22,
+      "color": "#e3a269",
+      "width": 0.38,
+      "trail": true
+    },
+    "rune": {
+      "speed": 9,
+      "radius": 0.22,
+      "color": "#a8c8bb",
+      "width": 0.36,
+      "trail": true
+    }
+  },
+  "render": {
+    "tile": 48,
+    "spriteScale": 2,
+    "monsterScale": 2,
+    "npcScale": 2,
+    "shadowRadius": 0.29,
+    "shadowSquash": 0.4,
+    "walkBob": 1.7,
+    "walkRate": 11,
+    "idleBob": 0.6,
+    "idleRate": 2,
+    "hitFlash": 0.16,
+    "spritePixel": 1,
+    "minimapSize": 140,
+    "minimapMobile": 94,
+    "minimapScale": 3.5,
+    "floatRise": 35,
+    "floatFont": 16,
+    "nameFont": 11,
+    "barWidth": 34,
+    "barHeight": 4,
+    "npcLabelRange": 6,
+    "lightAlpha": 0.12,
+    "grassTuftRate": 7,
+    "waterWaveRate": 1.4,
+    "waterWaveAlpha": 0.2,
+    "houseWallRatio": 0.66,
+    "houseRoofRatio": 0.45,
+    "portalPulse": 2.2,
+    "portalSize": 0.55,
+    "labelStroke": 3,
+    "cameraMargin": 0.5,
+    "hazardLine": 2,
+    "hazardAlpha": 0.27,
+    "playerLightRadius": 5,
+    "glowRadius": 0.65,
+    "effectPulse": 0.4,
+    "bossBarWidth": 0.52,
+    "bossBarMin": 180,
+    "bossBarY": 19,
+    "npcMarkSize": 18,
+    "tileVariation": 0.035,
+    "lowHpVignette": 0.3,
+    "levelLightDuration": 1.5,
+    "screenShake": 3,
+    "shakeDecay": 12,
+    "treeScale": 3.8,
+    "rockScale": 2.4,
+    "resourceScale": 2,
+    "defaultSkin": "#dfbf94",
+    "defaultHair": "#78634a",
+    "defaultCloth": "#968263",
+    "defaultAccent": "#d1b579",
+    "hitBrightness": 2.5,
+    "tintLetters": [
+      "g",
+      "m",
+      "n",
+      "r"
     ],
-    "counterPower": [
-      "power",
-      "counterPower"
-    ]
-  }
+    "tintMix": 0.55,
+    "walkFeetRows": 3,
+    "headRows": 6,
+    "floorMarkAlpha": 0.1,
+    "treeShadowAlpha": 0.22,
+    "portalAlpha": 0.4,
+    "portalRingWidth": 2,
+    "healthBarOffset": 8,
+    "healthBarOutline": 1,
+    "npcNameOffset": 8,
+    "textShadow": "#242c22",
+    "labelPadding": 4,
+    "labelBg": "#253024dc",
+    "orbRadius": 3,
+    "projectileTrail": 0.5,
+    "projectileLine": 2,
+    "roofLineWidth": 1,
+    "propShadowOffset": 0.15,
+    "house": {
+      "roofHeight": 0.43,
+      "overhang": 0.15,
+      "doorWidth": 0.62,
+      "doorHeight": 0.85,
+      "windowSize": 0.42,
+      "windowXs": [
+        0.2,
+        0.72
+      ],
+      "windowY": 0.61,
+      "trim": 0.055,
+      "roofLineStep": 0.28
+    },
+    "fountain": {
+      "radius": 0.9,
+      "rim": 0.15,
+      "center": 0.25
+    },
+    "mini": {
+      "padding": 6,
+      "playerRadius": 3,
+      "dot": 2,
+      "npcColor": "#edcf84",
+      "portalColor": "#acd8d4",
+      "enemyColor": "#b34b3d",
+      "guardColor": "#e4a25e",
+      "playerColor": "#fff5d4"
+    },
+    "navigationMargin": 30,
+    "navigationTop": 93,
+    "navigationBottom": 115,
+    "navigationRadius": 13,
+    "navigationFont": 10,
+    "navigationLabelOffset": 24,
+    "navigationLine": 2
+  },
+  "audio": {
+    "enabled": true,
+    "music": true,
+    "effects": true,
+    "masterGain": 0.65,
+    "noteBase": 440,
+    "midiReference": 69,
+    "semitones": 12,
+    "attack": 0.025,
+    "release": 0.16,
+    "pluckDecay": 0.6,
+    "fluteLevel": 0.42,
+    "luteLevel": 0.24,
+    "bassLevel": 0.14,
+    "drumLevel": 0.1,
+    "filter": 2100,
+    "noiseLength": 0.4,
+    "noiseDecay": 0.15,
+    "trackFade": 0.18,
+    "tracks": {
+      "town": {
+        "bpm": 88,
+        "beats": 32,
+        "melody": [
+          74,
+          76,
+          77,
+          81,
+          79,
+          77,
+          76,
+          74,
+          72,
+          74,
+          76,
+          72,
+          69,
+          72,
+          74,
+          null,
+          74,
+          76,
+          79,
+          81,
+          84,
+          81,
+          79,
+          77,
+          76,
+          74,
+          72,
+          69,
+          72,
+          74,
+          74,
+          null
+        ],
+        "chords": [
+          [
+            62,
+            65,
+            69
+          ],
+          [
+            60,
+            64,
+            67
+          ],
+          [
+            58,
+            62,
+            65
+          ],
+          [
+            60,
+            64,
+            67
+          ]
+        ],
+        "bass": [
+          38,
+          36,
+          34,
+          36
+        ],
+        "step": 1,
+        "arpeggio": [
+          0,
+          1,
+          2,
+          1
+        ],
+        "drum": false
+      },
+      "field": {
+        "bpm": 104,
+        "beats": 32,
+        "melody": [
+          67,
+          69,
+          71,
+          74,
+          76,
+          74,
+          71,
+          69,
+          67,
+          71,
+          74,
+          79,
+          76,
+          74,
+          71,
+          null,
+          69,
+          71,
+          74,
+          76,
+          79,
+          76,
+          74,
+          71,
+          69,
+          67,
+          64,
+          67,
+          69,
+          71,
+          67,
+          null
+        ],
+        "chords": [
+          [
+            55,
+            59,
+            62
+          ],
+          [
+            60,
+            64,
+            67
+          ],
+          [
+            62,
+            66,
+            69
+          ],
+          [
+            55,
+            59,
+            62
+          ]
+        ],
+        "bass": [
+          31,
+          36,
+          38,
+          31
+        ],
+        "step": 1,
+        "arpeggio": [
+          0,
+          1,
+          2,
+          1
+        ],
+        "drum": false
+      },
+      "dungeon": {
+        "bpm": 72,
+        "beats": 32,
+        "melody": [
+          62,
+          null,
+          65,
+          69,
+          67,
+          null,
+          65,
+          62,
+          60,
+          null,
+          62,
+          65,
+          64,
+          null,
+          60,
+          null,
+          62,
+          null,
+          69,
+          72,
+          70,
+          null,
+          69,
+          65,
+          64,
+          null,
+          62,
+          60,
+          58,
+          null,
+          62,
+          null
+        ],
+        "chords": [
+          [
+            50,
+            53,
+            57
+          ],
+          [
+            48,
+            52,
+            55
+          ],
+          [
+            46,
+            50,
+            53
+          ],
+          [
+            45,
+            48,
+            52
+          ]
+        ],
+        "bass": [
+          26,
+          24,
+          22,
+          21
+        ],
+        "step": 1,
+        "arpeggio": [
+          0,
+          1,
+          2,
+          1
+        ],
+        "drum": false
+      },
+      "boss": {
+        "bpm": 128,
+        "beats": 32,
+        "melody": [
+          62,
+          62,
+          69,
+          65,
+          67,
+          69,
+          72,
+          69,
+          65,
+          65,
+          72,
+          69,
+          70,
+          69,
+          67,
+          65,
+          62,
+          65,
+          69,
+          74,
+          72,
+          70,
+          69,
+          67,
+          65,
+          64,
+          62,
+          60,
+          58,
+          60,
+          62,
+          62
+        ],
+        "chords": [
+          [
+            50,
+            53,
+            57
+          ],
+          [
+            46,
+            50,
+            53
+          ],
+          [
+            48,
+            52,
+            55
+          ],
+          [
+            45,
+            49,
+            52
+          ]
+        ],
+        "bass": [
+          26,
+          22,
+          24,
+          21
+        ],
+        "step": 1,
+        "arpeggio": [
+          0,
+          1,
+          2,
+          1
+        ],
+        "drum": true
+      }
+    },
+    "sfx": {
+      "sword": {
+        "wave": "triangle",
+        "notes": [
+          210,
+          110
+        ],
+        "duration": 0.09,
+        "gain": 0.28,
+        "gap": 0.065,
+        "noise": {
+          "duration": 0.08,
+          "gain": 0.12,
+          "filter": 1300
+        }
+      },
+      "arrow": {
+        "wave": "sine",
+        "notes": [
+          740,
+          390
+        ],
+        "duration": 0.075,
+        "gain": 0.18,
+        "gap": 0.065,
+        "noise": {
+          "duration": 0.06,
+          "gain": 0.07,
+          "filter": 2100
+        }
+      },
+      "magic": {
+        "wave": "sine",
+        "notes": [
+          660,
+          880
+        ],
+        "duration": 0.14,
+        "gain": 0.22,
+        "gap": 0.065
+      },
+      "fire": {
+        "wave": "sawtooth",
+        "notes": [
+          180,
+          110
+        ],
+        "duration": 0.2,
+        "gain": 0.18,
+        "gap": 0.065,
+        "noise": {
+          "duration": 0.18,
+          "gain": 0.1,
+          "filter": 950
+        }
+      },
+      "ice": {
+        "wave": "sine",
+        "notes": [
+          1046,
+          784
+        ],
+        "duration": 0.2,
+        "gain": 0.18,
+        "gap": 0.065
+      },
+      "shield": {
+        "wave": "triangle",
+        "notes": [
+          150,
+          100
+        ],
+        "duration": 0.14,
+        "gain": 0.28,
+        "gap": 0.065,
+        "noise": {
+          "duration": 0.12,
+          "gain": 0.1,
+          "filter": 900
+        }
+      },
+      "heavy": {
+        "wave": "triangle",
+        "notes": [
+          100,
+          60
+        ],
+        "duration": 0.24,
+        "gain": 0.4,
+        "gap": 0.065,
+        "noise": {
+          "duration": 0.22,
+          "gain": 0.24,
+          "filter": 240
+        }
+      },
+      "hit": {
+        "wave": "triangle",
+        "notes": [
+          160,
+          80
+        ],
+        "duration": 0.08,
+        "gain": 0.22,
+        "gap": 0.065,
+        "noise": {
+          "duration": 0.075,
+          "gain": 0.09,
+          "filter": 650
+        }
+      },
+      "loot": {
+        "wave": "sine",
+        "notes": [
+          784,
+          1046
+        ],
+        "duration": 0.15,
+        "gain": 0.2,
+        "gap": 0.065
+      },
+      "level": {
+        "wave": "sine",
+        "notes": [
+          523,
+          659,
+          784,
+          1046
+        ],
+        "duration": 0.18,
+        "gain": 0.25,
+        "gap": 0.065
+      },
+      "heal": {
+        "wave": "sine",
+        "notes": [
+          523,
+          784,
+          1046
+        ],
+        "duration": 0.16,
+        "gain": 0.2,
+        "gap": 0.065
+      },
+      "buff": {
+        "wave": "sine",
+        "notes": [
+          440,
+          660,
+          880
+        ],
+        "duration": 0.17,
+        "gain": 0.18,
+        "gap": 0.065
+      },
+      "click": {
+        "wave": "triangle",
+        "notes": [
+          440
+        ],
+        "duration": 0.05,
+        "gain": 0.12,
+        "gap": 0.065
+      },
+      "death": {
+        "wave": "triangle",
+        "notes": [
+          220,
+          165,
+          110
+        ],
+        "duration": 0.3,
+        "gain": 0.22,
+        "gap": 0.065
+      },
+      "boss": {
+        "wave": "triangle",
+        "notes": [
+          110,
+          165,
+          220
+        ],
+        "duration": 0.24,
+        "gain": 0.22,
+        "gap": 0.065
+      }
+    },
+    "luteDivisions": 2,
+    "bassEvery": 4,
+    "chordNoteDuration": 0.5,
+    "melodyDuration": 0.82,
+    "bassDuration": 1.8,
+    "minimumGain": 0.0001,
+    "startLatency": 0.04,
+    "fluteFilter": 1800,
+    "luteFilter": 1700,
+    "bassFilter": 500,
+    "drumFilter": 260,
+    "drumDuration": 0.12,
+    "drumEvery": 2,
+    "drumStrongEvery": 4,
+    "sfxVolumeScale": 1,
+    "sustain": 0.42,
+    "fluteWave": "sine",
+    "luteWave": "triangle",
+    "bassWave": "sine"
+  },
+  "ui": {
+    "newGame": "새 모험",
+    "continue": "이어하기",
+    "start": "모험 시작",
+    "titleTag": "탑뷰 판타지 RPG",
+    "createTitle": "당신의 모험가",
+    "createHint": "종족과 직업을 고르면 오크우드에서 모험을 시작합니다.",
+    "race": "종족",
+    "class": "직업",
+    "name": "이름",
+    "namePlaceholder": "모험가",
+    "autoCombat": "이동은 직접 · 공격과 기술은 자동",
+    "controls": "WASD / 방향키 이동 · E 상호작용 · Q 물약",
+    "mobileControls": "왼쪽 조이스틱으로 이동 · 가까이 가서 상호작용",
+    "bag": "장비",
+    "talents": "직업",
+    "quests": "의뢰",
+    "map": "지도",
+    "settings": "설정",
+    "close": "닫기",
+    "back": "돌아가기",
+    "interact": "상호작용",
+    "potion": "물약",
+    "recall": "마을 귀환",
+    "hp": "체력",
+    "mp": "마력",
+    "xp": "경험치",
+    "gold": "금화",
+    "points": "기술점",
+    "level": "Lv.",
+    "auto": "자동",
+    "ready": "준비",
+    "noTarget": "근처의 적에게 자동 공격합니다.",
+    "safe": "안전 지역",
+    "combat": "전투 중",
+    "explore": "탐험 중",
+    "questAvailable": "새 의뢰",
+    "questReady": "보상 받기",
+    "accept": "의뢰 수락",
+    "claim": "보상 받기",
+    "active": "진행 중",
+    "complete": "완료",
+    "available": "수락 가능",
+    "returnNpc": "의뢰인에게 돌아가기",
+    "objective": "현재 목표",
+    "noQuest": "길드에서 새 의뢰를 받으세요.",
+    "questProgress": "진행",
+    "reward": "보상",
+    "mainQuest": "이야기",
+    "sideQuest": "의뢰",
+    "repeatable": "반복",
+    "moveTo": "위치 보기",
+    "equip": "장착",
+    "equipped": "장착 중",
+    "unequip": "해제",
+    "emptySlot": "빈 장비칸",
+    "itemLevel": "장비 레벨",
+    "upgrade": "강화",
+    "maxUpgrade": "최대 강화",
+    "upgradeHint": "강화는 실패하지 않습니다. 금화와 철광석이 필요합니다.",
+    "salvage": "분해",
+    "sell": "판매",
+    "favorite": "보관",
+    "unfavorite": "보관 해제",
+    "stats": "능력",
+    "compare": "교체 후 변화",
+    "noChange": "동일한 능력입니다.",
+    "all": "전체",
+    "weapon": "무기",
+    "armor": "갑옷",
+    "accessory": "장신구",
+    "relic": "유물",
+    "newLoot": "새 장비",
+    "noItems": "보유한 장비가 없습니다.",
+    "smith": "대장간",
+    "craft": "제작",
+    "enhance": "강화",
+    "shop": "잡화점",
+    "buy": "구입",
+    "rest": "무료 휴식",
+    "meal": "따뜻한 식사",
+    "blessing": "축복",
+    "respec": "기술 재분배",
+    "respecHint": "마을에서 기술점을 무료로 되돌릴 수 있습니다.",
+    "learn": "투자",
+    "learned": "완성",
+    "requiresBranch": "이 갈래에 {count}점 투자 필요",
+    "rank": "단계",
+    "skillLoadout": "자동 기술 · 2칸",
+    "skillHint": "기술을 선택하면 자동 사용 목록에 장착됩니다.",
+    "skillUnlock": "Lv. {level}에 개방",
+    "skillSlot": "기술칸",
+    "cooldown": "재사용",
+    "manaCost": "마력",
+    "damage": "피해",
+    "branch": "성장 갈래",
+    "townOnly": "마을에서 이용할 수 있습니다.",
+    "notEnough": "재료나 금화가 부족합니다.",
+    "noPoints": "사용 가능한 기술점이 없습니다.",
+    "locked": "아직 열리지 않았습니다.",
+    "noPotion": "회복 물약이 없습니다.",
+    "potionWait": "물약 재사용 대기 중입니다.",
+    "fullHp": "체력이 가득합니다.",
+    "busy": "전투 중에는 이용할 수 없습니다.",
+    "requiresQuest": "먼저 「{quest}」 의뢰를 완료하세요.",
+    "requiresGuardians": "봉인 수호자를 모두 쓰러뜨리세요.",
+    "guardians": "봉인 수호자",
+    "chest": "보물 상자",
+    "open": "열기",
+    "gather": "채집",
+    "mining": "채광",
+    "enter": "입장",
+    "leave": "이동",
+    "dungeonEntry": "던전 입장",
+    "tier": "난이도",
+    "firstClear": "첫 클리어",
+    "clears": "클리어",
+    "tierLocked": "이 던전 {count}회 클리어 필요",
+    "tierHint": "높은 난이도는 적 레벨과 보상을 함께 올립니다.",
+    "boss": "보스",
+    "bossDefeated": "보스 격파",
+    "returnTown": "마을로 돌아왔습니다.",
+    "died": "쓰러졌습니다. 성장과 장비는 보존됩니다.",
+    "lostGold": "회복 비용 {gold} 금화",
+    "save": "저장 내려받기",
+    "load": "저장 불러오기",
+    "saved": "모험을 저장했습니다.",
+    "loaded": "저장을 불러왔습니다.",
+    "invalidSave": "올바른 RPG 저장 파일이 아닙니다.",
+    "resetTitle": "새 모험을 시작할까요?",
+    "resetBody": "현재 RPG 진행을 초기화합니다. 이전 결투 게임의 저장은 삭제하지 않습니다.",
+    "cancel": "취소",
+    "resetConfirm": "새 모험 시작",
+    "music": "배경음악",
+    "effects": "효과음",
+    "volume": "음량",
+    "fullscreen": "화면 최대화",
+    "exportName": "에버돈_모험.json",
+    "musicHint": "이동과 전투에 따라 중세풍 음악이 바뀝니다.",
+    "journalHint": "의뢰 수락과 보상 수령은 의뢰인 앞에서 할 수 있습니다.",
+    "healed": "체력과 마력을 회복했습니다.",
+    "crafted": "장비를 제작했습니다.",
+    "upgraded": "강화에 성공했습니다.",
+    "salvaged": "장비를 분해했습니다.",
+    "sold": "장비를 판매했습니다.",
+    "equippedNotice": "장비를 장착했습니다.",
+    "talentNotice": "기술에 투자했습니다.",
+    "questAccepted": "의뢰를 수락했습니다.",
+    "questCompleted": "의뢰를 완료했습니다.",
+    "newSkill": "새 자동 기술이 열렸습니다.",
+    "levelUp": "레벨 상승! Lv. {level}",
+    "paused": "메뉴를 보는 동안 전투가 멈춥니다.",
+    "travel": "빠른 이동",
+    "travelHint": "방문한 여행의 돌로 이동합니다. 던전은 입구에서 진입하세요.",
+    "unvisited": "미발견",
+    "selected": "선택",
+    "deleteProtected": "장착 중이거나 보관한 장비는 처분할 수 없습니다.",
+    "free": "무료",
+    "chapterComplete": "별의 계승자",
+    "chapterContinue": "모험 계속",
+    "help": "조작 안내",
+    "helpBody": "WASD 또는 방향키로 이동합니다. 공격과 장착 기술은 적이 범위 안에 들어오면 자동으로 사용합니다. 마을에서 E로 대화하고, 의뢰를 해결해 장비와 기술점을 얻으세요. 붉은 예고 범위를 벗어나 보스 공격을 피하세요.",
+    "material": "재료",
+    "held": "보유",
+    "skillTab": "자동 기술",
+    "treeTab": "성장 트리",
+    "sfxUnit": "초",
+    "action": "행동",
+    "inventoryFull": "가방이 가득해 일반 장비를 자동 분해했습니다.",
+    "noInteraction": "대상 가까이 이동하세요.",
+    "lockedSkill": "아직 사용할 수 없는 기술입니다.",
+    "healFountain": "안전 지역에서는 체력과 마력이 회복됩니다.",
+    "nameFallback": "모험가",
+    "storyComplete": "이야기 완료 · 더 높은 던전에 도전하세요.",
+    "newAdventure": "새 모험가",
+    "equippedCount": "출전 장비",
+    "buffs": "여행의 가호",
+    "readyToClaim": "의뢰인에게 보고하세요.",
+    "enemyLevel": "권장 레벨",
+    "autoBasic": "평타 자동",
+    "autoSkill": "기술 자동",
+    "questMarker": "!",
+    "questTurninMarker": "?",
+    "deathFee": "금화 일부만 회복 비용으로 사용합니다.",
+    "waystone": "여행의 돌",
+    "inventoryHelp": "장비를 누르면 상세 능력과 교체 전후 차이가 표시됩니다.",
+    "skillEmpty": "기술 없음",
+    "enemy": "몬스터",
+    "tracking": "목표 위치",
+    "good": "증가",
+    "bad": "감소",
+    "returnToTitle": "타이틀로",
+    "showMap": "전체 지도",
+    "portalLabel": "다음 지역",
+    "nearby": "가까운 대상",
+    "consume": "소모",
+    "resume": "계속하기",
+    "baseStats": "기본 능력",
+    "selectRace": "종족을 선택하세요",
+    "selectClass": "직업을 선택하세요",
+    "portraitHint": "당신의 모험가",
+    "itemDetail": "장비 상세",
+    "upgradePreview": "강화 후 전투 능력",
+    "skillsSubtitle": "기술은 조건과 마력이 갖춰지면 자동으로 사용합니다.",
+    "skillKind_projectile": "표적에게 투사체 공격",
+    "skillKind_nova": "자신 주변 범위 공격",
+    "skillKind_targetArea": "표적 주변 범위 공격",
+    "skillKind_chain": "여러 적에게 연쇄 공격",
+    "skillKind_self": "자신 강화·회복",
+    "burn": "화상",
+    "slow": "둔화",
+    "healing": "체력 회복",
+    "protect": "보호막",
+    "questLocation": "의뢰인 위치",
+    "noOffers": "현재 받을 수 있는 의뢰가 없습니다.",
+    "completedQuests": "완료한 이야기",
+    "bagSort": "좋은 장비순",
+    "equippedHint": "장착 중인 장비는 초록색으로 표시됩니다.",
+    "upgradeNpcHint": "장비 강화는 대장장이 앞에서 가능합니다.",
+    "notVisited": "먼저 이 지역을 방문하세요.",
+    "routeNext": "다음 길",
+    "currentLocation": "현재 위치",
+    "targetMap": "목표 지역",
+    "walking": "도보 이동",
+    "cleared": "격파 완료",
+    "sellItems": "장비 처분",
+    "merchantHint": "물약을 준비하고 필요 없는 장비를 처분하세요.",
+    "smithHint": "장비를 강화하거나 재료로 희귀 장비를 제작하세요.",
+    "templeHint": "축복은 하나만 유지됩니다. 성장 트리는 무료로 재분배할 수 있습니다.",
+    "restHint": "휴식으로 체력과 마력을 전부 회복합니다.",
+    "innFood": "식사 효과",
+    "savedHint": "자동 저장됩니다.",
+    "soundOn": "켜짐",
+    "soundOff": "꺼짐",
+    "fullscreenUnavailable": "이 브라우저에서는 전체 화면을 지원하지 않습니다.",
+    "questGuide": "의뢰를 누르면 진행과 이동 경로를 볼 수 있습니다.",
+    "backToTown": "귀환",
+    "titleContinue": "영웅의 모험을 이어갑니다.",
+    "talentPoints": "남은 기술점",
+    "emptySkillHint": "성장하면 새 기술이 자동으로 장착됩니다.",
+    "portalLocked": "봉인된 길",
+    "pathTo": "{map}로 가는 길",
+    "newSkillSlot": "기술이 자동 사용 목록에 추가되었습니다.",
+    "playerStats": "모험가 능력",
+    "autoSlots": "사용 순서",
+    "npcTalk": "대화",
+    "dungeonGuardianHint": "봉인 수호자들을 쓰러뜨리면 보스방이 열립니다.",
+    "runLevel": "적 레벨",
+    "rareReward": "희귀 장비 · 강화 재료",
+    "firstAdventure": "새 이야기",
+    "enchantLevel": "강화 단계",
+    "selectedItem": "선택한 장비",
+    "lootLabel": "획득",
+    "mapTitle": "에버돈 동부 지도",
+    "questEmpty": "마을의 길드 안내인에게 말을 걸어보세요.",
+    "characterCreated": "모험이 시작되었습니다. 마렌에게 말을 걸어보세요.",
+    "safelySaved": "이 RPG의 진행만 새로 시작합니다.",
+    "perk": "고유 효과",
+    "equipFirst": "장비를 선택하세요.",
+    "currentBuff": "현재 가호",
+    "none": "없음",
+    "notYet": "아직",
+    "more": "상세 보기",
+    "chapterVictory": "별의 봉인이 다시 빛납니다. 새로운 빌드와 더 높은 던전 난이도로 모험을 계속할 수 있습니다.",
+    "inventoryBack": "장비 목록으로",
+    "targetDirection": "목표 방향",
+    "respawning": "재등장 대기",
+    "range": "거리",
+    "questCompletedShort": "의뢰 완료"
+  },
+  "_docs": {
+    "source": "game-db.js는 모든 콘텐츠·수치·지도·그림·음악·문구의 단일 원본입니다.",
+    "maps": "maps의 ASCII tiles와 npc/portal/spawn/resource/chest 좌표가 실제 공간입니다. terrain.walk와 solid prop을 충돌에 사용합니다.",
+    "build": "classes/races/skills/branches/talents/items/affixes의 stats를 공통 계산기로 합산합니다. 클래스 ID 분기 없이 동작합니다.",
+    "save": "새 RPG 저장 키를 사용하며 이전 결투 v6 저장을 삭제하거나 덮어쓰지 않습니다.",
+    "audio": "audio.tracks의 MIDI 멜로디·화음·베이스를 오프라인 Web Audio로 합성합니다."
+  },
+  "comparisonStats": [
+    "attack",
+    "spell",
+    "hp",
+    "mp",
+    "defense",
+    "basicDamage",
+    "skillDamage",
+    "attackSpeed",
+    "crit",
+    "speed",
+    "manaRegen",
+    "range",
+    "cooldownRate",
+    "shieldOnSkill",
+    "lifesteal",
+    "thorns"
+  ]
 };
