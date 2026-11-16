@@ -66,4 +66,15 @@ DB·밸런스·콘텐츠 수정은 game-db.js에서 관련 키를 먼저 검색�
 
 지역은 regions, 후기 경험치 배율은 xpBands, 원정 위험·보상 선택은 expeditionRules, 연전은 trials.waves, 동료 지원은 companions, 평판·전용 제작은 factions/recipes.reputation, 도감 보상은 codexRewards에서 관리합니다. 의뢰 선택 보상은 quests.choices이며 한 번만 원자적으로 지급합니다. 반복 의뢰는 수주 시 지역별 처치 기준을 기록하고 completedAt/cooldown으로 재수주를 제한합니다. 전투 기믹은 monsters.phases/patterns와 maps[].mechanisms/zones를 사용하며 안전지대와 실제 피격 판정을 일치시킵니다.
 
-MMORPG 확장을 위해 영구 캐릭터 진행(전직·평판·동료·의뢰·도감)과 지역 인스턴스(적·상자·사건·장치)를 구분하고 안정적인 콘텐츠 ID를 유지합니다. 현재 버전에 서버·다른 플레이어·온라인 거래가 있다고 표시하지 않습니다. 이전 저장의 완료 의뢰·아이템·성장을 보존하며 새 필드와 후기 여정을 이어서 열어 줍니다. 정적 데이터 변경만으로 서버 권위나 실시간 동기화가 구현된 것으로 취급하지 않습니다.
+MMORPG 확장을 위해 영구 캐릭터 진행(전직·평판·동료·의뢰·도감)과 지역 인스턴스(적·상자·사건·장치)를 구분하고 안정적인 콘텐츠 ID를 유지합니다. 온라인 표시는 실제 인증 세션과 서버 스트림에 연결된 경우에만 허용합니다. 이전 저장의 완료 의뢰·아이템·성장을 보존하며 새 필드와 후기 여정을 이어서 열어 줍니다. 정적 데이터 변경만으로 서버 권위나 실시간 동기화가 구현된 것으로 취급하지 않습니다.
+
+
+# 온라인 MMORPG 기준
+
+온라인의 권위는 서버에 있습니다. 클라이언트는 입력 방향·검증 가능한 행동만 전송하고 좌표·피해·경험치·주화·보상을 직접 기록하지 않습니다. 개인 저장과 온라인 저장을 섞지 않으며 공개 서버는 서명되지 않은 개인 저장 이관을 기본 차단합니다. 개인 서버 이관을 허용할 때는 장비를 귀속하고 온라인 재화·업적 기준을 새로 시작합니다.
+
+server/world.cjs와 server/social.cjs가 파티·공유 전투·길드·거래·우편·소환·결투 규칙을 담당합니다. server/store.cjs는 로컬 Node SQLite, cloudflare/store.mjs는 Durable Object SQLite 어댑터입니다. 온라인 수치·정원·가격·확률·보상·역할·API 행동 허용 목록은 game-db.js의 online 및 관련 DB 키를 참조합니다. 모든 보상 수령·거래 확정은 서버의 단일 transaction 경로로 처리합니다. 미완료 거래는 재시작 시 우편으로 한 번만 반환합니다.
+
+Cloudflare Worker tactics는 Git main과 자동 배포로 연결되어 있습니다. wrangler.jsonc의 WORLD Durable Object 바인딩, namespace 이름, migration 태그를 보존합니다. build-cloudflare.cjs로 공통 엔진의 Worker용 함수 모듈과 정적 Assets를 생성하며 생성 파일은 직접 수정하지 않습니다. Worker에서는 WebSocket, 로컬 Node에서는 SSE를 사용합니다. 공개 완료 보고 전에 GitHub Workers Builds 체크와 실제 /api/v1/health의 backend/transport/version을 확인합니다. API 토큰을 소스·로그·대화에 넣지 않습니다.
+
+변경 대응 검증은 기존 node rpg-check.cjs, 서버 변경은 node server/check.cjs, Worker 변경은 로컬 Wrangler에 한해 node cloudflare/check.cjs를 사용합니다. 각 검사는 짧은 입력·전투·요청만 확인하며 전체 플레이 자동화를 수행하지 않습니다. 실제 서비스에서 테스트용 계정·거래·보상을 만들지 않습니다.

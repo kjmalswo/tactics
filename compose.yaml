@@ -1,0 +1,13 @@
+services:
+  everdawn:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      PORT: "8080"
+      DATA_DIR: /data
+    volumes:
+      - everdawn-data:/data
+    restart: unless-stopped
+volumes:
+  everdawn-data:

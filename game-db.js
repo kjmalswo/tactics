@@ -1,9 +1,9 @@
 // Editable JSON-compatible fantasy RPG database.
 window.GAME_DB = {
   "meta": {
-    "version": "2.0",
+    "version": "3.0",
     "title": "에버돈",
-    "subtitle": "다섯 왕관의 여정",
+    "subtitle": "왕국의 동료들",
     "description": "마을에서 시작해 나만의 직업 빌드를 완성하는 판타지 액션 RPG"
   },
   "theme": {
@@ -123,7 +123,8 @@ window.GAME_DB = {
       "heart": "<path d=\"M12 21S1 14 3 7q3-7 9-1 6-6 9 1 2 7-9 14z\"/>",
       "tree": "<path d=\"M12 2 4 12h4l-5 6h7v4h4v-4h7l-5-6h4z\"/>",
       "music": "<path d=\"M9 18V5l11-2v13M9 8l11-2M9 18q-2-3-5-1t1 4q4 0 4-3m11-2q-2-3-5-1t1 4q4 0 4-3\"/>",
-      "dash": "<path d=\"m13 3-8 10h6l-1 8 9-12h-7z\"/>"
+      "dash": "<path d=\"m13 3-8 10h6l-1 8 9-12h-7z\"/>",
+      "online": "<circle cx='8' cy='7' r='3'/><circle cx='17' cy='8' r='2'/><path d='M2 21v-5a6 6 0 0 1 12 0v5m1-8a5 5 0 0 1 7 4v4'/>"
     }
   },
   "config": {
@@ -348,7 +349,8 @@ window.GAME_DB = {
     "enemyPatternMax": 32,
     "advancementPreviewStats": 3,
     "companionVisualSize": 1,
-    "hazardDefaultAngle": 3.141592653589793
+    "hazardDefaultAngle": 3.141592653589793,
+    "byteBits": 8
   },
   "controls": {
     "left": [
@@ -437,7 +439,13 @@ window.GAME_DB = {
     "lowHpDamage": 0,
     "damageReduction": 0,
     "skillEcho": 0,
-    "potionPower": 1
+    "potionPower": 1,
+    "physicalResist": 0,
+    "fireResist": 0,
+    "frostResist": 0,
+    "natureResist": 0,
+    "arcaneResist": 0,
+    "threatGain": 1
   },
   "statCaps": {
     "crit": [
@@ -487,6 +495,26 @@ window.GAME_DB = {
     "skillEcho": [
       0,
       0.75
+    ],
+    "physicalResist": [
+      -0.3,
+      0.5
+    ],
+    "fireResist": [
+      -0.3,
+      0.5
+    ],
+    "frostResist": [
+      -0.3,
+      0.5
+    ],
+    "natureResist": [
+      -0.3,
+      0.5
+    ],
+    "arcaneResist": [
+      -0.3,
+      0.5
     ]
   },
   "statLabels": {
@@ -524,7 +552,13 @@ window.GAME_DB = {
     "lowHpDamage": "위기 화력",
     "damageReduction": "받는 피해 감소",
     "skillEcho": "기술 메아리 확률",
-    "potionPower": "물약 효율"
+    "potionPower": "물약 효율",
+    "physicalResist": "물리 저항",
+    "fireResist": "화염 저항",
+    "frostResist": "냉기 저항",
+    "natureResist": "자연 저항",
+    "arcaneResist": "비전 저항",
+    "threatGain": "위협도"
   },
   "percentStats": [
     "crit",
@@ -536,7 +570,13 @@ window.GAME_DB = {
     "cleave",
     "lowHpDamage",
     "damageReduction",
-    "skillEcho"
+    "skillEcho",
+    "physicalResist",
+    "fireResist",
+    "frostResist",
+    "natureResist",
+    "arcaneResist",
+    "threatGain"
   ],
   "multiplierStats": [
     "basicDamage",
@@ -697,7 +737,8 @@ window.GAME_DB = {
         "defense": 5,
         "speed": 3.1,
         "range": 1.2,
-        "attackInterval": 0.76
+        "attackInterval": 0.76,
+        "threatGain": 1.3
       },
       "growth": {
         "hp": 12,
@@ -718,7 +759,37 @@ window.GAME_DB = {
         "runic_wave",
         "steel_rush",
         "royal_cleave",
-        "astral_blade"
+        "astral_blade",
+        "veteran_warrior_0",
+        "veteran_warrior_1",
+        "veteran_warrior_2",
+        "veteran_warrior_3",
+        "veteran_warrior_4",
+        "veteran_warrior_5",
+        "veteran_warrior_6",
+        "veteran_warrior_7",
+        "support_warrior",
+        "lineage_gladiator",
+        "lineage_berserker",
+        "lineage_rune",
+        "lineage_gladiator_s0",
+        "lineage_gladiator_s0_t0",
+        "lineage_gladiator_s0_t1",
+        "lineage_gladiator_s1",
+        "lineage_gladiator_s1_t0",
+        "lineage_gladiator_s1_t1",
+        "lineage_berserker_s0",
+        "lineage_berserker_s0_t0",
+        "lineage_berserker_s0_t1",
+        "lineage_berserker_s1",
+        "lineage_berserker_s1_t0",
+        "lineage_berserker_s1_t1",
+        "lineage_rune_s0",
+        "lineage_rune_s0_t0",
+        "lineage_rune_s0_t1",
+        "lineage_rune_s1",
+        "lineage_rune_s1_t0",
+        "lineage_rune_s1_t1"
       ],
       "starter": "iron_sword",
       "branches": [
@@ -726,7 +797,8 @@ window.GAME_DB = {
         "berserker",
         "rune"
       ],
-      "backSprite": "warrior_back"
+      "backSprite": "warrior_back",
+      "onlineRole": "damage"
     },
     {
       "id": "archer",
@@ -745,7 +817,8 @@ window.GAME_DB = {
         "defense": 2,
         "speed": 3.1,
         "range": 5.2,
-        "attackInterval": 0.7
+        "attackInterval": 0.7,
+        "threatGain": 0.8
       },
       "growth": {
         "hp": 8,
@@ -766,7 +839,37 @@ window.GAME_DB = {
         "piercing_shot",
         "wind_step",
         "hawk_volley",
-        "star_arrow"
+        "star_arrow",
+        "veteran_archer_0",
+        "veteran_archer_1",
+        "veteran_archer_2",
+        "veteran_archer_3",
+        "veteran_archer_4",
+        "veteran_archer_5",
+        "veteran_archer_6",
+        "veteran_archer_7",
+        "support_archer",
+        "lineage_marksman",
+        "lineage_ranger",
+        "lineage_venom",
+        "lineage_marksman_s0",
+        "lineage_marksman_s0_t0",
+        "lineage_marksman_s0_t1",
+        "lineage_marksman_s1",
+        "lineage_marksman_s1_t0",
+        "lineage_marksman_s1_t1",
+        "lineage_ranger_s0",
+        "lineage_ranger_s0_t0",
+        "lineage_ranger_s0_t1",
+        "lineage_ranger_s1",
+        "lineage_ranger_s1_t0",
+        "lineage_ranger_s1_t1",
+        "lineage_venom_s0",
+        "lineage_venom_s0_t0",
+        "lineage_venom_s0_t1",
+        "lineage_venom_s1",
+        "lineage_venom_s1_t0",
+        "lineage_venom_s1_t1"
       ],
       "starter": "hunting_bow",
       "branches": [
@@ -774,7 +877,8 @@ window.GAME_DB = {
         "ranger",
         "venom"
       ],
-      "backSprite": "archer_back"
+      "backSprite": "archer_back",
+      "onlineRole": "damage"
     },
     {
       "id": "magician",
@@ -794,7 +898,8 @@ window.GAME_DB = {
         "speed": 2.65,
         "range": 4.5,
         "attackInterval": 1.05,
-        "manaRegen": 2.7
+        "manaRegen": 2.7,
+        "threatGain": 1
       },
       "growth": {
         "hp": 7,
@@ -815,7 +920,37 @@ window.GAME_DB = {
         "arcane_chain",
         "meteor",
         "solar_orb",
-        "cosmic_chain"
+        "cosmic_chain",
+        "veteran_magician_0",
+        "veteran_magician_1",
+        "veteran_magician_2",
+        "veteran_magician_3",
+        "veteran_magician_4",
+        "veteran_magician_5",
+        "veteran_magician_6",
+        "veteran_magician_7",
+        "support_magician",
+        "lineage_pyromancer",
+        "lineage_frost",
+        "lineage_arcanist",
+        "lineage_pyromancer_s0",
+        "lineage_pyromancer_s0_t0",
+        "lineage_pyromancer_s0_t1",
+        "lineage_pyromancer_s1",
+        "lineage_pyromancer_s1_t0",
+        "lineage_pyromancer_s1_t1",
+        "lineage_frost_s0",
+        "lineage_frost_s0_t0",
+        "lineage_frost_s0_t1",
+        "lineage_frost_s1",
+        "lineage_frost_s1_t0",
+        "lineage_frost_s1_t1",
+        "lineage_arcanist_s0",
+        "lineage_arcanist_s0_t0",
+        "lineage_arcanist_s0_t1",
+        "lineage_arcanist_s1",
+        "lineage_arcanist_s1_t0",
+        "lineage_arcanist_s1_t1"
       ],
       "starter": "apprentice_staff",
       "branches": [
@@ -823,7 +958,8 @@ window.GAME_DB = {
         "frost",
         "arcanist"
       ],
-      "backSprite": "magician_back"
+      "backSprite": "magician_back",
+      "onlineRole": "support"
     },
     {
       "id": "guardian",
@@ -843,7 +979,8 @@ window.GAME_DB = {
         "speed": 2.5,
         "range": 1.3,
         "attackInterval": 0.96,
-        "manaRegen": 2.25
+        "manaRegen": 2.25,
+        "threatGain": 3
       },
       "growth": {
         "hp": 17,
@@ -864,7 +1001,37 @@ window.GAME_DB = {
         "judgment",
         "iron_oath",
         "royal_verdict",
-        "aegis_crash"
+        "aegis_crash",
+        "veteran_guardian_0",
+        "veteran_guardian_1",
+        "veteran_guardian_2",
+        "veteran_guardian_3",
+        "veteran_guardian_4",
+        "veteran_guardian_5",
+        "veteran_guardian_6",
+        "veteran_guardian_7",
+        "support_guardian",
+        "lineage_fortress",
+        "lineage_paladin",
+        "lineage_avenger",
+        "lineage_fortress_s0",
+        "lineage_fortress_s0_t0",
+        "lineage_fortress_s0_t1",
+        "lineage_fortress_s1",
+        "lineage_fortress_s1_t0",
+        "lineage_fortress_s1_t1",
+        "lineage_paladin_s0",
+        "lineage_paladin_s0_t0",
+        "lineage_paladin_s0_t1",
+        "lineage_paladin_s1",
+        "lineage_paladin_s1_t0",
+        "lineage_paladin_s1_t1",
+        "lineage_avenger_s0",
+        "lineage_avenger_s0_t0",
+        "lineage_avenger_s0_t1",
+        "lineage_avenger_s1",
+        "lineage_avenger_s1_t0",
+        "lineage_avenger_s1_t1"
       ],
       "starter": "oath_mace",
       "branches": [
@@ -872,7 +1039,8 @@ window.GAME_DB = {
         "paladin",
         "avenger"
       ],
-      "backSprite": "guardian_back"
+      "backSprite": "guardian_back",
+      "onlineRole": "tank"
     }
   ],
   "skills": {
@@ -1279,6 +1447,2217 @@ window.GAME_DB = {
       "color": "#e4d3a2",
       "sound": "shield",
       "id": "aegis_crash"
+    },
+    "veteran_warrior_0": {
+      "name": "노련한 회전 베기",
+      "icon": "attack",
+      "unlock": 8,
+      "kind": "nova",
+      "scale": "attack",
+      "coefficient": 2.38,
+      "radius": 1.8,
+      "range": 1.8,
+      "cooldown": 5.5,
+      "cost": 13,
+      "color": "#e0ca90",
+      "sound": "sword",
+      "element": "physical"
+    },
+    "veteran_warrior_1": {
+      "name": "연속 전장의 함성",
+      "icon": "heart",
+      "unlock": 13,
+      "kind": "self",
+      "cooldown": 11.2,
+      "cost": 17,
+      "heal": 0.12,
+      "buff": {
+        "duration": 5,
+        "stats": [
+          {
+            "stat": "basicDamage",
+            "op": "multiply",
+            "value": 1.2
+          }
+        ]
+      },
+      "conditionHp": 0.8,
+      "color": "#d9af6d",
+      "sound": "buff",
+      "coefficient": 0.0,
+      "element": "fire"
+    },
+    "veteran_warrior_2": {
+      "name": "집중 룬의 파동",
+      "icon": "staff",
+      "unlock": 18,
+      "kind": "projectile",
+      "projectile": "rune",
+      "scale": "attack",
+      "coefficient": 2.71,
+      "range": 5,
+      "radius": 1.1,
+      "cooldown": 8.0,
+      "cost": 21,
+      "color": "#9fcac2",
+      "sound": "magic",
+      "element": "frost"
+    },
+    "veteran_warrior_3": {
+      "name": "정밀 강철 충격",
+      "icon": "shield",
+      "unlock": 23,
+      "kind": "nova",
+      "scale": "attack",
+      "coefficient": 3.81,
+      "radius": 2.4,
+      "range": 2.4,
+      "cooldown": 9.3,
+      "cost": 25,
+      "knockback": 1.2,
+      "color": "#d5ddd3",
+      "sound": "heavy",
+      "element": "nature"
+    },
+    "veteran_warrior_4": {
+      "name": "깊은 회전 베기",
+      "icon": "attack",
+      "unlock": 28,
+      "kind": "nova",
+      "scale": "attack",
+      "coefficient": 2.6,
+      "radius": 1.8,
+      "range": 1.8,
+      "cooldown": 5.9,
+      "cost": 15,
+      "color": "#e0ca90",
+      "sound": "sword",
+      "element": "arcane"
+    },
+    "veteran_warrior_5": {
+      "name": "폭풍의 전장의 함성",
+      "icon": "heart",
+      "unlock": 33,
+      "kind": "self",
+      "cooldown": 12.0,
+      "cost": 19,
+      "heal": 0.12,
+      "buff": {
+        "duration": 5,
+        "stats": [
+          {
+            "stat": "basicDamage",
+            "op": "multiply",
+            "value": 1.2
+          }
+        ]
+      },
+      "conditionHp": 0.8,
+      "color": "#d9af6d",
+      "sound": "buff",
+      "coefficient": 0.0,
+      "element": "physical"
+    },
+    "veteran_warrior_6": {
+      "name": "왕립 룬의 파동",
+      "icon": "staff",
+      "unlock": 38,
+      "kind": "projectile",
+      "projectile": "rune",
+      "scale": "attack",
+      "coefficient": 2.95,
+      "range": 5,
+      "radius": 1.1,
+      "cooldown": 8.5,
+      "cost": 23,
+      "color": "#9fcac2",
+      "sound": "magic",
+      "element": "fire"
+    },
+    "veteran_warrior_7": {
+      "name": "계승의 강철 충격",
+      "icon": "shield",
+      "unlock": 43,
+      "kind": "nova",
+      "scale": "attack",
+      "coefficient": 4.14,
+      "radius": 2.4,
+      "range": 2.4,
+      "cooldown": 9.9,
+      "cost": 28,
+      "knockback": 1.2,
+      "color": "#d5ddd3",
+      "sound": "heavy",
+      "element": "frost"
+    },
+    "support_warrior": {
+      "name": "전우의 깃발",
+      "kind": "self",
+      "icon": "attack",
+      "unlock": 10,
+      "cooldown": 18,
+      "cost": 22,
+      "party": {
+        "stats": [
+          {
+            "stat": "attack",
+            "value": 1.1,
+            "op": "multiply"
+          }
+        ],
+        "duration": 6,
+        "range": 6,
+        "taunt": 1.5
+      },
+      "color": "#e5d6a0",
+      "sound": "buff"
+    },
+    "lineage_gladiator": {
+      "name": "검투사의 비기",
+      "icon": "attack",
+      "unlock": 3,
+      "kind": "nova",
+      "scale": "attack",
+      "coefficient": 2.6,
+      "radius": 1.8,
+      "range": 1.8,
+      "cooldown": 5.4,
+      "cost": 14,
+      "color": "#e0ca90",
+      "sound": "sword",
+      "requiredBranch": "gladiator",
+      "element": "arcane"
+    },
+    "lineage_berserker": {
+      "name": "버서커의 비기",
+      "icon": "attack",
+      "unlock": 3,
+      "kind": "nova",
+      "scale": "attack",
+      "coefficient": 2.6,
+      "radius": 1.8,
+      "range": 1.8,
+      "cooldown": 5.4,
+      "cost": 14,
+      "color": "#e0ca90",
+      "sound": "sword",
+      "requiredBranch": "berserker",
+      "element": "arcane"
+    },
+    "lineage_rune": {
+      "name": "룬 기사의 비기",
+      "icon": "attack",
+      "unlock": 3,
+      "kind": "nova",
+      "scale": "attack",
+      "coefficient": 2.6,
+      "radius": 1.8,
+      "range": 1.8,
+      "cooldown": 5.4,
+      "cost": 14,
+      "color": "#e0ca90",
+      "sound": "sword",
+      "requiredBranch": "rune",
+      "element": "arcane"
+    },
+    "lineage_gladiator_s0": {
+      "name": "소드마스터의 비기",
+      "icon": "heart",
+      "unlock": 18,
+      "kind": "self",
+      "cooldown": 11.6,
+      "cost": 19,
+      "heal": 0.12,
+      "buff": {
+        "duration": 5,
+        "stats": [
+          {
+            "stat": "basicDamage",
+            "op": "multiply",
+            "value": 1.2
+          }
+        ]
+      },
+      "conditionHp": 0.8,
+      "color": "#d9af6d",
+      "sound": "buff",
+      "requiredBranch": "gladiator_s0",
+      "coefficient": 0.0,
+      "element": "frost"
+    },
+    "lineage_gladiator_s0_t0": {
+      "name": "검성의 비기",
+      "icon": "staff",
+      "unlock": 34,
+      "kind": "projectile",
+      "projectile": "rune",
+      "scale": "attack",
+      "coefficient": 3.7,
+      "range": 5,
+      "radius": 1.1,
+      "cooldown": 8.7,
+      "cost": 26,
+      "color": "#9fcac2",
+      "sound": "magic",
+      "requiredBranch": "gladiator_s0_t0",
+      "element": "physical"
+    },
+    "lineage_gladiator_s0_t1": {
+      "name": "결투의 군주의 비기",
+      "icon": "staff",
+      "unlock": 34,
+      "kind": "projectile",
+      "projectile": "rune",
+      "scale": "attack",
+      "coefficient": 3.7,
+      "range": 5,
+      "radius": 1.1,
+      "cooldown": 8.7,
+      "cost": 26,
+      "color": "#9fcac2",
+      "sound": "magic",
+      "requiredBranch": "gladiator_s0_t1",
+      "element": "physical"
+    },
+    "lineage_gladiator_s1": {
+      "name": "블레이드댄서의 비기",
+      "icon": "heart",
+      "unlock": 18,
+      "kind": "self",
+      "cooldown": 11.6,
+      "cost": 19,
+      "heal": 0.12,
+      "buff": {
+        "duration": 5,
+        "stats": [
+          {
+            "stat": "basicDamage",
+            "op": "multiply",
+            "value": 1.2
+          }
+        ]
+      },
+      "conditionHp": 0.8,
+      "color": "#d9af6d",
+      "sound": "buff",
+      "requiredBranch": "gladiator_s1",
+      "coefficient": 0.0,
+      "element": "frost"
+    },
+    "lineage_gladiator_s1_t0": {
+      "name": "폭풍 검무가의 비기",
+      "icon": "staff",
+      "unlock": 34,
+      "kind": "projectile",
+      "projectile": "rune",
+      "scale": "attack",
+      "coefficient": 3.7,
+      "range": 5,
+      "radius": 1.1,
+      "cooldown": 8.7,
+      "cost": 26,
+      "color": "#9fcac2",
+      "sound": "magic",
+      "requiredBranch": "gladiator_s1_t0",
+      "element": "physical"
+    },
+    "lineage_gladiator_s1_t1": {
+      "name": "혈월 무희의 비기",
+      "icon": "staff",
+      "unlock": 34,
+      "kind": "projectile",
+      "projectile": "rune",
+      "scale": "attack",
+      "coefficient": 3.7,
+      "range": 5,
+      "radius": 1.1,
+      "cooldown": 8.7,
+      "cost": 26,
+      "color": "#9fcac2",
+      "sound": "magic",
+      "requiredBranch": "gladiator_s1_t1",
+      "element": "physical"
+    },
+    "lineage_berserker_s0": {
+      "name": "블러드리버의 비기",
+      "icon": "heart",
+      "unlock": 18,
+      "kind": "self",
+      "cooldown": 11.6,
+      "cost": 19,
+      "heal": 0.12,
+      "buff": {
+        "duration": 5,
+        "stats": [
+          {
+            "stat": "basicDamage",
+            "op": "multiply",
+            "value": 1.2
+          }
+        ]
+      },
+      "conditionHp": 0.8,
+      "color": "#d9af6d",
+      "sound": "buff",
+      "requiredBranch": "berserker_s0",
+      "coefficient": 0.0,
+      "element": "frost"
+    },
+    "lineage_berserker_s0_t0": {
+      "name": "혈왕의 비기",
+      "icon": "staff",
+      "unlock": 34,
+      "kind": "projectile",
+      "projectile": "rune",
+      "scale": "attack",
+      "coefficient": 3.7,
+      "range": 5,
+      "radius": 1.1,
+      "cooldown": 8.7,
+      "cost": 26,
+      "color": "#9fcac2",
+      "sound": "magic",
+      "requiredBranch": "berserker_s0_t0",
+      "element": "physical"
+    },
+    "lineage_berserker_s0_t1": {
+      "name": "불멸의 광전사의 비기",
+      "icon": "staff",
+      "unlock": 34,
+      "kind": "projectile",
+      "projectile": "rune",
+      "scale": "attack",
+      "coefficient": 3.7,
+      "range": 5,
+      "radius": 1.1,
+      "cooldown": 8.7,
+      "cost": 26,
+      "color": "#9fcac2",
+      "sound": "magic",
+      "requiredBranch": "berserker_s0_t1",
+      "element": "physical"
+    },
+    "lineage_berserker_s1": {
+      "name": "워로드의 비기",
+      "icon": "heart",
+      "unlock": 18,
+      "kind": "self",
+      "cooldown": 11.6,
+      "cost": 19,
+      "heal": 0.12,
+      "buff": {
+        "duration": 5,
+        "stats": [
+          {
+            "stat": "basicDamage",
+            "op": "multiply",
+            "value": 1.2
+          }
+        ]
+      },
+      "conditionHp": 0.8,
+      "color": "#d9af6d",
+      "sound": "buff",
+      "requiredBranch": "berserker_s1",
+      "coefficient": 0.0,
+      "element": "frost"
+    },
+    "lineage_berserker_s1_t0": {
+      "name": "전쟁군주의 비기",
+      "icon": "staff",
+      "unlock": 34,
+      "kind": "projectile",
+      "projectile": "rune",
+      "scale": "attack",
+      "coefficient": 3.7,
+      "range": 5,
+      "radius": 1.1,
+      "cooldown": 8.7,
+      "cost": 26,
+      "color": "#9fcac2",
+      "sound": "magic",
+      "requiredBranch": "berserker_s1_t0",
+      "element": "physical"
+    },
+    "lineage_berserker_s1_t1": {
+      "name": "철혈 지휘관의 비기",
+      "icon": "staff",
+      "unlock": 34,
+      "kind": "projectile",
+      "projectile": "rune",
+      "scale": "attack",
+      "coefficient": 3.7,
+      "range": 5,
+      "radius": 1.1,
+      "cooldown": 8.7,
+      "cost": 26,
+      "color": "#9fcac2",
+      "sound": "magic",
+      "requiredBranch": "berserker_s1_t1",
+      "element": "physical"
+    },
+    "lineage_rune_s0": {
+      "name": "마검사의 비기",
+      "icon": "heart",
+      "unlock": 18,
+      "kind": "self",
+      "cooldown": 11.6,
+      "cost": 19,
+      "heal": 0.12,
+      "buff": {
+        "duration": 5,
+        "stats": [
+          {
+            "stat": "basicDamage",
+            "op": "multiply",
+            "value": 1.2
+          }
+        ]
+      },
+      "conditionHp": 0.8,
+      "color": "#d9af6d",
+      "sound": "buff",
+      "requiredBranch": "rune_s0",
+      "coefficient": 0.0,
+      "element": "frost"
+    },
+    "lineage_rune_s0_t0": {
+      "name": "별의 마검사의 비기",
+      "icon": "staff",
+      "unlock": 34,
+      "kind": "projectile",
+      "projectile": "rune",
+      "scale": "attack",
+      "coefficient": 3.7,
+      "range": 5,
+      "radius": 1.1,
+      "cooldown": 8.7,
+      "cost": 26,
+      "color": "#9fcac2",
+      "sound": "magic",
+      "requiredBranch": "rune_s0_t0",
+      "element": "physical"
+    },
+    "lineage_rune_s0_t1": {
+      "name": "심연의 칼날의 비기",
+      "icon": "staff",
+      "unlock": 34,
+      "kind": "projectile",
+      "projectile": "rune",
+      "scale": "attack",
+      "coefficient": 3.7,
+      "range": 5,
+      "radius": 1.1,
+      "cooldown": 8.7,
+      "cost": 26,
+      "color": "#9fcac2",
+      "sound": "magic",
+      "requiredBranch": "rune_s0_t1",
+      "element": "physical"
+    },
+    "lineage_rune_s1": {
+      "name": "룬 수호자의 비기",
+      "icon": "heart",
+      "unlock": 18,
+      "kind": "self",
+      "cooldown": 11.6,
+      "cost": 19,
+      "heal": 0.12,
+      "buff": {
+        "duration": 5,
+        "stats": [
+          {
+            "stat": "basicDamage",
+            "op": "multiply",
+            "value": 1.2
+          }
+        ]
+      },
+      "conditionHp": 0.8,
+      "color": "#d9af6d",
+      "sound": "buff",
+      "requiredBranch": "rune_s1",
+      "coefficient": 0.0,
+      "element": "frost"
+    },
+    "lineage_rune_s1_t0": {
+      "name": "봉인의 기사의 비기",
+      "icon": "staff",
+      "unlock": 34,
+      "kind": "projectile",
+      "projectile": "rune",
+      "scale": "attack",
+      "coefficient": 3.7,
+      "range": 5,
+      "radius": 1.1,
+      "cooldown": 8.7,
+      "cost": 26,
+      "color": "#9fcac2",
+      "sound": "magic",
+      "requiredBranch": "rune_s1_t0",
+      "element": "physical"
+    },
+    "lineage_rune_s1_t1": {
+      "name": "황금 서약자의 비기",
+      "icon": "staff",
+      "unlock": 34,
+      "kind": "projectile",
+      "projectile": "rune",
+      "scale": "attack",
+      "coefficient": 3.7,
+      "range": 5,
+      "radius": 1.1,
+      "cooldown": 8.7,
+      "cost": 26,
+      "color": "#9fcac2",
+      "sound": "magic",
+      "requiredBranch": "rune_s1_t1",
+      "element": "physical"
+    },
+    "veteran_archer_0": {
+      "name": "노련한 화살비",
+      "icon": "bow",
+      "unlock": 8,
+      "kind": "targetArea",
+      "scale": "attack",
+      "coefficient": 2.16,
+      "range": 5.7,
+      "radius": 1.6,
+      "cooldown": 7.7,
+      "cost": 13,
+      "color": "#e2d39c",
+      "sound": "arrow",
+      "element": "physical"
+    },
+    "veteran_archer_1": {
+      "name": "연속 사냥꾼의 눈",
+      "icon": "signature",
+      "unlock": 13,
+      "kind": "self",
+      "cooldown": 12.3,
+      "cost": 11,
+      "buff": {
+        "duration": 6,
+        "stats": [
+          {
+            "stat": "crit",
+            "op": "add",
+            "value": 0.2
+          },
+          {
+            "stat": "basicDamage",
+            "op": "multiply",
+            "value": 1.15
+          }
+        ]
+      },
+      "color": "#aac57d",
+      "sound": "buff",
+      "coefficient": 0.0,
+      "element": "fire"
+    },
+    "veteran_archer_2": {
+      "name": "집중 관통 사격",
+      "icon": "bow",
+      "unlock": 18,
+      "kind": "projectile",
+      "projectile": "arrow",
+      "scale": "attack",
+      "coefficient": 3.5,
+      "range": 6,
+      "radius": 0.9,
+      "cooldown": 9.1,
+      "cost": 17,
+      "pierce": 3,
+      "color": "#f5ddb2",
+      "sound": "arrow",
+      "element": "frost"
+    },
+    "veteran_archer_3": {
+      "name": "정밀 바람의 가호",
+      "icon": "bait",
+      "unlock": 23,
+      "kind": "self",
+      "cooldown": 13.9,
+      "cost": 15,
+      "buff": {
+        "duration": 6,
+        "stats": [
+          {
+            "stat": "speed",
+            "op": "multiply",
+            "value": 1.25
+          },
+          {
+            "stat": "attackSpeed",
+            "op": "multiply",
+            "value": 1.2
+          }
+        ]
+      },
+      "color": "#c8ddc1",
+      "sound": "buff",
+      "coefficient": 0.0,
+      "element": "nature"
+    },
+    "veteran_archer_4": {
+      "name": "깊은 화살비",
+      "icon": "bow",
+      "unlock": 28,
+      "kind": "targetArea",
+      "scale": "attack",
+      "coefficient": 2.36,
+      "range": 5.7,
+      "radius": 1.6,
+      "cooldown": 8.3,
+      "cost": 15,
+      "color": "#e2d39c",
+      "sound": "arrow",
+      "element": "arcane"
+    },
+    "veteran_archer_5": {
+      "name": "폭풍의 사냥꾼의 눈",
+      "icon": "signature",
+      "unlock": 33,
+      "kind": "self",
+      "cooldown": 13.2,
+      "cost": 12,
+      "buff": {
+        "duration": 6,
+        "stats": [
+          {
+            "stat": "crit",
+            "op": "add",
+            "value": 0.2
+          },
+          {
+            "stat": "basicDamage",
+            "op": "multiply",
+            "value": 1.15
+          }
+        ]
+      },
+      "color": "#aac57d",
+      "sound": "buff",
+      "coefficient": 0.0,
+      "element": "physical"
+    },
+    "veteran_archer_6": {
+      "name": "왕립 관통 사격",
+      "icon": "bow",
+      "unlock": 38,
+      "kind": "projectile",
+      "projectile": "arrow",
+      "scale": "attack",
+      "coefficient": 3.81,
+      "range": 6,
+      "radius": 0.9,
+      "cooldown": 9.8,
+      "cost": 19,
+      "pierce": 3,
+      "color": "#f5ddb2",
+      "sound": "arrow",
+      "element": "fire"
+    },
+    "veteran_archer_7": {
+      "name": "계승의 바람의 가호",
+      "icon": "bait",
+      "unlock": 43,
+      "kind": "self",
+      "cooldown": 14.9,
+      "cost": 17,
+      "buff": {
+        "duration": 6,
+        "stats": [
+          {
+            "stat": "speed",
+            "op": "multiply",
+            "value": 1.25
+          },
+          {
+            "stat": "attackSpeed",
+            "op": "multiply",
+            "value": 1.2
+          }
+        ]
+      },
+      "color": "#c8ddc1",
+      "sound": "buff",
+      "coefficient": 0.0,
+      "element": "frost"
+    },
+    "support_archer": {
+      "name": "사냥꾼의 신호",
+      "kind": "self",
+      "icon": "bow",
+      "unlock": 10,
+      "cooldown": 18,
+      "cost": 22,
+      "party": {
+        "stats": [
+          {
+            "stat": "crit",
+            "value": 0.035,
+            "op": "add"
+          }
+        ],
+        "duration": 7,
+        "range": 7
+      },
+      "color": "#e5d6a0",
+      "sound": "buff"
+    },
+    "lineage_marksman": {
+      "name": "명사수의 비기",
+      "icon": "bow",
+      "unlock": 3,
+      "kind": "targetArea",
+      "scale": "attack",
+      "coefficient": 2.36,
+      "range": 5.7,
+      "radius": 1.6,
+      "cooldown": 7.6,
+      "cost": 14,
+      "color": "#e2d39c",
+      "sound": "arrow",
+      "requiredBranch": "marksman",
+      "element": "nature"
+    },
+    "lineage_ranger": {
+      "name": "추적자의 비기",
+      "icon": "bow",
+      "unlock": 3,
+      "kind": "targetArea",
+      "scale": "attack",
+      "coefficient": 2.36,
+      "range": 5.7,
+      "radius": 1.6,
+      "cooldown": 7.6,
+      "cost": 14,
+      "color": "#e2d39c",
+      "sound": "arrow",
+      "requiredBranch": "ranger",
+      "element": "fire"
+    },
+    "lineage_venom": {
+      "name": "독 사냥꾼의 비기",
+      "icon": "bow",
+      "unlock": 3,
+      "kind": "targetArea",
+      "scale": "attack",
+      "coefficient": 2.36,
+      "range": 5.7,
+      "radius": 1.6,
+      "cooldown": 7.6,
+      "cost": 14,
+      "color": "#e2d39c",
+      "sound": "arrow",
+      "requiredBranch": "venom",
+      "element": "physical"
+    },
+    "lineage_marksman_s0": {
+      "name": "데드아이의 비기",
+      "icon": "signature",
+      "unlock": 18,
+      "kind": "self",
+      "cooldown": 12.8,
+      "cost": 13,
+      "buff": {
+        "duration": 6,
+        "stats": [
+          {
+            "stat": "crit",
+            "op": "add",
+            "value": 0.2
+          },
+          {
+            "stat": "basicDamage",
+            "op": "multiply",
+            "value": 1.15
+          }
+        ]
+      },
+      "color": "#aac57d",
+      "sound": "buff",
+      "requiredBranch": "marksman_s0",
+      "coefficient": 0.0,
+      "element": "fire"
+    },
+    "lineage_marksman_s0_t0": {
+      "name": "왕국 저격수의 비기",
+      "icon": "bow",
+      "unlock": 34,
+      "kind": "projectile",
+      "projectile": "arrow",
+      "scale": "attack",
+      "coefficient": 4.77,
+      "range": 6,
+      "radius": 0.9,
+      "cooldown": 9.9,
+      "cost": 21,
+      "pierce": 3,
+      "color": "#f5ddb2",
+      "sound": "arrow",
+      "requiredBranch": "marksman_s0_t0",
+      "element": "arcane"
+    },
+    "lineage_marksman_s0_t1": {
+      "name": "유성 사수의 비기",
+      "icon": "bow",
+      "unlock": 34,
+      "kind": "projectile",
+      "projectile": "arrow",
+      "scale": "attack",
+      "coefficient": 4.77,
+      "range": 6,
+      "radius": 0.9,
+      "cooldown": 9.9,
+      "cost": 21,
+      "pierce": 3,
+      "color": "#f5ddb2",
+      "sound": "arrow",
+      "requiredBranch": "marksman_s0_t1",
+      "element": "arcane"
+    },
+    "lineage_marksman_s1": {
+      "name": "호크아이의 비기",
+      "icon": "signature",
+      "unlock": 18,
+      "kind": "self",
+      "cooldown": 12.8,
+      "cost": 13,
+      "buff": {
+        "duration": 6,
+        "stats": [
+          {
+            "stat": "crit",
+            "op": "add",
+            "value": 0.2
+          },
+          {
+            "stat": "basicDamage",
+            "op": "multiply",
+            "value": 1.15
+          }
+        ]
+      },
+      "color": "#aac57d",
+      "sound": "buff",
+      "requiredBranch": "marksman_s1",
+      "coefficient": 0.0,
+      "element": "fire"
+    },
+    "lineage_marksman_s1_t0": {
+      "name": "매의 군주의 비기",
+      "icon": "bow",
+      "unlock": 34,
+      "kind": "projectile",
+      "projectile": "arrow",
+      "scale": "attack",
+      "coefficient": 4.77,
+      "range": 6,
+      "radius": 0.9,
+      "cooldown": 9.9,
+      "cost": 21,
+      "pierce": 3,
+      "color": "#f5ddb2",
+      "sound": "arrow",
+      "requiredBranch": "marksman_s1_t0",
+      "element": "arcane"
+    },
+    "lineage_marksman_s1_t1": {
+      "name": "천리안의 비기",
+      "icon": "bow",
+      "unlock": 34,
+      "kind": "projectile",
+      "projectile": "arrow",
+      "scale": "attack",
+      "coefficient": 4.77,
+      "range": 6,
+      "radius": 0.9,
+      "cooldown": 9.9,
+      "cost": 21,
+      "pierce": 3,
+      "color": "#f5ddb2",
+      "sound": "arrow",
+      "requiredBranch": "marksman_s1_t1",
+      "element": "arcane"
+    },
+    "lineage_ranger_s0": {
+      "name": "숲의 파수꾼의 비기",
+      "icon": "signature",
+      "unlock": 18,
+      "kind": "self",
+      "cooldown": 12.8,
+      "cost": 13,
+      "buff": {
+        "duration": 6,
+        "stats": [
+          {
+            "stat": "crit",
+            "op": "add",
+            "value": 0.2
+          },
+          {
+            "stat": "basicDamage",
+            "op": "multiply",
+            "value": 1.15
+          }
+        ]
+      },
+      "color": "#aac57d",
+      "sound": "buff",
+      "requiredBranch": "ranger_s0",
+      "coefficient": 0.0,
+      "element": "arcane"
+    },
+    "lineage_ranger_s0_t0": {
+      "name": "야생의 수호자의 비기",
+      "icon": "bow",
+      "unlock": 34,
+      "kind": "projectile",
+      "projectile": "arrow",
+      "scale": "attack",
+      "coefficient": 4.77,
+      "range": 6,
+      "radius": 0.9,
+      "cooldown": 9.9,
+      "cost": 21,
+      "pierce": 3,
+      "color": "#f5ddb2",
+      "sound": "arrow",
+      "requiredBranch": "ranger_s0_t0",
+      "element": "frost"
+    },
+    "lineage_ranger_s0_t1": {
+      "name": "녹풍 사냥꾼의 비기",
+      "icon": "bow",
+      "unlock": 34,
+      "kind": "projectile",
+      "projectile": "arrow",
+      "scale": "attack",
+      "coefficient": 4.77,
+      "range": 6,
+      "radius": 0.9,
+      "cooldown": 9.9,
+      "cost": 21,
+      "pierce": 3,
+      "color": "#f5ddb2",
+      "sound": "arrow",
+      "requiredBranch": "ranger_s0_t1",
+      "element": "frost"
+    },
+    "lineage_ranger_s1": {
+      "name": "트래퍼의 비기",
+      "icon": "signature",
+      "unlock": 18,
+      "kind": "self",
+      "cooldown": 12.8,
+      "cost": 13,
+      "buff": {
+        "duration": 6,
+        "stats": [
+          {
+            "stat": "crit",
+            "op": "add",
+            "value": 0.2
+          },
+          {
+            "stat": "basicDamage",
+            "op": "multiply",
+            "value": 1.15
+          }
+        ]
+      },
+      "color": "#aac57d",
+      "sound": "buff",
+      "requiredBranch": "ranger_s1",
+      "coefficient": 0.0,
+      "element": "arcane"
+    },
+    "lineage_ranger_s1_t0": {
+      "name": "덫의 장인의 비기",
+      "icon": "bow",
+      "unlock": 34,
+      "kind": "projectile",
+      "projectile": "arrow",
+      "scale": "attack",
+      "coefficient": 4.77,
+      "range": 6,
+      "radius": 0.9,
+      "cooldown": 9.9,
+      "cost": 21,
+      "pierce": 3,
+      "color": "#f5ddb2",
+      "sound": "arrow",
+      "requiredBranch": "ranger_s1_t0",
+      "element": "frost"
+    },
+    "lineage_ranger_s1_t1": {
+      "name": "독안개 추적자의 비기",
+      "icon": "bow",
+      "unlock": 34,
+      "kind": "projectile",
+      "projectile": "arrow",
+      "scale": "attack",
+      "coefficient": 4.77,
+      "range": 6,
+      "radius": 0.9,
+      "cooldown": 9.9,
+      "cost": 21,
+      "pierce": 3,
+      "color": "#f5ddb2",
+      "sound": "arrow",
+      "requiredBranch": "ranger_s1_t1",
+      "element": "frost"
+    },
+    "lineage_venom_s0": {
+      "name": "나이트스토커의 비기",
+      "icon": "signature",
+      "unlock": 18,
+      "kind": "self",
+      "cooldown": 12.8,
+      "cost": 13,
+      "buff": {
+        "duration": 6,
+        "stats": [
+          {
+            "stat": "crit",
+            "op": "add",
+            "value": 0.2
+          },
+          {
+            "stat": "basicDamage",
+            "op": "multiply",
+            "value": 1.15
+          }
+        ]
+      },
+      "color": "#aac57d",
+      "sound": "buff",
+      "requiredBranch": "venom_s0",
+      "coefficient": 0.0,
+      "element": "nature"
+    },
+    "lineage_venom_s0_t0": {
+      "name": "월영 추적자의 비기",
+      "icon": "bow",
+      "unlock": 34,
+      "kind": "projectile",
+      "projectile": "arrow",
+      "scale": "attack",
+      "coefficient": 4.77,
+      "range": 6,
+      "radius": 0.9,
+      "cooldown": 9.9,
+      "cost": 21,
+      "pierce": 3,
+      "color": "#f5ddb2",
+      "sound": "arrow",
+      "requiredBranch": "venom_s0_t0",
+      "element": "fire"
+    },
+    "lineage_venom_s0_t1": {
+      "name": "칠흑의 화살의 비기",
+      "icon": "bow",
+      "unlock": 34,
+      "kind": "projectile",
+      "projectile": "arrow",
+      "scale": "attack",
+      "coefficient": 4.77,
+      "range": 6,
+      "radius": 0.9,
+      "cooldown": 9.9,
+      "cost": 21,
+      "pierce": 3,
+      "color": "#f5ddb2",
+      "sound": "arrow",
+      "requiredBranch": "venom_s0_t1",
+      "element": "fire"
+    },
+    "lineage_venom_s1": {
+      "name": "베놈레인저의 비기",
+      "icon": "signature",
+      "unlock": 18,
+      "kind": "self",
+      "cooldown": 12.8,
+      "cost": 13,
+      "buff": {
+        "duration": 6,
+        "stats": [
+          {
+            "stat": "crit",
+            "op": "add",
+            "value": 0.2
+          },
+          {
+            "stat": "basicDamage",
+            "op": "multiply",
+            "value": 1.15
+          }
+        ]
+      },
+      "color": "#aac57d",
+      "sound": "buff",
+      "requiredBranch": "venom_s1",
+      "coefficient": 0.0,
+      "element": "nature"
+    },
+    "lineage_venom_s1_t0": {
+      "name": "독왕의 비기",
+      "icon": "bow",
+      "unlock": 34,
+      "kind": "projectile",
+      "projectile": "arrow",
+      "scale": "attack",
+      "coefficient": 4.77,
+      "range": 6,
+      "radius": 0.9,
+      "cooldown": 9.9,
+      "cost": 21,
+      "pierce": 3,
+      "color": "#f5ddb2",
+      "sound": "arrow",
+      "requiredBranch": "venom_s1_t0",
+      "element": "fire"
+    },
+    "lineage_venom_s1_t1": {
+      "name": "가시 심장의 비기",
+      "icon": "bow",
+      "unlock": 34,
+      "kind": "projectile",
+      "projectile": "arrow",
+      "scale": "attack",
+      "coefficient": 4.77,
+      "range": 6,
+      "radius": 0.9,
+      "cooldown": 9.9,
+      "cost": 21,
+      "pierce": 3,
+      "color": "#f5ddb2",
+      "sound": "arrow",
+      "requiredBranch": "venom_s1_t1",
+      "element": "fire"
+    },
+    "veteran_magician_0": {
+      "name": "노련한 화염구",
+      "icon": "staff",
+      "unlock": 8,
+      "kind": "projectile",
+      "projectile": "fire",
+      "scale": "spell",
+      "coefficient": 2.38,
+      "range": 5.5,
+      "radius": 1.5,
+      "cooldown": 4.2,
+      "cost": 20,
+      "burn": true,
+      "color": "#edb16f",
+      "sound": "fire",
+      "element": "physical"
+    },
+    "veteran_magician_1": {
+      "name": "연속 서리 고리",
+      "icon": "signature",
+      "unlock": 13,
+      "kind": "nova",
+      "scale": "spell",
+      "coefficient": 1.88,
+      "radius": 2.8,
+      "range": 2.8,
+      "cooldown": 6.7,
+      "cost": 23,
+      "slow": true,
+      "color": "#b4dce2",
+      "sound": "ice",
+      "element": "fire"
+    },
+    "veteran_magician_2": {
+      "name": "집중 비전 연쇄",
+      "icon": "staff",
+      "unlock": 18,
+      "kind": "chain",
+      "scale": "spell",
+      "coefficient": 2.26,
+      "range": 5.8,
+      "chain": 4,
+      "cooldown": 6.3,
+      "cost": 26,
+      "color": "#d1bbe8",
+      "sound": "magic",
+      "element": "frost"
+    },
+    "veteran_magician_3": {
+      "name": "정밀 낙성",
+      "icon": "signature",
+      "unlock": 23,
+      "kind": "targetArea",
+      "scale": "spell",
+      "coefficient": 4.62,
+      "range": 6,
+      "radius": 2.5,
+      "cooldown": 10.4,
+      "cost": 38,
+      "burn": true,
+      "color": "#efad78",
+      "sound": "heavy",
+      "element": "nature"
+    },
+    "veteran_magician_4": {
+      "name": "깊은 화염구",
+      "icon": "staff",
+      "unlock": 28,
+      "kind": "projectile",
+      "projectile": "fire",
+      "scale": "spell",
+      "coefficient": 2.6,
+      "range": 5.5,
+      "radius": 1.5,
+      "cooldown": 4.5,
+      "cost": 22,
+      "burn": true,
+      "color": "#edb16f",
+      "sound": "fire",
+      "element": "arcane"
+    },
+    "veteran_magician_5": {
+      "name": "폭풍의 서리 고리",
+      "icon": "signature",
+      "unlock": 33,
+      "kind": "nova",
+      "scale": "spell",
+      "coefficient": 2.05,
+      "radius": 2.8,
+      "range": 2.8,
+      "cooldown": 7.2,
+      "cost": 25,
+      "slow": true,
+      "color": "#b4dce2",
+      "sound": "ice",
+      "element": "physical"
+    },
+    "veteran_magician_6": {
+      "name": "왕립 비전 연쇄",
+      "icon": "staff",
+      "unlock": 38,
+      "kind": "chain",
+      "scale": "spell",
+      "coefficient": 2.46,
+      "range": 5.8,
+      "chain": 4,
+      "cooldown": 6.7,
+      "cost": 28,
+      "color": "#d1bbe8",
+      "sound": "magic",
+      "element": "fire"
+    },
+    "veteran_magician_7": {
+      "name": "계승의 낙성",
+      "icon": "signature",
+      "unlock": 43,
+      "kind": "targetArea",
+      "scale": "spell",
+      "coefficient": 5.02,
+      "range": 6,
+      "radius": 2.5,
+      "cooldown": 11.2,
+      "cost": 42,
+      "burn": true,
+      "color": "#efad78",
+      "sound": "heavy",
+      "element": "frost"
+    },
+    "support_magician": {
+      "name": "별빛의 샘",
+      "kind": "self",
+      "icon": "staff",
+      "unlock": 10,
+      "cooldown": 18,
+      "cost": 22,
+      "party": {
+        "heal": 0.1,
+        "mana": 0.1,
+        "range": 6
+      },
+      "color": "#e5d6a0",
+      "sound": "buff"
+    },
+    "lineage_pyromancer": {
+      "name": "화염술사의 비기",
+      "icon": "staff",
+      "unlock": 3,
+      "kind": "projectile",
+      "projectile": "fire",
+      "scale": "spell",
+      "coefficient": 2.6,
+      "range": 5.5,
+      "radius": 1.5,
+      "cooldown": 4.1,
+      "cost": 21,
+      "burn": true,
+      "color": "#edb16f",
+      "sound": "fire",
+      "requiredBranch": "pyromancer",
+      "element": "physical"
+    },
+    "lineage_frost": {
+      "name": "빙결술사의 비기",
+      "icon": "staff",
+      "unlock": 3,
+      "kind": "projectile",
+      "projectile": "fire",
+      "scale": "spell",
+      "coefficient": 2.6,
+      "range": 5.5,
+      "radius": 1.5,
+      "cooldown": 4.1,
+      "cost": 21,
+      "burn": true,
+      "color": "#edb16f",
+      "sound": "fire",
+      "requiredBranch": "frost",
+      "element": "physical"
+    },
+    "lineage_arcanist": {
+      "name": "비전술사의 비기",
+      "icon": "staff",
+      "unlock": 3,
+      "kind": "projectile",
+      "projectile": "fire",
+      "scale": "spell",
+      "coefficient": 2.6,
+      "range": 5.5,
+      "radius": 1.5,
+      "cooldown": 4.1,
+      "cost": 21,
+      "burn": true,
+      "color": "#edb16f",
+      "sound": "fire",
+      "requiredBranch": "arcanist",
+      "element": "nature"
+    },
+    "lineage_pyromancer_s0": {
+      "name": "인페르노의 비기",
+      "icon": "signature",
+      "unlock": 18,
+      "kind": "nova",
+      "scale": "spell",
+      "coefficient": 2.31,
+      "radius": 2.8,
+      "range": 2.8,
+      "cooldown": 7.0,
+      "cost": 26,
+      "slow": true,
+      "color": "#b4dce2",
+      "sound": "ice",
+      "requiredBranch": "pyromancer_s0",
+      "element": "nature"
+    },
+    "lineage_pyromancer_s0_t0": {
+      "name": "불사조 현자의 비기",
+      "icon": "staff",
+      "unlock": 34,
+      "kind": "chain",
+      "scale": "spell",
+      "coefficient": 3.08,
+      "range": 5.8,
+      "chain": 4,
+      "cooldown": 6.8,
+      "cost": 31,
+      "color": "#d1bbe8",
+      "sound": "magic",
+      "requiredBranch": "pyromancer_s0_t0",
+      "element": "fire"
+    },
+    "lineage_pyromancer_s0_t1": {
+      "name": "홍련의 군주의 비기",
+      "icon": "staff",
+      "unlock": 34,
+      "kind": "chain",
+      "scale": "spell",
+      "coefficient": 3.08,
+      "range": 5.8,
+      "chain": 4,
+      "cooldown": 6.8,
+      "cost": 31,
+      "color": "#d1bbe8",
+      "sound": "magic",
+      "requiredBranch": "pyromancer_s0_t1",
+      "element": "fire"
+    },
+    "lineage_pyromancer_s1": {
+      "name": "플레임위버의 비기",
+      "icon": "signature",
+      "unlock": 18,
+      "kind": "nova",
+      "scale": "spell",
+      "coefficient": 2.31,
+      "radius": 2.8,
+      "range": 2.8,
+      "cooldown": 7.0,
+      "cost": 26,
+      "slow": true,
+      "color": "#b4dce2",
+      "sound": "ice",
+      "requiredBranch": "pyromancer_s1",
+      "element": "nature"
+    },
+    "lineage_pyromancer_s1_t0": {
+      "name": "태양의 직조자의 비기",
+      "icon": "staff",
+      "unlock": 34,
+      "kind": "chain",
+      "scale": "spell",
+      "coefficient": 3.08,
+      "range": 5.8,
+      "chain": 4,
+      "cooldown": 6.8,
+      "cost": 31,
+      "color": "#d1bbe8",
+      "sound": "magic",
+      "requiredBranch": "pyromancer_s1_t0",
+      "element": "fire"
+    },
+    "lineage_pyromancer_s1_t1": {
+      "name": "재의 예언자의 비기",
+      "icon": "staff",
+      "unlock": 34,
+      "kind": "chain",
+      "scale": "spell",
+      "coefficient": 3.08,
+      "range": 5.8,
+      "chain": 4,
+      "cooldown": 6.8,
+      "cost": 31,
+      "color": "#d1bbe8",
+      "sound": "magic",
+      "requiredBranch": "pyromancer_s1_t1",
+      "element": "fire"
+    },
+    "lineage_frost_s0": {
+      "name": "글레이셜의 비기",
+      "icon": "signature",
+      "unlock": 18,
+      "kind": "nova",
+      "scale": "spell",
+      "coefficient": 2.31,
+      "radius": 2.8,
+      "range": 2.8,
+      "cooldown": 7.0,
+      "cost": 26,
+      "slow": true,
+      "color": "#b4dce2",
+      "sound": "ice",
+      "requiredBranch": "frost_s0",
+      "element": "nature"
+    },
+    "lineage_frost_s0_t0": {
+      "name": "겨울의 현자의 비기",
+      "icon": "staff",
+      "unlock": 34,
+      "kind": "chain",
+      "scale": "spell",
+      "coefficient": 3.08,
+      "range": 5.8,
+      "chain": 4,
+      "cooldown": 6.8,
+      "cost": 31,
+      "color": "#d1bbe8",
+      "sound": "magic",
+      "requiredBranch": "frost_s0_t0",
+      "element": "fire"
+    },
+    "lineage_frost_s0_t1": {
+      "name": "빙관의 군주의 비기",
+      "icon": "staff",
+      "unlock": 34,
+      "kind": "chain",
+      "scale": "spell",
+      "coefficient": 3.08,
+      "range": 5.8,
+      "chain": 4,
+      "cooldown": 6.8,
+      "cost": 31,
+      "color": "#d1bbe8",
+      "sound": "magic",
+      "requiredBranch": "frost_s0_t1",
+      "element": "fire"
+    },
+    "lineage_frost_s1": {
+      "name": "프로스트가드의 비기",
+      "icon": "signature",
+      "unlock": 18,
+      "kind": "nova",
+      "scale": "spell",
+      "coefficient": 2.31,
+      "radius": 2.8,
+      "range": 2.8,
+      "cooldown": 7.0,
+      "cost": 26,
+      "slow": true,
+      "color": "#b4dce2",
+      "sound": "ice",
+      "requiredBranch": "frost_s1",
+      "element": "nature"
+    },
+    "lineage_frost_s1_t0": {
+      "name": "서리 수호자의 비기",
+      "icon": "staff",
+      "unlock": 34,
+      "kind": "chain",
+      "scale": "spell",
+      "coefficient": 3.08,
+      "range": 5.8,
+      "chain": 4,
+      "cooldown": 6.8,
+      "cost": 31,
+      "color": "#d1bbe8",
+      "sound": "magic",
+      "requiredBranch": "frost_s1_t0",
+      "element": "fire"
+    },
+    "lineage_frost_s1_t1": {
+      "name": "영원의 얼음의 비기",
+      "icon": "staff",
+      "unlock": 34,
+      "kind": "chain",
+      "scale": "spell",
+      "coefficient": 3.08,
+      "range": 5.8,
+      "chain": 4,
+      "cooldown": 6.8,
+      "cost": 31,
+      "color": "#d1bbe8",
+      "sound": "magic",
+      "requiredBranch": "frost_s1_t1",
+      "element": "fire"
+    },
+    "lineage_arcanist_s0": {
+      "name": "아크메이지의 비기",
+      "icon": "signature",
+      "unlock": 18,
+      "kind": "nova",
+      "scale": "spell",
+      "coefficient": 2.31,
+      "radius": 2.8,
+      "range": 2.8,
+      "cooldown": 7.0,
+      "cost": 26,
+      "slow": true,
+      "color": "#b4dce2",
+      "sound": "ice",
+      "requiredBranch": "arcanist_s0",
+      "element": "fire"
+    },
+    "lineage_arcanist_s0_t0": {
+      "name": "별의 대마도사의 비기",
+      "icon": "staff",
+      "unlock": 34,
+      "kind": "chain",
+      "scale": "spell",
+      "coefficient": 3.08,
+      "range": 5.8,
+      "chain": 4,
+      "cooldown": 6.8,
+      "cost": 31,
+      "color": "#d1bbe8",
+      "sound": "magic",
+      "requiredBranch": "arcanist_s0_t0",
+      "element": "arcane"
+    },
+    "lineage_arcanist_s0_t1": {
+      "name": "차원 여행자의 비기",
+      "icon": "staff",
+      "unlock": 34,
+      "kind": "chain",
+      "scale": "spell",
+      "coefficient": 3.08,
+      "range": 5.8,
+      "chain": 4,
+      "cooldown": 6.8,
+      "cost": 31,
+      "color": "#d1bbe8",
+      "sound": "magic",
+      "requiredBranch": "arcanist_s0_t1",
+      "element": "arcane"
+    },
+    "lineage_arcanist_s1": {
+      "name": "에테르위버의 비기",
+      "icon": "signature",
+      "unlock": 18,
+      "kind": "nova",
+      "scale": "spell",
+      "coefficient": 2.31,
+      "radius": 2.8,
+      "range": 2.8,
+      "cooldown": 7.0,
+      "cost": 26,
+      "slow": true,
+      "color": "#b4dce2",
+      "sound": "ice",
+      "requiredBranch": "arcanist_s1",
+      "element": "fire"
+    },
+    "lineage_arcanist_s1_t0": {
+      "name": "마력의 지배자의 비기",
+      "icon": "staff",
+      "unlock": 34,
+      "kind": "chain",
+      "scale": "spell",
+      "coefficient": 3.08,
+      "range": 5.8,
+      "chain": 4,
+      "cooldown": 6.8,
+      "cost": 31,
+      "color": "#d1bbe8",
+      "sound": "magic",
+      "requiredBranch": "arcanist_s1_t0",
+      "element": "arcane"
+    },
+    "lineage_arcanist_s1_t1": {
+      "name": "시간의 현자의 비기",
+      "icon": "staff",
+      "unlock": 34,
+      "kind": "chain",
+      "scale": "spell",
+      "coefficient": 3.08,
+      "range": 5.8,
+      "chain": 4,
+      "cooldown": 6.8,
+      "cost": 31,
+      "color": "#d1bbe8",
+      "sound": "magic",
+      "requiredBranch": "arcanist_s1_t1",
+      "element": "arcane"
+    },
+    "veteran_guardian_0": {
+      "name": "노련한 방패 강타",
+      "icon": "shield",
+      "unlock": 8,
+      "kind": "nova",
+      "scale": "spell",
+      "defenseScale": 1.4,
+      "coefficient": 1.94,
+      "radius": 1.7,
+      "range": 1.7,
+      "cooldown": 5.3,
+      "cost": 13,
+      "knockback": 0.65,
+      "color": "#e4d3a2",
+      "sound": "shield",
+      "element": "physical"
+    },
+    "veteran_guardian_1": {
+      "name": "연속 성역",
+      "icon": "heart",
+      "unlock": 13,
+      "kind": "self",
+      "cooldown": 11.2,
+      "cost": 20,
+      "heal": 0.2,
+      "shield": 0.08,
+      "conditionHp": 0.8,
+      "color": "#f0e2ac",
+      "sound": "heal",
+      "coefficient": 0.0,
+      "element": "fire"
+    },
+    "veteran_guardian_2": {
+      "name": "집중 빛의 심판",
+      "icon": "signature",
+      "unlock": 18,
+      "kind": "targetArea",
+      "scale": "spell",
+      "defenseScale": 1.8,
+      "coefficient": 2.83,
+      "range": 4.5,
+      "radius": 2,
+      "cooldown": 8.0,
+      "cost": 23,
+      "color": "#f6e7b9",
+      "sound": "magic",
+      "element": "frost"
+    },
+    "veteran_guardian_3": {
+      "name": "정밀 강철 서약",
+      "icon": "shield",
+      "unlock": 23,
+      "kind": "self",
+      "cooldown": 13.9,
+      "cost": 23,
+      "shield": 0.25,
+      "buff": {
+        "duration": 6,
+        "stats": [
+          {
+            "stat": "damageReduction",
+            "op": "add",
+            "value": 0.2
+          },
+          {
+            "stat": "thorns",
+            "op": "add",
+            "value": 8
+          }
+        ]
+      },
+      "color": "#d8dccf",
+      "sound": "buff",
+      "coefficient": 0.0,
+      "element": "nature"
+    },
+    "veteran_guardian_4": {
+      "name": "깊은 방패 강타",
+      "icon": "shield",
+      "unlock": 28,
+      "kind": "nova",
+      "scale": "spell",
+      "defenseScale": 1.4,
+      "coefficient": 2.12,
+      "radius": 1.7,
+      "range": 1.7,
+      "cooldown": 5.7,
+      "cost": 15,
+      "knockback": 0.65,
+      "color": "#e4d3a2",
+      "sound": "shield",
+      "element": "arcane"
+    },
+    "veteran_guardian_5": {
+      "name": "폭풍의 성역",
+      "icon": "heart",
+      "unlock": 33,
+      "kind": "self",
+      "cooldown": 12.0,
+      "cost": 22,
+      "heal": 0.2,
+      "shield": 0.08,
+      "conditionHp": 0.8,
+      "color": "#f0e2ac",
+      "sound": "heal",
+      "coefficient": 0.0,
+      "element": "physical"
+    },
+    "veteran_guardian_6": {
+      "name": "왕립 빛의 심판",
+      "icon": "signature",
+      "unlock": 38,
+      "kind": "targetArea",
+      "scale": "spell",
+      "defenseScale": 1.8,
+      "coefficient": 3.08,
+      "range": 4.5,
+      "radius": 2,
+      "cooldown": 8.5,
+      "cost": 26,
+      "color": "#f6e7b9",
+      "sound": "magic",
+      "element": "fire"
+    },
+    "veteran_guardian_7": {
+      "name": "계승의 강철 서약",
+      "icon": "shield",
+      "unlock": 43,
+      "kind": "self",
+      "cooldown": 14.9,
+      "cost": 25,
+      "shield": 0.25,
+      "buff": {
+        "duration": 6,
+        "stats": [
+          {
+            "stat": "damageReduction",
+            "op": "add",
+            "value": 0.2
+          },
+          {
+            "stat": "thorns",
+            "op": "add",
+            "value": 8
+          }
+        ]
+      },
+      "color": "#d8dccf",
+      "sound": "buff",
+      "coefficient": 0.0,
+      "element": "frost"
+    },
+    "support_guardian": {
+      "name": "수호자의 진형",
+      "kind": "self",
+      "icon": "shield",
+      "unlock": 10,
+      "cooldown": 18,
+      "cost": 22,
+      "party": {
+        "shield": 0.12,
+        "stats": [
+          {
+            "stat": "damageReduction",
+            "value": 0.05,
+            "op": "add"
+          }
+        ],
+        "duration": 6,
+        "range": 5,
+        "taunt": 4
+      },
+      "color": "#e5d6a0",
+      "sound": "buff"
+    },
+    "lineage_fortress": {
+      "name": "철벽의 비기",
+      "icon": "shield",
+      "unlock": 3,
+      "kind": "nova",
+      "scale": "spell",
+      "defenseScale": 1.4,
+      "coefficient": 2.12,
+      "radius": 1.7,
+      "range": 1.7,
+      "cooldown": 5.2,
+      "cost": 14,
+      "knockback": 0.65,
+      "color": "#e4d3a2",
+      "sound": "shield",
+      "requiredBranch": "fortress",
+      "element": "nature"
+    },
+    "lineage_paladin": {
+      "name": "성기사의 비기",
+      "icon": "shield",
+      "unlock": 3,
+      "kind": "nova",
+      "scale": "spell",
+      "defenseScale": 1.4,
+      "coefficient": 2.12,
+      "radius": 1.7,
+      "range": 1.7,
+      "cooldown": 5.2,
+      "cost": 14,
+      "knockback": 0.65,
+      "color": "#e4d3a2",
+      "sound": "shield",
+      "requiredBranch": "paladin",
+      "element": "frost"
+    },
+    "lineage_avenger": {
+      "name": "응징자의 비기",
+      "icon": "shield",
+      "unlock": 3,
+      "kind": "nova",
+      "scale": "spell",
+      "defenseScale": 1.4,
+      "coefficient": 2.12,
+      "radius": 1.7,
+      "range": 1.7,
+      "cooldown": 5.2,
+      "cost": 14,
+      "knockback": 0.65,
+      "color": "#e4d3a2",
+      "sound": "shield",
+      "requiredBranch": "avenger",
+      "element": "frost"
+    },
+    "lineage_fortress_s0": {
+      "name": "바스티온의 비기",
+      "icon": "heart",
+      "unlock": 18,
+      "kind": "self",
+      "cooldown": 11.6,
+      "cost": 23,
+      "heal": 0.2,
+      "shield": 0.08,
+      "conditionHp": 0.8,
+      "color": "#f0e2ac",
+      "sound": "heal",
+      "requiredBranch": "fortress_s0",
+      "coefficient": 0.0,
+      "element": "fire"
+    },
+    "lineage_fortress_s0_t0": {
+      "name": "불굴의 성채의 비기",
+      "icon": "signature",
+      "unlock": 34,
+      "kind": "targetArea",
+      "scale": "spell",
+      "defenseScale": 1.8,
+      "coefficient": 3.85,
+      "range": 4.5,
+      "radius": 2,
+      "cooldown": 8.7,
+      "cost": 28,
+      "color": "#f6e7b9",
+      "sound": "magic",
+      "requiredBranch": "fortress_s0_t0",
+      "element": "arcane"
+    },
+    "lineage_fortress_s0_t1": {
+      "name": "왕국의 보루의 비기",
+      "icon": "signature",
+      "unlock": 34,
+      "kind": "targetArea",
+      "scale": "spell",
+      "defenseScale": 1.8,
+      "coefficient": 3.85,
+      "range": 4.5,
+      "radius": 2,
+      "cooldown": 8.7,
+      "cost": 28,
+      "color": "#f6e7b9",
+      "sound": "magic",
+      "requiredBranch": "fortress_s0_t1",
+      "element": "arcane"
+    },
+    "lineage_fortress_s1": {
+      "name": "아이언가드의 비기",
+      "icon": "heart",
+      "unlock": 18,
+      "kind": "self",
+      "cooldown": 11.6,
+      "cost": 23,
+      "heal": 0.2,
+      "shield": 0.08,
+      "conditionHp": 0.8,
+      "color": "#f0e2ac",
+      "sound": "heal",
+      "requiredBranch": "fortress_s1",
+      "coefficient": 0.0,
+      "element": "fire"
+    },
+    "lineage_fortress_s1_t0": {
+      "name": "강철의 거인의 비기",
+      "icon": "signature",
+      "unlock": 34,
+      "kind": "targetArea",
+      "scale": "spell",
+      "defenseScale": 1.8,
+      "coefficient": 3.85,
+      "range": 4.5,
+      "radius": 2,
+      "cooldown": 8.7,
+      "cost": 28,
+      "color": "#f6e7b9",
+      "sound": "magic",
+      "requiredBranch": "fortress_s1_t0",
+      "element": "arcane"
+    },
+    "lineage_fortress_s1_t1": {
+      "name": "아다만트 수호자의 비기",
+      "icon": "signature",
+      "unlock": 34,
+      "kind": "targetArea",
+      "scale": "spell",
+      "defenseScale": 1.8,
+      "coefficient": 3.85,
+      "range": 4.5,
+      "radius": 2,
+      "cooldown": 8.7,
+      "cost": 28,
+      "color": "#f6e7b9",
+      "sound": "magic",
+      "requiredBranch": "fortress_s1_t1",
+      "element": "arcane"
+    },
+    "lineage_paladin_s0": {
+      "name": "하이템플러의 비기",
+      "icon": "heart",
+      "unlock": 18,
+      "kind": "self",
+      "cooldown": 11.6,
+      "cost": 23,
+      "heal": 0.2,
+      "shield": 0.08,
+      "conditionHp": 0.8,
+      "color": "#f0e2ac",
+      "sound": "heal",
+      "requiredBranch": "paladin_s0",
+      "coefficient": 0.0,
+      "element": "physical"
+    },
+    "lineage_paladin_s0_t0": {
+      "name": "새벽의 성자의 비기",
+      "icon": "signature",
+      "unlock": 34,
+      "kind": "targetArea",
+      "scale": "spell",
+      "defenseScale": 1.8,
+      "coefficient": 3.85,
+      "range": 4.5,
+      "radius": 2,
+      "cooldown": 8.7,
+      "cost": 28,
+      "color": "#f6e7b9",
+      "sound": "magic",
+      "requiredBranch": "paladin_s0_t0",
+      "element": "nature"
+    },
+    "lineage_paladin_s0_t1": {
+      "name": "태양의 심판관의 비기",
+      "icon": "signature",
+      "unlock": 34,
+      "kind": "targetArea",
+      "scale": "spell",
+      "defenseScale": 1.8,
+      "coefficient": 3.85,
+      "range": 4.5,
+      "radius": 2,
+      "cooldown": 8.7,
+      "cost": 28,
+      "color": "#f6e7b9",
+      "sound": "magic",
+      "requiredBranch": "paladin_s0_t1",
+      "element": "nature"
+    },
+    "lineage_paladin_s1": {
+      "name": "세이크리드가드의 비기",
+      "icon": "heart",
+      "unlock": 18,
+      "kind": "self",
+      "cooldown": 11.6,
+      "cost": 23,
+      "heal": 0.2,
+      "shield": 0.08,
+      "conditionHp": 0.8,
+      "color": "#f0e2ac",
+      "sound": "heal",
+      "requiredBranch": "paladin_s1",
+      "coefficient": 0.0,
+      "element": "physical"
+    },
+    "lineage_paladin_s1_t0": {
+      "name": "성역의 수호자의 비기",
+      "icon": "signature",
+      "unlock": 34,
+      "kind": "targetArea",
+      "scale": "spell",
+      "defenseScale": 1.8,
+      "coefficient": 3.85,
+      "range": 4.5,
+      "radius": 2,
+      "cooldown": 8.7,
+      "cost": 28,
+      "color": "#f6e7b9",
+      "sound": "magic",
+      "requiredBranch": "paladin_s1_t0",
+      "element": "nature"
+    },
+    "lineage_paladin_s1_t1": {
+      "name": "빛의 순례자의 비기",
+      "icon": "signature",
+      "unlock": 34,
+      "kind": "targetArea",
+      "scale": "spell",
+      "defenseScale": 1.8,
+      "coefficient": 3.85,
+      "range": 4.5,
+      "radius": 2,
+      "cooldown": 8.7,
+      "cost": 28,
+      "color": "#f6e7b9",
+      "sound": "magic",
+      "requiredBranch": "paladin_s1_t1",
+      "element": "nature"
+    },
+    "lineage_avenger_s0": {
+      "name": "드레드노트의 비기",
+      "icon": "heart",
+      "unlock": 18,
+      "kind": "self",
+      "cooldown": 11.6,
+      "cost": 23,
+      "heal": 0.2,
+      "shield": 0.08,
+      "conditionHp": 0.8,
+      "color": "#f0e2ac",
+      "sound": "heal",
+      "requiredBranch": "avenger_s0",
+      "coefficient": 0.0,
+      "element": "physical"
+    },
+    "lineage_avenger_s0_t0": {
+      "name": "복수의 군주의 비기",
+      "icon": "signature",
+      "unlock": 34,
+      "kind": "targetArea",
+      "scale": "spell",
+      "defenseScale": 1.8,
+      "coefficient": 3.85,
+      "range": 4.5,
+      "radius": 2,
+      "cooldown": 8.7,
+      "cost": 28,
+      "color": "#f6e7b9",
+      "sound": "magic",
+      "requiredBranch": "avenger_s0_t0",
+      "element": "nature"
+    },
+    "lineage_avenger_s0_t1": {
+      "name": "파멸의 방패의 비기",
+      "icon": "signature",
+      "unlock": 34,
+      "kind": "targetArea",
+      "scale": "spell",
+      "defenseScale": 1.8,
+      "coefficient": 3.85,
+      "range": 4.5,
+      "radius": 2,
+      "cooldown": 8.7,
+      "cost": 28,
+      "color": "#f6e7b9",
+      "sound": "magic",
+      "requiredBranch": "avenger_s0_t1",
+      "element": "nature"
+    },
+    "lineage_avenger_s1": {
+      "name": "저거너트의 비기",
+      "icon": "heart",
+      "unlock": 18,
+      "kind": "self",
+      "cooldown": 11.6,
+      "cost": 23,
+      "heal": 0.2,
+      "shield": 0.08,
+      "conditionHp": 0.8,
+      "color": "#f0e2ac",
+      "sound": "heal",
+      "requiredBranch": "avenger_s1",
+      "coefficient": 0.0,
+      "element": "physical"
+    },
+    "lineage_avenger_s1_t0": {
+      "name": "전장의 거신의 비기",
+      "icon": "signature",
+      "unlock": 34,
+      "kind": "targetArea",
+      "scale": "spell",
+      "defenseScale": 1.8,
+      "coefficient": 3.85,
+      "range": 4.5,
+      "radius": 2,
+      "cooldown": 8.7,
+      "cost": 28,
+      "color": "#f6e7b9",
+      "sound": "magic",
+      "requiredBranch": "avenger_s1_t0",
+      "element": "nature"
+    },
+    "lineage_avenger_s1_t1": {
+      "name": "불굴의 응징자의 비기",
+      "icon": "signature",
+      "unlock": 34,
+      "kind": "targetArea",
+      "scale": "spell",
+      "defenseScale": 1.8,
+      "coefficient": 3.85,
+      "range": 4.5,
+      "radius": 2,
+      "cooldown": 8.7,
+      "cost": 28,
+      "color": "#f6e7b9",
+      "sound": "magic",
+      "requiredBranch": "avenger_s1_t1",
+      "element": "nature"
     }
   },
   "branches": {
@@ -10448,6 +12827,15 @@ window.GAME_DB = {
       "affixes": 2,
       "weight": 0.05,
       "salvage": 7
+    },
+    {
+      "id": "legendary",
+      "name": "전설",
+      "color": "#c89b45",
+      "multiplier": 1.9,
+      "affixes": 3,
+      "weight": 0.005,
+      "salvage": 12
     }
   ],
   "items": [
@@ -12044,6 +14432,3414 @@ window.GAME_DB = {
       ],
       "description": "세력의 힘 / 금화 획득 -8%.",
       "boss": true
+    },
+    {
+      "id": "set_ember_warrior",
+      "name": "불씨 성전 장검",
+      "slot": "weapon",
+      "classes": [
+        "warrior"
+      ],
+      "icon": "attack",
+      "element": "fire",
+      "set": "ember",
+      "minLevel": 12,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 7.0,
+          "op": "add"
+        },
+        {
+          "stat": "defense",
+          "value": -1,
+          "op": "add"
+        }
+      ],
+      "description": "세트 무기. 속성 상성과 세트 효과를 조합하세요."
+    },
+    {
+      "id": "set_ember_archer",
+      "name": "불씨 성전 활",
+      "slot": "weapon",
+      "classes": [
+        "archer"
+      ],
+      "icon": "bow",
+      "element": "fire",
+      "set": "ember",
+      "minLevel": 12,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 7.0,
+          "op": "add"
+        },
+        {
+          "stat": "defense",
+          "value": -1,
+          "op": "add"
+        }
+      ],
+      "description": "세트 무기. 속성 상성과 세트 효과를 조합하세요."
+    },
+    {
+      "id": "set_ember_magician",
+      "name": "불씨 성전 지팡이",
+      "slot": "weapon",
+      "classes": [
+        "magician"
+      ],
+      "icon": "staff",
+      "element": "fire",
+      "set": "ember",
+      "minLevel": 12,
+      "stats": [
+        {
+          "stat": "spell",
+          "value": 7.0,
+          "op": "add"
+        },
+        {
+          "stat": "defense",
+          "value": -1,
+          "op": "add"
+        }
+      ],
+      "description": "세트 무기. 속성 상성과 세트 효과를 조합하세요."
+    },
+    {
+      "id": "set_ember_guardian",
+      "name": "불씨 성전 철퇴",
+      "slot": "weapon",
+      "classes": [
+        "guardian"
+      ],
+      "icon": "shield",
+      "element": "fire",
+      "set": "ember",
+      "minLevel": 12,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 7.0,
+          "op": "add"
+        },
+        {
+          "stat": "hp",
+          "value": 10,
+          "op": "add"
+        }
+      ],
+      "description": "세트 무기. 속성 상성과 세트 효과를 조합하세요."
+    },
+    {
+      "id": "set_ember_armor",
+      "name": "불씨 성전 예복",
+      "slot": "armor",
+      "icon": "shield",
+      "set": "ember",
+      "element": "fire",
+      "minLevel": 12,
+      "stats": [
+        {
+          "stat": "hp",
+          "value": 18,
+          "op": "add"
+        },
+        {
+          "stat": "fireResist",
+          "value": 0.05,
+          "op": "add"
+        },
+        {
+          "stat": "speed",
+          "value": 0.98,
+          "op": "multiply"
+        }
+      ],
+      "description": "세트 2개·4개 장착 시 추가 효과."
+    },
+    {
+      "id": "set_ember_accessory",
+      "name": "불씨 성전 인장",
+      "slot": "accessory",
+      "icon": "rank",
+      "set": "ember",
+      "element": "fire",
+      "minLevel": 12,
+      "stats": [
+        {
+          "stat": "crit",
+          "value": 0.025,
+          "op": "add"
+        },
+        {
+          "stat": "defense",
+          "value": -1,
+          "op": "add"
+        }
+      ],
+      "description": "세트 2개·4개 장착 시 추가 효과."
+    },
+    {
+      "id": "set_ember_relic",
+      "name": "불씨 성전 성물",
+      "slot": "relic",
+      "icon": "rank",
+      "set": "ember",
+      "element": "fire",
+      "minLevel": 12,
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "value": 1.04,
+          "op": "multiply"
+        },
+        {
+          "stat": "manaRegen",
+          "value": 0.15,
+          "op": "add"
+        },
+        {
+          "stat": "attackSpeed",
+          "value": 0.98,
+          "op": "multiply"
+        }
+      ],
+      "description": "세트 2개·4개 장착 시 추가 효과."
+    },
+    {
+      "id": "set_glacier_warrior",
+      "name": "빙관 맹약 장검",
+      "slot": "weapon",
+      "classes": [
+        "warrior"
+      ],
+      "icon": "attack",
+      "element": "frost",
+      "set": "glacier",
+      "minLevel": 17,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 7.5,
+          "op": "add"
+        },
+        {
+          "stat": "defense",
+          "value": -1,
+          "op": "add"
+        }
+      ],
+      "description": "세트 무기. 속성 상성과 세트 효과를 조합하세요."
+    },
+    {
+      "id": "set_glacier_archer",
+      "name": "빙관 맹약 활",
+      "slot": "weapon",
+      "classes": [
+        "archer"
+      ],
+      "icon": "bow",
+      "element": "frost",
+      "set": "glacier",
+      "minLevel": 17,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 7.5,
+          "op": "add"
+        },
+        {
+          "stat": "defense",
+          "value": -1,
+          "op": "add"
+        }
+      ],
+      "description": "세트 무기. 속성 상성과 세트 효과를 조합하세요."
+    },
+    {
+      "id": "set_glacier_magician",
+      "name": "빙관 맹약 지팡이",
+      "slot": "weapon",
+      "classes": [
+        "magician"
+      ],
+      "icon": "staff",
+      "element": "frost",
+      "set": "glacier",
+      "minLevel": 17,
+      "stats": [
+        {
+          "stat": "spell",
+          "value": 7.5,
+          "op": "add"
+        },
+        {
+          "stat": "defense",
+          "value": -1,
+          "op": "add"
+        }
+      ],
+      "description": "세트 무기. 속성 상성과 세트 효과를 조합하세요."
+    },
+    {
+      "id": "set_glacier_guardian",
+      "name": "빙관 맹약 철퇴",
+      "slot": "weapon",
+      "classes": [
+        "guardian"
+      ],
+      "icon": "shield",
+      "element": "frost",
+      "set": "glacier",
+      "minLevel": 17,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 7.5,
+          "op": "add"
+        },
+        {
+          "stat": "hp",
+          "value": 10,
+          "op": "add"
+        }
+      ],
+      "description": "세트 무기. 속성 상성과 세트 효과를 조합하세요."
+    },
+    {
+      "id": "set_glacier_armor",
+      "name": "빙관 맹약 예복",
+      "slot": "armor",
+      "icon": "shield",
+      "set": "glacier",
+      "element": "frost",
+      "minLevel": 17,
+      "stats": [
+        {
+          "stat": "hp",
+          "value": 19,
+          "op": "add"
+        },
+        {
+          "stat": "frostResist",
+          "value": 0.05,
+          "op": "add"
+        },
+        {
+          "stat": "speed",
+          "value": 0.98,
+          "op": "multiply"
+        }
+      ],
+      "description": "세트 2개·4개 장착 시 추가 효과."
+    },
+    {
+      "id": "set_glacier_accessory",
+      "name": "빙관 맹약 인장",
+      "slot": "accessory",
+      "icon": "rank",
+      "set": "glacier",
+      "element": "frost",
+      "minLevel": 17,
+      "stats": [
+        {
+          "stat": "crit",
+          "value": 0.025,
+          "op": "add"
+        },
+        {
+          "stat": "defense",
+          "value": -1,
+          "op": "add"
+        }
+      ],
+      "description": "세트 2개·4개 장착 시 추가 효과."
+    },
+    {
+      "id": "set_glacier_relic",
+      "name": "빙관 맹약 성물",
+      "slot": "relic",
+      "icon": "rank",
+      "set": "glacier",
+      "element": "frost",
+      "minLevel": 17,
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "value": 1.04,
+          "op": "multiply"
+        },
+        {
+          "stat": "manaRegen",
+          "value": 0.15,
+          "op": "add"
+        },
+        {
+          "stat": "attackSpeed",
+          "value": 0.98,
+          "op": "multiply"
+        }
+      ],
+      "description": "세트 2개·4개 장착 시 추가 효과."
+    },
+    {
+      "id": "set_wild_warrior",
+      "name": "야생 수호 장검",
+      "slot": "weapon",
+      "classes": [
+        "warrior"
+      ],
+      "icon": "attack",
+      "element": "nature",
+      "set": "wild",
+      "minLevel": 22,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 8.0,
+          "op": "add"
+        },
+        {
+          "stat": "defense",
+          "value": -1,
+          "op": "add"
+        }
+      ],
+      "description": "세트 무기. 속성 상성과 세트 효과를 조합하세요."
+    },
+    {
+      "id": "set_wild_archer",
+      "name": "야생 수호 활",
+      "slot": "weapon",
+      "classes": [
+        "archer"
+      ],
+      "icon": "bow",
+      "element": "nature",
+      "set": "wild",
+      "minLevel": 22,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 8.0,
+          "op": "add"
+        },
+        {
+          "stat": "defense",
+          "value": -1,
+          "op": "add"
+        }
+      ],
+      "description": "세트 무기. 속성 상성과 세트 효과를 조합하세요."
+    },
+    {
+      "id": "set_wild_magician",
+      "name": "야생 수호 지팡이",
+      "slot": "weapon",
+      "classes": [
+        "magician"
+      ],
+      "icon": "staff",
+      "element": "nature",
+      "set": "wild",
+      "minLevel": 22,
+      "stats": [
+        {
+          "stat": "spell",
+          "value": 8.0,
+          "op": "add"
+        },
+        {
+          "stat": "defense",
+          "value": -1,
+          "op": "add"
+        }
+      ],
+      "description": "세트 무기. 속성 상성과 세트 효과를 조합하세요."
+    },
+    {
+      "id": "set_wild_guardian",
+      "name": "야생 수호 철퇴",
+      "slot": "weapon",
+      "classes": [
+        "guardian"
+      ],
+      "icon": "shield",
+      "element": "nature",
+      "set": "wild",
+      "minLevel": 22,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 8.0,
+          "op": "add"
+        },
+        {
+          "stat": "hp",
+          "value": 10,
+          "op": "add"
+        }
+      ],
+      "description": "세트 무기. 속성 상성과 세트 효과를 조합하세요."
+    },
+    {
+      "id": "set_wild_armor",
+      "name": "야생 수호 예복",
+      "slot": "armor",
+      "icon": "shield",
+      "set": "wild",
+      "element": "nature",
+      "minLevel": 22,
+      "stats": [
+        {
+          "stat": "hp",
+          "value": 20,
+          "op": "add"
+        },
+        {
+          "stat": "natureResist",
+          "value": 0.05,
+          "op": "add"
+        },
+        {
+          "stat": "speed",
+          "value": 0.98,
+          "op": "multiply"
+        }
+      ],
+      "description": "세트 2개·4개 장착 시 추가 효과."
+    },
+    {
+      "id": "set_wild_accessory",
+      "name": "야생 수호 인장",
+      "slot": "accessory",
+      "icon": "rank",
+      "set": "wild",
+      "element": "nature",
+      "minLevel": 22,
+      "stats": [
+        {
+          "stat": "crit",
+          "value": 0.025,
+          "op": "add"
+        },
+        {
+          "stat": "defense",
+          "value": -1,
+          "op": "add"
+        }
+      ],
+      "description": "세트 2개·4개 장착 시 추가 효과."
+    },
+    {
+      "id": "set_wild_relic",
+      "name": "야생 수호 성물",
+      "slot": "relic",
+      "icon": "rank",
+      "set": "wild",
+      "element": "nature",
+      "minLevel": 22,
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "value": 1.04,
+          "op": "multiply"
+        },
+        {
+          "stat": "manaRegen",
+          "value": 0.15,
+          "op": "add"
+        },
+        {
+          "stat": "attackSpeed",
+          "value": 0.98,
+          "op": "multiply"
+        }
+      ],
+      "description": "세트 2개·4개 장착 시 추가 효과."
+    },
+    {
+      "id": "set_astral_warrior",
+      "name": "성운 기록 장검",
+      "slot": "weapon",
+      "classes": [
+        "warrior"
+      ],
+      "icon": "attack",
+      "element": "arcane",
+      "set": "astral",
+      "minLevel": 27,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 8.5,
+          "op": "add"
+        },
+        {
+          "stat": "defense",
+          "value": -1,
+          "op": "add"
+        }
+      ],
+      "description": "세트 무기. 속성 상성과 세트 효과를 조합하세요."
+    },
+    {
+      "id": "set_astral_archer",
+      "name": "성운 기록 활",
+      "slot": "weapon",
+      "classes": [
+        "archer"
+      ],
+      "icon": "bow",
+      "element": "arcane",
+      "set": "astral",
+      "minLevel": 27,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 8.5,
+          "op": "add"
+        },
+        {
+          "stat": "defense",
+          "value": -1,
+          "op": "add"
+        }
+      ],
+      "description": "세트 무기. 속성 상성과 세트 효과를 조합하세요."
+    },
+    {
+      "id": "set_astral_magician",
+      "name": "성운 기록 지팡이",
+      "slot": "weapon",
+      "classes": [
+        "magician"
+      ],
+      "icon": "staff",
+      "element": "arcane",
+      "set": "astral",
+      "minLevel": 27,
+      "stats": [
+        {
+          "stat": "spell",
+          "value": 8.5,
+          "op": "add"
+        },
+        {
+          "stat": "defense",
+          "value": -1,
+          "op": "add"
+        }
+      ],
+      "description": "세트 무기. 속성 상성과 세트 효과를 조합하세요."
+    },
+    {
+      "id": "set_astral_guardian",
+      "name": "성운 기록 철퇴",
+      "slot": "weapon",
+      "classes": [
+        "guardian"
+      ],
+      "icon": "shield",
+      "element": "arcane",
+      "set": "astral",
+      "minLevel": 27,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 8.5,
+          "op": "add"
+        },
+        {
+          "stat": "hp",
+          "value": 10,
+          "op": "add"
+        }
+      ],
+      "description": "세트 무기. 속성 상성과 세트 효과를 조합하세요."
+    },
+    {
+      "id": "set_astral_armor",
+      "name": "성운 기록 예복",
+      "slot": "armor",
+      "icon": "shield",
+      "set": "astral",
+      "element": "arcane",
+      "minLevel": 27,
+      "stats": [
+        {
+          "stat": "hp",
+          "value": 21,
+          "op": "add"
+        },
+        {
+          "stat": "arcaneResist",
+          "value": 0.05,
+          "op": "add"
+        },
+        {
+          "stat": "speed",
+          "value": 0.98,
+          "op": "multiply"
+        }
+      ],
+      "description": "세트 2개·4개 장착 시 추가 효과."
+    },
+    {
+      "id": "set_astral_accessory",
+      "name": "성운 기록 인장",
+      "slot": "accessory",
+      "icon": "rank",
+      "set": "astral",
+      "element": "arcane",
+      "minLevel": 27,
+      "stats": [
+        {
+          "stat": "crit",
+          "value": 0.025,
+          "op": "add"
+        },
+        {
+          "stat": "defense",
+          "value": -1,
+          "op": "add"
+        }
+      ],
+      "description": "세트 2개·4개 장착 시 추가 효과."
+    },
+    {
+      "id": "set_astral_relic",
+      "name": "성운 기록 성물",
+      "slot": "relic",
+      "icon": "rank",
+      "set": "astral",
+      "element": "arcane",
+      "minLevel": 27,
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "value": 1.04,
+          "op": "multiply"
+        },
+        {
+          "stat": "manaRegen",
+          "value": 0.15,
+          "op": "add"
+        },
+        {
+          "stat": "attackSpeed",
+          "value": 0.98,
+          "op": "multiply"
+        }
+      ],
+      "description": "세트 2개·4개 장착 시 추가 효과."
+    },
+    {
+      "id": "set_bastion_warrior",
+      "name": "왕국 성채 장검",
+      "slot": "weapon",
+      "classes": [
+        "warrior"
+      ],
+      "icon": "attack",
+      "element": "physical",
+      "set": "bastion",
+      "minLevel": 32,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 9.0,
+          "op": "add"
+        },
+        {
+          "stat": "defense",
+          "value": -1,
+          "op": "add"
+        }
+      ],
+      "description": "세트 무기. 속성 상성과 세트 효과를 조합하세요."
+    },
+    {
+      "id": "set_bastion_archer",
+      "name": "왕국 성채 활",
+      "slot": "weapon",
+      "classes": [
+        "archer"
+      ],
+      "icon": "bow",
+      "element": "physical",
+      "set": "bastion",
+      "minLevel": 32,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 9.0,
+          "op": "add"
+        },
+        {
+          "stat": "defense",
+          "value": -1,
+          "op": "add"
+        }
+      ],
+      "description": "세트 무기. 속성 상성과 세트 효과를 조합하세요."
+    },
+    {
+      "id": "set_bastion_magician",
+      "name": "왕국 성채 지팡이",
+      "slot": "weapon",
+      "classes": [
+        "magician"
+      ],
+      "icon": "staff",
+      "element": "physical",
+      "set": "bastion",
+      "minLevel": 32,
+      "stats": [
+        {
+          "stat": "spell",
+          "value": 9.0,
+          "op": "add"
+        },
+        {
+          "stat": "defense",
+          "value": -1,
+          "op": "add"
+        }
+      ],
+      "description": "세트 무기. 속성 상성과 세트 효과를 조합하세요."
+    },
+    {
+      "id": "set_bastion_guardian",
+      "name": "왕국 성채 철퇴",
+      "slot": "weapon",
+      "classes": [
+        "guardian"
+      ],
+      "icon": "shield",
+      "element": "physical",
+      "set": "bastion",
+      "minLevel": 32,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 9.0,
+          "op": "add"
+        },
+        {
+          "stat": "hp",
+          "value": 10,
+          "op": "add"
+        }
+      ],
+      "description": "세트 무기. 속성 상성과 세트 효과를 조합하세요."
+    },
+    {
+      "id": "set_bastion_armor",
+      "name": "왕국 성채 예복",
+      "slot": "armor",
+      "icon": "shield",
+      "set": "bastion",
+      "element": "physical",
+      "minLevel": 32,
+      "stats": [
+        {
+          "stat": "hp",
+          "value": 22,
+          "op": "add"
+        },
+        {
+          "stat": "physicalResist",
+          "value": 0.05,
+          "op": "add"
+        },
+        {
+          "stat": "speed",
+          "value": 0.98,
+          "op": "multiply"
+        }
+      ],
+      "description": "세트 2개·4개 장착 시 추가 효과."
+    },
+    {
+      "id": "set_bastion_accessory",
+      "name": "왕국 성채 인장",
+      "slot": "accessory",
+      "icon": "rank",
+      "set": "bastion",
+      "element": "physical",
+      "minLevel": 32,
+      "stats": [
+        {
+          "stat": "crit",
+          "value": 0.025,
+          "op": "add"
+        },
+        {
+          "stat": "defense",
+          "value": -1,
+          "op": "add"
+        }
+      ],
+      "description": "세트 2개·4개 장착 시 추가 효과."
+    },
+    {
+      "id": "set_bastion_relic",
+      "name": "왕국 성채 성물",
+      "slot": "relic",
+      "icon": "rank",
+      "set": "bastion",
+      "element": "physical",
+      "minLevel": 32,
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "value": 1.04,
+          "op": "multiply"
+        },
+        {
+          "stat": "manaRegen",
+          "value": 0.15,
+          "op": "add"
+        },
+        {
+          "stat": "attackSpeed",
+          "value": 0.98,
+          "op": "multiply"
+        }
+      ],
+      "description": "세트 2개·4개 장착 시 추가 효과."
+    },
+    {
+      "id": "set_storm_warrior",
+      "name": "폭풍 사냥 장검",
+      "slot": "weapon",
+      "classes": [
+        "warrior"
+      ],
+      "icon": "attack",
+      "element": "frost",
+      "set": "storm",
+      "minLevel": 37,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 9.5,
+          "op": "add"
+        },
+        {
+          "stat": "defense",
+          "value": -1,
+          "op": "add"
+        }
+      ],
+      "description": "세트 무기. 속성 상성과 세트 효과를 조합하세요."
+    },
+    {
+      "id": "set_storm_archer",
+      "name": "폭풍 사냥 활",
+      "slot": "weapon",
+      "classes": [
+        "archer"
+      ],
+      "icon": "bow",
+      "element": "frost",
+      "set": "storm",
+      "minLevel": 37,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 9.5,
+          "op": "add"
+        },
+        {
+          "stat": "defense",
+          "value": -1,
+          "op": "add"
+        }
+      ],
+      "description": "세트 무기. 속성 상성과 세트 효과를 조합하세요."
+    },
+    {
+      "id": "set_storm_magician",
+      "name": "폭풍 사냥 지팡이",
+      "slot": "weapon",
+      "classes": [
+        "magician"
+      ],
+      "icon": "staff",
+      "element": "frost",
+      "set": "storm",
+      "minLevel": 37,
+      "stats": [
+        {
+          "stat": "spell",
+          "value": 9.5,
+          "op": "add"
+        },
+        {
+          "stat": "defense",
+          "value": -1,
+          "op": "add"
+        }
+      ],
+      "description": "세트 무기. 속성 상성과 세트 효과를 조합하세요."
+    },
+    {
+      "id": "set_storm_guardian",
+      "name": "폭풍 사냥 철퇴",
+      "slot": "weapon",
+      "classes": [
+        "guardian"
+      ],
+      "icon": "shield",
+      "element": "frost",
+      "set": "storm",
+      "minLevel": 37,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 9.5,
+          "op": "add"
+        },
+        {
+          "stat": "hp",
+          "value": 10,
+          "op": "add"
+        }
+      ],
+      "description": "세트 무기. 속성 상성과 세트 효과를 조합하세요."
+    },
+    {
+      "id": "set_storm_armor",
+      "name": "폭풍 사냥 예복",
+      "slot": "armor",
+      "icon": "shield",
+      "set": "storm",
+      "element": "frost",
+      "minLevel": 37,
+      "stats": [
+        {
+          "stat": "hp",
+          "value": 23,
+          "op": "add"
+        },
+        {
+          "stat": "frostResist",
+          "value": 0.05,
+          "op": "add"
+        },
+        {
+          "stat": "speed",
+          "value": 0.98,
+          "op": "multiply"
+        }
+      ],
+      "description": "세트 2개·4개 장착 시 추가 효과."
+    },
+    {
+      "id": "set_storm_accessory",
+      "name": "폭풍 사냥 인장",
+      "slot": "accessory",
+      "icon": "rank",
+      "set": "storm",
+      "element": "frost",
+      "minLevel": 37,
+      "stats": [
+        {
+          "stat": "crit",
+          "value": 0.025,
+          "op": "add"
+        },
+        {
+          "stat": "defense",
+          "value": -1,
+          "op": "add"
+        }
+      ],
+      "description": "세트 2개·4개 장착 시 추가 효과."
+    },
+    {
+      "id": "set_storm_relic",
+      "name": "폭풍 사냥 성물",
+      "slot": "relic",
+      "icon": "rank",
+      "set": "storm",
+      "element": "frost",
+      "minLevel": 37,
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "value": 1.04,
+          "op": "multiply"
+        },
+        {
+          "stat": "manaRegen",
+          "value": 0.15,
+          "op": "add"
+        },
+        {
+          "stat": "attackSpeed",
+          "value": 0.98,
+          "op": "multiply"
+        }
+      ],
+      "description": "세트 2개·4개 장착 시 추가 효과."
+    },
+    {
+      "id": "set_dusk_warrior",
+      "name": "황혼 유산 장검",
+      "slot": "weapon",
+      "classes": [
+        "warrior"
+      ],
+      "icon": "attack",
+      "element": "arcane",
+      "set": "dusk",
+      "minLevel": 42,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 10.0,
+          "op": "add"
+        },
+        {
+          "stat": "defense",
+          "value": -1,
+          "op": "add"
+        }
+      ],
+      "description": "세트 무기. 속성 상성과 세트 효과를 조합하세요."
+    },
+    {
+      "id": "set_dusk_archer",
+      "name": "황혼 유산 활",
+      "slot": "weapon",
+      "classes": [
+        "archer"
+      ],
+      "icon": "bow",
+      "element": "arcane",
+      "set": "dusk",
+      "minLevel": 42,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 10.0,
+          "op": "add"
+        },
+        {
+          "stat": "defense",
+          "value": -1,
+          "op": "add"
+        }
+      ],
+      "description": "세트 무기. 속성 상성과 세트 효과를 조합하세요."
+    },
+    {
+      "id": "set_dusk_magician",
+      "name": "황혼 유산 지팡이",
+      "slot": "weapon",
+      "classes": [
+        "magician"
+      ],
+      "icon": "staff",
+      "element": "arcane",
+      "set": "dusk",
+      "minLevel": 42,
+      "stats": [
+        {
+          "stat": "spell",
+          "value": 10.0,
+          "op": "add"
+        },
+        {
+          "stat": "defense",
+          "value": -1,
+          "op": "add"
+        }
+      ],
+      "description": "세트 무기. 속성 상성과 세트 효과를 조합하세요."
+    },
+    {
+      "id": "set_dusk_guardian",
+      "name": "황혼 유산 철퇴",
+      "slot": "weapon",
+      "classes": [
+        "guardian"
+      ],
+      "icon": "shield",
+      "element": "arcane",
+      "set": "dusk",
+      "minLevel": 42,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 10.0,
+          "op": "add"
+        },
+        {
+          "stat": "hp",
+          "value": 10,
+          "op": "add"
+        }
+      ],
+      "description": "세트 무기. 속성 상성과 세트 효과를 조합하세요."
+    },
+    {
+      "id": "set_dusk_armor",
+      "name": "황혼 유산 예복",
+      "slot": "armor",
+      "icon": "shield",
+      "set": "dusk",
+      "element": "arcane",
+      "minLevel": 42,
+      "stats": [
+        {
+          "stat": "hp",
+          "value": 24,
+          "op": "add"
+        },
+        {
+          "stat": "arcaneResist",
+          "value": 0.05,
+          "op": "add"
+        },
+        {
+          "stat": "speed",
+          "value": 0.98,
+          "op": "multiply"
+        }
+      ],
+      "description": "세트 2개·4개 장착 시 추가 효과."
+    },
+    {
+      "id": "set_dusk_accessory",
+      "name": "황혼 유산 인장",
+      "slot": "accessory",
+      "icon": "rank",
+      "set": "dusk",
+      "element": "arcane",
+      "minLevel": 42,
+      "stats": [
+        {
+          "stat": "crit",
+          "value": 0.025,
+          "op": "add"
+        },
+        {
+          "stat": "defense",
+          "value": -1,
+          "op": "add"
+        }
+      ],
+      "description": "세트 2개·4개 장착 시 추가 효과."
+    },
+    {
+      "id": "set_dusk_relic",
+      "name": "황혼 유산 성물",
+      "slot": "relic",
+      "icon": "rank",
+      "set": "dusk",
+      "element": "arcane",
+      "minLevel": 42,
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "value": 1.04,
+          "op": "multiply"
+        },
+        {
+          "stat": "manaRegen",
+          "value": 0.15,
+          "op": "add"
+        },
+        {
+          "stat": "attackSpeed",
+          "value": 0.98,
+          "op": "multiply"
+        }
+      ],
+      "description": "세트 2개·4개 장착 시 추가 효과."
+    },
+    {
+      "id": "set_dawn_warrior",
+      "name": "여명 순례 장검",
+      "slot": "weapon",
+      "classes": [
+        "warrior"
+      ],
+      "icon": "attack",
+      "element": "fire",
+      "set": "dawn",
+      "minLevel": 47,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 10.5,
+          "op": "add"
+        },
+        {
+          "stat": "defense",
+          "value": -1,
+          "op": "add"
+        }
+      ],
+      "description": "세트 무기. 속성 상성과 세트 효과를 조합하세요."
+    },
+    {
+      "id": "set_dawn_archer",
+      "name": "여명 순례 활",
+      "slot": "weapon",
+      "classes": [
+        "archer"
+      ],
+      "icon": "bow",
+      "element": "fire",
+      "set": "dawn",
+      "minLevel": 47,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 10.5,
+          "op": "add"
+        },
+        {
+          "stat": "defense",
+          "value": -1,
+          "op": "add"
+        }
+      ],
+      "description": "세트 무기. 속성 상성과 세트 효과를 조합하세요."
+    },
+    {
+      "id": "set_dawn_magician",
+      "name": "여명 순례 지팡이",
+      "slot": "weapon",
+      "classes": [
+        "magician"
+      ],
+      "icon": "staff",
+      "element": "fire",
+      "set": "dawn",
+      "minLevel": 47,
+      "stats": [
+        {
+          "stat": "spell",
+          "value": 10.5,
+          "op": "add"
+        },
+        {
+          "stat": "defense",
+          "value": -1,
+          "op": "add"
+        }
+      ],
+      "description": "세트 무기. 속성 상성과 세트 효과를 조합하세요."
+    },
+    {
+      "id": "set_dawn_guardian",
+      "name": "여명 순례 철퇴",
+      "slot": "weapon",
+      "classes": [
+        "guardian"
+      ],
+      "icon": "shield",
+      "element": "fire",
+      "set": "dawn",
+      "minLevel": 47,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 10.5,
+          "op": "add"
+        },
+        {
+          "stat": "hp",
+          "value": 10,
+          "op": "add"
+        }
+      ],
+      "description": "세트 무기. 속성 상성과 세트 효과를 조합하세요."
+    },
+    {
+      "id": "set_dawn_armor",
+      "name": "여명 순례 예복",
+      "slot": "armor",
+      "icon": "shield",
+      "set": "dawn",
+      "element": "fire",
+      "minLevel": 47,
+      "stats": [
+        {
+          "stat": "hp",
+          "value": 25,
+          "op": "add"
+        },
+        {
+          "stat": "fireResist",
+          "value": 0.05,
+          "op": "add"
+        },
+        {
+          "stat": "speed",
+          "value": 0.98,
+          "op": "multiply"
+        }
+      ],
+      "description": "세트 2개·4개 장착 시 추가 효과."
+    },
+    {
+      "id": "set_dawn_accessory",
+      "name": "여명 순례 인장",
+      "slot": "accessory",
+      "icon": "rank",
+      "set": "dawn",
+      "element": "fire",
+      "minLevel": 47,
+      "stats": [
+        {
+          "stat": "crit",
+          "value": 0.025,
+          "op": "add"
+        },
+        {
+          "stat": "defense",
+          "value": -1,
+          "op": "add"
+        }
+      ],
+      "description": "세트 2개·4개 장착 시 추가 효과."
+    },
+    {
+      "id": "set_dawn_relic",
+      "name": "여명 순례 성물",
+      "slot": "relic",
+      "icon": "rank",
+      "set": "dawn",
+      "element": "fire",
+      "minLevel": 47,
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "value": 1.04,
+          "op": "multiply"
+        },
+        {
+          "stat": "manaRegen",
+          "value": 0.15,
+          "op": "add"
+        },
+        {
+          "stat": "attackSpeed",
+          "value": 0.98,
+          "op": "multiply"
+        }
+      ],
+      "description": "세트 2개·4개 장착 시 추가 효과."
+    },
+    {
+      "id": "craftline_0_warrior",
+      "name": "여행자 파쇄검",
+      "slot": "weapon",
+      "classes": [
+        "warrior"
+      ],
+      "icon": "attack",
+      "minLevel": 5,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 6.0,
+          "op": "add"
+        },
+        {
+          "stat": "skillDamage",
+          "value": 1.04,
+          "op": "multiply"
+        },
+        {
+          "stat": "hp",
+          "value": 0.97,
+          "op": "multiply"
+        }
+      ],
+      "description": "공격 성향을 강화하는 대신 최대 체력을 내줍니다."
+    },
+    {
+      "id": "craftline_0_archer",
+      "name": "여행자 연사궁",
+      "slot": "weapon",
+      "classes": [
+        "archer"
+      ],
+      "icon": "bow",
+      "minLevel": 5,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 6.0,
+          "op": "add"
+        },
+        {
+          "stat": "skillDamage",
+          "value": 1.04,
+          "op": "multiply"
+        },
+        {
+          "stat": "hp",
+          "value": 0.97,
+          "op": "multiply"
+        }
+      ],
+      "description": "공격 성향을 강화하는 대신 최대 체력을 내줍니다."
+    },
+    {
+      "id": "craftline_0_magician",
+      "name": "여행자 마도봉",
+      "slot": "weapon",
+      "classes": [
+        "magician"
+      ],
+      "icon": "staff",
+      "minLevel": 5,
+      "stats": [
+        {
+          "stat": "spell",
+          "value": 6.0,
+          "op": "add"
+        },
+        {
+          "stat": "skillDamage",
+          "value": 1.04,
+          "op": "multiply"
+        },
+        {
+          "stat": "hp",
+          "value": 0.97,
+          "op": "multiply"
+        }
+      ],
+      "description": "공격 성향을 강화하는 대신 최대 체력을 내줍니다."
+    },
+    {
+      "id": "craftline_0_guardian",
+      "name": "여행자 수호 철퇴",
+      "slot": "weapon",
+      "classes": [
+        "guardian"
+      ],
+      "icon": "shield",
+      "minLevel": 5,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 6.0,
+          "op": "add"
+        },
+        {
+          "stat": "skillDamage",
+          "value": 1.04,
+          "op": "multiply"
+        },
+        {
+          "stat": "hp",
+          "value": 0.97,
+          "op": "multiply"
+        }
+      ],
+      "description": "공격 성향을 강화하는 대신 최대 체력을 내줍니다."
+    },
+    {
+      "id": "craftline_1_warrior",
+      "name": "개척자 파쇄검",
+      "slot": "weapon",
+      "classes": [
+        "warrior"
+      ],
+      "icon": "attack",
+      "minLevel": 11,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 6.6,
+          "op": "add"
+        },
+        {
+          "stat": "basicDamage",
+          "value": 1.04,
+          "op": "multiply"
+        },
+        {
+          "stat": "hp",
+          "value": 0.97,
+          "op": "multiply"
+        }
+      ],
+      "description": "공격 성향을 강화하는 대신 최대 체력을 내줍니다."
+    },
+    {
+      "id": "craftline_1_archer",
+      "name": "개척자 연사궁",
+      "slot": "weapon",
+      "classes": [
+        "archer"
+      ],
+      "icon": "bow",
+      "minLevel": 11,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 6.6,
+          "op": "add"
+        },
+        {
+          "stat": "basicDamage",
+          "value": 1.04,
+          "op": "multiply"
+        },
+        {
+          "stat": "hp",
+          "value": 0.97,
+          "op": "multiply"
+        }
+      ],
+      "description": "공격 성향을 강화하는 대신 최대 체력을 내줍니다."
+    },
+    {
+      "id": "craftline_1_magician",
+      "name": "개척자 마도봉",
+      "slot": "weapon",
+      "classes": [
+        "magician"
+      ],
+      "icon": "staff",
+      "minLevel": 11,
+      "stats": [
+        {
+          "stat": "spell",
+          "value": 6.6,
+          "op": "add"
+        },
+        {
+          "stat": "basicDamage",
+          "value": 1.04,
+          "op": "multiply"
+        },
+        {
+          "stat": "hp",
+          "value": 0.97,
+          "op": "multiply"
+        }
+      ],
+      "description": "공격 성향을 강화하는 대신 최대 체력을 내줍니다."
+    },
+    {
+      "id": "craftline_1_guardian",
+      "name": "개척자 수호 철퇴",
+      "slot": "weapon",
+      "classes": [
+        "guardian"
+      ],
+      "icon": "shield",
+      "minLevel": 11,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 6.6,
+          "op": "add"
+        },
+        {
+          "stat": "basicDamage",
+          "value": 1.04,
+          "op": "multiply"
+        },
+        {
+          "stat": "hp",
+          "value": 0.97,
+          "op": "multiply"
+        }
+      ],
+      "description": "공격 성향을 강화하는 대신 최대 체력을 내줍니다."
+    },
+    {
+      "id": "craftline_2_warrior",
+      "name": "은빛 파쇄검",
+      "slot": "weapon",
+      "classes": [
+        "warrior"
+      ],
+      "icon": "attack",
+      "minLevel": 17,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 7.2,
+          "op": "add"
+        },
+        {
+          "stat": "skillDamage",
+          "value": 1.04,
+          "op": "multiply"
+        },
+        {
+          "stat": "hp",
+          "value": 0.97,
+          "op": "multiply"
+        }
+      ],
+      "description": "공격 성향을 강화하는 대신 최대 체력을 내줍니다."
+    },
+    {
+      "id": "craftline_2_archer",
+      "name": "은빛 연사궁",
+      "slot": "weapon",
+      "classes": [
+        "archer"
+      ],
+      "icon": "bow",
+      "minLevel": 17,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 7.2,
+          "op": "add"
+        },
+        {
+          "stat": "skillDamage",
+          "value": 1.04,
+          "op": "multiply"
+        },
+        {
+          "stat": "hp",
+          "value": 0.97,
+          "op": "multiply"
+        }
+      ],
+      "description": "공격 성향을 강화하는 대신 최대 체력을 내줍니다."
+    },
+    {
+      "id": "craftline_2_magician",
+      "name": "은빛 마도봉",
+      "slot": "weapon",
+      "classes": [
+        "magician"
+      ],
+      "icon": "staff",
+      "minLevel": 17,
+      "stats": [
+        {
+          "stat": "spell",
+          "value": 7.2,
+          "op": "add"
+        },
+        {
+          "stat": "skillDamage",
+          "value": 1.04,
+          "op": "multiply"
+        },
+        {
+          "stat": "hp",
+          "value": 0.97,
+          "op": "multiply"
+        }
+      ],
+      "description": "공격 성향을 강화하는 대신 최대 체력을 내줍니다."
+    },
+    {
+      "id": "craftline_2_guardian",
+      "name": "은빛 수호 철퇴",
+      "slot": "weapon",
+      "classes": [
+        "guardian"
+      ],
+      "icon": "shield",
+      "minLevel": 17,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 7.2,
+          "op": "add"
+        },
+        {
+          "stat": "skillDamage",
+          "value": 1.04,
+          "op": "multiply"
+        },
+        {
+          "stat": "hp",
+          "value": 0.97,
+          "op": "multiply"
+        }
+      ],
+      "description": "공격 성향을 강화하는 대신 최대 체력을 내줍니다."
+    },
+    {
+      "id": "craftline_3_warrior",
+      "name": "왕립 파쇄검",
+      "slot": "weapon",
+      "classes": [
+        "warrior"
+      ],
+      "icon": "attack",
+      "minLevel": 23,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 7.8,
+          "op": "add"
+        },
+        {
+          "stat": "basicDamage",
+          "value": 1.04,
+          "op": "multiply"
+        },
+        {
+          "stat": "hp",
+          "value": 0.97,
+          "op": "multiply"
+        }
+      ],
+      "description": "공격 성향을 강화하는 대신 최대 체력을 내줍니다."
+    },
+    {
+      "id": "craftline_3_archer",
+      "name": "왕립 연사궁",
+      "slot": "weapon",
+      "classes": [
+        "archer"
+      ],
+      "icon": "bow",
+      "minLevel": 23,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 7.8,
+          "op": "add"
+        },
+        {
+          "stat": "basicDamage",
+          "value": 1.04,
+          "op": "multiply"
+        },
+        {
+          "stat": "hp",
+          "value": 0.97,
+          "op": "multiply"
+        }
+      ],
+      "description": "공격 성향을 강화하는 대신 최대 체력을 내줍니다."
+    },
+    {
+      "id": "craftline_3_magician",
+      "name": "왕립 마도봉",
+      "slot": "weapon",
+      "classes": [
+        "magician"
+      ],
+      "icon": "staff",
+      "minLevel": 23,
+      "stats": [
+        {
+          "stat": "spell",
+          "value": 7.8,
+          "op": "add"
+        },
+        {
+          "stat": "basicDamage",
+          "value": 1.04,
+          "op": "multiply"
+        },
+        {
+          "stat": "hp",
+          "value": 0.97,
+          "op": "multiply"
+        }
+      ],
+      "description": "공격 성향을 강화하는 대신 최대 체력을 내줍니다."
+    },
+    {
+      "id": "craftline_3_guardian",
+      "name": "왕립 수호 철퇴",
+      "slot": "weapon",
+      "classes": [
+        "guardian"
+      ],
+      "icon": "shield",
+      "minLevel": 23,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 7.8,
+          "op": "add"
+        },
+        {
+          "stat": "basicDamage",
+          "value": 1.04,
+          "op": "multiply"
+        },
+        {
+          "stat": "hp",
+          "value": 0.97,
+          "op": "multiply"
+        }
+      ],
+      "description": "공격 성향을 강화하는 대신 최대 체력을 내줍니다."
+    },
+    {
+      "id": "craftline_4_warrior",
+      "name": "황혼 파쇄검",
+      "slot": "weapon",
+      "classes": [
+        "warrior"
+      ],
+      "icon": "attack",
+      "minLevel": 29,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 8.4,
+          "op": "add"
+        },
+        {
+          "stat": "skillDamage",
+          "value": 1.04,
+          "op": "multiply"
+        },
+        {
+          "stat": "hp",
+          "value": 0.97,
+          "op": "multiply"
+        }
+      ],
+      "description": "공격 성향을 강화하는 대신 최대 체력을 내줍니다."
+    },
+    {
+      "id": "craftline_4_archer",
+      "name": "황혼 연사궁",
+      "slot": "weapon",
+      "classes": [
+        "archer"
+      ],
+      "icon": "bow",
+      "minLevel": 29,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 8.4,
+          "op": "add"
+        },
+        {
+          "stat": "skillDamage",
+          "value": 1.04,
+          "op": "multiply"
+        },
+        {
+          "stat": "hp",
+          "value": 0.97,
+          "op": "multiply"
+        }
+      ],
+      "description": "공격 성향을 강화하는 대신 최대 체력을 내줍니다."
+    },
+    {
+      "id": "craftline_4_magician",
+      "name": "황혼 마도봉",
+      "slot": "weapon",
+      "classes": [
+        "magician"
+      ],
+      "icon": "staff",
+      "minLevel": 29,
+      "stats": [
+        {
+          "stat": "spell",
+          "value": 8.4,
+          "op": "add"
+        },
+        {
+          "stat": "skillDamage",
+          "value": 1.04,
+          "op": "multiply"
+        },
+        {
+          "stat": "hp",
+          "value": 0.97,
+          "op": "multiply"
+        }
+      ],
+      "description": "공격 성향을 강화하는 대신 최대 체력을 내줍니다."
+    },
+    {
+      "id": "craftline_4_guardian",
+      "name": "황혼 수호 철퇴",
+      "slot": "weapon",
+      "classes": [
+        "guardian"
+      ],
+      "icon": "shield",
+      "minLevel": 29,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 8.4,
+          "op": "add"
+        },
+        {
+          "stat": "skillDamage",
+          "value": 1.04,
+          "op": "multiply"
+        },
+        {
+          "stat": "hp",
+          "value": 0.97,
+          "op": "multiply"
+        }
+      ],
+      "description": "공격 성향을 강화하는 대신 최대 체력을 내줍니다."
+    },
+    {
+      "id": "craftline_5_warrior",
+      "name": "고대 파쇄검",
+      "slot": "weapon",
+      "classes": [
+        "warrior"
+      ],
+      "icon": "attack",
+      "minLevel": 35,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 9.0,
+          "op": "add"
+        },
+        {
+          "stat": "basicDamage",
+          "value": 1.04,
+          "op": "multiply"
+        },
+        {
+          "stat": "hp",
+          "value": 0.97,
+          "op": "multiply"
+        }
+      ],
+      "description": "공격 성향을 강화하는 대신 최대 체력을 내줍니다."
+    },
+    {
+      "id": "craftline_5_archer",
+      "name": "고대 연사궁",
+      "slot": "weapon",
+      "classes": [
+        "archer"
+      ],
+      "icon": "bow",
+      "minLevel": 35,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 9.0,
+          "op": "add"
+        },
+        {
+          "stat": "basicDamage",
+          "value": 1.04,
+          "op": "multiply"
+        },
+        {
+          "stat": "hp",
+          "value": 0.97,
+          "op": "multiply"
+        }
+      ],
+      "description": "공격 성향을 강화하는 대신 최대 체력을 내줍니다."
+    },
+    {
+      "id": "craftline_5_magician",
+      "name": "고대 마도봉",
+      "slot": "weapon",
+      "classes": [
+        "magician"
+      ],
+      "icon": "staff",
+      "minLevel": 35,
+      "stats": [
+        {
+          "stat": "spell",
+          "value": 9.0,
+          "op": "add"
+        },
+        {
+          "stat": "basicDamage",
+          "value": 1.04,
+          "op": "multiply"
+        },
+        {
+          "stat": "hp",
+          "value": 0.97,
+          "op": "multiply"
+        }
+      ],
+      "description": "공격 성향을 강화하는 대신 최대 체력을 내줍니다."
+    },
+    {
+      "id": "craftline_5_guardian",
+      "name": "고대 수호 철퇴",
+      "slot": "weapon",
+      "classes": [
+        "guardian"
+      ],
+      "icon": "shield",
+      "minLevel": 35,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 9.0,
+          "op": "add"
+        },
+        {
+          "stat": "basicDamage",
+          "value": 1.04,
+          "op": "multiply"
+        },
+        {
+          "stat": "hp",
+          "value": 0.97,
+          "op": "multiply"
+        }
+      ],
+      "description": "공격 성향을 강화하는 대신 최대 체력을 내줍니다."
+    },
+    {
+      "id": "craftline_6_warrior",
+      "name": "별빛 파쇄검",
+      "slot": "weapon",
+      "classes": [
+        "warrior"
+      ],
+      "icon": "attack",
+      "minLevel": 41,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 9.6,
+          "op": "add"
+        },
+        {
+          "stat": "skillDamage",
+          "value": 1.04,
+          "op": "multiply"
+        },
+        {
+          "stat": "hp",
+          "value": 0.97,
+          "op": "multiply"
+        }
+      ],
+      "description": "공격 성향을 강화하는 대신 최대 체력을 내줍니다."
+    },
+    {
+      "id": "craftline_6_archer",
+      "name": "별빛 연사궁",
+      "slot": "weapon",
+      "classes": [
+        "archer"
+      ],
+      "icon": "bow",
+      "minLevel": 41,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 9.6,
+          "op": "add"
+        },
+        {
+          "stat": "skillDamage",
+          "value": 1.04,
+          "op": "multiply"
+        },
+        {
+          "stat": "hp",
+          "value": 0.97,
+          "op": "multiply"
+        }
+      ],
+      "description": "공격 성향을 강화하는 대신 최대 체력을 내줍니다."
+    },
+    {
+      "id": "craftline_6_magician",
+      "name": "별빛 마도봉",
+      "slot": "weapon",
+      "classes": [
+        "magician"
+      ],
+      "icon": "staff",
+      "minLevel": 41,
+      "stats": [
+        {
+          "stat": "spell",
+          "value": 9.6,
+          "op": "add"
+        },
+        {
+          "stat": "skillDamage",
+          "value": 1.04,
+          "op": "multiply"
+        },
+        {
+          "stat": "hp",
+          "value": 0.97,
+          "op": "multiply"
+        }
+      ],
+      "description": "공격 성향을 강화하는 대신 최대 체력을 내줍니다."
+    },
+    {
+      "id": "craftline_6_guardian",
+      "name": "별빛 수호 철퇴",
+      "slot": "weapon",
+      "classes": [
+        "guardian"
+      ],
+      "icon": "shield",
+      "minLevel": 41,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 9.6,
+          "op": "add"
+        },
+        {
+          "stat": "skillDamage",
+          "value": 1.04,
+          "op": "multiply"
+        },
+        {
+          "stat": "hp",
+          "value": 0.97,
+          "op": "multiply"
+        }
+      ],
+      "description": "공격 성향을 강화하는 대신 최대 체력을 내줍니다."
+    },
+    {
+      "id": "craftline_7_warrior",
+      "name": "계승자 파쇄검",
+      "slot": "weapon",
+      "classes": [
+        "warrior"
+      ],
+      "icon": "attack",
+      "minLevel": 47,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 10.2,
+          "op": "add"
+        },
+        {
+          "stat": "basicDamage",
+          "value": 1.04,
+          "op": "multiply"
+        },
+        {
+          "stat": "hp",
+          "value": 0.97,
+          "op": "multiply"
+        }
+      ],
+      "description": "공격 성향을 강화하는 대신 최대 체력을 내줍니다."
+    },
+    {
+      "id": "craftline_7_archer",
+      "name": "계승자 연사궁",
+      "slot": "weapon",
+      "classes": [
+        "archer"
+      ],
+      "icon": "bow",
+      "minLevel": 47,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 10.2,
+          "op": "add"
+        },
+        {
+          "stat": "basicDamage",
+          "value": 1.04,
+          "op": "multiply"
+        },
+        {
+          "stat": "hp",
+          "value": 0.97,
+          "op": "multiply"
+        }
+      ],
+      "description": "공격 성향을 강화하는 대신 최대 체력을 내줍니다."
+    },
+    {
+      "id": "craftline_7_magician",
+      "name": "계승자 마도봉",
+      "slot": "weapon",
+      "classes": [
+        "magician"
+      ],
+      "icon": "staff",
+      "minLevel": 47,
+      "stats": [
+        {
+          "stat": "spell",
+          "value": 10.2,
+          "op": "add"
+        },
+        {
+          "stat": "basicDamage",
+          "value": 1.04,
+          "op": "multiply"
+        },
+        {
+          "stat": "hp",
+          "value": 0.97,
+          "op": "multiply"
+        }
+      ],
+      "description": "공격 성향을 강화하는 대신 최대 체력을 내줍니다."
+    },
+    {
+      "id": "craftline_7_guardian",
+      "name": "계승자 수호 철퇴",
+      "slot": "weapon",
+      "classes": [
+        "guardian"
+      ],
+      "icon": "shield",
+      "minLevel": 47,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 10.2,
+          "op": "add"
+        },
+        {
+          "stat": "basicDamage",
+          "value": 1.04,
+          "op": "multiply"
+        },
+        {
+          "stat": "hp",
+          "value": 0.97,
+          "op": "multiply"
+        }
+      ],
+      "description": "공격 성향을 강화하는 대신 최대 체력을 내줍니다."
+    },
+    {
+      "id": "relic_0",
+      "name": "순환 반지",
+      "slot": "accessory",
+      "icon": "rank",
+      "minLevel": 8,
+      "stats": [
+        {
+          "stat": "manaRegen",
+          "value": 0.25,
+          "op": "add"
+        },
+        {
+          "stat": "hp",
+          "value": 0.98,
+          "op": "multiply"
+        }
+      ],
+      "description": "하나의 능력을 특화합니다. 최대 체력 -2%."
+    },
+    {
+      "id": "relic_1",
+      "name": "매의 눈 반지",
+      "slot": "accessory",
+      "icon": "rank",
+      "minLevel": 9,
+      "stats": [
+        {
+          "stat": "crit",
+          "value": 0.025,
+          "op": "add"
+        },
+        {
+          "stat": "hp",
+          "value": 0.98,
+          "op": "multiply"
+        }
+      ],
+      "description": "하나의 능력을 특화합니다. 최대 체력 -2%."
+    },
+    {
+      "id": "relic_2",
+      "name": "거인의 숨 반지",
+      "slot": "accessory",
+      "icon": "rank",
+      "minLevel": 10,
+      "stats": [
+        {
+          "stat": "hp",
+          "value": 18,
+          "op": "add"
+        },
+        {
+          "stat": "hp",
+          "value": 0.98,
+          "op": "multiply"
+        }
+      ],
+      "description": "하나의 능력을 특화합니다. 최대 체력 -2%."
+    },
+    {
+      "id": "relic_3",
+      "name": "질풍 반지",
+      "slot": "accessory",
+      "icon": "rank",
+      "minLevel": 11,
+      "stats": [
+        {
+          "stat": "attackSpeed",
+          "value": 1.035,
+          "op": "multiply"
+        },
+        {
+          "stat": "hp",
+          "value": 0.98,
+          "op": "multiply"
+        }
+      ],
+      "description": "하나의 능력을 특화합니다. 최대 체력 -2%."
+    },
+    {
+      "id": "relic_4",
+      "name": "비전 반지",
+      "slot": "accessory",
+      "icon": "rank",
+      "minLevel": 12,
+      "stats": [
+        {
+          "stat": "spell",
+          "value": 3,
+          "op": "add"
+        },
+        {
+          "stat": "hp",
+          "value": 0.98,
+          "op": "multiply"
+        }
+      ],
+      "description": "하나의 능력을 특화합니다. 최대 체력 -2%."
+    },
+    {
+      "id": "relic_5",
+      "name": "수호 반지",
+      "slot": "accessory",
+      "icon": "rank",
+      "minLevel": 13,
+      "stats": [
+        {
+          "stat": "defense",
+          "value": 2,
+          "op": "add"
+        },
+        {
+          "stat": "hp",
+          "value": 0.98,
+          "op": "multiply"
+        }
+      ],
+      "description": "하나의 능력을 특화합니다. 최대 체력 -2%."
+    },
+    {
+      "id": "relic_6",
+      "name": "흡혈 반지",
+      "slot": "accessory",
+      "icon": "rank",
+      "minLevel": 14,
+      "stats": [
+        {
+          "stat": "lifesteal",
+          "value": 0.008,
+          "op": "add"
+        },
+        {
+          "stat": "hp",
+          "value": 0.98,
+          "op": "multiply"
+        }
+      ],
+      "description": "하나의 능력을 특화합니다. 최대 체력 -2%."
+    },
+    {
+      "id": "relic_7",
+      "name": "흐르는 시간 반지",
+      "slot": "accessory",
+      "icon": "rank",
+      "minLevel": 15,
+      "stats": [
+        {
+          "stat": "cooldownRate",
+          "value": 0.975,
+          "op": "multiply"
+        },
+        {
+          "stat": "hp",
+          "value": 0.98,
+          "op": "multiply"
+        }
+      ],
+      "description": "하나의 능력을 특화합니다. 최대 체력 -2%."
+    },
+    {
+      "id": "relic_8",
+      "name": "순환 목걸이",
+      "slot": "accessory",
+      "icon": "rank",
+      "minLevel": 16,
+      "stats": [
+        {
+          "stat": "manaRegen",
+          "value": 0.25,
+          "op": "add"
+        },
+        {
+          "stat": "hp",
+          "value": 0.98,
+          "op": "multiply"
+        }
+      ],
+      "description": "하나의 능력을 특화합니다. 최대 체력 -2%."
+    },
+    {
+      "id": "relic_9",
+      "name": "매의 눈 목걸이",
+      "slot": "accessory",
+      "icon": "rank",
+      "minLevel": 17,
+      "stats": [
+        {
+          "stat": "crit",
+          "value": 0.025,
+          "op": "add"
+        },
+        {
+          "stat": "hp",
+          "value": 0.98,
+          "op": "multiply"
+        }
+      ],
+      "description": "하나의 능력을 특화합니다. 최대 체력 -2%."
+    },
+    {
+      "id": "relic_10",
+      "name": "거인의 숨 목걸이",
+      "slot": "accessory",
+      "icon": "rank",
+      "minLevel": 18,
+      "stats": [
+        {
+          "stat": "hp",
+          "value": 18,
+          "op": "add"
+        },
+        {
+          "stat": "hp",
+          "value": 0.98,
+          "op": "multiply"
+        }
+      ],
+      "description": "하나의 능력을 특화합니다. 최대 체력 -2%."
+    },
+    {
+      "id": "relic_11",
+      "name": "질풍 목걸이",
+      "slot": "accessory",
+      "icon": "rank",
+      "minLevel": 19,
+      "stats": [
+        {
+          "stat": "attackSpeed",
+          "value": 1.035,
+          "op": "multiply"
+        },
+        {
+          "stat": "hp",
+          "value": 0.98,
+          "op": "multiply"
+        }
+      ],
+      "description": "하나의 능력을 특화합니다. 최대 체력 -2%."
+    },
+    {
+      "id": "relic_12",
+      "name": "비전 목걸이",
+      "slot": "accessory",
+      "icon": "rank",
+      "minLevel": 20,
+      "stats": [
+        {
+          "stat": "spell",
+          "value": 3,
+          "op": "add"
+        },
+        {
+          "stat": "hp",
+          "value": 0.98,
+          "op": "multiply"
+        }
+      ],
+      "description": "하나의 능력을 특화합니다. 최대 체력 -2%."
+    },
+    {
+      "id": "relic_13",
+      "name": "수호 목걸이",
+      "slot": "accessory",
+      "icon": "rank",
+      "minLevel": 21,
+      "stats": [
+        {
+          "stat": "defense",
+          "value": 2,
+          "op": "add"
+        },
+        {
+          "stat": "hp",
+          "value": 0.98,
+          "op": "multiply"
+        }
+      ],
+      "description": "하나의 능력을 특화합니다. 최대 체력 -2%."
+    },
+    {
+      "id": "relic_14",
+      "name": "흡혈 목걸이",
+      "slot": "accessory",
+      "icon": "rank",
+      "minLevel": 22,
+      "stats": [
+        {
+          "stat": "lifesteal",
+          "value": 0.008,
+          "op": "add"
+        },
+        {
+          "stat": "hp",
+          "value": 0.98,
+          "op": "multiply"
+        }
+      ],
+      "description": "하나의 능력을 특화합니다. 최대 체력 -2%."
+    },
+    {
+      "id": "relic_15",
+      "name": "흐르는 시간 목걸이",
+      "slot": "accessory",
+      "icon": "rank",
+      "minLevel": 23,
+      "stats": [
+        {
+          "stat": "cooldownRate",
+          "value": 0.975,
+          "op": "multiply"
+        },
+        {
+          "stat": "hp",
+          "value": 0.98,
+          "op": "multiply"
+        }
+      ],
+      "description": "하나의 능력을 특화합니다. 최대 체력 -2%."
+    },
+    {
+      "id": "relic_16",
+      "name": "순환 부적",
+      "slot": "relic",
+      "icon": "rank",
+      "minLevel": 24,
+      "stats": [
+        {
+          "stat": "manaRegen",
+          "value": 0.25,
+          "op": "add"
+        },
+        {
+          "stat": "hp",
+          "value": 0.98,
+          "op": "multiply"
+        }
+      ],
+      "description": "하나의 능력을 특화합니다. 최대 체력 -2%."
+    },
+    {
+      "id": "relic_17",
+      "name": "매의 눈 부적",
+      "slot": "relic",
+      "icon": "rank",
+      "minLevel": 25,
+      "stats": [
+        {
+          "stat": "crit",
+          "value": 0.025,
+          "op": "add"
+        },
+        {
+          "stat": "hp",
+          "value": 0.98,
+          "op": "multiply"
+        }
+      ],
+      "description": "하나의 능력을 특화합니다. 최대 체력 -2%."
+    },
+    {
+      "id": "relic_18",
+      "name": "거인의 숨 부적",
+      "slot": "relic",
+      "icon": "rank",
+      "minLevel": 26,
+      "stats": [
+        {
+          "stat": "hp",
+          "value": 18,
+          "op": "add"
+        },
+        {
+          "stat": "hp",
+          "value": 0.98,
+          "op": "multiply"
+        }
+      ],
+      "description": "하나의 능력을 특화합니다. 최대 체력 -2%."
+    },
+    {
+      "id": "relic_19",
+      "name": "질풍 부적",
+      "slot": "relic",
+      "icon": "rank",
+      "minLevel": 27,
+      "stats": [
+        {
+          "stat": "attackSpeed",
+          "value": 1.035,
+          "op": "multiply"
+        },
+        {
+          "stat": "hp",
+          "value": 0.98,
+          "op": "multiply"
+        }
+      ],
+      "description": "하나의 능력을 특화합니다. 최대 체력 -2%."
+    },
+    {
+      "id": "relic_20",
+      "name": "비전 부적",
+      "slot": "relic",
+      "icon": "rank",
+      "minLevel": 28,
+      "stats": [
+        {
+          "stat": "spell",
+          "value": 3,
+          "op": "add"
+        },
+        {
+          "stat": "hp",
+          "value": 0.98,
+          "op": "multiply"
+        }
+      ],
+      "description": "하나의 능력을 특화합니다. 최대 체력 -2%."
+    },
+    {
+      "id": "relic_21",
+      "name": "수호 부적",
+      "slot": "relic",
+      "icon": "rank",
+      "minLevel": 29,
+      "stats": [
+        {
+          "stat": "defense",
+          "value": 2,
+          "op": "add"
+        },
+        {
+          "stat": "hp",
+          "value": 0.98,
+          "op": "multiply"
+        }
+      ],
+      "description": "하나의 능력을 특화합니다. 최대 체력 -2%."
+    },
+    {
+      "id": "relic_22",
+      "name": "흡혈 부적",
+      "slot": "relic",
+      "icon": "rank",
+      "minLevel": 30,
+      "stats": [
+        {
+          "stat": "lifesteal",
+          "value": 0.008,
+          "op": "add"
+        },
+        {
+          "stat": "hp",
+          "value": 0.98,
+          "op": "multiply"
+        }
+      ],
+      "description": "하나의 능력을 특화합니다. 최대 체력 -2%."
+    },
+    {
+      "id": "relic_23",
+      "name": "흐르는 시간 부적",
+      "slot": "relic",
+      "icon": "rank",
+      "minLevel": 31,
+      "stats": [
+        {
+          "stat": "cooldownRate",
+          "value": 0.975,
+          "op": "multiply"
+        },
+        {
+          "stat": "hp",
+          "value": 0.98,
+          "op": "multiply"
+        }
+      ],
+      "description": "하나의 능력을 특화합니다. 최대 체력 -2%."
+    },
+    {
+      "id": "relic_24",
+      "name": "순환 수정",
+      "slot": "relic",
+      "icon": "rank",
+      "minLevel": 32,
+      "stats": [
+        {
+          "stat": "manaRegen",
+          "value": 0.25,
+          "op": "add"
+        },
+        {
+          "stat": "hp",
+          "value": 0.98,
+          "op": "multiply"
+        }
+      ],
+      "description": "하나의 능력을 특화합니다. 최대 체력 -2%."
+    },
+    {
+      "id": "relic_25",
+      "name": "매의 눈 수정",
+      "slot": "relic",
+      "icon": "rank",
+      "minLevel": 33,
+      "stats": [
+        {
+          "stat": "crit",
+          "value": 0.025,
+          "op": "add"
+        },
+        {
+          "stat": "hp",
+          "value": 0.98,
+          "op": "multiply"
+        }
+      ],
+      "description": "하나의 능력을 특화합니다. 최대 체력 -2%."
+    },
+    {
+      "id": "relic_26",
+      "name": "거인의 숨 수정",
+      "slot": "relic",
+      "icon": "rank",
+      "minLevel": 34,
+      "stats": [
+        {
+          "stat": "hp",
+          "value": 18,
+          "op": "add"
+        },
+        {
+          "stat": "hp",
+          "value": 0.98,
+          "op": "multiply"
+        }
+      ],
+      "description": "하나의 능력을 특화합니다. 최대 체력 -2%."
+    },
+    {
+      "id": "relic_27",
+      "name": "질풍 수정",
+      "slot": "relic",
+      "icon": "rank",
+      "minLevel": 35,
+      "stats": [
+        {
+          "stat": "attackSpeed",
+          "value": 1.035,
+          "op": "multiply"
+        },
+        {
+          "stat": "hp",
+          "value": 0.98,
+          "op": "multiply"
+        }
+      ],
+      "description": "하나의 능력을 특화합니다. 최대 체력 -2%."
+    },
+    {
+      "id": "relic_28",
+      "name": "비전 수정",
+      "slot": "relic",
+      "icon": "rank",
+      "minLevel": 36,
+      "stats": [
+        {
+          "stat": "spell",
+          "value": 3,
+          "op": "add"
+        },
+        {
+          "stat": "hp",
+          "value": 0.98,
+          "op": "multiply"
+        }
+      ],
+      "description": "하나의 능력을 특화합니다. 최대 체력 -2%."
+    },
+    {
+      "id": "relic_29",
+      "name": "수호 수정",
+      "slot": "relic",
+      "icon": "rank",
+      "minLevel": 37,
+      "stats": [
+        {
+          "stat": "defense",
+          "value": 2,
+          "op": "add"
+        },
+        {
+          "stat": "hp",
+          "value": 0.98,
+          "op": "multiply"
+        }
+      ],
+      "description": "하나의 능력을 특화합니다. 최대 체력 -2%."
+    },
+    {
+      "id": "relic_30",
+      "name": "흡혈 수정",
+      "slot": "relic",
+      "icon": "rank",
+      "minLevel": 38,
+      "stats": [
+        {
+          "stat": "lifesteal",
+          "value": 0.008,
+          "op": "add"
+        },
+        {
+          "stat": "hp",
+          "value": 0.98,
+          "op": "multiply"
+        }
+      ],
+      "description": "하나의 능력을 특화합니다. 최대 체력 -2%."
+    },
+    {
+      "id": "relic_31",
+      "name": "흐르는 시간 수정",
+      "slot": "relic",
+      "icon": "rank",
+      "minLevel": 39,
+      "stats": [
+        {
+          "stat": "cooldownRate",
+          "value": 0.975,
+          "op": "multiply"
+        },
+        {
+          "stat": "hp",
+          "value": 0.98,
+          "op": "multiply"
+        }
+      ],
+      "description": "하나의 능력을 특화합니다. 최대 체력 -2%."
+    },
+    {
+      "id": "element_fire_warrior",
+      "name": "화염 룬검",
+      "slot": "weapon",
+      "classes": [
+        "warrior"
+      ],
+      "icon": "attack",
+      "element": "fire",
+      "minLevel": 18,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 8,
+          "op": "add"
+        },
+        {
+          "stat": "fireResist",
+          "value": 0.04,
+          "op": "add"
+        },
+        {
+          "stat": "mp",
+          "value": 0.96,
+          "op": "multiply"
+        }
+      ],
+      "description": "평타 속성을 바꿔 몬스터 상성을 공략합니다."
+    },
+    {
+      "id": "element_frost_warrior",
+      "name": "냉기 룬검",
+      "slot": "weapon",
+      "classes": [
+        "warrior"
+      ],
+      "icon": "attack",
+      "element": "frost",
+      "minLevel": 18,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 8,
+          "op": "add"
+        },
+        {
+          "stat": "frostResist",
+          "value": 0.04,
+          "op": "add"
+        },
+        {
+          "stat": "mp",
+          "value": 0.96,
+          "op": "multiply"
+        }
+      ],
+      "description": "평타 속성을 바꿔 몬스터 상성을 공략합니다."
+    },
+    {
+      "id": "element_nature_warrior",
+      "name": "자연 룬검",
+      "slot": "weapon",
+      "classes": [
+        "warrior"
+      ],
+      "icon": "attack",
+      "element": "nature",
+      "minLevel": 18,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 8,
+          "op": "add"
+        },
+        {
+          "stat": "natureResist",
+          "value": 0.04,
+          "op": "add"
+        },
+        {
+          "stat": "mp",
+          "value": 0.96,
+          "op": "multiply"
+        }
+      ],
+      "description": "평타 속성을 바꿔 몬스터 상성을 공략합니다."
+    },
+    {
+      "id": "element_arcane_warrior",
+      "name": "비전 룬검",
+      "slot": "weapon",
+      "classes": [
+        "warrior"
+      ],
+      "icon": "attack",
+      "element": "arcane",
+      "minLevel": 18,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 8,
+          "op": "add"
+        },
+        {
+          "stat": "arcaneResist",
+          "value": 0.04,
+          "op": "add"
+        },
+        {
+          "stat": "mp",
+          "value": 0.96,
+          "op": "multiply"
+        }
+      ],
+      "description": "평타 속성을 바꿔 몬스터 상성을 공략합니다."
+    },
+    {
+      "id": "element_fire_archer",
+      "name": "화염 룬궁",
+      "slot": "weapon",
+      "classes": [
+        "archer"
+      ],
+      "icon": "bow",
+      "element": "fire",
+      "minLevel": 18,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 8,
+          "op": "add"
+        },
+        {
+          "stat": "fireResist",
+          "value": 0.04,
+          "op": "add"
+        },
+        {
+          "stat": "mp",
+          "value": 0.96,
+          "op": "multiply"
+        }
+      ],
+      "description": "평타 속성을 바꿔 몬스터 상성을 공략합니다."
+    },
+    {
+      "id": "element_frost_archer",
+      "name": "냉기 룬궁",
+      "slot": "weapon",
+      "classes": [
+        "archer"
+      ],
+      "icon": "bow",
+      "element": "frost",
+      "minLevel": 18,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 8,
+          "op": "add"
+        },
+        {
+          "stat": "frostResist",
+          "value": 0.04,
+          "op": "add"
+        },
+        {
+          "stat": "mp",
+          "value": 0.96,
+          "op": "multiply"
+        }
+      ],
+      "description": "평타 속성을 바꿔 몬스터 상성을 공략합니다."
+    },
+    {
+      "id": "element_nature_archer",
+      "name": "자연 룬궁",
+      "slot": "weapon",
+      "classes": [
+        "archer"
+      ],
+      "icon": "bow",
+      "element": "nature",
+      "minLevel": 18,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 8,
+          "op": "add"
+        },
+        {
+          "stat": "natureResist",
+          "value": 0.04,
+          "op": "add"
+        },
+        {
+          "stat": "mp",
+          "value": 0.96,
+          "op": "multiply"
+        }
+      ],
+      "description": "평타 속성을 바꿔 몬스터 상성을 공략합니다."
+    },
+    {
+      "id": "element_arcane_archer",
+      "name": "비전 룬궁",
+      "slot": "weapon",
+      "classes": [
+        "archer"
+      ],
+      "icon": "bow",
+      "element": "arcane",
+      "minLevel": 18,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 8,
+          "op": "add"
+        },
+        {
+          "stat": "arcaneResist",
+          "value": 0.04,
+          "op": "add"
+        },
+        {
+          "stat": "mp",
+          "value": 0.96,
+          "op": "multiply"
+        }
+      ],
+      "description": "평타 속성을 바꿔 몬스터 상성을 공략합니다."
+    },
+    {
+      "id": "element_fire_magician",
+      "name": "화염 룬봉",
+      "slot": "weapon",
+      "classes": [
+        "magician"
+      ],
+      "icon": "staff",
+      "element": "fire",
+      "minLevel": 18,
+      "stats": [
+        {
+          "stat": "spell",
+          "value": 8,
+          "op": "add"
+        },
+        {
+          "stat": "fireResist",
+          "value": 0.04,
+          "op": "add"
+        },
+        {
+          "stat": "mp",
+          "value": 0.96,
+          "op": "multiply"
+        }
+      ],
+      "description": "평타 속성을 바꿔 몬스터 상성을 공략합니다."
+    },
+    {
+      "id": "element_frost_magician",
+      "name": "냉기 룬봉",
+      "slot": "weapon",
+      "classes": [
+        "magician"
+      ],
+      "icon": "staff",
+      "element": "frost",
+      "minLevel": 18,
+      "stats": [
+        {
+          "stat": "spell",
+          "value": 8,
+          "op": "add"
+        },
+        {
+          "stat": "frostResist",
+          "value": 0.04,
+          "op": "add"
+        },
+        {
+          "stat": "mp",
+          "value": 0.96,
+          "op": "multiply"
+        }
+      ],
+      "description": "평타 속성을 바꿔 몬스터 상성을 공략합니다."
+    },
+    {
+      "id": "element_nature_magician",
+      "name": "자연 룬봉",
+      "slot": "weapon",
+      "classes": [
+        "magician"
+      ],
+      "icon": "staff",
+      "element": "nature",
+      "minLevel": 18,
+      "stats": [
+        {
+          "stat": "spell",
+          "value": 8,
+          "op": "add"
+        },
+        {
+          "stat": "natureResist",
+          "value": 0.04,
+          "op": "add"
+        },
+        {
+          "stat": "mp",
+          "value": 0.96,
+          "op": "multiply"
+        }
+      ],
+      "description": "평타 속성을 바꿔 몬스터 상성을 공략합니다."
+    },
+    {
+      "id": "element_arcane_magician",
+      "name": "비전 룬봉",
+      "slot": "weapon",
+      "classes": [
+        "magician"
+      ],
+      "icon": "staff",
+      "element": "arcane",
+      "minLevel": 18,
+      "stats": [
+        {
+          "stat": "spell",
+          "value": 8,
+          "op": "add"
+        },
+        {
+          "stat": "arcaneResist",
+          "value": 0.04,
+          "op": "add"
+        },
+        {
+          "stat": "mp",
+          "value": 0.96,
+          "op": "multiply"
+        }
+      ],
+      "description": "평타 속성을 바꿔 몬스터 상성을 공략합니다."
+    },
+    {
+      "id": "element_fire_guardian",
+      "name": "화염 룬 철퇴",
+      "slot": "weapon",
+      "classes": [
+        "guardian"
+      ],
+      "icon": "shield",
+      "element": "fire",
+      "minLevel": 18,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 8,
+          "op": "add"
+        },
+        {
+          "stat": "fireResist",
+          "value": 0.04,
+          "op": "add"
+        },
+        {
+          "stat": "mp",
+          "value": 0.96,
+          "op": "multiply"
+        }
+      ],
+      "description": "평타 속성을 바꿔 몬스터 상성을 공략합니다."
+    },
+    {
+      "id": "element_frost_guardian",
+      "name": "냉기 룬 철퇴",
+      "slot": "weapon",
+      "classes": [
+        "guardian"
+      ],
+      "icon": "shield",
+      "element": "frost",
+      "minLevel": 18,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 8,
+          "op": "add"
+        },
+        {
+          "stat": "frostResist",
+          "value": 0.04,
+          "op": "add"
+        },
+        {
+          "stat": "mp",
+          "value": 0.96,
+          "op": "multiply"
+        }
+      ],
+      "description": "평타 속성을 바꿔 몬스터 상성을 공략합니다."
+    },
+    {
+      "id": "element_nature_guardian",
+      "name": "자연 룬 철퇴",
+      "slot": "weapon",
+      "classes": [
+        "guardian"
+      ],
+      "icon": "shield",
+      "element": "nature",
+      "minLevel": 18,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 8,
+          "op": "add"
+        },
+        {
+          "stat": "natureResist",
+          "value": 0.04,
+          "op": "add"
+        },
+        {
+          "stat": "mp",
+          "value": 0.96,
+          "op": "multiply"
+        }
+      ],
+      "description": "평타 속성을 바꿔 몬스터 상성을 공략합니다."
+    },
+    {
+      "id": "element_arcane_guardian",
+      "name": "비전 룬 철퇴",
+      "slot": "weapon",
+      "classes": [
+        "guardian"
+      ],
+      "icon": "shield",
+      "element": "arcane",
+      "minLevel": 18,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 8,
+          "op": "add"
+        },
+        {
+          "stat": "arcaneResist",
+          "value": 0.04,
+          "op": "add"
+        },
+        {
+          "stat": "mp",
+          "value": 0.96,
+          "op": "multiply"
+        }
+      ],
+      "description": "평타 속성을 바꿔 몬스터 상성을 공략합니다."
     }
   ],
   "affixes": [
@@ -12766,6 +18562,550 @@ window.GAME_DB = {
         "arcanum": 120
       },
       "description": "세력 평판 120과 정복 인장이 필요합니다."
+    },
+    {
+      "id": "craftline_0_warrior",
+      "name": "여행자 파쇄검 제작",
+      "item": "craftline_0_warrior",
+      "classes": [
+        "warrior"
+      ],
+      "rarity": "uncommon",
+      "minLevel": 5,
+      "gold": 150,
+      "materials": {
+        "ore": 8,
+        "wood": 6,
+        "crystal": 3
+      },
+      "description": "파밍 재료로 확정 제작합니다."
+    },
+    {
+      "id": "craftline_0_archer",
+      "name": "여행자 연사궁 제작",
+      "item": "craftline_0_archer",
+      "classes": [
+        "archer"
+      ],
+      "rarity": "uncommon",
+      "minLevel": 5,
+      "gold": 150,
+      "materials": {
+        "ore": 8,
+        "wood": 6,
+        "crystal": 3
+      },
+      "description": "파밍 재료로 확정 제작합니다."
+    },
+    {
+      "id": "craftline_0_magician",
+      "name": "여행자 마도봉 제작",
+      "item": "craftline_0_magician",
+      "classes": [
+        "magician"
+      ],
+      "rarity": "uncommon",
+      "minLevel": 5,
+      "gold": 150,
+      "materials": {
+        "ore": 8,
+        "wood": 6,
+        "crystal": 3
+      },
+      "description": "파밍 재료로 확정 제작합니다."
+    },
+    {
+      "id": "craftline_0_guardian",
+      "name": "여행자 수호 철퇴 제작",
+      "item": "craftline_0_guardian",
+      "classes": [
+        "guardian"
+      ],
+      "rarity": "uncommon",
+      "minLevel": 5,
+      "gold": 150,
+      "materials": {
+        "ore": 8,
+        "wood": 6,
+        "crystal": 3
+      },
+      "description": "파밍 재료로 확정 제작합니다."
+    },
+    {
+      "id": "craftline_1_warrior",
+      "name": "개척자 파쇄검 제작",
+      "item": "craftline_1_warrior",
+      "classes": [
+        "warrior"
+      ],
+      "rarity": "uncommon",
+      "minLevel": 11,
+      "gold": 370,
+      "materials": {
+        "ore": 11,
+        "wood": 8,
+        "crystal": 5
+      },
+      "description": "파밍 재료로 확정 제작합니다."
+    },
+    {
+      "id": "craftline_1_archer",
+      "name": "개척자 연사궁 제작",
+      "item": "craftline_1_archer",
+      "classes": [
+        "archer"
+      ],
+      "rarity": "uncommon",
+      "minLevel": 11,
+      "gold": 370,
+      "materials": {
+        "ore": 11,
+        "wood": 8,
+        "crystal": 5
+      },
+      "description": "파밍 재료로 확정 제작합니다."
+    },
+    {
+      "id": "craftline_1_magician",
+      "name": "개척자 마도봉 제작",
+      "item": "craftline_1_magician",
+      "classes": [
+        "magician"
+      ],
+      "rarity": "uncommon",
+      "minLevel": 11,
+      "gold": 370,
+      "materials": {
+        "ore": 11,
+        "wood": 8,
+        "crystal": 5
+      },
+      "description": "파밍 재료로 확정 제작합니다."
+    },
+    {
+      "id": "craftline_1_guardian",
+      "name": "개척자 수호 철퇴 제작",
+      "item": "craftline_1_guardian",
+      "classes": [
+        "guardian"
+      ],
+      "rarity": "uncommon",
+      "minLevel": 11,
+      "gold": 370,
+      "materials": {
+        "ore": 11,
+        "wood": 8,
+        "crystal": 5
+      },
+      "description": "파밍 재료로 확정 제작합니다."
+    },
+    {
+      "id": "craftline_2_warrior",
+      "name": "은빛 파쇄검 제작",
+      "item": "craftline_2_warrior",
+      "classes": [
+        "warrior"
+      ],
+      "rarity": "rare",
+      "minLevel": 17,
+      "gold": 590,
+      "materials": {
+        "ore": 14,
+        "wood": 10,
+        "crystal": 7
+      },
+      "description": "파밍 재료로 확정 제작합니다."
+    },
+    {
+      "id": "craftline_2_archer",
+      "name": "은빛 연사궁 제작",
+      "item": "craftline_2_archer",
+      "classes": [
+        "archer"
+      ],
+      "rarity": "rare",
+      "minLevel": 17,
+      "gold": 590,
+      "materials": {
+        "ore": 14,
+        "wood": 10,
+        "crystal": 7
+      },
+      "description": "파밍 재료로 확정 제작합니다."
+    },
+    {
+      "id": "craftline_2_magician",
+      "name": "은빛 마도봉 제작",
+      "item": "craftline_2_magician",
+      "classes": [
+        "magician"
+      ],
+      "rarity": "rare",
+      "minLevel": 17,
+      "gold": 590,
+      "materials": {
+        "ore": 14,
+        "wood": 10,
+        "crystal": 7
+      },
+      "description": "파밍 재료로 확정 제작합니다."
+    },
+    {
+      "id": "craftline_2_guardian",
+      "name": "은빛 수호 철퇴 제작",
+      "item": "craftline_2_guardian",
+      "classes": [
+        "guardian"
+      ],
+      "rarity": "rare",
+      "minLevel": 17,
+      "gold": 590,
+      "materials": {
+        "ore": 14,
+        "wood": 10,
+        "crystal": 7
+      },
+      "description": "파밍 재료로 확정 제작합니다."
+    },
+    {
+      "id": "craftline_3_warrior",
+      "name": "왕립 파쇄검 제작",
+      "item": "craftline_3_warrior",
+      "classes": [
+        "warrior"
+      ],
+      "rarity": "rare",
+      "minLevel": 23,
+      "gold": 810,
+      "materials": {
+        "ore": 17,
+        "wood": 12,
+        "crystal": 9
+      },
+      "description": "파밍 재료로 확정 제작합니다."
+    },
+    {
+      "id": "craftline_3_archer",
+      "name": "왕립 연사궁 제작",
+      "item": "craftline_3_archer",
+      "classes": [
+        "archer"
+      ],
+      "rarity": "rare",
+      "minLevel": 23,
+      "gold": 810,
+      "materials": {
+        "ore": 17,
+        "wood": 12,
+        "crystal": 9
+      },
+      "description": "파밍 재료로 확정 제작합니다."
+    },
+    {
+      "id": "craftline_3_magician",
+      "name": "왕립 마도봉 제작",
+      "item": "craftline_3_magician",
+      "classes": [
+        "magician"
+      ],
+      "rarity": "rare",
+      "minLevel": 23,
+      "gold": 810,
+      "materials": {
+        "ore": 17,
+        "wood": 12,
+        "crystal": 9
+      },
+      "description": "파밍 재료로 확정 제작합니다."
+    },
+    {
+      "id": "craftline_3_guardian",
+      "name": "왕립 수호 철퇴 제작",
+      "item": "craftline_3_guardian",
+      "classes": [
+        "guardian"
+      ],
+      "rarity": "rare",
+      "minLevel": 23,
+      "gold": 810,
+      "materials": {
+        "ore": 17,
+        "wood": 12,
+        "crystal": 9
+      },
+      "description": "파밍 재료로 확정 제작합니다."
+    },
+    {
+      "id": "craftline_4_warrior",
+      "name": "황혼 파쇄검 제작",
+      "item": "craftline_4_warrior",
+      "classes": [
+        "warrior"
+      ],
+      "rarity": "rare",
+      "minLevel": 29,
+      "gold": 1030,
+      "materials": {
+        "ore": 20,
+        "wood": 14,
+        "crystal": 11
+      },
+      "description": "파밍 재료로 확정 제작합니다."
+    },
+    {
+      "id": "craftline_4_archer",
+      "name": "황혼 연사궁 제작",
+      "item": "craftline_4_archer",
+      "classes": [
+        "archer"
+      ],
+      "rarity": "rare",
+      "minLevel": 29,
+      "gold": 1030,
+      "materials": {
+        "ore": 20,
+        "wood": 14,
+        "crystal": 11
+      },
+      "description": "파밍 재료로 확정 제작합니다."
+    },
+    {
+      "id": "craftline_4_magician",
+      "name": "황혼 마도봉 제작",
+      "item": "craftline_4_magician",
+      "classes": [
+        "magician"
+      ],
+      "rarity": "rare",
+      "minLevel": 29,
+      "gold": 1030,
+      "materials": {
+        "ore": 20,
+        "wood": 14,
+        "crystal": 11
+      },
+      "description": "파밍 재료로 확정 제작합니다."
+    },
+    {
+      "id": "craftline_4_guardian",
+      "name": "황혼 수호 철퇴 제작",
+      "item": "craftline_4_guardian",
+      "classes": [
+        "guardian"
+      ],
+      "rarity": "rare",
+      "minLevel": 29,
+      "gold": 1030,
+      "materials": {
+        "ore": 20,
+        "wood": 14,
+        "crystal": 11
+      },
+      "description": "파밍 재료로 확정 제작합니다."
+    },
+    {
+      "id": "craftline_5_warrior",
+      "name": "고대 파쇄검 제작",
+      "item": "craftline_5_warrior",
+      "classes": [
+        "warrior"
+      ],
+      "rarity": "rare",
+      "minLevel": 35,
+      "gold": 1250,
+      "materials": {
+        "ore": 23,
+        "wood": 16,
+        "crystal": 13
+      },
+      "description": "파밍 재료로 확정 제작합니다."
+    },
+    {
+      "id": "craftline_5_archer",
+      "name": "고대 연사궁 제작",
+      "item": "craftline_5_archer",
+      "classes": [
+        "archer"
+      ],
+      "rarity": "rare",
+      "minLevel": 35,
+      "gold": 1250,
+      "materials": {
+        "ore": 23,
+        "wood": 16,
+        "crystal": 13
+      },
+      "description": "파밍 재료로 확정 제작합니다."
+    },
+    {
+      "id": "craftline_5_magician",
+      "name": "고대 마도봉 제작",
+      "item": "craftline_5_magician",
+      "classes": [
+        "magician"
+      ],
+      "rarity": "rare",
+      "minLevel": 35,
+      "gold": 1250,
+      "materials": {
+        "ore": 23,
+        "wood": 16,
+        "crystal": 13
+      },
+      "description": "파밍 재료로 확정 제작합니다."
+    },
+    {
+      "id": "craftline_5_guardian",
+      "name": "고대 수호 철퇴 제작",
+      "item": "craftline_5_guardian",
+      "classes": [
+        "guardian"
+      ],
+      "rarity": "rare",
+      "minLevel": 35,
+      "gold": 1250,
+      "materials": {
+        "ore": 23,
+        "wood": 16,
+        "crystal": 13
+      },
+      "description": "파밍 재료로 확정 제작합니다."
+    },
+    {
+      "id": "craftline_6_warrior",
+      "name": "별빛 파쇄검 제작",
+      "item": "craftline_6_warrior",
+      "classes": [
+        "warrior"
+      ],
+      "rarity": "rare",
+      "minLevel": 41,
+      "gold": 1470,
+      "materials": {
+        "ore": 26,
+        "wood": 18,
+        "crystal": 15
+      },
+      "description": "파밍 재료로 확정 제작합니다."
+    },
+    {
+      "id": "craftline_6_archer",
+      "name": "별빛 연사궁 제작",
+      "item": "craftline_6_archer",
+      "classes": [
+        "archer"
+      ],
+      "rarity": "rare",
+      "minLevel": 41,
+      "gold": 1470,
+      "materials": {
+        "ore": 26,
+        "wood": 18,
+        "crystal": 15
+      },
+      "description": "파밍 재료로 확정 제작합니다."
+    },
+    {
+      "id": "craftline_6_magician",
+      "name": "별빛 마도봉 제작",
+      "item": "craftline_6_magician",
+      "classes": [
+        "magician"
+      ],
+      "rarity": "rare",
+      "minLevel": 41,
+      "gold": 1470,
+      "materials": {
+        "ore": 26,
+        "wood": 18,
+        "crystal": 15
+      },
+      "description": "파밍 재료로 확정 제작합니다."
+    },
+    {
+      "id": "craftline_6_guardian",
+      "name": "별빛 수호 철퇴 제작",
+      "item": "craftline_6_guardian",
+      "classes": [
+        "guardian"
+      ],
+      "rarity": "rare",
+      "minLevel": 41,
+      "gold": 1470,
+      "materials": {
+        "ore": 26,
+        "wood": 18,
+        "crystal": 15
+      },
+      "description": "파밍 재료로 확정 제작합니다."
+    },
+    {
+      "id": "craftline_7_warrior",
+      "name": "계승자 파쇄검 제작",
+      "item": "craftline_7_warrior",
+      "classes": [
+        "warrior"
+      ],
+      "rarity": "rare",
+      "minLevel": 47,
+      "gold": 1690,
+      "materials": {
+        "ore": 29,
+        "wood": 20,
+        "crystal": 17
+      },
+      "description": "파밍 재료로 확정 제작합니다."
+    },
+    {
+      "id": "craftline_7_archer",
+      "name": "계승자 연사궁 제작",
+      "item": "craftline_7_archer",
+      "classes": [
+        "archer"
+      ],
+      "rarity": "rare",
+      "minLevel": 47,
+      "gold": 1690,
+      "materials": {
+        "ore": 29,
+        "wood": 20,
+        "crystal": 17
+      },
+      "description": "파밍 재료로 확정 제작합니다."
+    },
+    {
+      "id": "craftline_7_magician",
+      "name": "계승자 마도봉 제작",
+      "item": "craftline_7_magician",
+      "classes": [
+        "magician"
+      ],
+      "rarity": "rare",
+      "minLevel": 47,
+      "gold": 1690,
+      "materials": {
+        "ore": 29,
+        "wood": 20,
+        "crystal": 17
+      },
+      "description": "파밍 재료로 확정 제작합니다."
+    },
+    {
+      "id": "craftline_7_guardian",
+      "name": "계승자 수호 철퇴 제작",
+      "item": "craftline_7_guardian",
+      "classes": [
+        "guardian"
+      ],
+      "rarity": "rare",
+      "minLevel": 47,
+      "gold": 1690,
+      "materials": {
+        "ore": 29,
+        "wood": 20,
+        "crystal": 17
+      },
+      "description": "파밍 재료로 확정 제작합니다."
     }
   ],
   "shop": [
@@ -13585,7 +19925,8 @@ window.GAME_DB = {
       "material": {
         "herb": 0.18
       },
-      "size": 0.9
+      "size": 0.9,
+      "element": "nature"
     },
     "goblin": {
       "name": "고블린",
@@ -13607,7 +19948,8 @@ window.GAME_DB = {
       "material": {
         "ore": 0.32
       },
-      "size": 1
+      "size": 1,
+      "element": "physical"
     },
     "wolf": {
       "name": "회색 늑대",
@@ -13631,7 +19973,8 @@ window.GAME_DB = {
         "hide": 0.48
       },
       "size": 1.1,
-      "dash": true
+      "dash": true,
+      "element": "physical"
     },
     "boar": {
       "name": "숲 호그",
@@ -13655,7 +19998,8 @@ window.GAME_DB = {
         "hide": 0.6
       },
       "size": 1.2,
-      "dash": true
+      "dash": true,
+      "element": "physical"
     },
     "lizard": {
       "name": "늪 리자드",
@@ -13677,7 +20021,8 @@ window.GAME_DB = {
       "material": {
         "crystal": 0.32
       },
-      "size": 1.1
+      "size": 1.1,
+      "element": "physical"
     },
     "goblin_guard": {
       "name": "봉인 고블린",
@@ -13700,7 +20045,8 @@ window.GAME_DB = {
         "ore": 0.8
       },
       "size": 1.25,
-      "elite": true
+      "elite": true,
+      "element": "physical"
     },
     "golem": {
       "name": "광산 골렘",
@@ -13722,7 +20068,8 @@ window.GAME_DB = {
       "material": {
         "ore": 1
       },
-      "size": 1.4
+      "size": 1.4,
+      "element": "physical"
     },
     "lizard_shaman": {
       "name": "리자드 주술사",
@@ -13746,7 +20093,8 @@ window.GAME_DB = {
       },
       "size": 1.3,
       "elite": true,
-      "tint": "#9a8ca3"
+      "tint": "#9a8ca3",
+      "element": "physical"
     },
     "wolf_king": {
       "name": "은빛 늑대왕",
@@ -13806,7 +20154,11 @@ window.GAME_DB = {
       "adds": [
         "wolf",
         "wolf"
-      ]
+      ],
+      "element": "physical",
+      "material": {
+        "sigil": 0.8
+      }
     },
     "mine_golem": {
       "name": "깨어난 광산군주",
@@ -13864,7 +20216,11 @@ window.GAME_DB = {
       "adds": [
         "goblin",
         "goblin"
-      ]
+      ],
+      "element": "physical",
+      "material": {
+        "sigil": 0.8
+      }
     },
     "ancient_drake": {
       "name": "잿불의 원룡",
@@ -13937,7 +20293,11 @@ window.GAME_DB = {
       "adds": [
         "lizard",
         "lizard"
-      ]
+      ],
+      "element": "fire",
+      "material": {
+        "sigil": 0.8
+      }
     },
     "goblin_captain": {
       "name": "황야의 고블린 대장",
@@ -13961,7 +20321,8 @@ window.GAME_DB = {
       },
       "size": 1.4,
       "elite": true,
-      "tint": "#b8a18a"
+      "tint": "#b8a18a",
+      "element": "physical"
     },
     "alpha_wolf": {
       "name": "흰갈기 우두머리",
@@ -13987,7 +20348,8 @@ window.GAME_DB = {
       "size": 1.4,
       "dash": true,
       "elite": true,
-      "tint": "#b8a18a"
+      "tint": "#b8a18a",
+      "element": "physical"
     },
     "lizard_chief": {
       "name": "비늘갑옷 추적자",
@@ -14011,7 +20373,8 @@ window.GAME_DB = {
       },
       "size": 1.4,
       "elite": true,
-      "tint": "#b8a18a"
+      "tint": "#b8a18a",
+      "element": "physical"
     },
     "moss_ent": {
       "name": "이끼나무 수호자",
@@ -14035,7 +20398,8 @@ window.GAME_DB = {
       },
       "size": 1.4,
       "innerRadius": 1.15,
-      "tint": "#699d58"
+      "tint": "#699d58",
+      "element": "nature"
     },
     "cave_bat": {
       "name": "흡혈 박쥐",
@@ -14059,7 +20423,8 @@ window.GAME_DB = {
         "hide": 0.32
       },
       "size": 0.85,
-      "dash": true
+      "dash": true,
+      "element": "physical"
     },
     "bone_soldier": {
       "name": "해골 보병",
@@ -14081,7 +20446,8 @@ window.GAME_DB = {
       "material": {
         "ore": 0.38
       },
-      "size": 1
+      "size": 1,
+      "element": "physical"
     },
     "venom_spider": {
       "name": "독니 거미",
@@ -14103,7 +20469,8 @@ window.GAME_DB = {
       "material": {
         "herb": 0.4
       },
-      "size": 0.9
+      "size": 0.9,
+      "element": "nature"
     },
     "highland_orc": {
       "name": "고원 오크",
@@ -14127,7 +20494,8 @@ window.GAME_DB = {
         "ore": 0.25
       },
       "size": 1,
-      "angle": 1.3
+      "angle": 1.3,
+      "element": "physical"
     },
     "orc_shaman": {
       "name": "오크 불술사",
@@ -14152,7 +20520,8 @@ window.GAME_DB = {
       },
       "size": 1.3,
       "elite": false,
-      "tint": "#ca7c53"
+      "tint": "#ca7c53",
+      "element": "physical"
     },
     "stone_wyvern": {
       "name": "바위 와이번",
@@ -14176,7 +20545,8 @@ window.GAME_DB = {
         "hide": 0.5
       },
       "size": 1.2,
-      "dash": true
+      "dash": true,
+      "element": "physical"
     },
     "frost_wolf": {
       "name": "서리 늑대",
@@ -14201,7 +20571,8 @@ window.GAME_DB = {
       },
       "size": 1.1,
       "dash": true,
-      "tint": "#9fc7db"
+      "tint": "#9fc7db",
+      "element": "frost"
     },
     "ice_wraith": {
       "name": "빙결 망령",
@@ -14226,7 +20597,8 @@ window.GAME_DB = {
       "size": 1.3,
       "elite": false,
       "tint": "#87b7ce",
-      "innerRadius": 1.4
+      "innerRadius": 1.4,
+      "element": "frost"
     },
     "snow_golem": {
       "name": "설원 골렘",
@@ -14251,7 +20623,8 @@ window.GAME_DB = {
       },
       "size": 1.4,
       "angle": 1.8,
-      "tint": "#b8d4df"
+      "tint": "#b8d4df",
+      "element": "frost"
     },
     "sand_scorpion": {
       "name": "사막 전갈",
@@ -14277,7 +20650,8 @@ window.GAME_DB = {
       },
       "size": 1.1,
       "dash": true,
-      "tint": "#b39a59"
+      "tint": "#b39a59",
+      "element": "physical"
     },
     "dune_raider": {
       "name": "모래 약탈자",
@@ -14301,7 +20675,8 @@ window.GAME_DB = {
       },
       "size": 1,
       "angle": 1.4,
-      "tint": "#bd8c60"
+      "tint": "#bd8c60",
+      "element": "physical"
     },
     "ember_drake": {
       "name": "불씨 비룡",
@@ -14325,7 +20700,8 @@ window.GAME_DB = {
       },
       "size": 1.2,
       "elite": false,
-      "tint": "#9a8ca3"
+      "tint": "#9a8ca3",
+      "element": "fire"
     },
     "grave_knight": {
       "name": "묘지 기사",
@@ -14351,7 +20727,8 @@ window.GAME_DB = {
       "size": 1,
       "length": 4,
       "dash": true,
-      "tint": "#938eae"
+      "tint": "#938eae",
+      "element": "arcane"
     },
     "curse_wraith": {
       "name": "저주 망령",
@@ -14376,7 +20753,8 @@ window.GAME_DB = {
       "size": 1.3,
       "elite": false,
       "tint": "#9f7eaf",
-      "innerRadius": 1.6
+      "innerRadius": 1.6,
+      "element": "arcane"
     },
     "abyss_spider": {
       "name": "심연 거미",
@@ -14416,7 +20794,8 @@ window.GAME_DB = {
           0
         ]
       ],
-      "tint": "#7e689b"
+      "tint": "#7e689b",
+      "element": "nature"
     },
     "dusk_sentinel": {
       "name": "황혼 근위병",
@@ -14443,7 +20822,8 @@ window.GAME_DB = {
       "length": 4,
       "dash": false,
       "tint": "#b69664",
-      "angle": 1.8
+      "angle": 1.8,
+      "element": "arcane"
     },
     "dusk_magus": {
       "name": "황혼 마도사",
@@ -14485,7 +20865,8 @@ window.GAME_DB = {
           -2,
           -2
         ]
-      ]
+      ],
+      "element": "arcane"
     },
     "thorn_queen": {
       "name": "가시숲의 여왕",
@@ -14665,7 +21046,11 @@ window.GAME_DB = {
           ]
         }
       ],
-      "tint": "#79a56f"
+      "tint": "#79a56f",
+      "element": "nature",
+      "material": {
+        "sigil": 0.8
+      }
     },
     "frost_regent": {
       "name": "서리왕 이스렌",
@@ -14821,7 +21206,11 @@ window.GAME_DB = {
           ]
         }
       ],
-      "tint": "#8aafce"
+      "tint": "#8aafce",
+      "element": "frost",
+      "material": {
+        "sigil": 0.8
+      }
     },
     "sun_scorpion": {
       "name": "태양을 삼킨 전갈",
@@ -15013,7 +21402,11 @@ window.GAME_DB = {
           ]
         }
       ],
-      "tint": "#c9a25c"
+      "tint": "#c9a25c",
+      "element": "fire",
+      "material": {
+        "sigil": 0.8
+      }
     },
     "grave_marshal": {
       "name": "망자의 원수",
@@ -15148,7 +21541,11 @@ window.GAME_DB = {
           ]
         }
       ],
-      "tint": "#b5a4bd"
+      "tint": "#b5a4bd",
+      "element": "arcane",
+      "material": {
+        "sigil": 0.8
+      }
     },
     "eclipse_king": {
       "name": "황혼왕 발테르",
@@ -15385,7 +21782,11 @@ window.GAME_DB = {
           ]
         }
       ],
-      "tint": "#d6b16c"
+      "tint": "#d6b16c",
+      "element": "arcane",
+      "material": {
+        "sigil": 0.8
+      }
     },
     "highland_elite": {
       "name": "가시바람의 우두머리",
@@ -15410,7 +21811,8 @@ window.GAME_DB = {
       },
       "size": 1.5,
       "angle": 1.3,
-      "elite": true
+      "elite": true,
+      "element": "physical"
     },
     "snowfield_elite": {
       "name": "백서리의 우두머리",
@@ -15436,7 +21838,8 @@ window.GAME_DB = {
       "size": 1.5,
       "dash": true,
       "tint": "#9fc7db",
-      "elite": true
+      "elite": true,
+      "element": "frost"
     },
     "sunwaste_elite": {
       "name": "붉은의 우두머리",
@@ -15463,7 +21866,8 @@ window.GAME_DB = {
       "size": 1.5,
       "dash": true,
       "tint": "#b39a59",
-      "elite": true
+      "elite": true,
+      "element": "fire"
     },
     "gravewood_elite": {
       "name": "잊힌의 우두머리",
@@ -15486,7 +21890,8 @@ window.GAME_DB = {
         "ore": 0.38
       },
       "size": 1.5,
-      "elite": true
+      "elite": true,
+      "element": "arcane"
     },
     "eclipse_plain_elite": {
       "name": "황혼의의 우두머리",
@@ -15514,7 +21919,758 @@ window.GAME_DB = {
       "dash": false,
       "tint": "#b69664",
       "angle": 1.8,
-      "elite": true
+      "elite": true,
+      "element": "arcane"
+    },
+    "raid_verdant": {
+      "name": "세계수의 심장",
+      "sprite": "ent",
+      "hp": 3480.0,
+      "attack": 29,
+      "defense": 8,
+      "speed": 1.65,
+      "range": 5.5,
+      "xp": 448,
+      "gold": [
+        64,
+        96
+      ],
+      "size": 2.4,
+      "boss": true,
+      "group": "raid_verdant",
+      "drop": "highland_heart",
+      "patterns": [
+        {
+          "name": "뿌리 감옥",
+          "kind": "ring",
+          "radius": 5,
+          "windup": 1.4,
+          "cooldown": 2.8,
+          "damage": 1.15,
+          "innerRadius": 1.8
+        },
+        {
+          "name": "가시 부채",
+          "kind": "cone",
+          "radius": 5.2,
+          "windup": 1.25,
+          "cooldown": 2.5,
+          "damage": 1.1,
+          "angle": 1.3
+        },
+        {
+          "name": "추적 씨앗",
+          "kind": "target",
+          "radius": 1.6,
+          "windup": 1.2,
+          "cooldown": 2.5,
+          "damage": 1,
+          "offsets": [
+            [
+              0,
+              0
+            ],
+            [
+              2,
+              0
+            ],
+            [
+              -2,
+              0
+            ]
+          ],
+          "interval": 0.55,
+          "bursts": 3
+        }
+      ],
+      "adds": [
+        "venom_spider",
+        "moss_ent"
+      ],
+      "phases": [
+        {
+          "threshold": 0.65,
+          "adds": [
+            "venom_spider",
+            "moss_ent"
+          ],
+          "patterns": [
+            {
+              "name": "추적 씨앗",
+              "kind": "target",
+              "radius": 1.6,
+              "windup": 1.2,
+              "cooldown": 2.5,
+              "damage": 1,
+              "offsets": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  2,
+                  0
+                ],
+                [
+                  -2,
+                  0
+                ]
+              ],
+              "interval": 0.55,
+              "bursts": 3
+            },
+            {
+              "name": "가시 부채",
+              "kind": "cone",
+              "radius": 5.2,
+              "windup": 1.25,
+              "cooldown": 2.5,
+              "damage": 1.1,
+              "angle": 1.3
+            },
+            {
+              "name": "뿌리 감옥",
+              "kind": "ring",
+              "radius": 5,
+              "windup": 1.4,
+              "cooldown": 2.8,
+              "damage": 1.15,
+              "innerRadius": 1.8
+            }
+          ]
+        },
+        {
+          "threshold": 0.3,
+          "adds": [
+            "venom_spider",
+            "moss_ent"
+          ],
+          "patterns": [
+            {
+              "name": "뿌리 감옥",
+              "kind": "ring",
+              "radius": 5,
+              "windup": 1.4,
+              "cooldown": 2.8,
+              "damage": 1.15,
+              "innerRadius": 1.8
+            },
+            {
+              "name": "가시 부채",
+              "kind": "cone",
+              "radius": 5.2,
+              "windup": 1.25,
+              "cooldown": 2.5,
+              "damage": 1.1,
+              "angle": 1.3
+            },
+            {
+              "name": "추적 씨앗",
+              "kind": "target",
+              "radius": 1.6,
+              "windup": 1.2,
+              "cooldown": 2.5,
+              "damage": 1,
+              "offsets": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  2,
+                  0
+                ],
+                [
+                  -2,
+                  0
+                ]
+              ],
+              "interval": 0.55,
+              "bursts": 3
+            },
+            {
+              "name": "뿌리 감옥",
+              "kind": "ring",
+              "radius": 5,
+              "windup": 1.4,
+              "cooldown": 2.8,
+              "damage": 1.15,
+              "innerRadius": 1.8
+            }
+          ]
+        }
+      ],
+      "tint": "#79a56f",
+      "element": "nature",
+      "material": {
+        "sigil": 0.8
+      },
+      "raid": true
+    },
+    "raid_glacial": {
+      "name": "빙관의 파수꾼",
+      "sprite": "knight",
+      "hp": 4440.0,
+      "attack": 32,
+      "defense": 8,
+      "speed": 1.65,
+      "range": 5.5,
+      "xp": 464,
+      "gold": [
+        72,
+        108
+      ],
+      "size": 2.4,
+      "boss": true,
+      "group": "raid_glacial",
+      "drop": "frost_crest",
+      "patterns": [
+        {
+          "name": "서리 파동",
+          "kind": "ring",
+          "radius": 6,
+          "windup": 1.6,
+          "cooldown": 3,
+          "damage": 1.2,
+          "innerRadius": 2
+        },
+        {
+          "name": "얼음 십자",
+          "kind": "line",
+          "radius": 0.65,
+          "windup": 1.45,
+          "cooldown": 2.8,
+          "damage": 1.1,
+          "length": 9,
+          "angles": [
+            0,
+            1.5708,
+            3.1416,
+            4.7124
+          ]
+        },
+        {
+          "name": "쇄빙 돌진",
+          "kind": "line",
+          "radius": 1,
+          "windup": 1.2,
+          "cooldown": 2.6,
+          "damage": 1.2,
+          "length": 7,
+          "dash": true
+        }
+      ],
+      "adds": [
+        "ice_wraith",
+        "frost_wolf"
+      ],
+      "phases": [
+        {
+          "threshold": 0.65,
+          "adds": [
+            "ice_wraith",
+            "frost_wolf"
+          ],
+          "patterns": [
+            {
+              "name": "쇄빙 돌진",
+              "kind": "line",
+              "radius": 1,
+              "windup": 1.2,
+              "cooldown": 2.6,
+              "damage": 1.2,
+              "length": 7,
+              "dash": true
+            },
+            {
+              "name": "얼음 십자",
+              "kind": "line",
+              "radius": 0.65,
+              "windup": 1.45,
+              "cooldown": 2.8,
+              "damage": 1.1,
+              "length": 9,
+              "angles": [
+                0,
+                1.5708,
+                3.1416,
+                4.7124
+              ]
+            },
+            {
+              "name": "서리 파동",
+              "kind": "ring",
+              "radius": 6,
+              "windup": 1.6,
+              "cooldown": 3,
+              "damage": 1.2,
+              "innerRadius": 2
+            }
+          ]
+        },
+        {
+          "threshold": 0.3,
+          "adds": [
+            "ice_wraith",
+            "frost_wolf"
+          ],
+          "patterns": [
+            {
+              "name": "서리 파동",
+              "kind": "ring",
+              "radius": 6,
+              "windup": 1.6,
+              "cooldown": 3,
+              "damage": 1.2,
+              "innerRadius": 2
+            },
+            {
+              "name": "얼음 십자",
+              "kind": "line",
+              "radius": 0.65,
+              "windup": 1.45,
+              "cooldown": 2.8,
+              "damage": 1.1,
+              "length": 9,
+              "angles": [
+                0,
+                1.5708,
+                3.1416,
+                4.7124
+              ]
+            },
+            {
+              "name": "쇄빙 돌진",
+              "kind": "line",
+              "radius": 1,
+              "windup": 1.2,
+              "cooldown": 2.6,
+              "damage": 1.2,
+              "length": 7,
+              "dash": true
+            },
+            {
+              "name": "서리 파동",
+              "kind": "ring",
+              "radius": 6,
+              "windup": 1.6,
+              "cooldown": 3,
+              "damage": 1.2,
+              "innerRadius": 2
+            }
+          ]
+        }
+      ],
+      "tint": "#8aafce",
+      "element": "frost",
+      "material": {
+        "sigil": 0.8
+      },
+      "raid": true
+    },
+    "raid_astral": {
+      "name": "왕관을 삼킨 별",
+      "sprite": "knight",
+      "hp": 7680.0,
+      "attack": 41,
+      "defense": 8,
+      "speed": 1.65,
+      "range": 5.5,
+      "xp": 504,
+      "gold": [
+        92,
+        138
+      ],
+      "size": 2.4,
+      "boss": true,
+      "group": "raid_astral",
+      "drop": "eclipse_crown",
+      "patterns": [
+        {
+          "name": "왕의 심판",
+          "kind": "cone",
+          "radius": 7,
+          "windup": 1.45,
+          "cooldown": 2.8,
+          "damage": 1.4,
+          "angle": 1.6
+        },
+        {
+          "name": "왕관의 궤도",
+          "kind": "ring",
+          "radius": 7.5,
+          "windup": 1.7,
+          "cooldown": 3,
+          "damage": 1.25,
+          "innerRadius": 2.3
+        },
+        {
+          "name": "황혼 십자",
+          "kind": "line",
+          "radius": 1,
+          "windup": 1.5,
+          "cooldown": 2.8,
+          "damage": 1.2,
+          "length": 10,
+          "angles": [
+            0,
+            1.5708,
+            3.1416,
+            4.7124
+          ]
+        },
+        {
+          "name": "별의 추락",
+          "kind": "target",
+          "radius": 2,
+          "windup": 1.5,
+          "cooldown": 3,
+          "damage": 1.15,
+          "bursts": 4,
+          "interval": 0.5,
+          "offsets": [
+            [
+              0,
+              0
+            ],
+            [
+              3,
+              0
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              -3,
+              -3
+            ]
+          ]
+        }
+      ],
+      "adds": [
+        "dusk_sentinel",
+        "dusk_magus"
+      ],
+      "phases": [
+        {
+          "threshold": 0.65,
+          "adds": [
+            "dusk_sentinel",
+            "dusk_magus"
+          ],
+          "patterns": [
+            {
+              "name": "별의 추락",
+              "kind": "target",
+              "radius": 2,
+              "windup": 1.5,
+              "cooldown": 3,
+              "damage": 1.15,
+              "bursts": 4,
+              "interval": 0.5,
+              "offsets": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  3,
+                  0
+                ],
+                [
+                  0,
+                  3
+                ],
+                [
+                  -3,
+                  -3
+                ]
+              ]
+            },
+            {
+              "name": "황혼 십자",
+              "kind": "line",
+              "radius": 1,
+              "windup": 1.5,
+              "cooldown": 2.8,
+              "damage": 1.2,
+              "length": 10,
+              "angles": [
+                0,
+                1.5708,
+                3.1416,
+                4.7124
+              ]
+            },
+            {
+              "name": "왕관의 궤도",
+              "kind": "ring",
+              "radius": 7.5,
+              "windup": 1.7,
+              "cooldown": 3,
+              "damage": 1.25,
+              "innerRadius": 2.3
+            },
+            {
+              "name": "왕의 심판",
+              "kind": "cone",
+              "radius": 7,
+              "windup": 1.45,
+              "cooldown": 2.8,
+              "damage": 1.4,
+              "angle": 1.6
+            }
+          ]
+        },
+        {
+          "threshold": 0.3,
+          "adds": [
+            "dusk_sentinel",
+            "dusk_magus"
+          ],
+          "patterns": [
+            {
+              "name": "왕의 심판",
+              "kind": "cone",
+              "radius": 7,
+              "windup": 1.45,
+              "cooldown": 2.8,
+              "damage": 1.4,
+              "angle": 1.6
+            },
+            {
+              "name": "왕관의 궤도",
+              "kind": "ring",
+              "radius": 7.5,
+              "windup": 1.7,
+              "cooldown": 3,
+              "damage": 1.25,
+              "innerRadius": 2.3
+            },
+            {
+              "name": "황혼 십자",
+              "kind": "line",
+              "radius": 1,
+              "windup": 1.5,
+              "cooldown": 2.8,
+              "damage": 1.2,
+              "length": 10,
+              "angles": [
+                0,
+                1.5708,
+                3.1416,
+                4.7124
+              ]
+            },
+            {
+              "name": "별의 추락",
+              "kind": "target",
+              "radius": 2,
+              "windup": 1.5,
+              "cooldown": 3,
+              "damage": 1.15,
+              "bursts": 4,
+              "interval": 0.5,
+              "offsets": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  3,
+                  0
+                ],
+                [
+                  0,
+                  3
+                ],
+                [
+                  -3,
+                  -3
+                ]
+              ]
+            },
+            {
+              "name": "왕의 심판",
+              "kind": "cone",
+              "radius": 7,
+              "windup": 1.45,
+              "cooldown": 2.8,
+              "damage": 1.4,
+              "angle": 1.6
+            }
+          ]
+        }
+      ],
+      "tint": "#d6b16c",
+      "element": "arcane",
+      "material": {
+        "sigil": 0.8
+      },
+      "raid": true
+    },
+    "world_highland": {
+      "name": "대지의 방랑자",
+      "sprite": "golem",
+      "hp": 2400,
+      "attack": 36,
+      "defense": 7,
+      "speed": 1.1,
+      "range": 2.6,
+      "xp": 160,
+      "gold": [
+        33,
+        50
+      ],
+      "size": 2.2,
+      "boss": true,
+      "group": "world_highland",
+      "drop": "golem_heart",
+      "patterns": [
+        {
+          "name": "육중한 강타",
+          "kind": "circle",
+          "radius": 2.3,
+          "windup": 1.1,
+          "cooldown": 2.7,
+          "damage": 1.15
+        },
+        {
+          "name": "땅울림",
+          "kind": "target",
+          "radius": 2,
+          "windup": 1.25,
+          "cooldown": 2.7,
+          "damage": 1
+        },
+        {
+          "name": "균열의 길",
+          "kind": "line",
+          "radius": 1.1,
+          "length": 6,
+          "windup": 1.4,
+          "cooldown": 3,
+          "damage": 1.3
+        },
+        {
+          "name": "채광 부채",
+          "kind": "cone",
+          "radius": 4.5,
+          "windup": 1.4,
+          "cooldown": 2.8,
+          "damage": 1.15,
+          "angle": 1.6
+        }
+      ],
+      "adds": [
+        "goblin",
+        "goblin"
+      ],
+      "element": "physical",
+      "material": {
+        "sigil": 0.8
+      },
+      "worldBoss": true
+    },
+    "world_snowfield": {
+      "name": "서리날개 고룡",
+      "sprite": "drake",
+      "hp": 3800,
+      "attack": 44,
+      "defense": 8,
+      "speed": 1.6,
+      "range": 4.1,
+      "xp": 250,
+      "gold": [
+        49,
+        75
+      ],
+      "size": 2.2,
+      "boss": true,
+      "group": "world_snowfield",
+      "drop": "drake_ember",
+      "patterns": [
+        {
+          "name": "화염 숨결",
+          "kind": "line",
+          "length": 7,
+          "radius": 1.4,
+          "windup": 1.35,
+          "cooldown": 3,
+          "damage": 1.25
+        },
+        {
+          "name": "불꽃 낙인",
+          "kind": "target",
+          "radius": 2.25,
+          "windup": 1.2,
+          "cooldown": 2.6,
+          "damage": 1
+        },
+        {
+          "name": "꼬리 휩쓸기",
+          "kind": "circle",
+          "radius": 2.9,
+          "windup": 1.25,
+          "cooldown": 3,
+          "damage": 1.1
+        },
+        {
+          "name": "연쇄 화염",
+          "kind": "target",
+          "radius": 1.8,
+          "windup": 1.3,
+          "cooldown": 2.7,
+          "damage": 1.1,
+          "bursts": 3,
+          "interval": 0.6,
+          "offsets": [
+            [
+              0,
+              0
+            ],
+            [
+              2,
+              0
+            ],
+            [
+              -2,
+              0
+            ]
+          ]
+        }
+      ],
+      "adds": [
+        "lizard",
+        "lizard"
+      ],
+      "element": "fire",
+      "material": {
+        "sigil": 0.8
+      },
+      "worldBoss": true
+    },
+    "duelist": {
+      "name": "결투 상대",
+      "sprite": "warrior",
+      "hp": 100,
+      "attack": 1,
+      "defense": 0,
+      "speed": 3,
+      "range": 1,
+      "windup": 1,
+      "cooldown": 1,
+      "kind": "circle",
+      "radius": 1,
+      "xp": 0,
+      "gold": [
+        0,
+        0
+      ],
+      "size": 1,
+      "element": "physical",
+      "ignoreCodex": true
     }
   },
   "quests": [
@@ -20637,6 +27793,15 @@ window.GAME_DB = {
               23
             ]
           ]
+        },
+        {
+          "id": "world_highland",
+          "monster": "world_highland",
+          "x": 39,
+          "y": 23,
+          "level": 19,
+          "guardian": false,
+          "respawn": 600
         }
       ],
       "resources": [
@@ -21301,6 +28466,15 @@ window.GAME_DB = {
               23
             ]
           ]
+        },
+        {
+          "id": "world_snowfield",
+          "monster": "world_snowfield",
+          "x": 39,
+          "y": 23,
+          "level": 25,
+          "guardian": false,
+          "respawn": 600
         }
       ],
       "resources": [
@@ -28285,6 +35459,500 @@ window.GAME_DB = {
       "waypoint": null,
       "group": "trial",
       "guardianTotal": 0
+    },
+    "raid_verdant": {
+      "id": "raid_verdant",
+      "name": "세계수의 심장",
+      "kind": "boss",
+      "width": 34,
+      "height": 28,
+      "level": 18,
+      "music": "boss",
+      "spawn": [
+        4.5,
+        14
+      ],
+      "tiles": [
+        "##################################",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "##################################"
+      ],
+      "props": [
+        {
+          "type": "ruin",
+          "x": 10,
+          "y": 3,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        },
+        {
+          "type": "ruin",
+          "x": 29,
+          "y": 4,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        },
+        {
+          "type": "ruin",
+          "x": 29,
+          "y": 24,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        }
+      ],
+      "npcs": [],
+      "portals": [
+        {
+          "id": "exit",
+          "name": "오크우드로",
+          "x": 2,
+          "y": 14,
+          "to": "oakwood",
+          "spawn": [
+            24,
+            14
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": false
+        }
+      ],
+      "spawns": [
+        {
+          "id": "raid_verdant_boss",
+          "monster": "raid_verdant",
+          "x": 23,
+          "y": 14,
+          "level": 18,
+          "guardian": false
+        }
+      ],
+      "resources": [],
+      "chests": [],
+      "discoveries": [],
+      "events": [],
+      "mechanisms": [
+        {
+          "id": "raid_verdant_ward_0",
+          "name": "공명 수호석 1",
+          "x": 9,
+          "y": 5,
+          "ward": true,
+          "description": "해제하면 군주의 피해 감소 12%가 사라집니다."
+        },
+        {
+          "id": "raid_verdant_ward_1",
+          "name": "공명 수호석 2",
+          "x": 28,
+          "y": 23,
+          "ward": true,
+          "description": "해제하면 군주의 피해 감소 12%가 사라집니다."
+        }
+      ],
+      "zones": [
+        {
+          "id": "raid_verdant_zone_0",
+          "x": 15,
+          "y": 8,
+          "kind": "circle",
+          "radius": 2,
+          "windup": 1.4,
+          "period": 7,
+          "damage": 43,
+          "offset": 0,
+          "name": "황혼 분출"
+        },
+        {
+          "id": "raid_verdant_zone_1",
+          "x": 18,
+          "y": 21,
+          "kind": "circle",
+          "radius": 2,
+          "windup": 1.4,
+          "period": 7,
+          "damage": 43,
+          "offset": 2,
+          "name": "황혼 분출"
+        }
+      ],
+      "waypoint": null,
+      "group": "raid_verdant",
+      "boss": "raid_verdant"
+    },
+    "raid_glacial": {
+      "id": "raid_glacial",
+      "name": "빙관의 파수꾼",
+      "kind": "boss",
+      "width": 34,
+      "height": 28,
+      "level": 32,
+      "music": "boss",
+      "spawn": [
+        4.5,
+        14
+      ],
+      "tiles": [
+        "##################################",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "##################################"
+      ],
+      "props": [
+        {
+          "type": "ruin",
+          "x": 10,
+          "y": 3,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        },
+        {
+          "type": "ruin",
+          "x": 29,
+          "y": 4,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        },
+        {
+          "type": "ruin",
+          "x": 29,
+          "y": 24,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        }
+      ],
+      "npcs": [],
+      "portals": [
+        {
+          "id": "exit",
+          "name": "오크우드로",
+          "x": 2,
+          "y": 14,
+          "to": "oakwood",
+          "spawn": [
+            24,
+            14
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": false
+        }
+      ],
+      "spawns": [
+        {
+          "id": "raid_glacial_boss",
+          "monster": "raid_glacial",
+          "x": 23,
+          "y": 14,
+          "level": 32,
+          "guardian": false
+        }
+      ],
+      "resources": [],
+      "chests": [],
+      "discoveries": [],
+      "events": [],
+      "mechanisms": [
+        {
+          "id": "raid_glacial_ward_0",
+          "name": "공명 수호석 1",
+          "x": 9,
+          "y": 5,
+          "ward": true,
+          "description": "해제하면 군주의 피해 감소 12%가 사라집니다."
+        },
+        {
+          "id": "raid_glacial_ward_1",
+          "name": "공명 수호석 2",
+          "x": 28,
+          "y": 23,
+          "ward": true,
+          "description": "해제하면 군주의 피해 감소 12%가 사라집니다."
+        }
+      ],
+      "zones": [
+        {
+          "id": "raid_glacial_zone_0",
+          "x": 15,
+          "y": 8,
+          "kind": "circle",
+          "radius": 2,
+          "windup": 1.4,
+          "period": 7,
+          "damage": 57,
+          "offset": 0,
+          "name": "황혼 분출"
+        },
+        {
+          "id": "raid_glacial_zone_1",
+          "x": 18,
+          "y": 21,
+          "kind": "circle",
+          "radius": 2,
+          "windup": 1.4,
+          "period": 7,
+          "damage": 57,
+          "offset": 2,
+          "name": "황혼 분출"
+        }
+      ],
+      "waypoint": null,
+      "group": "raid_glacial",
+      "boss": "raid_glacial"
+    },
+    "raid_astral": {
+      "id": "raid_astral",
+      "name": "왕관을 삼킨 별",
+      "kind": "boss",
+      "width": 34,
+      "height": 28,
+      "level": 48,
+      "music": "boss",
+      "spawn": [
+        4.5,
+        14
+      ],
+      "tiles": [
+        "##################################",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "##################################"
+      ],
+      "props": [
+        {
+          "type": "ruin",
+          "x": 10,
+          "y": 3,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        },
+        {
+          "type": "ruin",
+          "x": 29,
+          "y": 4,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        },
+        {
+          "type": "ruin",
+          "x": 29,
+          "y": 24,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        }
+      ],
+      "npcs": [],
+      "portals": [
+        {
+          "id": "exit",
+          "name": "오크우드로",
+          "x": 2,
+          "y": 14,
+          "to": "oakwood",
+          "spawn": [
+            24,
+            14
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": false
+        }
+      ],
+      "spawns": [
+        {
+          "id": "raid_astral_boss",
+          "monster": "raid_astral",
+          "x": 23,
+          "y": 14,
+          "level": 48,
+          "guardian": false
+        }
+      ],
+      "resources": [],
+      "chests": [],
+      "discoveries": [],
+      "events": [],
+      "mechanisms": [
+        {
+          "id": "raid_astral_ward_0",
+          "name": "공명 수호석 1",
+          "x": 9,
+          "y": 5,
+          "ward": true,
+          "description": "해제하면 군주의 피해 감소 12%가 사라집니다."
+        },
+        {
+          "id": "raid_astral_ward_1",
+          "name": "공명 수호석 2",
+          "x": 28,
+          "y": 23,
+          "ward": true,
+          "description": "해제하면 군주의 피해 감소 12%가 사라집니다."
+        }
+      ],
+      "zones": [
+        {
+          "id": "raid_astral_zone_0",
+          "x": 15,
+          "y": 8,
+          "kind": "circle",
+          "radius": 2,
+          "windup": 1.4,
+          "period": 7,
+          "damage": 73,
+          "offset": 0,
+          "name": "황혼 분출"
+        },
+        {
+          "id": "raid_astral_zone_1",
+          "x": 18,
+          "y": 21,
+          "kind": "circle",
+          "radius": 2,
+          "windup": 1.4,
+          "period": 7,
+          "damage": 73,
+          "offset": 2,
+          "name": "황혼 분출"
+        }
+      ],
+      "waypoint": null,
+      "group": "raid_astral",
+      "boss": "raid_astral"
+    },
+    "duel_arena": {
+      "id": "duel_arena",
+      "name": "왕국 훈련 결투장",
+      "kind": "dungeon",
+      "width": 34,
+      "height": 28,
+      "level": 10,
+      "music": "dungeon",
+      "spawn": [
+        3.5,
+        14.5
+      ],
+      "tiles": [
+        "##################################",
+        "#ffffffffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffffffffff#",
+        "#ffffff#fffffff#fffffff#fffffffff#",
+        "#ffffff#fffffff#fffffff#fffffffff#",
+        "#ffffff#fffffff#fffffff#fffffffff#",
+        "#ffffff#fffffff#fffffff#fffffffff#",
+        "#ffffff#fffffff#fffffff#fffffffff#",
+        "#ffffff#fffffff#fffffff#fffffffff#",
+        "#ffffff#fffffffffffffff#fffffffff#",
+        "#ffffff#fffffffffffffff#fffffffff#",
+        "#ffffff#fffffffffffffff#fffffffff#",
+        "#ffffff#fffffffffffffff#fffffffff#",
+        "#ffffffffffffffffffffff#fffffffff#",
+        "#ffffffffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffffffffff#",
+        "#ffffffffffffff#fffffff#fffffffff#",
+        "#ffffffffffffff#fffffffffffffffff#",
+        "#ffffff#fffffff#fffffffffffffffff#",
+        "#ffffff#fffffff#fffffffffffffffff#",
+        "#ffffff#fffffff#fffffffffffffffff#",
+        "#ffffff#fffffff#fffffffffffffffff#",
+        "#ffffff#fffffff#fffffff#fffffffff#",
+        "#ffffff#fffffff#fffffff#fffffffff#",
+        "#ffffff#fffffff#fffffff#fffffffff#",
+        "#ffffffffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffffffffff#",
+        "##################################"
+      ],
+      "props": [],
+      "npcs": [],
+      "portals": [],
+      "spawns": [],
+      "resources": [],
+      "chests": [],
+      "discoveries": [],
+      "events": [],
+      "mechanisms": [],
+      "zones": [],
+      "waypoint": null,
+      "group": "duel",
+      "guardianTotal": 0
     }
   },
   "mapKinds": {
@@ -29423,7 +37091,8 @@ window.GAME_DB = {
       "guardColor": "#e4a25e",
       "playerColor": "#fff5d4",
       "discoveryColor": "#ead28f",
-      "eventColor": "#d4a87e"
+      "eventColor": "#d4a87e",
+      "peerColor": "#d5e5bd"
     },
     "navigationMargin": 30,
     "navigationTop": 93,
@@ -29437,7 +37106,9 @@ window.GAME_DB = {
     "dashTrailAlpha": 0.25,
     "nightAlpha": 0.14,
     "discoveryScale": 3,
-    "eventScale": 3
+    "eventScale": 3,
+    "peerBarY": 7,
+    "peerNameY": 19
   },
   "audio": {
     "enabled": true,
@@ -30016,8 +37687,8 @@ window.GAME_DB = {
     "explore": "탐험 중",
     "questAvailable": "길드에서 다음 의뢰를 수주하세요.",
     "questReady": "보상 받기",
-    "accept": "의뢰 수락",
-    "claim": "보상 받기",
+    "accept": "수락",
+    "claim": "받기",
     "active": "진행 중",
     "complete": "완료",
     "available": "수락 가능",
@@ -30400,7 +38071,183 @@ window.GAME_DB = {
     "monster": "몬스터",
     "elite": "정예",
     "defeated": "누적 처치",
-    "growInvest": "이전 계열 수련 {count} 필요"
+    "growInvest": "이전 계열 수련 {count} 필요",
+    "online": "함께 모험",
+    "onlineTitle": "에버돈 온라인",
+    "onlineLogin": "접속",
+    "onlineRegister": "계정 만들기",
+    "onlineLogout": "온라인 나가기",
+    "onlineUsername": "계정 ID",
+    "onlinePassword": "비밀번호",
+    "onlineName": "캐릭터 이름",
+    "onlineLegacy": "현재 개인 모험 이관",
+    "onlineLegacyHint": "레벨·장비·의뢰를 이어갑니다. 이관 장비는 귀속되고, 거래 주화·온라인 성과는 서버 활동으로 얻습니다. 기존 개인 저장은 보존됩니다.",
+    "onlineHostNeeded": "온라인은 게임 서버 주소에서 실행할 수 있습니다. 서버를 실행한 뒤 해당 주소로 접속하세요.",
+    "onlineAddress": "게임 서버 주소",
+    "onlineOpenServer": "서버 주소 열기",
+    "onlineConnecting": "서버에 접속 중",
+    "onlineReconnecting": "연결 복구 중",
+    "onlineDisconnected": "서버 연결이 끊어졌습니다.",
+    "onlineConnected": "공유 월드",
+    "onlineError": "요청을 처리하지 못했습니다.",
+    "onlineInvalid": "요청 값이 올바르지 않습니다.",
+    "onlineLoginRequired": "먼저 온라인 계정으로 접속하세요.",
+    "onlineBadAuth": "계정 또는 비밀번호를 확인하세요.",
+    "onlineAccountExists": "사용 중인 계정 ID입니다.",
+    "onlineBusy": "잠시 후 다시 시도하세요.",
+    "onlineLimit": "접속 정원이 찼습니다.",
+    "onlineSameOrigin": "게임 서버와 같은 주소에서 접속하세요.",
+    "onlineSave": "서버 자동 저장",
+    "onlineServerOnly": "온라인 접속 후 이용할 수 있습니다.",
+    "onlineMapFull": "지역 접속 정원이 찼습니다.",
+    "onlineIncompatible": "클라이언트 버전을 갱신하세요.",
+    "worldPlayers": "같은 지역의 모험가",
+    "worldEmpty": "이 지역의 다른 모험가가 없습니다.",
+    "chatPlaceholder": "지역 대화",
+    "chatSend": "보내기",
+    "crowns": "왕국 주화",
+    "stars": "별 조각",
+    "shards": "정령 가루",
+    "honor": "명예",
+    "party": "파티",
+    "raid": "레이드",
+    "partyCreate": "파티 만들기",
+    "partyCode": "초대 코드",
+    "partyJoin": "코드로 참가",
+    "partyLeave": "파티 나가기",
+    "partyNotMember": "파티에 가입하세요.",
+    "partyNotLeader": "파티장만 실행할 수 있습니다.",
+    "partyFull": "파티 정원이 찼습니다.",
+    "partyMode": "공격대 전환",
+    "partyRole": "역할",
+    "partyRoleGate": "방어와 공격 역할을 포함한 2명이 필요합니다.",
+    "partyAlready": "이미 파티에 속해 있습니다.",
+    "raidEnter": "공동 원정 입장",
+    "raidLevel": "원정 레벨 조건이 부족합니다.",
+    "raidReady": "모든 파티원이 마을에서 준비해야 합니다.",
+    "raidReward": "주간 원정 보너스는 원정별 3회입니다. 전투 보상은 계속 얻습니다.",
+    "guild": "길드",
+    "guildName": "길드 이름",
+    "guildCreate": "길드 창설",
+    "guildJoin": "길드 가입",
+    "guildLeave": "길드 탈퇴",
+    "guildDonate": "공동 기금 기부",
+    "guildProject": "공동 목표",
+    "guildClaim": "공동 목표 보상",
+    "guildFull": "길드 정원이 찼습니다.",
+    "guildAlready": "이미 길드에 속해 있습니다.",
+    "guildOwnerLeave": "마지막 길드원일 때 해산할 수 있습니다.",
+    "guildAura": "길드 가호",
+    "market": "왕국 거래소",
+    "marketPrice": "판매가 · 왕국 주화",
+    "marketList": "판매 등록",
+    "marketBuy": "구매",
+    "marketCancel": "등록 취소",
+    "marketEmpty": "등록된 장비가 없습니다.",
+    "marketHint": "서버에서 획득한 미귀속 장비를 거래합니다. 등록비 2주화, 거래세 6%. 물품과 대금은 우편으로 지급됩니다.",
+    "marketOwn": "내 등록",
+    "marketBound": "귀속·장착·즐겨찾기 장비는 거래할 수 없습니다.",
+    "marketExpired": "이미 판매되었거나 만료된 등록입니다.",
+    "marketSlots": "판매 등록 한도입니다.",
+    "mail": "우편",
+    "mailClaim": "수령",
+    "mailEmpty": "받을 우편이 없습니다.",
+    "mailCapacity": "가방 공간을 확보하세요.",
+    "mailSale": "거래소 판매 대금",
+    "mailPurchase": "거래소 구매 장비",
+    "mailReturn": "보관 장비 반환",
+    "mailTrade": "개인 거래 완료",
+    "trade": "개인 거래",
+    "tradeInvite": "거래 요청",
+    "tradeOffer": "제안 올리기",
+    "tradeConfirm": "현재 제안 확정",
+    "tradeCancel": "거래 취소",
+    "tradeIncoming": "거래 요청이 도착했습니다.",
+    "tradeWaiting": "상대의 확정을 기다립니다.",
+    "tradeRevised": "제안이 바뀌었습니다. 다시 확인하세요.",
+    "tradeHint": "양쪽이 같은 제안을 확정하면 교환됩니다. 제안한 물품·주화는 거래가 끝날 때까지 보관됩니다.",
+    "pvp": "훈련 결투",
+    "pvpInvite": "결투 신청",
+    "pvpAccept": "수락",
+    "pvpDecline": "거절",
+    "pvpIncoming": "결투 신청이 도착했습니다.",
+    "pvpHint": "서로 수락한 1:1 결투입니다. 기본 전투 수치를 정규화하고 전직·기술은 유지합니다. 물약·장비·기술 변경은 제한됩니다. 패배해도 장비·경험치·금화를 잃지 않습니다.",
+    "pvpWins": "승리",
+    "pvpRating": "대전 점수",
+    "pvpActive": "결투 진행 중",
+    "pvpWin": "결투 승리",
+    "pvpLoss": "결투 패배",
+    "pvpDraw": "무승부",
+    "pvpBusy": "현재 결투할 수 없습니다.",
+    "achievements": "업적",
+    "achievementClaim": "달성 보상",
+    "expeditionBook": "원정 수첩",
+    "summon": "정령 소환",
+    "summonHint": "게임에서 얻은 별 조각만 사용합니다. 일반 78% · 희귀 20% · 전설 2%. 50회 안에 전설이 확정됩니다. 중복 정령은 가루 5개로 전환됩니다.",
+    "summonOne": "1회 소환",
+    "summonTen": "10회 소환",
+    "summonPity": "전설 보장까지",
+    "summonResults": "소환 결과",
+    "spiritEquip": "정령 동행",
+    "spiritActive": "동행 정령",
+    "shardExchange": "가루 30개 → 별 조각 1개",
+    "collection": "장비 수집",
+    "bound": "귀속",
+    "tradeable": "거래 가능",
+    "mastery": "장기 숙련",
+    "masteryHint": "Lv50 이후 경험치가 숙련으로 누적됩니다. 기존 레벨과 장비는 초기화되지 않습니다.",
+    "masteryPoints": "숙련점",
+    "masteryLearn": "숙련 투자",
+    "element": "속성",
+    "setEffect": "세트 효과",
+    "engrave": "무기 각인",
+    "engraveHint": "대장간에서 속성을 바꿉니다. 각인한 장비는 귀속됩니다.",
+    "engraveChoose": "각인할 무기를 선택하세요.",
+    "skillBranchLocked": "선택한 전직의 전용 기술입니다.",
+    "skillElement": "기술 속성",
+    "partySupport": "파티 지원",
+    "serverStarted": "서버 실행 중",
+    "worldBoss": "공유 월드 보스",
+    "kingdomBoard": "왕국 현황",
+    "onlineInvite": "신청",
+    "onlineReturn": "개인 모험으로 돌아가기",
+    "saveTransferInvalid": "이관할 개인 저장을 확인하세요.",
+    "onlineActionBlocked": "결투 중에는 이 기능을 사용할 수 없습니다.",
+    "onlineItemLocked": "다른 거래에서 보관 중인 장비입니다.",
+    "notEnoughCrowns": "왕국 주화가 부족합니다.",
+    "notEnoughStars": "별 조각이 부족합니다.",
+    "noReward": "아직 보상 조건을 달성하지 못했습니다.",
+    "leaderboard": "왕국 순위",
+    "loading": "불러오는 중",
+    "onlineLive": "온라인에서는 메뉴를 열어도 전투가 계속됩니다.",
+    "onlineContinue": "서버 캐릭터 접속",
+    "onlineFresh": "온라인 새 캐릭터",
+    "onlineLegacyDisabled": "이 서버는 신규 온라인 캐릭터로 시작합니다. 개인 모험 저장은 그대로 유지됩니다.",
+    "onlineLegacyAllowed": "개인 서버 이관 허용",
+    "gearSource": "장비 출처",
+    "summonDuplicate": "중복 · 가루 +5",
+    "guildLevel": "길드 단계",
+    "partyHelp": "초대 코드를 공유해 같은 파티로 참가하세요. 공격대로 전환하면 8명까지 함께할 수 있습니다.",
+    "tradeCoins": "제안할 왕국 주화",
+    "tradeSelect": "보낼 장비",
+    "marketSelect": "판매할 장비",
+    "masteryMax": "최대 수련",
+    "onlineServerExample": "https://tactics.kjmalswo-804.workers.dev",
+    "onlineAuthHint": "ID는 영문·숫자·밑줄 3~20자, 비밀번호는 8자 이상입니다.",
+    "onlineLoginHint": "계정으로 접속하면 서버에 저장한 캐릭터가 이어집니다.",
+    "raidHint": "공격대장만 새 원정을 시작할 수 있습니다. 이미 진행 중인 원정에는 마을에서 재합류할 수 있습니다.",
+    "guildGoalKills": "공동 토벌",
+    "guildGoalRaids": "레이드 완주",
+    "guildGoalDonation": "공동 기금",
+    "wallet": "보유 재화",
+    "onlineRequestPending": "서버 처리 중",
+    "itemRune": "각인",
+    "onlineStatus": "접속 상태",
+    "chat": "지역 대화",
+    "guildCostHint": "원정에서 모은 왕국 주화로 길드를 창설하고 공동 목표를 달성하세요.",
+    "groupEntry": "함께 모험의 공동 원정에서 입장",
+    "elementHint": "화염 → 자연 → 비전 → 냉기 → 화염. 유리한 속성은 피해 +25%, 불리하면 -20%.",
+    "mailLoot": "가방 초과 획득 장비"
   },
   "_docs": {
     "source": "game-db.js는 모든 콘텐츠·수치·지도·그림·음악·문구의 단일 원본입니다.",
@@ -30412,7 +38259,8 @@ window.GAME_DB = {
     "openWorld": "maps[].discoveries/events, resources, 일정이 있는 npcs와 patrol spawns가 오픈월드 콘텐츠입니다. discoveries 영구 보너스·사건 상태·상인 재고·추가된 필드 스폰은 저장·이전 저장 보완을 지원합니다.",
     "advancement": "branches의 parent/stage/class로 단일 전직 계보를 정의합니다. 단계별 한 개만 선택하고 talents.minLevel과 선행 포인트를 검사합니다. 마을에서 유료 전직 초기화 시 선택도 모두 해제합니다.",
     "content": "주요 의뢰의 챕터·선택 보상, 지역별 2층 던전, 연전 waves, phases/patterns, mechanisms/zones는 실제 전투와 연결됩니다.",
-    "onlineReadiness": "콘텐츠 ID와 캐릭터 영구 진행(전직·의뢰·평판·동료·도감), 지역 인스턴스(적·사건·장치·상자), 시간 기반 반복 의뢰를 구분합니다. 실제 멀티플레이/서버/거래는 아직 구현하지 않습니다. 이후 권위 서버가 같은 검증 경로를 사용하도록 규칙과 보상을 DB에서 관리합니다."
+    "onlineReadiness": "콘텐츠 ID와 캐릭터 영구 진행(전직·의뢰·평판·동료·도감), 지역 인스턴스(적·사건·장치·상자), 시간 기반 반복 의뢰를 구분합니다. 실제 멀티플레이/서버/거래는 아직 구현하지 않습니다. 이후 권위 서버가 같은 검증 경로를 사용하도록 규칙과 보상을 DB에서 관리합니다.",
+    "online": "공개 서버는 Cloudflare Worker + Durable Objects SQLite, 실시간 입력·월드 상태는 WebSocket입니다. 로컬 Node 어댑터는 HTTP/SSE + SQLite로 같은 권위 엔진을 사용합니다. 서버만 이동·피해·보상·거래·소환을 확정합니다. 공개 저장 이관은 기본 차단하고 개인 저장은 보존합니다. 서버·경제·역할·확률은 online 및 관련 DB 키에서 관리합니다."
   },
   "comparisonStats": [
     "attack",
@@ -30430,7 +38278,12 @@ window.GAME_DB = {
     "cooldownRate",
     "shieldOnSkill",
     "lifesteal",
-    "thorns"
+    "thorns",
+    "physicalResist",
+    "fireResist",
+    "frostResist",
+    "natureResist",
+    "arcaneResist"
   ],
   "controlLabels": {
     "potion": "R",
@@ -30452,6 +38305,13 @@ window.GAME_DB = {
       "uncommon": 28,
       "rare": 1.9,
       "epic": 0.1
+    },
+    "raid": {
+      "common": 10,
+      "uncommon": 77,
+      "rare": 11.9,
+      "epic": 1.05,
+      "legendary": 0.05
     }
   },
   "consumables": [
@@ -31551,6 +39411,1671 @@ window.GAME_DB = {
         "eclipse_depth_2",
         "eclipse_throne"
       ]
+    },
+    {
+      "id": "online",
+      "name": "공동 원정",
+      "maps": [
+        "raid_verdant",
+        "raid_glacial",
+        "raid_astral",
+        "duel_arena"
+      ]
+    }
+  ],
+  "online": {
+    "protocol": 1,
+    "port": 8080,
+    "maxPlayers": 64,
+    "roomPlayers": 32,
+    "tickMs": 50,
+    "frameMs": 100,
+    "snapshotMs": 1000,
+    "persistMs": 5000,
+    "inputTimeout": 0.45,
+    "offlineGrace": 15,
+    "roomIdle": 300,
+    "maxCatchUp": 4,
+    "shareRadius": 14,
+    "partyCap": 4,
+    "raidCap": 8,
+    "partyXpBonus": 0.12,
+    "maxBodyBytes": 2097152,
+    "maxName": 14,
+    "chatMax": 120,
+    "chatHistory": 40,
+    "chatCooldown": 2,
+    "rateWindow": 1,
+    "inputRate": 24,
+    "actionRate": 12,
+    "authWindow": 60,
+    "authRate": 8,
+    "maxInvites": 10,
+    "inviteDuration": 45,
+    "sessionDays": 30,
+    "passwordMin": 8,
+    "passwordMax": 128,
+    "usernamePattern": "^[A-Za-z0-9_]{3,20}$",
+    "usernameMax": 20,
+    "scryptN": 16384,
+    "scryptR": 8,
+    "scryptP": 1,
+    "scryptMaxmem": 33554432,
+    "saltBytes": 16,
+    "sessionBytes": 32,
+    "cookie": "everdawn_session",
+    "epoch": "2026-01-01T00:00:00Z",
+    "marketDuration": 86400,
+    "marketFee": 2,
+    "marketTax": 0.06,
+    "marketMinPrice": 1,
+    "marketMaxPrice": 100000,
+    "marketSlots": 8,
+    "tradeItems": 5,
+    "mailLimit": 80,
+    "guildCost": 50,
+    "guildCap": 30,
+    "guildMaxLevel": 10,
+    "guildGoalKills": 150,
+    "guildGoalRaids": 3,
+    "guildGoalDonation": 120,
+    "guildAuraPerLevel": 0.003,
+    "guildAuraCap": 0.03,
+    "pvpRewardDailyCap": 3,
+    "pvpWinHonor": 10,
+    "pvpLossHonor": 2,
+    "pvpWinCrowns": 8,
+    "pvpRatingStep": 16,
+    "pvpStartRating": 1000,
+    "pvpInvulnerability": 0.12,
+    "pvpModifierMin": 0.85,
+    "pvpModifierMax": 1.15,
+    "pvpDamageReductionCap": 0.3,
+    "pvpLifestealCap": 0.04,
+    "pvpMatchSeconds": 180,
+    "pvpDisconnectGrace": 10,
+    "crownsKillChance": 0.15,
+    "crownsKill": 1,
+    "crownsBoss": 4,
+    "crownsRaid": 12,
+    "starsRaid": 1,
+    "crownsEvent": 3,
+    "crownsQuest": 2,
+    "weeklyRaidRewardCap": 3,
+    "elementStrong": 1.25,
+    "elementWeak": 0.8,
+    "resistCap": 0.5,
+    "masteryCap": 100,
+    "masteryXpBase": 1800,
+    "masteryXpGrowth": 1.045,
+    "drawCost": 1,
+    "drawTen": 10,
+    "drawPity": 50,
+    "duplicateShards": 5,
+    "shardExchange": 30,
+    "predictionLerp": 12,
+    "predictionSnap": 2.5,
+    "retryMs": 2000,
+    "clientInputMs": 100,
+    "maxCatalogRows": 24,
+    "roles": [
+      {
+        "id": "tank",
+        "name": "방어"
+      },
+      {
+        "id": "damage",
+        "name": "공격"
+      },
+      {
+        "id": "support",
+        "name": "지원"
+      }
+    ],
+    "tabs": [
+      {
+        "id": "world",
+        "name": "월드"
+      },
+      {
+        "id": "party",
+        "name": "파티·레이드"
+      },
+      {
+        "id": "guild",
+        "name": "길드"
+      },
+      {
+        "id": "market",
+        "name": "거래소"
+      },
+      {
+        "id": "mail",
+        "name": "우편"
+      },
+      {
+        "id": "pvp",
+        "name": "결투"
+      },
+      {
+        "id": "records",
+        "name": "성과·수첩"
+      },
+      {
+        "id": "summon",
+        "name": "정령 소환"
+      },
+      {
+        "id": "mastery",
+        "name": "숙련"
+      }
+    ],
+    "actionBindings": {
+      "advance": {
+        "method": "advance",
+        "args": [
+          "id"
+        ],
+        "refresh": true
+      },
+      "learn": {
+        "method": "learn",
+        "args": [
+          "id"
+        ],
+        "refresh": true
+      },
+      "respec": {
+        "method": "respec",
+        "args": [],
+        "open": "talents"
+      },
+      "equip-skill": {
+        "method": "equipSkill",
+        "args": [
+          "skillSlot",
+          "id"
+        ],
+        "refresh": true
+      },
+      "equip": {
+        "method": "equip",
+        "args": [
+          "id"
+        ],
+        "refresh": true
+      },
+      "unequip": {
+        "method": "unequip",
+        "args": [
+          "id"
+        ],
+        "refresh": true
+      },
+      "favorite": {
+        "method": "favorite",
+        "args": [
+          "id"
+        ],
+        "refresh": true
+      },
+      "salvage": {
+        "method": "dispose",
+        "args": [
+          "id",
+          "literal:salvage"
+        ],
+        "refresh": true
+      },
+      "sell": {
+        "method": "dispose",
+        "args": [
+          "id",
+          "literal:sell"
+        ],
+        "refresh": true
+      },
+      "upgrade": {
+        "method": "upgrade",
+        "args": [
+          "id"
+        ],
+        "refresh": true
+      },
+      "craft": {
+        "method": "craft",
+        "args": [
+          "id"
+        ],
+        "refresh": true
+      },
+      "buy": {
+        "method": "buy",
+        "args": [
+          "id"
+        ],
+        "refresh": true
+      },
+      "rest": {
+        "method": "rest",
+        "args": [
+          "false"
+        ],
+        "refresh": true
+      },
+      "meal": {
+        "method": "rest",
+        "args": [
+          "true"
+        ],
+        "refresh": true
+      },
+      "bless": {
+        "method": "bless",
+        "args": [
+          "id"
+        ],
+        "refresh": true
+      },
+      "accept": {
+        "method": "acceptQuest",
+        "args": [
+          "id"
+        ],
+        "refresh": true
+      },
+      "claim": {
+        "method": "completeQuest",
+        "args": [
+          "id",
+          "choice"
+        ],
+        "refresh": true
+      },
+      "discover": {
+        "method": "discover",
+        "args": [
+          "id"
+        ],
+        "refresh": true
+      },
+      "start-event": {
+        "method": "startEvent",
+        "args": [
+          "id"
+        ],
+        "close": true
+      },
+      "claim-event": {
+        "method": "claimEvent",
+        "args": [
+          "id"
+        ],
+        "refresh": true
+      },
+      "select-companion": {
+        "method": "selectCompanion",
+        "args": [
+          "id"
+        ],
+        "refresh": true
+      },
+      "codex-claim": {
+        "method": "claimCodex",
+        "args": [
+          "id",
+          "index"
+        ],
+        "refresh": true
+      },
+      "start-trial": {
+        "method": "startTrial",
+        "args": [
+          "id"
+        ],
+        "close": true
+      },
+      "claim-trial": {
+        "method": "claimTrial",
+        "args": [],
+        "refresh": true
+      },
+      "travel": {
+        "method": "travel",
+        "args": [
+          "id"
+        ],
+        "close": true
+      },
+      "enter-dungeon": {
+        "method": "enterDungeon",
+        "args": [
+          "entryPortal",
+          "tier",
+          "expeditionRule"
+        ],
+        "close": true
+      },
+      "potion": {
+        "method": "potion",
+        "args": []
+      },
+      "manaPotion": {
+        "method": "useConsumable",
+        "args": [
+          "manaId"
+        ]
+      },
+      "use-supply": {
+        "method": "useConsumable",
+        "args": [
+          "id"
+        ],
+        "refresh": true
+      },
+      "dash": {
+        "method": "dash",
+        "args": []
+      },
+      "interact": {
+        "method": "interact",
+        "args": [],
+        "interaction": true
+      },
+      "engrave": {
+        "method": "engrave",
+        "args": [
+          "item",
+          "id"
+        ],
+        "refresh": true
+      },
+      "mastery-learn": {
+        "method": "learnMastery",
+        "args": [
+          "id"
+        ],
+        "refresh": true
+      }
+    },
+    "pvpStats": {
+      "warrior": {
+        "hp": 950,
+        "mp": 180,
+        "attack": 90,
+        "spell": 65,
+        "defense": 12,
+        "speed": 3.2,
+        "range": 1.25
+      },
+      "archer": {
+        "hp": 720,
+        "mp": 150,
+        "attack": 100,
+        "spell": 55,
+        "defense": 7,
+        "speed": 3.2,
+        "range": 6
+      },
+      "magician": {
+        "hp": 660,
+        "mp": 260,
+        "attack": 45,
+        "spell": 130,
+        "defense": 6,
+        "speed": 2.8,
+        "range": 5.5
+      },
+      "guardian": {
+        "hp": 1200,
+        "mp": 210,
+        "attack": 58,
+        "spell": 78,
+        "defense": 19,
+        "speed": 2.7,
+        "range": 1.3
+      }
+    },
+    "codeBytes": 4,
+    "passwordBytes": 32,
+    "substeps": 2,
+    "dayMs": 86400000,
+    "weekMs": 604800000,
+    "socialRadius": 6,
+    "worldBossRespawn": 600,
+    "contributionTime": 30,
+    "raidBasePlayers": 2,
+    "raidHpPerPlayer": 0.3,
+    "dungeonHpPerPlayer": 0.45,
+    "tauntScale": 10,
+    "maxArgs": 4,
+    "guildNameMin": 2,
+    "guildProjectReward": {
+      "stars": 1,
+      "crowns": 5
+    },
+    "pvpManaRegen": 3,
+    "pvpCritCap": 0.3,
+    "duelSpawns": [
+      [
+        10,
+        14
+      ],
+      [
+        24,
+        14
+      ]
+    ],
+    "duelStartDelay": 3,
+    "rankingLimit": 10,
+    "startStars": 3,
+    "streamBackpressure": 1048576,
+    "duelMethods": [
+      "dash"
+    ],
+    "masteryMinLevel": 50,
+    "statusElements": {
+      "burn": "fire",
+      "poison": "nature"
+    },
+    "drawMaximum": 10,
+    "marketDefaultPrice": 10,
+    "guildDonationDefault": 10,
+    "tradeSelectRows": 4,
+    "realmId": "everdawn-main-v1",
+    "pbkdf2Iterations": 100000,
+    "socketMessageBytes": 1024,
+    "claimedMailHistory": 20,
+    "requestTimeoutMs": 6000,
+    "publicUrl": "https://tactics.kjmalswo-804.workers.dev"
+  },
+  "elements": [
+    {
+      "id": "physical",
+      "name": "물리",
+      "color": "#b6a082"
+    },
+    {
+      "id": "fire",
+      "name": "화염",
+      "color": "#c76743"
+    },
+    {
+      "id": "frost",
+      "name": "냉기",
+      "color": "#78adbc"
+    },
+    {
+      "id": "nature",
+      "name": "자연",
+      "color": "#66966a"
+    },
+    {
+      "id": "arcane",
+      "name": "비전",
+      "color": "#9e79b0"
+    }
+  ],
+  "elementCycle": {
+    "fire": "nature",
+    "nature": "arcane",
+    "arcane": "frost",
+    "frost": "fire"
+  },
+  "equipmentSets": [
+    {
+      "id": "ember",
+      "name": "불씨 성전",
+      "bonuses": [
+        {
+          "count": 2,
+          "stats": [
+            {
+              "stat": "skillDamage",
+              "value": 1.07,
+              "op": "multiply"
+            }
+          ]
+        },
+        {
+          "count": 4,
+          "stats": [
+            {
+              "stat": "burnChance",
+              "value": 0.09,
+              "op": "add"
+            },
+            {
+              "stat": "hp",
+              "value": 0.95,
+              "op": "multiply"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "glacier",
+      "name": "빙관 맹약",
+      "bonuses": [
+        {
+          "count": 2,
+          "stats": [
+            {
+              "stat": "cooldownRate",
+              "value": 0.96,
+              "op": "multiply"
+            }
+          ]
+        },
+        {
+          "count": 4,
+          "stats": [
+            {
+              "stat": "shieldOnSkill",
+              "value": 3,
+              "op": "add"
+            },
+            {
+              "stat": "attackSpeed",
+              "value": 0.96,
+              "op": "multiply"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wild",
+      "name": "야생 수호",
+      "bonuses": [
+        {
+          "count": 2,
+          "stats": [
+            {
+              "stat": "hp",
+              "value": 1.07,
+              "op": "multiply"
+            }
+          ]
+        },
+        {
+          "count": 4,
+          "stats": [
+            {
+              "stat": "lifesteal",
+              "value": 0.018,
+              "op": "add"
+            },
+            {
+              "stat": "spell",
+              "value": 0.96,
+              "op": "multiply"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "astral",
+      "name": "성운 기록",
+      "bonuses": [
+        {
+          "count": 2,
+          "stats": [
+            {
+              "stat": "mp",
+              "value": 1.1,
+              "op": "multiply"
+            }
+          ]
+        },
+        {
+          "count": 4,
+          "stats": [
+            {
+              "stat": "spell",
+              "value": 1.09,
+              "op": "multiply"
+            },
+            {
+              "stat": "defense",
+              "value": -2,
+              "op": "add"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bastion",
+      "name": "왕국 성채",
+      "bonuses": [
+        {
+          "count": 2,
+          "stats": [
+            {
+              "stat": "defense",
+              "value": 3,
+              "op": "add"
+            }
+          ]
+        },
+        {
+          "count": 4,
+          "stats": [
+            {
+              "stat": "damageReduction",
+              "value": 0.04,
+              "op": "add"
+            },
+            {
+              "stat": "speed",
+              "value": 0.96,
+              "op": "multiply"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "storm",
+      "name": "폭풍 사냥",
+      "bonuses": [
+        {
+          "count": 2,
+          "stats": [
+            {
+              "stat": "attackSpeed",
+              "value": 1.04,
+              "op": "multiply"
+            }
+          ]
+        },
+        {
+          "count": 4,
+          "stats": [
+            {
+              "stat": "crit",
+              "value": 0.04,
+              "op": "add"
+            },
+            {
+              "stat": "hp",
+              "value": 0.95,
+              "op": "multiply"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dusk",
+      "name": "황혼 유산",
+      "bonuses": [
+        {
+          "count": 2,
+          "stats": [
+            {
+              "stat": "skillDamage",
+              "value": 1.07,
+              "op": "multiply"
+            }
+          ]
+        },
+        {
+          "count": 4,
+          "stats": [
+            {
+              "stat": "skillEcho",
+              "value": 0.04,
+              "op": "add"
+            },
+            {
+              "stat": "manaRegen",
+              "value": -0.2,
+              "op": "add"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dawn",
+      "name": "여명 순례",
+      "bonuses": [
+        {
+          "count": 2,
+          "stats": [
+            {
+              "stat": "hp",
+              "value": 1.05,
+              "op": "multiply"
+            }
+          ]
+        },
+        {
+          "count": 4,
+          "stats": [
+            {
+              "stat": "potionPower",
+              "value": 1.12,
+              "op": "multiply"
+            },
+            {
+              "stat": "spell",
+              "value": 1.04,
+              "op": "multiply"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "runes": [
+    {
+      "id": "physical",
+      "name": "물리 각인",
+      "element": "physical",
+      "gold": 180,
+      "materials": {
+        "crystal": 8,
+        "ore": 6
+      },
+      "stats": [
+        {
+          "stat": "physicalResist",
+          "value": 0.06,
+          "op": "add"
+        },
+        {
+          "stat": "attackSpeed",
+          "value": 0.985,
+          "op": "multiply"
+        }
+      ],
+      "description": "무기 속성 변경 / 해당 속성 저항 +6%p / 공격 속도 -1.5%"
+    },
+    {
+      "id": "fire",
+      "name": "화염 각인",
+      "element": "fire",
+      "gold": 180,
+      "materials": {
+        "crystal": 8,
+        "ore": 6
+      },
+      "stats": [
+        {
+          "stat": "fireResist",
+          "value": 0.06,
+          "op": "add"
+        },
+        {
+          "stat": "attackSpeed",
+          "value": 0.985,
+          "op": "multiply"
+        }
+      ],
+      "description": "무기 속성 변경 / 해당 속성 저항 +6%p / 공격 속도 -1.5%"
+    },
+    {
+      "id": "frost",
+      "name": "냉기 각인",
+      "element": "frost",
+      "gold": 180,
+      "materials": {
+        "crystal": 8,
+        "ore": 6
+      },
+      "stats": [
+        {
+          "stat": "frostResist",
+          "value": 0.06,
+          "op": "add"
+        },
+        {
+          "stat": "attackSpeed",
+          "value": 0.985,
+          "op": "multiply"
+        }
+      ],
+      "description": "무기 속성 변경 / 해당 속성 저항 +6%p / 공격 속도 -1.5%"
+    },
+    {
+      "id": "nature",
+      "name": "자연 각인",
+      "element": "nature",
+      "gold": 180,
+      "materials": {
+        "crystal": 8,
+        "ore": 6
+      },
+      "stats": [
+        {
+          "stat": "natureResist",
+          "value": 0.06,
+          "op": "add"
+        },
+        {
+          "stat": "attackSpeed",
+          "value": 0.985,
+          "op": "multiply"
+        }
+      ],
+      "description": "무기 속성 변경 / 해당 속성 저항 +6%p / 공격 속도 -1.5%"
+    },
+    {
+      "id": "arcane",
+      "name": "비전 각인",
+      "element": "arcane",
+      "gold": 180,
+      "materials": {
+        "crystal": 8,
+        "ore": 6
+      },
+      "stats": [
+        {
+          "stat": "arcaneResist",
+          "value": 0.06,
+          "op": "add"
+        },
+        {
+          "stat": "attackSpeed",
+          "value": 0.985,
+          "op": "multiply"
+        }
+      ],
+      "description": "무기 속성 변경 / 해당 속성 저항 +6%p / 공격 속도 -1.5%"
+    }
+  ],
+  "masteryTracks": [
+    {
+      "id": "vitality",
+      "name": "생명 수련",
+      "maxRank": 10,
+      "stats": [
+        {
+          "stat": "hp",
+          "value": 1.01,
+          "op": "multiply"
+        }
+      ]
+    },
+    {
+      "id": "mind",
+      "name": "정신 수련",
+      "maxRank": 10,
+      "stats": [
+        {
+          "stat": "mp",
+          "value": 1.01,
+          "op": "multiply"
+        }
+      ]
+    },
+    {
+      "id": "blade",
+      "name": "무기 수련",
+      "maxRank": 10,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 1.01,
+          "op": "multiply"
+        }
+      ]
+    },
+    {
+      "id": "spell",
+      "name": "주문 수련",
+      "maxRank": 10,
+      "stats": [
+        {
+          "stat": "spell",
+          "value": 1.01,
+          "op": "multiply"
+        }
+      ]
+    },
+    {
+      "id": "armor",
+      "name": "갑주 수련",
+      "maxRank": 10,
+      "stats": [
+        {
+          "stat": "defense",
+          "value": 0.3,
+          "op": "add"
+        }
+      ]
+    },
+    {
+      "id": "flow",
+      "name": "마력 순환",
+      "maxRank": 10,
+      "stats": [
+        {
+          "stat": "manaRegen",
+          "value": 0.04,
+          "op": "add"
+        }
+      ]
+    },
+    {
+      "id": "focus",
+      "name": "집중",
+      "maxRank": 10,
+      "stats": [
+        {
+          "stat": "crit",
+          "value": 0.002,
+          "op": "add"
+        }
+      ]
+    },
+    {
+      "id": "pace",
+      "name": "발걸음",
+      "maxRank": 10,
+      "stats": [
+        {
+          "stat": "speed",
+          "value": 1.005,
+          "op": "multiply"
+        }
+      ]
+    },
+    {
+      "id": "recovery",
+      "name": "물약 연구",
+      "maxRank": 10,
+      "stats": [
+        {
+          "stat": "potionPower",
+          "value": 1.01,
+          "op": "multiply"
+        }
+      ]
+    },
+    {
+      "id": "ward",
+      "name": "대비",
+      "maxRank": 10,
+      "stats": [
+        {
+          "stat": "damageReduction",
+          "value": 0.002,
+          "op": "add"
+        }
+      ]
+    }
+  ],
+  "spirits": [
+    {
+      "id": "wisp",
+      "name": "작은 빛",
+      "element": "arcane",
+      "rarity": "common",
+      "weight": 15.6,
+      "stats": [
+        {
+          "stat": "hp",
+          "value": 1.02,
+          "op": "multiply"
+        }
+      ],
+      "color": "#9e79b0"
+    },
+    {
+      "id": "fox",
+      "name": "불꽃 여우",
+      "element": "fire",
+      "rarity": "common",
+      "weight": 15.6,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 1.02,
+          "op": "multiply"
+        }
+      ],
+      "color": "#c76743"
+    },
+    {
+      "id": "owl",
+      "name": "눈꽃 부엉이",
+      "element": "frost",
+      "rarity": "common",
+      "weight": 15.6,
+      "stats": [
+        {
+          "stat": "mp",
+          "value": 1.02,
+          "op": "multiply"
+        }
+      ],
+      "color": "#78adbc"
+    },
+    {
+      "id": "seed",
+      "name": "숲의 씨앗",
+      "element": "nature",
+      "rarity": "common",
+      "weight": 15.6,
+      "stats": [
+        {
+          "stat": "spell",
+          "value": 1.02,
+          "op": "multiply"
+        }
+      ],
+      "color": "#66966a"
+    },
+    {
+      "id": "golem",
+      "name": "돌의 아이",
+      "element": "physical",
+      "rarity": "common",
+      "weight": 15.6,
+      "stats": [
+        {
+          "stat": "defense",
+          "value": 1,
+          "op": "add"
+        }
+      ],
+      "color": "#b6a082"
+    },
+    {
+      "id": "salamander",
+      "name": "불씨 도마뱀",
+      "element": "fire",
+      "rarity": "rare",
+      "weight": 4.0,
+      "stats": [
+        {
+          "stat": "hp",
+          "value": 1.02,
+          "op": "multiply"
+        }
+      ],
+      "color": "#c76743"
+    },
+    {
+      "id": "sprite",
+      "name": "겨울 요정",
+      "element": "frost",
+      "rarity": "rare",
+      "weight": 4.0,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 1.02,
+          "op": "multiply"
+        }
+      ],
+      "color": "#78adbc"
+    },
+    {
+      "id": "dryad",
+      "name": "어린 드리아드",
+      "element": "nature",
+      "rarity": "rare",
+      "weight": 4.0,
+      "stats": [
+        {
+          "stat": "mp",
+          "value": 1.02,
+          "op": "multiply"
+        }
+      ],
+      "color": "#66966a"
+    },
+    {
+      "id": "comet",
+      "name": "별의 꼬리",
+      "element": "arcane",
+      "rarity": "rare",
+      "weight": 4.0,
+      "stats": [
+        {
+          "stat": "spell",
+          "value": 1.02,
+          "op": "multiply"
+        }
+      ],
+      "color": "#9e79b0"
+    },
+    {
+      "id": "aegis",
+      "name": "황금 방패",
+      "element": "physical",
+      "rarity": "rare",
+      "weight": 4.0,
+      "stats": [
+        {
+          "stat": "defense",
+          "value": 1,
+          "op": "add"
+        }
+      ],
+      "color": "#b6a082"
+    },
+    {
+      "id": "phoenix",
+      "name": "여명의 불사조",
+      "element": "fire",
+      "rarity": "legendary",
+      "weight": 1.0,
+      "stats": [
+        {
+          "stat": "hp",
+          "value": 1.02,
+          "op": "multiply"
+        }
+      ],
+      "color": "#c76743"
+    },
+    {
+      "id": "moon",
+      "name": "월광의 정령",
+      "element": "arcane",
+      "rarity": "legendary",
+      "weight": 1.0,
+      "stats": [
+        {
+          "stat": "attack",
+          "value": 1.02,
+          "op": "multiply"
+        }
+      ],
+      "color": "#9e79b0"
+    }
+  ],
+  "achievements": [
+    {
+      "id": "kills_50",
+      "name": "토벌의 기록 1",
+      "metric": "kills",
+      "target": 50,
+      "rewards": {
+        "crowns": 8,
+        "stars": 1
+      },
+      "title": null
+    },
+    {
+      "id": "kills_250",
+      "name": "토벌의 기록 2",
+      "metric": "kills",
+      "target": 250,
+      "rewards": {
+        "crowns": 16,
+        "stars": 1
+      },
+      "title": null
+    },
+    {
+      "id": "kills_1000",
+      "name": "토벌의 기록 3",
+      "metric": "kills",
+      "target": 1000,
+      "rewards": {
+        "crowns": 24,
+        "stars": 2
+      },
+      "title": null
+    },
+    {
+      "id": "kills_5000",
+      "name": "토벌의 기록 4",
+      "metric": "kills",
+      "target": 5000,
+      "rewards": {
+        "crowns": 32,
+        "stars": 2
+      },
+      "title": "토벌의 기록"
+    },
+    {
+      "id": "bosses_3",
+      "name": "군주의 도전자 1",
+      "metric": "bosses",
+      "target": 3,
+      "rewards": {
+        "crowns": 8,
+        "stars": 1
+      },
+      "title": null
+    },
+    {
+      "id": "bosses_15",
+      "name": "군주의 도전자 2",
+      "metric": "bosses",
+      "target": 15,
+      "rewards": {
+        "crowns": 16,
+        "stars": 1
+      },
+      "title": null
+    },
+    {
+      "id": "bosses_50",
+      "name": "군주의 도전자 3",
+      "metric": "bosses",
+      "target": 50,
+      "rewards": {
+        "crowns": 24,
+        "stars": 2
+      },
+      "title": "군주의 도전자"
+    },
+    {
+      "id": "raids_1",
+      "name": "공동 원정 1",
+      "metric": "raids",
+      "target": 1,
+      "rewards": {
+        "crowns": 8,
+        "stars": 1
+      },
+      "title": null
+    },
+    {
+      "id": "raids_5",
+      "name": "공동 원정 2",
+      "metric": "raids",
+      "target": 5,
+      "rewards": {
+        "crowns": 16,
+        "stars": 1
+      },
+      "title": null
+    },
+    {
+      "id": "raids_20",
+      "name": "공동 원정 3",
+      "metric": "raids",
+      "target": 20,
+      "rewards": {
+        "crowns": 24,
+        "stars": 2
+      },
+      "title": "공동 원정"
+    },
+    {
+      "id": "crafts_5",
+      "name": "장인의 손길 1",
+      "metric": "crafts",
+      "target": 5,
+      "rewards": {
+        "crowns": 8,
+        "stars": 1
+      },
+      "title": null
+    },
+    {
+      "id": "crafts_25",
+      "name": "장인의 손길 2",
+      "metric": "crafts",
+      "target": 25,
+      "rewards": {
+        "crowns": 16,
+        "stars": 1
+      },
+      "title": null
+    },
+    {
+      "id": "crafts_100",
+      "name": "장인의 손길 3",
+      "metric": "crafts",
+      "target": 100,
+      "rewards": {
+        "crowns": 24,
+        "stars": 2
+      },
+      "title": "장인의 손길"
+    },
+    {
+      "id": "quests_10",
+      "name": "길드의 신뢰 1",
+      "metric": "quests",
+      "target": 10,
+      "rewards": {
+        "crowns": 8,
+        "stars": 1
+      },
+      "title": null
+    },
+    {
+      "id": "quests_40",
+      "name": "길드의 신뢰 2",
+      "metric": "quests",
+      "target": 40,
+      "rewards": {
+        "crowns": 16,
+        "stars": 1
+      },
+      "title": null
+    },
+    {
+      "id": "quests_100",
+      "name": "길드의 신뢰 3",
+      "metric": "quests",
+      "target": 100,
+      "rewards": {
+        "crowns": 24,
+        "stars": 2
+      },
+      "title": "길드의 신뢰"
+    },
+    {
+      "id": "discoveries_5",
+      "name": "미지의 발자취 1",
+      "metric": "discoveries",
+      "target": 5,
+      "rewards": {
+        "crowns": 8,
+        "stars": 1
+      },
+      "title": null
+    },
+    {
+      "id": "discoveries_15",
+      "name": "미지의 발자취 2",
+      "metric": "discoveries",
+      "target": 15,
+      "rewards": {
+        "crowns": 16,
+        "stars": 1
+      },
+      "title": null
+    },
+    {
+      "id": "discoveries_30",
+      "name": "미지의 발자취 3",
+      "metric": "discoveries",
+      "target": 30,
+      "rewards": {
+        "crowns": 24,
+        "stars": 2
+      },
+      "title": "미지의 발자취"
+    },
+    {
+      "id": "pvpWins_1",
+      "name": "결투의 증명 1",
+      "metric": "pvpWins",
+      "target": 1,
+      "rewards": {
+        "crowns": 8,
+        "stars": 1
+      },
+      "title": null
+    },
+    {
+      "id": "pvpWins_10",
+      "name": "결투의 증명 2",
+      "metric": "pvpWins",
+      "target": 10,
+      "rewards": {
+        "crowns": 16,
+        "stars": 1
+      },
+      "title": null
+    },
+    {
+      "id": "pvpWins_50",
+      "name": "결투의 증명 3",
+      "metric": "pvpWins",
+      "target": 50,
+      "rewards": {
+        "crowns": 24,
+        "stars": 2
+      },
+      "title": "결투의 증명"
+    },
+    {
+      "id": "trades_1",
+      "name": "왕국의 교역상 1",
+      "metric": "trades",
+      "target": 1,
+      "rewards": {
+        "crowns": 8,
+        "stars": 1
+      },
+      "title": null
+    },
+    {
+      "id": "trades_10",
+      "name": "왕국의 교역상 2",
+      "metric": "trades",
+      "target": 10,
+      "rewards": {
+        "crowns": 16,
+        "stars": 1
+      },
+      "title": null
+    },
+    {
+      "id": "trades_50",
+      "name": "왕국의 교역상 3",
+      "metric": "trades",
+      "target": 50,
+      "rewards": {
+        "crowns": 24,
+        "stars": 2
+      },
+      "title": "왕국의 교역상"
+    },
+    {
+      "id": "draws_10",
+      "name": "정령의 벗 1",
+      "metric": "draws",
+      "target": 10,
+      "rewards": {
+        "crowns": 8,
+        "stars": 1
+      },
+      "title": null
+    },
+    {
+      "id": "draws_50",
+      "name": "정령의 벗 2",
+      "metric": "draws",
+      "target": 50,
+      "rewards": {
+        "crowns": 16,
+        "stars": 1
+      },
+      "title": null
+    },
+    {
+      "id": "draws_150",
+      "name": "정령의 벗 3",
+      "metric": "draws",
+      "target": 150,
+      "rewards": {
+        "crowns": 24,
+        "stars": 2
+      },
+      "title": "정령의 벗"
+    },
+    {
+      "id": "collection_15",
+      "name": "수집가 1",
+      "metric": "collection",
+      "target": 15,
+      "rewards": {
+        "crowns": 8,
+        "stars": 1
+      },
+      "title": null
+    },
+    {
+      "id": "collection_50",
+      "name": "수집가 2",
+      "metric": "collection",
+      "target": 50,
+      "rewards": {
+        "crowns": 16,
+        "stars": 1
+      },
+      "title": null
+    },
+    {
+      "id": "collection_120",
+      "name": "수집가 3",
+      "metric": "collection",
+      "target": 120,
+      "rewards": {
+        "crowns": 24,
+        "stars": 2
+      },
+      "title": "수집가"
+    },
+    {
+      "id": "mastery_1",
+      "name": "성장의 끝 너머 1",
+      "metric": "mastery",
+      "target": 1,
+      "rewards": {
+        "crowns": 8,
+        "stars": 1
+      },
+      "title": null
+    },
+    {
+      "id": "mastery_20",
+      "name": "성장의 끝 너머 2",
+      "metric": "mastery",
+      "target": 20,
+      "rewards": {
+        "crowns": 16,
+        "stars": 1
+      },
+      "title": null
+    },
+    {
+      "id": "mastery_60",
+      "name": "성장의 끝 너머 3",
+      "metric": "mastery",
+      "target": 60,
+      "rewards": {
+        "crowns": 24,
+        "stars": 2
+      },
+      "title": "성장의 끝 너머"
+    }
+  ],
+  "expeditionGoals": [
+    {
+      "id": "daily_hunt",
+      "period": "day",
+      "name": "오늘의 토벌",
+      "metric": "kills",
+      "target": 40,
+      "rewards": {
+        "crowns": 8,
+        "stars": 1
+      }
+    },
+    {
+      "id": "daily_event",
+      "period": "day",
+      "name": "지역의 조력자",
+      "metric": "events",
+      "target": 2,
+      "rewards": {
+        "crowns": 8,
+        "stars": 1
+      }
+    },
+    {
+      "id": "daily_quest",
+      "period": "day",
+      "name": "길드의 하루",
+      "metric": "quests",
+      "target": 2,
+      "rewards": {
+        "crowns": 6,
+        "stars": 1
+      }
+    },
+    {
+      "id": "weekly_hunt",
+      "period": "week",
+      "name": "변경의 수호",
+      "metric": "kills",
+      "target": 350,
+      "rewards": {
+        "crowns": 35,
+        "stars": 3
+      }
+    },
+    {
+      "id": "weekly_raid",
+      "period": "week",
+      "name": "왕국 공동 원정",
+      "metric": "raids",
+      "target": 3,
+      "rewards": {
+        "crowns": 35,
+        "stars": 3
+      }
+    },
+    {
+      "id": "weekly_quest",
+      "period": "week",
+      "name": "길드 장기 의뢰",
+      "metric": "quests",
+      "target": 15,
+      "rewards": {
+        "crowns": 25,
+        "stars": 2
+      }
+    }
+  ],
+  "raids": [
+    {
+      "id": "verdant",
+      "name": "세계수의 심장",
+      "map": "raid_verdant",
+      "minLevel": 18,
+      "minPlayers": 2,
+      "maxPlayers": 8,
+      "roles": [
+        "tank",
+        "damage"
+      ],
+      "description": "방어 역할이 시선을 붙잡고, 공격 역할은 수호석과 군주를 공략합니다. 지원 기술은 근처 동료에게 적용됩니다."
+    },
+    {
+      "id": "glacial",
+      "name": "빙관의 파수꾼",
+      "map": "raid_glacial",
+      "minLevel": 32,
+      "minPlayers": 2,
+      "maxPlayers": 8,
+      "roles": [
+        "tank",
+        "damage"
+      ],
+      "description": "방어 역할이 시선을 붙잡고, 공격 역할은 수호석과 군주를 공략합니다. 지원 기술은 근처 동료에게 적용됩니다."
+    },
+    {
+      "id": "astral",
+      "name": "왕관을 삼킨 별",
+      "map": "raid_astral",
+      "minLevel": 48,
+      "minPlayers": 2,
+      "maxPlayers": 8,
+      "roles": [
+        "tank",
+        "damage"
+      ],
+      "description": "방어 역할이 시선을 붙잡고, 공격 역할은 수호석과 군주를 공략합니다. 지원 기술은 근처 동료에게 적용됩니다."
     }
   ]
 };
