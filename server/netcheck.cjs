@@ -32,4 +32,32 @@ a.G.enterMap('meadow',[15,4]);realm.attach(a);const chest=DB.maps.meadow.chests[
 for(const c of [a,b]){c.G.enterMap('oakwood',C.startPosition);realm.attach(c);c.G.state().level=50;}assert(realm.command(a,'social.party.create',[]).ok);assert(realm.command(b,'social.party.join',[realm.party(a).code]).ok);assert(realm.command(a,'social.party.mode',['raid']).ok);assert(realm.command(a,'social.raid.enter',[DB.raids[0].id]).ok);const scope=realm.rooms.get(a.room).scope,boss=a.G.instance().enemies[0];boss.hp-=10;const savedHp=boss.hp;realm.persist();const restarted=new Realm(store,{now:()=>now,random:()=>0}),again=restarted.character(a.id),ally=restarted.character(b.id);restarted.connect(again,()=>{});restarted.connect(ally,()=>{});assert.equal(restarted.party(again).members.length,2);assert.equal(restarted.rooms.get(again.room).scope,scope);assert.equal(again.G.instance(),ally.G.instance());assert.equal(again.G.instance().enemies[0].hp,savedHp);ally.G.enterMap('oakwood',C.startPosition);restarted.attach(ally);ally.G.state().level=1;assert.throws(()=>restarted.command(ally,'social.raid.enter',[DB.raids[0].id]));
 // Network snapshots omit server-only combat accounting while exported saves remain loadable.
 const frame=restarted.frame(again);assert(!('contributions' in frame.enemies[0]));assert(!('statuses' in frame.enemies[0]));const exported=again.G.snapshot({currentMapOnly:true}),loaded=createEngine();assert(loaded.load(exported).ok);assert.equal(Object.keys(exported.instances).length,1);
-store.close();console.log('PASS: delayed input replay, stale/duplicate frames, key release, wall/dash prediction, acknowledgements, connection epochs, timer catch-up, idempotent actions, bound mail, storage rollback and raid/party reconnect.');
+store.close();
+
+// Exercise the real client transport: periodic full snapshots used a different path from frames.
+async function clientSnapshots(){
+ const local=createEngine();local.create('human','warrior');let clock=0,serverTime=Date.now();const origin=serverTime,storage=new Store(':memory:'),world=new Realm(storage,{now:()=>serverTime,random:()=>0});
+ storage.addAccount({id:'moving',username:'moving',salt:'fixture',password:'fixture',created:serverTime});const hero=world.createCharacter('moving','human','warrior','moving');world.connect(hero,()=>{});
+ let stream;const outgoing=[],incoming=[];class Events{constructor(){stream=this;this.events={};}addEventListener(type,fn){this.events[type]=fn;}close(){}}
+ const client=vm.createContext({window:{RPG:local,RPGUI:{showGame(){},showTitle(){},updateHUD(){},toast(){}}},document:{getElementById:()=>null},location:{protocol:'http:',host:'localhost'},performance:{now:()=>clock},EventSource:Events,setTimeout,clearTimeout,
+  fetch:async(url,options)=>{let value={ok:true};if(url.endsWith('/health'))value={ok:true,protocol:O.protocol,transport:'sse'};else if(url.endsWith('/session'))value={ok:true,state:world.state(hero)};else if(url.endsWith('/input')){const packet=JSON.parse(options.body);outgoing.push({at:clock+125+(packet.seq%3)*9,packet});}return {json:async()=>value};}});
+ for(const file of ['rpg-netcode.js','rpg-online.js'])vm.runInContext(fs.readFileSync(path.join(__dirname,'..',file),'utf8'),client,{filename:file});const online=client.window.RPGOnline;await online.init();await online.start();stream.events.state({data:JSON.stringify(world.state(hero))});
+ let serverTick=0,fullUpdates=0,maxFullJump=0;const displayed=()=>{const s=local.state();return {x:s.player.x+(s.networkView?.x||0),y:s.player.y+(s.networkView?.y||0)};};
+ for(let frame=1;frame<=180;frame++){
+  clock=frame*1000/60;
+  while((serverTick+1)*O.tickMs<=clock){const time=++serverTick*O.tickMs;while(outgoing.length&&outgoing[0].at<=time){const next=outgoing.shift();serverTime=origin+next.at;world.input(hero,next.packet.x,next.packet.y,next.packet);}serverTime=origin+time;world.pulse();
+   if(time%O.frameMs===0)incoming.push({at:time+125,event:'frame',data:world.frame(hero)});
+   if(time%O.snapshotMs===0)incoming.push({at:time+125,event:'state',data:world.state(hero)});
+  }
+  while(incoming.length&&incoming[0].at<=clock){const next=incoming.shift(),before=displayed();stream.events[next.event]({data:JSON.stringify(next.data)});if(next.event==='state'){const after=displayed();fullUpdates++;maxFullJump=Math.max(maxFullJump,Math.hypot(after.x-before.x,after.y-before.y));}}
+  const input=clock<800?{x:1,y:0}:clock<1400?{x:0,y:1}:clock<2000?{x:-1,y:0}:{x:0,y:0};online.step(1/60,input);
+ }
+ assert(fullUpdates>=2);assert(maxFullJump<O.motionEpsilon,'full snapshots must preserve the displayed predicted position; jump='+maxFullJump);
+ assert(Math.hypot(local.state().player.x-hero.G.state().player.x,local.state().player.y-hero.G.state().player.y)<O.motionEpsilon,'released movement converges to the server after mixed full/frame updates');
+ // A late full response must not detach the live stats object from subsequent frame updates.
+ const fresh=world.frame(hero),baseSpeed=fresh.networkStats.speed;fresh.network.revision+=2;fresh.networkStats={...fresh.networkStats,speed:baseSpeed+1};stream.events.frame({data:JSON.stringify(fresh)});
+ const late=world.state(hero);late.network.revision=fresh.network.revision-1;late.networkStats={...late.networkStats,speed:baseSpeed-1};stream.events.state({data:JSON.stringify(late)});assert.equal(local.stats().speed,baseSpeed+1);
+ fresh.network.revision++;fresh.networkStats.speed=baseSpeed+2;stream.events.frame({data:JSON.stringify(fresh)});assert.equal(local.stats().speed,baseSpeed+2,'future speed corrections still update the engine after a late full response');
+ await online.logout();storage.close();
+}
+clientSnapshots().then(()=>console.log('PASS: real client full/frame snapshots with 250 ms RTT and jitter, delayed input replay, key release, wall/dash prediction, acknowledgements, connection epochs, timer catch-up, idempotent actions, bound mail, storage rollback and raid/party reconnect.')).catch(error=>{console.error(error);process.exitCode=1;});

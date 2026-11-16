@@ -1,7 +1,7 @@
 // Editable JSON-compatible fantasy RPG database.
 window.GAME_DB = {
   "meta": {
-    "version": "3.1",
+    "version": "3.2",
     "title": "에버돈",
     "subtitle": "왕국의 동료들",
     "description": "마을에서 시작해 나만의 직업 빌드를 완성하는 판타지 액션 RPG"
@@ -37108,8 +37108,46 @@ window.GAME_DB = {
     "nightAlpha": 0.14,
     "discoveryScale": 3,
     "eventScale": 3,
-    "peerBarY": 7,
-    "peerNameY": 19
+    "playerNameplate": {
+      "enabled": true,
+      "minWidth": 126,
+      "maxWidth": 224,
+      "padding": 6,
+      "lineHeight": 16,
+      "nameFont": 12,
+      "detailFont": 10,
+      "guildFont": 10,
+      "headGap": 10,
+      "barHeight": 4,
+      "barGap": 4,
+      "minScale": 0.9,
+      "maxScale": 1.05,
+      "screenMargin": 8,
+      "borderWidth": 1,
+      "background": "#221f1ae8",
+      "borderColor": "brassDark",
+      "selfColor": "brassLight",
+      "partyColor": "good",
+      "peerColor": "ivory",
+      "detailColor": "paperShade",
+      "guildColor": "brassLight",
+      "barBackground": "woodDeep",
+      "separator": " · ",
+      "guildPrefix": "〈",
+      "guildSuffix": "〉",
+      "bars": [
+        {
+          "value": "hp",
+          "max": "maxHp",
+          "color": "hp"
+        },
+        {
+          "value": "mp",
+          "max": "maxMp",
+          "color": "mp"
+        }
+      ]
+    }
   },
   "audio": {
     "enabled": true,

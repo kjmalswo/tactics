@@ -83,3 +83,8 @@ Cloudflare Worker tactics는 Git main과 자동 배포로 연결되어 있습니
 온라인 이동 예측은 rpg-netcode.js의 입력 이력으로 관리합니다. 입력은 connectionId·locationEpoch·seq를 포함하고 서버 ackSeq/inputElapsed 이후의 미처리 시간만 공통 predictMovement로 재적용합니다. 화면 오프셋을 실제 충돌 좌표에 누적하지 않습니다. 연결 교체·맵 이동 시 이력을 초기화하고, 이전 연결의 종료 콜백·HTTP 결과·입력을 새 연결에 적용하지 않습니다. 정지 입력은 방향 변경 즉시 전송합니다. 관련 최소 검증은 node server/netcheck.cjs입니다.
 
 온라인 아이템 uid·origin·bound는 새 장비 생성 시에만 부여합니다. 우편·거래·가방 초과 반환에서 기존 uid와 귀속을 보존합니다. 파티와 개인 던전 scope는 저장하고 재배포·재접속 시 복원합니다. 단일 행동 transaction은 참여 캐릭터와 관련 방만 저장하고, 실패 시 공유 방과 이동 이력까지 복원합니다. 서버 tick은 실제 경과 시간을 고정 간격으로 나누고 DB의 추격 상한을 적용합니다.
+
+
+전체 온라인 상태를 수신해 엔진 상태 객체를 교체할 때는 교체 전 player를 MovementHistory.reconcile의 previousActor로 전달합니다. 교체 후 서버 player로 화면 오차를 계산하면 매 전체 갱신마다 이동 되감김이 재발합니다. server/netcheck.cjs는 실제 rpg-online.js 경로에서 지연·방향 전환·frame/state 혼합 수신을 확인합니다.
+
+플레이어 머리 위 이름표는 render.playerNameplate에서 색·크기·행간·자원 막대를 관리하고, 본인과 실제 onlinePeers를 같은 렌더링 경로로 표시합니다. 예측/보간된 캐릭터 표시 좌표를 사용하며 모든 배경·스프라이트 이후에 그려 이름이 가려지지 않게 합니다.
