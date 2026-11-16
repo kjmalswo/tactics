@@ -1,9 +1,9 @@
 // Editable JSON-compatible fantasy RPG database.
 window.GAME_DB = {
   "meta": {
-    "version": "1.1",
+    "version": "2.0",
     "title": "에버돈",
-    "subtitle": "별의 계승자",
+    "subtitle": "다섯 왕관의 여정",
     "description": "마을에서 시작해 나만의 직업 빌드를 완성하는 판타지 액션 RPG"
   },
   "theme": {
@@ -76,7 +76,12 @@ window.GAME_DB = {
       "window": "#f3d69b",
       "hazard": "#c94c37",
       "hazardFill": "#c94c3738",
-      "nightTint": "#263a5b"
+      "nightTint": "#263a5b",
+      "snow": "#cbd8d2",
+      "ice": "#7eafb6",
+      "ash": "#8f8680",
+      "dusk": "#8e8c9e",
+      "redSand": "#bd9870"
     },
     "icons": {
       "brand": "<circle cx='12' cy='12' r='9'/><path d='m12 5 3 7-3 7-3-7 3-7Zm-8 7h4m8 0h4'/>",
@@ -129,8 +134,8 @@ window.GAME_DB = {
     "step": 0.025,
     "maxFrame": 0.1,
     "milliseconds": 1000,
-    "maxLevel": 20,
-    "maxMonsterLevel": 30,
+    "maxLevel": 50,
+    "maxMonsterLevel": 65,
     "startGold": 55,
     "startPotions": 5,
     "startPoints": 2,
@@ -322,7 +327,28 @@ window.GAME_DB = {
     "blessingRefreshTolerance": 0.1,
     "eventInteractRadius": 2.15,
     "healingConsumable": "healing",
-    "manaConsumable": "mana"
+    "manaConsumable": "mana",
+    "contentRevision": 3,
+    "questRepeatCooldown": 180,
+    "repMax": 9999,
+    "codexKills": [
+      15,
+      45,
+      100
+    ],
+    "companionFollowDistance": 1.25,
+    "companionBondPerBoss": 3,
+    "companionBondPerEvent": 1,
+    "companionBondCap": 100,
+    "companionBondScale": 0.004,
+    "trialNextWave": 2,
+    "mechanismReduction": 0.12,
+    "advancementRespecCost": 60,
+    "questListPage": 10,
+    "enemyPatternMax": 32,
+    "advancementPreviewStats": 3,
+    "companionVisualSize": 1,
+    "hazardDefaultAngle": 3.141592653589793
   },
   "controls": {
     "left": [
@@ -370,11 +396,11 @@ window.GAME_DB = {
     ]
   },
   "world": {
-    "title": "꺼져가는 별의 봉인",
-    "body": "에버돈 왕국의 동쪽에서 오래된 봉인이 흔들립니다. 작은 길드의 모험가로 시작해 숲과 폐광, 잊힌 성역을 탐험하세요.",
-    "chapter": "에버돈 동부",
-    "goal": "세 던전의 보스를 쓰러뜨리고 별의 봉인을 되찾으세요.",
-    "completed": "별의 봉인을 지켰습니다. 더 높은 던전 등급과 장비 빌드에 도전하세요."
+    "title": "다섯 왕관의 여정",
+    "body": "별의 봉인이 무너진 뒤, 왕국의 변경에서 다섯 왕관을 노리는 군세가 깨어납니다. 작은 길드의 모험가가 되어 동료와 함께 숲·고원·설원·사막·황혼 성채를 누비세요.",
+    "chapter": "에버돈 대륙",
+    "goal": "지역 의뢰로 성장하고 여덟 던전의 군주를 넘어 황혼 성채의 왕관을 되찾으세요.",
+    "completed": "황혼의 왕관을 되찾았습니다. 전설 던전과 길드 연전, 세력 장비와 전직 완성에 도전하세요."
   },
   "baseStats": {
     "hp": 100,
@@ -690,7 +716,9 @@ window.GAME_DB = {
         "sweeping_blade",
         "war_cry",
         "runic_wave",
-        "steel_rush"
+        "steel_rush",
+        "royal_cleave",
+        "astral_blade"
       ],
       "starter": "iron_sword",
       "branches": [
@@ -736,7 +764,9 @@ window.GAME_DB = {
         "arrow_rain",
         "hunter_mark",
         "piercing_shot",
-        "wind_step"
+        "wind_step",
+        "hawk_volley",
+        "star_arrow"
       ],
       "starter": "hunting_bow",
       "branches": [
@@ -783,7 +813,9 @@ window.GAME_DB = {
         "fire_orb",
         "frost_nova",
         "arcane_chain",
-        "meteor"
+        "meteor",
+        "solar_orb",
+        "cosmic_chain"
       ],
       "starter": "apprentice_staff",
       "branches": [
@@ -830,7 +862,9 @@ window.GAME_DB = {
         "shield_bash",
         "sacred_ground",
         "judgment",
-        "iron_oath"
+        "iron_oath",
+        "royal_verdict",
+        "aegis_crash"
       ],
       "starter": "oath_mace",
       "branches": [
@@ -1117,6 +1151,134 @@ window.GAME_DB = {
       },
       "color": "#d8dccf",
       "sound": "buff"
+    },
+    "royal_cleave": {
+      "name": "왕의 참격",
+      "icon": "attack",
+      "unlock": 20,
+      "kind": "nova",
+      "scale": "attack",
+      "coefficient": 3.19,
+      "radius": 1.8,
+      "range": 1.8,
+      "cooldown": 5.8,
+      "cost": 16,
+      "color": "#e0ca90",
+      "sound": "sword",
+      "id": "royal_cleave"
+    },
+    "astral_blade": {
+      "name": "성운검",
+      "icon": "staff",
+      "unlock": 32,
+      "kind": "projectile",
+      "projectile": "rune",
+      "scale": "attack",
+      "coefficient": 4.08,
+      "range": 5,
+      "radius": 1.1,
+      "cooldown": 8.0,
+      "cost": 24,
+      "color": "#9fcac2",
+      "sound": "magic",
+      "id": "astral_blade"
+    },
+    "hawk_volley": {
+      "name": "매의 연사",
+      "icon": "bow",
+      "unlock": 20,
+      "kind": "targetArea",
+      "scale": "attack",
+      "coefficient": 3.0,
+      "range": 5.7,
+      "radius": 1.6,
+      "cooldown": 8.0,
+      "cost": 16,
+      "color": "#e2d39c",
+      "sound": "arrow",
+      "id": "hawk_volley"
+    },
+    "star_arrow": {
+      "name": "별을 꿰는 화살",
+      "icon": "bow",
+      "unlock": 32,
+      "kind": "projectile",
+      "projectile": "arrow",
+      "scale": "attack",
+      "coefficient": 5.42,
+      "range": 6,
+      "radius": 0.9,
+      "cooldown": 9.2,
+      "cost": 20,
+      "pierce": 3,
+      "color": "#f5ddb2",
+      "sound": "arrow",
+      "id": "star_arrow"
+    },
+    "solar_orb": {
+      "name": "태양구",
+      "icon": "staff",
+      "unlock": 20,
+      "kind": "projectile",
+      "projectile": "fire",
+      "scale": "spell",
+      "coefficient": 3.41,
+      "range": 5.5,
+      "radius": 1.5,
+      "cooldown": 4.4,
+      "cost": 24,
+      "burn": true,
+      "color": "#edb16f",
+      "sound": "fire",
+      "id": "solar_orb"
+    },
+    "cosmic_chain": {
+      "name": "천체 연쇄",
+      "icon": "staff",
+      "unlock": 32,
+      "kind": "chain",
+      "scale": "spell",
+      "coefficient": 3.6,
+      "range": 5.8,
+      "chain": 4,
+      "cooldown": 6.3,
+      "cost": 30,
+      "color": "#d1bbe8",
+      "sound": "magic",
+      "id": "cosmic_chain"
+    },
+    "royal_verdict": {
+      "name": "왕국의 심판",
+      "icon": "signature",
+      "unlock": 20,
+      "kind": "targetArea",
+      "scale": "spell",
+      "defenseScale": 1.8,
+      "coefficient": 3.75,
+      "range": 4.5,
+      "radius": 2,
+      "cooldown": 8.0,
+      "cost": 27,
+      "color": "#f6e7b9",
+      "sound": "magic",
+      "id": "royal_verdict"
+    },
+    "aegis_crash": {
+      "name": "성채 붕괴",
+      "icon": "shield",
+      "unlock": 32,
+      "kind": "nova",
+      "scale": "spell",
+      "defenseScale": 1.4,
+      "coefficient": 3.24,
+      "radius": 1.7,
+      "range": 1.7,
+      "cooldown": 5.5,
+      "cost": 16,
+      "knockback": 0.65,
+      "color": "#e4d3a2",
+      "sound": "shield",
+      "id": "aegis_crash"
     }
   },
   "branches": {
@@ -1124,73 +1286,841 @@ window.GAME_DB = {
       "id": "gladiator",
       "name": "검투사",
       "class": "warrior",
-      "description": "평타와 치명타로 꾸준히 밀어붙입니다."
+      "description": "평타와 치명타로 꾸준히 밀어붙입니다.",
+      "stage": 1,
+      "parent": null,
+      "root": "gladiator",
+      "level": 3
     },
     "berserker": {
       "id": "berserker",
       "name": "버서커",
       "class": "warrior",
-      "description": "생존 여유를 화력과 흡혈로 바꿉니다."
+      "description": "생존 여유를 화력과 흡혈로 바꿉니다.",
+      "stage": 1,
+      "parent": null,
+      "root": "berserker",
+      "level": 3
     },
     "rune": {
       "id": "rune",
       "name": "룬 기사",
       "class": "warrior",
-      "description": "마력을 순환시켜 기술 전투에 집중합니다."
+      "description": "마력을 순환시켜 기술 전투에 집중합니다.",
+      "stage": 1,
+      "parent": null,
+      "root": "rune",
+      "level": 3
     },
     "marksman": {
       "id": "marksman",
       "name": "명사수",
       "class": "archer",
-      "description": "먼 거리에서 치명적인 평타를 노립니다."
+      "description": "먼 거리에서 치명적인 평타를 노립니다.",
+      "stage": 1,
+      "parent": null,
+      "root": "marksman",
+      "level": 3
     },
     "ranger": {
       "id": "ranger",
       "name": "추적자",
       "class": "archer",
-      "description": "화살을 늘려 무리를 빠르게 정리합니다."
+      "description": "화살을 늘려 무리를 빠르게 정리합니다.",
+      "stage": 1,
+      "parent": null,
+      "root": "ranger",
+      "level": 3
     },
     "venom": {
       "id": "venom",
       "name": "독 사냥꾼",
       "class": "archer",
-      "description": "독과 둔화로 추격을 끊고 누적 피해를 줍니다."
+      "description": "독과 둔화로 추격을 끊고 누적 피해를 줍니다.",
+      "stage": 1,
+      "parent": null,
+      "root": "venom",
+      "level": 3
     },
     "pyromancer": {
       "id": "pyromancer",
       "name": "화염술사",
       "class": "magician",
-      "description": "화염 주문과 화상으로 무리를 녹입니다."
+      "description": "화염 주문과 화상으로 무리를 녹입니다.",
+      "stage": 1,
+      "parent": null,
+      "root": "pyromancer",
+      "level": 3
     },
     "frost": {
       "id": "frost",
       "name": "빙결술사",
       "class": "magician",
-      "description": "느려진 적을 제어하고 보호막으로 버팁니다."
+      "description": "느려진 적을 제어하고 보호막으로 버팁니다.",
+      "stage": 1,
+      "parent": null,
+      "root": "frost",
+      "level": 3
     },
     "arcanist": {
       "id": "arcanist",
       "name": "비전술사",
       "class": "magician",
-      "description": "마력 회복과 메아리로 주문을 연속 사용합니다."
+      "description": "마력 회복과 메아리로 주문을 연속 사용합니다.",
+      "stage": 1,
+      "parent": null,
+      "root": "arcanist",
+      "level": 3
     },
     "fortress": {
       "id": "fortress",
       "name": "철벽",
       "class": "guardian",
-      "description": "막강한 체력과 보호막으로 전선을 지킵니다."
+      "description": "막강한 체력과 보호막으로 전선을 지킵니다.",
+      "stage": 1,
+      "parent": null,
+      "root": "fortress",
+      "level": 3
     },
     "paladin": {
       "id": "paladin",
       "name": "성기사",
       "class": "guardian",
-      "description": "성역과 심판의 힘을 키우는 기술 수호자."
+      "description": "성역과 심판의 힘을 키우는 기술 수호자.",
+      "stage": 1,
+      "parent": null,
+      "root": "paladin",
+      "level": 3
     },
     "avenger": {
       "id": "avenger",
       "name": "응징자",
       "class": "guardian",
-      "description": "맞을수록 반사와 근접 화력이 강해집니다."
+      "description": "맞을수록 반사와 근접 화력이 강해집니다.",
+      "stage": 1,
+      "parent": null,
+      "root": "avenger",
+      "level": 3
+    },
+    "gladiator_s0": {
+      "id": "gladiator_s0",
+      "name": "소드마스터",
+      "class": "warrior",
+      "parent": "gladiator",
+      "root": "gladiator",
+      "stage": 2,
+      "level": 18,
+      "description": "계열의 주력 화력을 극대화합니다."
+    },
+    "gladiator_s0_t0": {
+      "id": "gladiator_s0_t0",
+      "name": "검성",
+      "class": "warrior",
+      "parent": "gladiator_s0",
+      "root": "gladiator",
+      "stage": 3,
+      "level": 34,
+      "description": "극대화된 주력 능력으로 정점을 노립니다."
+    },
+    "gladiator_s0_t1": {
+      "id": "gladiator_s0_t1",
+      "name": "결투의 군주",
+      "class": "warrior",
+      "parent": "gladiator_s0",
+      "root": "gladiator",
+      "stage": 3,
+      "level": 34,
+      "description": "생존·자원 순환을 더한 독자적인 완성형입니다."
+    },
+    "gladiator_s1": {
+      "id": "gladiator_s1",
+      "name": "블레이드댄서",
+      "class": "warrior",
+      "parent": "gladiator",
+      "root": "gladiator",
+      "stage": 2,
+      "level": 18,
+      "description": "계열의 약점을 보완하고 운용을 바꿉니다."
+    },
+    "gladiator_s1_t0": {
+      "id": "gladiator_s1_t0",
+      "name": "폭풍 검무가",
+      "class": "warrior",
+      "parent": "gladiator_s1",
+      "root": "gladiator",
+      "stage": 3,
+      "level": 34,
+      "description": "극대화된 주력 능력으로 정점을 노립니다."
+    },
+    "gladiator_s1_t1": {
+      "id": "gladiator_s1_t1",
+      "name": "혈월 무희",
+      "class": "warrior",
+      "parent": "gladiator_s1",
+      "root": "gladiator",
+      "stage": 3,
+      "level": 34,
+      "description": "생존·자원 순환을 더한 독자적인 완성형입니다."
+    },
+    "berserker_s0": {
+      "id": "berserker_s0",
+      "name": "블러드리버",
+      "class": "warrior",
+      "parent": "berserker",
+      "root": "berserker",
+      "stage": 2,
+      "level": 18,
+      "description": "계열의 주력 화력을 극대화합니다."
+    },
+    "berserker_s0_t0": {
+      "id": "berserker_s0_t0",
+      "name": "혈왕",
+      "class": "warrior",
+      "parent": "berserker_s0",
+      "root": "berserker",
+      "stage": 3,
+      "level": 34,
+      "description": "극대화된 주력 능력으로 정점을 노립니다."
+    },
+    "berserker_s0_t1": {
+      "id": "berserker_s0_t1",
+      "name": "불멸의 광전사",
+      "class": "warrior",
+      "parent": "berserker_s0",
+      "root": "berserker",
+      "stage": 3,
+      "level": 34,
+      "description": "생존·자원 순환을 더한 독자적인 완성형입니다."
+    },
+    "berserker_s1": {
+      "id": "berserker_s1",
+      "name": "워로드",
+      "class": "warrior",
+      "parent": "berserker",
+      "root": "berserker",
+      "stage": 2,
+      "level": 18,
+      "description": "계열의 약점을 보완하고 운용을 바꿉니다."
+    },
+    "berserker_s1_t0": {
+      "id": "berserker_s1_t0",
+      "name": "전쟁군주",
+      "class": "warrior",
+      "parent": "berserker_s1",
+      "root": "berserker",
+      "stage": 3,
+      "level": 34,
+      "description": "극대화된 주력 능력으로 정점을 노립니다."
+    },
+    "berserker_s1_t1": {
+      "id": "berserker_s1_t1",
+      "name": "철혈 지휘관",
+      "class": "warrior",
+      "parent": "berserker_s1",
+      "root": "berserker",
+      "stage": 3,
+      "level": 34,
+      "description": "생존·자원 순환을 더한 독자적인 완성형입니다."
+    },
+    "rune_s0": {
+      "id": "rune_s0",
+      "name": "마검사",
+      "class": "warrior",
+      "parent": "rune",
+      "root": "rune",
+      "stage": 2,
+      "level": 18,
+      "description": "계열의 주력 화력을 극대화합니다."
+    },
+    "rune_s0_t0": {
+      "id": "rune_s0_t0",
+      "name": "별의 마검사",
+      "class": "warrior",
+      "parent": "rune_s0",
+      "root": "rune",
+      "stage": 3,
+      "level": 34,
+      "description": "극대화된 주력 능력으로 정점을 노립니다."
+    },
+    "rune_s0_t1": {
+      "id": "rune_s0_t1",
+      "name": "심연의 칼날",
+      "class": "warrior",
+      "parent": "rune_s0",
+      "root": "rune",
+      "stage": 3,
+      "level": 34,
+      "description": "생존·자원 순환을 더한 독자적인 완성형입니다."
+    },
+    "rune_s1": {
+      "id": "rune_s1",
+      "name": "룬 수호자",
+      "class": "warrior",
+      "parent": "rune",
+      "root": "rune",
+      "stage": 2,
+      "level": 18,
+      "description": "계열의 약점을 보완하고 운용을 바꿉니다."
+    },
+    "rune_s1_t0": {
+      "id": "rune_s1_t0",
+      "name": "봉인의 기사",
+      "class": "warrior",
+      "parent": "rune_s1",
+      "root": "rune",
+      "stage": 3,
+      "level": 34,
+      "description": "극대화된 주력 능력으로 정점을 노립니다."
+    },
+    "rune_s1_t1": {
+      "id": "rune_s1_t1",
+      "name": "황금 서약자",
+      "class": "warrior",
+      "parent": "rune_s1",
+      "root": "rune",
+      "stage": 3,
+      "level": 34,
+      "description": "생존·자원 순환을 더한 독자적인 완성형입니다."
+    },
+    "marksman_s0": {
+      "id": "marksman_s0",
+      "name": "데드아이",
+      "class": "archer",
+      "parent": "marksman",
+      "root": "marksman",
+      "stage": 2,
+      "level": 18,
+      "description": "계열의 주력 화력을 극대화합니다."
+    },
+    "marksman_s0_t0": {
+      "id": "marksman_s0_t0",
+      "name": "왕국 저격수",
+      "class": "archer",
+      "parent": "marksman_s0",
+      "root": "marksman",
+      "stage": 3,
+      "level": 34,
+      "description": "극대화된 주력 능력으로 정점을 노립니다."
+    },
+    "marksman_s0_t1": {
+      "id": "marksman_s0_t1",
+      "name": "유성 사수",
+      "class": "archer",
+      "parent": "marksman_s0",
+      "root": "marksman",
+      "stage": 3,
+      "level": 34,
+      "description": "생존·자원 순환을 더한 독자적인 완성형입니다."
+    },
+    "marksman_s1": {
+      "id": "marksman_s1",
+      "name": "호크아이",
+      "class": "archer",
+      "parent": "marksman",
+      "root": "marksman",
+      "stage": 2,
+      "level": 18,
+      "description": "계열의 약점을 보완하고 운용을 바꿉니다."
+    },
+    "marksman_s1_t0": {
+      "id": "marksman_s1_t0",
+      "name": "매의 군주",
+      "class": "archer",
+      "parent": "marksman_s1",
+      "root": "marksman",
+      "stage": 3,
+      "level": 34,
+      "description": "극대화된 주력 능력으로 정점을 노립니다."
+    },
+    "marksman_s1_t1": {
+      "id": "marksman_s1_t1",
+      "name": "천리안",
+      "class": "archer",
+      "parent": "marksman_s1",
+      "root": "marksman",
+      "stage": 3,
+      "level": 34,
+      "description": "생존·자원 순환을 더한 독자적인 완성형입니다."
+    },
+    "ranger_s0": {
+      "id": "ranger_s0",
+      "name": "숲의 파수꾼",
+      "class": "archer",
+      "parent": "ranger",
+      "root": "ranger",
+      "stage": 2,
+      "level": 18,
+      "description": "계열의 주력 화력을 극대화합니다."
+    },
+    "ranger_s0_t0": {
+      "id": "ranger_s0_t0",
+      "name": "야생의 수호자",
+      "class": "archer",
+      "parent": "ranger_s0",
+      "root": "ranger",
+      "stage": 3,
+      "level": 34,
+      "description": "극대화된 주력 능력으로 정점을 노립니다."
+    },
+    "ranger_s0_t1": {
+      "id": "ranger_s0_t1",
+      "name": "녹풍 사냥꾼",
+      "class": "archer",
+      "parent": "ranger_s0",
+      "root": "ranger",
+      "stage": 3,
+      "level": 34,
+      "description": "생존·자원 순환을 더한 독자적인 완성형입니다."
+    },
+    "ranger_s1": {
+      "id": "ranger_s1",
+      "name": "트래퍼",
+      "class": "archer",
+      "parent": "ranger",
+      "root": "ranger",
+      "stage": 2,
+      "level": 18,
+      "description": "계열의 약점을 보완하고 운용을 바꿉니다."
+    },
+    "ranger_s1_t0": {
+      "id": "ranger_s1_t0",
+      "name": "덫의 장인",
+      "class": "archer",
+      "parent": "ranger_s1",
+      "root": "ranger",
+      "stage": 3,
+      "level": 34,
+      "description": "극대화된 주력 능력으로 정점을 노립니다."
+    },
+    "ranger_s1_t1": {
+      "id": "ranger_s1_t1",
+      "name": "독안개 추적자",
+      "class": "archer",
+      "parent": "ranger_s1",
+      "root": "ranger",
+      "stage": 3,
+      "level": 34,
+      "description": "생존·자원 순환을 더한 독자적인 완성형입니다."
+    },
+    "venom_s0": {
+      "id": "venom_s0",
+      "name": "나이트스토커",
+      "class": "archer",
+      "parent": "venom",
+      "root": "venom",
+      "stage": 2,
+      "level": 18,
+      "description": "계열의 주력 화력을 극대화합니다."
+    },
+    "venom_s0_t0": {
+      "id": "venom_s0_t0",
+      "name": "월영 추적자",
+      "class": "archer",
+      "parent": "venom_s0",
+      "root": "venom",
+      "stage": 3,
+      "level": 34,
+      "description": "극대화된 주력 능력으로 정점을 노립니다."
+    },
+    "venom_s0_t1": {
+      "id": "venom_s0_t1",
+      "name": "칠흑의 화살",
+      "class": "archer",
+      "parent": "venom_s0",
+      "root": "venom",
+      "stage": 3,
+      "level": 34,
+      "description": "생존·자원 순환을 더한 독자적인 완성형입니다."
+    },
+    "venom_s1": {
+      "id": "venom_s1",
+      "name": "베놈레인저",
+      "class": "archer",
+      "parent": "venom",
+      "root": "venom",
+      "stage": 2,
+      "level": 18,
+      "description": "계열의 약점을 보완하고 운용을 바꿉니다."
+    },
+    "venom_s1_t0": {
+      "id": "venom_s1_t0",
+      "name": "독왕",
+      "class": "archer",
+      "parent": "venom_s1",
+      "root": "venom",
+      "stage": 3,
+      "level": 34,
+      "description": "극대화된 주력 능력으로 정점을 노립니다."
+    },
+    "venom_s1_t1": {
+      "id": "venom_s1_t1",
+      "name": "가시 심장",
+      "class": "archer",
+      "parent": "venom_s1",
+      "root": "venom",
+      "stage": 3,
+      "level": 34,
+      "description": "생존·자원 순환을 더한 독자적인 완성형입니다."
+    },
+    "pyromancer_s0": {
+      "id": "pyromancer_s0",
+      "name": "인페르노",
+      "class": "magician",
+      "parent": "pyromancer",
+      "root": "pyromancer",
+      "stage": 2,
+      "level": 18,
+      "description": "계열의 주력 화력을 극대화합니다."
+    },
+    "pyromancer_s0_t0": {
+      "id": "pyromancer_s0_t0",
+      "name": "불사조 현자",
+      "class": "magician",
+      "parent": "pyromancer_s0",
+      "root": "pyromancer",
+      "stage": 3,
+      "level": 34,
+      "description": "극대화된 주력 능력으로 정점을 노립니다."
+    },
+    "pyromancer_s0_t1": {
+      "id": "pyromancer_s0_t1",
+      "name": "홍련의 군주",
+      "class": "magician",
+      "parent": "pyromancer_s0",
+      "root": "pyromancer",
+      "stage": 3,
+      "level": 34,
+      "description": "생존·자원 순환을 더한 독자적인 완성형입니다."
+    },
+    "pyromancer_s1": {
+      "id": "pyromancer_s1",
+      "name": "플레임위버",
+      "class": "magician",
+      "parent": "pyromancer",
+      "root": "pyromancer",
+      "stage": 2,
+      "level": 18,
+      "description": "계열의 약점을 보완하고 운용을 바꿉니다."
+    },
+    "pyromancer_s1_t0": {
+      "id": "pyromancer_s1_t0",
+      "name": "태양의 직조자",
+      "class": "magician",
+      "parent": "pyromancer_s1",
+      "root": "pyromancer",
+      "stage": 3,
+      "level": 34,
+      "description": "극대화된 주력 능력으로 정점을 노립니다."
+    },
+    "pyromancer_s1_t1": {
+      "id": "pyromancer_s1_t1",
+      "name": "재의 예언자",
+      "class": "magician",
+      "parent": "pyromancer_s1",
+      "root": "pyromancer",
+      "stage": 3,
+      "level": 34,
+      "description": "생존·자원 순환을 더한 독자적인 완성형입니다."
+    },
+    "frost_s0": {
+      "id": "frost_s0",
+      "name": "글레이셜",
+      "class": "magician",
+      "parent": "frost",
+      "root": "frost",
+      "stage": 2,
+      "level": 18,
+      "description": "계열의 주력 화력을 극대화합니다."
+    },
+    "frost_s0_t0": {
+      "id": "frost_s0_t0",
+      "name": "겨울의 현자",
+      "class": "magician",
+      "parent": "frost_s0",
+      "root": "frost",
+      "stage": 3,
+      "level": 34,
+      "description": "극대화된 주력 능력으로 정점을 노립니다."
+    },
+    "frost_s0_t1": {
+      "id": "frost_s0_t1",
+      "name": "빙관의 군주",
+      "class": "magician",
+      "parent": "frost_s0",
+      "root": "frost",
+      "stage": 3,
+      "level": 34,
+      "description": "생존·자원 순환을 더한 독자적인 완성형입니다."
+    },
+    "frost_s1": {
+      "id": "frost_s1",
+      "name": "프로스트가드",
+      "class": "magician",
+      "parent": "frost",
+      "root": "frost",
+      "stage": 2,
+      "level": 18,
+      "description": "계열의 약점을 보완하고 운용을 바꿉니다."
+    },
+    "frost_s1_t0": {
+      "id": "frost_s1_t0",
+      "name": "서리 수호자",
+      "class": "magician",
+      "parent": "frost_s1",
+      "root": "frost",
+      "stage": 3,
+      "level": 34,
+      "description": "극대화된 주력 능력으로 정점을 노립니다."
+    },
+    "frost_s1_t1": {
+      "id": "frost_s1_t1",
+      "name": "영원의 얼음",
+      "class": "magician",
+      "parent": "frost_s1",
+      "root": "frost",
+      "stage": 3,
+      "level": 34,
+      "description": "생존·자원 순환을 더한 독자적인 완성형입니다."
+    },
+    "arcanist_s0": {
+      "id": "arcanist_s0",
+      "name": "아크메이지",
+      "class": "magician",
+      "parent": "arcanist",
+      "root": "arcanist",
+      "stage": 2,
+      "level": 18,
+      "description": "계열의 주력 화력을 극대화합니다."
+    },
+    "arcanist_s0_t0": {
+      "id": "arcanist_s0_t0",
+      "name": "별의 대마도사",
+      "class": "magician",
+      "parent": "arcanist_s0",
+      "root": "arcanist",
+      "stage": 3,
+      "level": 34,
+      "description": "극대화된 주력 능력으로 정점을 노립니다."
+    },
+    "arcanist_s0_t1": {
+      "id": "arcanist_s0_t1",
+      "name": "차원 여행자",
+      "class": "magician",
+      "parent": "arcanist_s0",
+      "root": "arcanist",
+      "stage": 3,
+      "level": 34,
+      "description": "생존·자원 순환을 더한 독자적인 완성형입니다."
+    },
+    "arcanist_s1": {
+      "id": "arcanist_s1",
+      "name": "에테르위버",
+      "class": "magician",
+      "parent": "arcanist",
+      "root": "arcanist",
+      "stage": 2,
+      "level": 18,
+      "description": "계열의 약점을 보완하고 운용을 바꿉니다."
+    },
+    "arcanist_s1_t0": {
+      "id": "arcanist_s1_t0",
+      "name": "마력의 지배자",
+      "class": "magician",
+      "parent": "arcanist_s1",
+      "root": "arcanist",
+      "stage": 3,
+      "level": 34,
+      "description": "극대화된 주력 능력으로 정점을 노립니다."
+    },
+    "arcanist_s1_t1": {
+      "id": "arcanist_s1_t1",
+      "name": "시간의 현자",
+      "class": "magician",
+      "parent": "arcanist_s1",
+      "root": "arcanist",
+      "stage": 3,
+      "level": 34,
+      "description": "생존·자원 순환을 더한 독자적인 완성형입니다."
+    },
+    "fortress_s0": {
+      "id": "fortress_s0",
+      "name": "바스티온",
+      "class": "guardian",
+      "parent": "fortress",
+      "root": "fortress",
+      "stage": 2,
+      "level": 18,
+      "description": "계열의 주력 화력을 극대화합니다."
+    },
+    "fortress_s0_t0": {
+      "id": "fortress_s0_t0",
+      "name": "불굴의 성채",
+      "class": "guardian",
+      "parent": "fortress_s0",
+      "root": "fortress",
+      "stage": 3,
+      "level": 34,
+      "description": "극대화된 주력 능력으로 정점을 노립니다."
+    },
+    "fortress_s0_t1": {
+      "id": "fortress_s0_t1",
+      "name": "왕국의 보루",
+      "class": "guardian",
+      "parent": "fortress_s0",
+      "root": "fortress",
+      "stage": 3,
+      "level": 34,
+      "description": "생존·자원 순환을 더한 독자적인 완성형입니다."
+    },
+    "fortress_s1": {
+      "id": "fortress_s1",
+      "name": "아이언가드",
+      "class": "guardian",
+      "parent": "fortress",
+      "root": "fortress",
+      "stage": 2,
+      "level": 18,
+      "description": "계열의 약점을 보완하고 운용을 바꿉니다."
+    },
+    "fortress_s1_t0": {
+      "id": "fortress_s1_t0",
+      "name": "강철의 거인",
+      "class": "guardian",
+      "parent": "fortress_s1",
+      "root": "fortress",
+      "stage": 3,
+      "level": 34,
+      "description": "극대화된 주력 능력으로 정점을 노립니다."
+    },
+    "fortress_s1_t1": {
+      "id": "fortress_s1_t1",
+      "name": "아다만트 수호자",
+      "class": "guardian",
+      "parent": "fortress_s1",
+      "root": "fortress",
+      "stage": 3,
+      "level": 34,
+      "description": "생존·자원 순환을 더한 독자적인 완성형입니다."
+    },
+    "paladin_s0": {
+      "id": "paladin_s0",
+      "name": "하이템플러",
+      "class": "guardian",
+      "parent": "paladin",
+      "root": "paladin",
+      "stage": 2,
+      "level": 18,
+      "description": "계열의 주력 화력을 극대화합니다."
+    },
+    "paladin_s0_t0": {
+      "id": "paladin_s0_t0",
+      "name": "새벽의 성자",
+      "class": "guardian",
+      "parent": "paladin_s0",
+      "root": "paladin",
+      "stage": 3,
+      "level": 34,
+      "description": "극대화된 주력 능력으로 정점을 노립니다."
+    },
+    "paladin_s0_t1": {
+      "id": "paladin_s0_t1",
+      "name": "태양의 심판관",
+      "class": "guardian",
+      "parent": "paladin_s0",
+      "root": "paladin",
+      "stage": 3,
+      "level": 34,
+      "description": "생존·자원 순환을 더한 독자적인 완성형입니다."
+    },
+    "paladin_s1": {
+      "id": "paladin_s1",
+      "name": "세이크리드가드",
+      "class": "guardian",
+      "parent": "paladin",
+      "root": "paladin",
+      "stage": 2,
+      "level": 18,
+      "description": "계열의 약점을 보완하고 운용을 바꿉니다."
+    },
+    "paladin_s1_t0": {
+      "id": "paladin_s1_t0",
+      "name": "성역의 수호자",
+      "class": "guardian",
+      "parent": "paladin_s1",
+      "root": "paladin",
+      "stage": 3,
+      "level": 34,
+      "description": "극대화된 주력 능력으로 정점을 노립니다."
+    },
+    "paladin_s1_t1": {
+      "id": "paladin_s1_t1",
+      "name": "빛의 순례자",
+      "class": "guardian",
+      "parent": "paladin_s1",
+      "root": "paladin",
+      "stage": 3,
+      "level": 34,
+      "description": "생존·자원 순환을 더한 독자적인 완성형입니다."
+    },
+    "avenger_s0": {
+      "id": "avenger_s0",
+      "name": "드레드노트",
+      "class": "guardian",
+      "parent": "avenger",
+      "root": "avenger",
+      "stage": 2,
+      "level": 18,
+      "description": "계열의 주력 화력을 극대화합니다."
+    },
+    "avenger_s0_t0": {
+      "id": "avenger_s0_t0",
+      "name": "복수의 군주",
+      "class": "guardian",
+      "parent": "avenger_s0",
+      "root": "avenger",
+      "stage": 3,
+      "level": 34,
+      "description": "극대화된 주력 능력으로 정점을 노립니다."
+    },
+    "avenger_s0_t1": {
+      "id": "avenger_s0_t1",
+      "name": "파멸의 방패",
+      "class": "guardian",
+      "parent": "avenger_s0",
+      "root": "avenger",
+      "stage": 3,
+      "level": 34,
+      "description": "생존·자원 순환을 더한 독자적인 완성형입니다."
+    },
+    "avenger_s1": {
+      "id": "avenger_s1",
+      "name": "저거너트",
+      "class": "guardian",
+      "parent": "avenger",
+      "root": "avenger",
+      "stage": 2,
+      "level": 18,
+      "description": "계열의 약점을 보완하고 운용을 바꿉니다."
+    },
+    "avenger_s1_t0": {
+      "id": "avenger_s1_t0",
+      "name": "전장의 거신",
+      "class": "guardian",
+      "parent": "avenger_s1",
+      "root": "avenger",
+      "stage": 3,
+      "level": 34,
+      "description": "극대화된 주력 능력으로 정점을 노립니다."
+    },
+    "avenger_s1_t1": {
+      "id": "avenger_s1_t1",
+      "name": "불굴의 응징자",
+      "class": "guardian",
+      "parent": "avenger_s1",
+      "root": "avenger",
+      "stage": 3,
+      "level": 34,
+      "description": "생존·자원 순환을 더한 독자적인 완성형입니다."
     }
   },
   "talents": [
@@ -1211,7 +2141,8 @@ window.GAME_DB = {
         }
       ],
       "description": "평타 피해 +9%",
-      "capstone": false
+      "capstone": false,
+      "minLevel": 3
     },
     {
       "id": "gladiator_2",
@@ -1230,7 +2161,8 @@ window.GAME_DB = {
         }
       ],
       "description": "공격 속도 +7%",
-      "capstone": false
+      "capstone": false,
+      "minLevel": 3
     },
     {
       "id": "gladiator_3",
@@ -1254,7 +2186,8 @@ window.GAME_DB = {
         }
       ],
       "description": "치명타 +5%p / 최대 체력 -4%",
-      "capstone": false
+      "capstone": false,
+      "minLevel": 3
     },
     {
       "id": "gladiator_4",
@@ -1273,7 +2206,8 @@ window.GAME_DB = {
         }
       ],
       "description": "평타가 주변에 45% 피해",
-      "capstone": true
+      "capstone": true,
+      "minLevel": 3
     },
     {
       "id": "berserker_1",
@@ -1292,7 +2226,8 @@ window.GAME_DB = {
         }
       ],
       "description": "공격력 +8%",
-      "capstone": false
+      "capstone": false,
+      "minLevel": 3
     },
     {
       "id": "berserker_2",
@@ -1311,7 +2246,8 @@ window.GAME_DB = {
         }
       ],
       "description": "흡혈 +2.5%p",
-      "capstone": false
+      "capstone": false,
+      "minLevel": 3
     },
     {
       "id": "berserker_3",
@@ -1335,7 +2271,8 @@ window.GAME_DB = {
         }
       ],
       "description": "체력 절반 아래 화력 +12% / 방어 -8%",
-      "capstone": false
+      "capstone": false,
+      "minLevel": 3
     },
     {
       "id": "berserker_4",
@@ -1359,7 +2296,8 @@ window.GAME_DB = {
         }
       ],
       "description": "흡혈 +8%p / 처치 시 최대 체력 4% 회복",
-      "capstone": true
+      "capstone": true,
+      "minLevel": 3
     },
     {
       "id": "rune_1",
@@ -1378,7 +2316,8 @@ window.GAME_DB = {
         }
       ],
       "description": "기술 피해 +9%",
-      "capstone": false
+      "capstone": false,
+      "minLevel": 3
     },
     {
       "id": "rune_2",
@@ -1397,7 +2336,8 @@ window.GAME_DB = {
         }
       ],
       "description": "평타 적중 시 마력 1.2 회복",
-      "capstone": false
+      "capstone": false,
+      "minLevel": 3
     },
     {
       "id": "rune_3",
@@ -1421,7 +2361,8 @@ window.GAME_DB = {
         }
       ],
       "description": "기술 재사용 -8% / 평타 피해 -4%",
-      "capstone": false
+      "capstone": false,
+      "minLevel": 3
     },
     {
       "id": "rune_4",
@@ -1440,7 +2381,8 @@ window.GAME_DB = {
         }
       ],
       "description": "피해 기술이 40% 확률로 메아리 발동",
-      "capstone": true
+      "capstone": true,
+      "minLevel": 3
     },
     {
       "id": "marksman_1",
@@ -1459,7 +2401,8 @@ window.GAME_DB = {
         }
       ],
       "description": "평타 피해 +10%",
-      "capstone": false
+      "capstone": false,
+      "minLevel": 3
     },
     {
       "id": "marksman_2",
@@ -1478,7 +2421,8 @@ window.GAME_DB = {
         }
       ],
       "description": "공격 거리 +0.35",
-      "capstone": false
+      "capstone": false,
+      "minLevel": 3
     },
     {
       "id": "marksman_3",
@@ -1502,7 +2446,8 @@ window.GAME_DB = {
         }
       ],
       "description": "치명타 +6%p / 이동 속도 -3%",
-      "capstone": false
+      "capstone": false,
+      "minLevel": 3
     },
     {
       "id": "marksman_4",
@@ -1526,7 +2471,8 @@ window.GAME_DB = {
         }
       ],
       "description": "치명타 피해 +0.6배 / 확률 +12%p",
-      "capstone": true
+      "capstone": true,
+      "minLevel": 3
     },
     {
       "id": "ranger_1",
@@ -1545,7 +2491,8 @@ window.GAME_DB = {
         }
       ],
       "description": "공격 속도 +8%",
-      "capstone": false
+      "capstone": false,
+      "minLevel": 3
     },
     {
       "id": "ranger_2",
@@ -1564,7 +2511,8 @@ window.GAME_DB = {
         }
       ],
       "description": "이동 속도 +6%",
-      "capstone": false
+      "capstone": false,
+      "minLevel": 3
     },
     {
       "id": "ranger_3",
@@ -1588,7 +2536,8 @@ window.GAME_DB = {
         }
       ],
       "description": "추가 화살 +1 / 평타 피해 -9%",
-      "capstone": false
+      "capstone": false,
+      "minLevel": 3
     },
     {
       "id": "ranger_4",
@@ -1612,7 +2561,8 @@ window.GAME_DB = {
         }
       ],
       "description": "추가 화살 +1 / 적중 마력 +1",
-      "capstone": true
+      "capstone": true,
+      "minLevel": 3
     },
     {
       "id": "venom_1",
@@ -1631,7 +2581,8 @@ window.GAME_DB = {
         }
       ],
       "description": "중독 확률 +16%p",
-      "capstone": false
+      "capstone": false,
+      "minLevel": 3
     },
     {
       "id": "venom_2",
@@ -1650,7 +2601,8 @@ window.GAME_DB = {
         }
       ],
       "description": "둔화 확률 +10%p",
-      "capstone": false
+      "capstone": false,
+      "minLevel": 3
     },
     {
       "id": "venom_3",
@@ -1674,7 +2626,8 @@ window.GAME_DB = {
         }
       ],
       "description": "중독 피해 +25% / 공격력 -4%",
-      "capstone": false
+      "capstone": false,
+      "minLevel": 3
     },
     {
       "id": "venom_4",
@@ -1698,7 +2651,8 @@ window.GAME_DB = {
         }
       ],
       "description": "중독 확률 +50%p / 중독 피해 +70%",
-      "capstone": true
+      "capstone": true,
+      "minLevel": 3
     },
     {
       "id": "pyromancer_1",
@@ -1717,7 +2671,8 @@ window.GAME_DB = {
         }
       ],
       "description": "기술 피해 +10%",
-      "capstone": false
+      "capstone": false,
+      "minLevel": 3
     },
     {
       "id": "pyromancer_2",
@@ -1736,7 +2691,8 @@ window.GAME_DB = {
         }
       ],
       "description": "화상 확률 +16%p",
-      "capstone": false
+      "capstone": false,
+      "minLevel": 3
     },
     {
       "id": "pyromancer_3",
@@ -1760,7 +2716,8 @@ window.GAME_DB = {
         }
       ],
       "description": "주문력 +12% / 최대 체력 -5%",
-      "capstone": false
+      "capstone": false,
+      "minLevel": 3
     },
     {
       "id": "pyromancer_4",
@@ -1784,7 +2741,8 @@ window.GAME_DB = {
         }
       ],
       "description": "화상 확률 +50%p / 화상 피해 +80%",
-      "capstone": true
+      "capstone": true,
+      "minLevel": 3
     },
     {
       "id": "frost_1",
@@ -1803,7 +2761,8 @@ window.GAME_DB = {
         }
       ],
       "description": "둔화 확률 +15%p",
-      "capstone": false
+      "capstone": false,
+      "minLevel": 3
     },
     {
       "id": "frost_2",
@@ -1822,7 +2781,8 @@ window.GAME_DB = {
         }
       ],
       "description": "기술 사용 시 보호막 +5",
-      "capstone": false
+      "capstone": false,
+      "minLevel": 3
     },
     {
       "id": "frost_3",
@@ -1846,7 +2806,8 @@ window.GAME_DB = {
         }
       ],
       "description": "방어력 +2 / 이동 속도 -3%",
-      "capstone": false
+      "capstone": false,
+      "minLevel": 3
     },
     {
       "id": "frost_4",
@@ -1870,7 +2831,8 @@ window.GAME_DB = {
         }
       ],
       "description": "기술 보호막 +18 / 둔화 확률 +25%p",
-      "capstone": true
+      "capstone": true,
+      "minLevel": 3
     },
     {
       "id": "arcanist_1",
@@ -1889,7 +2851,8 @@ window.GAME_DB = {
         }
       ],
       "description": "마력 회복 +0.9/초",
-      "capstone": false
+      "capstone": false,
+      "minLevel": 3
     },
     {
       "id": "arcanist_2",
@@ -1908,7 +2871,8 @@ window.GAME_DB = {
         }
       ],
       "description": "기술 재사용 -6%",
-      "capstone": false
+      "capstone": false,
+      "minLevel": 3
     },
     {
       "id": "arcanist_3",
@@ -1932,7 +2896,8 @@ window.GAME_DB = {
         }
       ],
       "description": "기술 피해 +12% / 평타 피해 -7%",
-      "capstone": false
+      "capstone": false,
+      "minLevel": 3
     },
     {
       "id": "arcanist_4",
@@ -1951,7 +2916,8 @@ window.GAME_DB = {
         }
       ],
       "description": "피해 기술이 50% 확률로 메아리 발동",
-      "capstone": true
+      "capstone": true,
+      "minLevel": 3
     },
     {
       "id": "fortress_1",
@@ -1970,7 +2936,8 @@ window.GAME_DB = {
         }
       ],
       "description": "최대 체력 +9%",
-      "capstone": false
+      "capstone": false,
+      "minLevel": 3
     },
     {
       "id": "fortress_2",
@@ -1989,7 +2956,8 @@ window.GAME_DB = {
         }
       ],
       "description": "방어력 +1.8",
-      "capstone": false
+      "capstone": false,
+      "minLevel": 3
     },
     {
       "id": "fortress_3",
@@ -2013,7 +2981,8 @@ window.GAME_DB = {
         }
       ],
       "description": "받는 피해 -4.5% / 이동 속도 -3%",
-      "capstone": false
+      "capstone": false,
+      "minLevel": 3
     },
     {
       "id": "fortress_4",
@@ -2037,7 +3006,8 @@ window.GAME_DB = {
         }
       ],
       "description": "기술 보호막 +25 / 받는 피해 -10%",
-      "capstone": true
+      "capstone": true,
+      "minLevel": 3
     },
     {
       "id": "paladin_1",
@@ -2056,7 +3026,8 @@ window.GAME_DB = {
         }
       ],
       "description": "주문력 +10%",
-      "capstone": false
+      "capstone": false,
+      "minLevel": 3
     },
     {
       "id": "paladin_2",
@@ -2075,7 +3046,8 @@ window.GAME_DB = {
         }
       ],
       "description": "마력 회복 +0.8/초",
-      "capstone": false
+      "capstone": false,
+      "minLevel": 3
     },
     {
       "id": "paladin_3",
@@ -2099,7 +3071,8 @@ window.GAME_DB = {
         }
       ],
       "description": "기술 피해 +13% / 공격 속도 -4%",
-      "capstone": false
+      "capstone": false,
+      "minLevel": 3
     },
     {
       "id": "paladin_4",
@@ -2123,7 +3096,8 @@ window.GAME_DB = {
         }
       ],
       "description": "기술 피해 +30% / 처치 시 체력 5% 회복",
-      "capstone": true
+      "capstone": true,
+      "minLevel": 3
     },
     {
       "id": "avenger_1",
@@ -2142,7 +3116,8 @@ window.GAME_DB = {
         }
       ],
       "description": "근접 반사 피해 +2.5",
-      "capstone": false
+      "capstone": false,
+      "minLevel": 3
     },
     {
       "id": "avenger_2",
@@ -2161,7 +3136,8 @@ window.GAME_DB = {
         }
       ],
       "description": "체력 회복 +0.6/초",
-      "capstone": false
+      "capstone": false,
+      "minLevel": 3
     },
     {
       "id": "avenger_3",
@@ -2185,7 +3161,8 @@ window.GAME_DB = {
         }
       ],
       "description": "근접 반사 피해 +4 / 최대 마력 -4%",
-      "capstone": false
+      "capstone": false,
+      "minLevel": 3
     },
     {
       "id": "avenger_4",
@@ -2209,6 +3186,7207 @@ window.GAME_DB = {
         }
       ],
       "description": "근접 반사 피해 +15 / 흡혈 +6%p",
+      "capstone": true,
+      "minLevel": 3
+    },
+    {
+      "id": "gladiator_deep_0",
+      "name": "검투사의 연마",
+      "branch": "gladiator",
+      "class": "warrior",
+      "tier": 4,
+      "maxRank": 6,
+      "requires": 7,
+      "cost": 1,
+      "minLevel": 10,
+      "stats": [
+        {
+          "stat": "basicDamage",
+          "op": "multiply",
+          "value": 1.055
+        }
+      ],
+      "description": "계열 능력을 반복 수련합니다.",
+      "capstone": false
+    },
+    {
+      "id": "gladiator_deep_1",
+      "name": "검투사의 비전",
+      "branch": "gladiator",
+      "class": "warrior",
+      "tier": 5,
+      "maxRank": 6,
+      "requires": 10,
+      "cost": 1,
+      "minLevel": 14,
+      "stats": [
+        {
+          "stat": "crit",
+          "op": "add",
+          "value": 0.015
+        }
+      ],
+      "description": "계열 능력을 반복 수련합니다.",
+      "capstone": false
+    },
+    {
+      "id": "gladiator_s0_0",
+      "name": "소드마스터의 단련",
+      "branch": "gladiator_s0",
+      "class": "warrior",
+      "tier": 0,
+      "maxRank": 5,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 18,
+      "stats": [
+        {
+          "stat": "basicDamage",
+          "op": "multiply",
+          "value": 1.055
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "gladiator_s0_1",
+      "name": "소드마스터의 기예",
+      "branch": "gladiator_s0",
+      "class": "warrior",
+      "tier": 1,
+      "maxRank": 5,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 21,
+      "stats": [
+        {
+          "stat": "crit",
+          "op": "add",
+          "value": 0.015
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "gladiator_s0_2",
+      "name": "소드마스터의 신념",
+      "branch": "gladiator_s0",
+      "class": "warrior",
+      "tier": 2,
+      "maxRank": 4,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 24,
+      "stats": [
+        {
+          "stat": "attackSpeed",
+          "op": "multiply",
+          "value": 1.025
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "gladiator_s0_3",
+      "name": "소드마스터의 오의",
+      "branch": "gladiator_s0",
+      "class": "warrior",
+      "tier": 3,
+      "maxRank": 2,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 27,
+      "stats": [
+        {
+          "stat": "basicDamage",
+          "op": "multiply",
+          "value": 1.055
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": true
+    },
+    {
+      "id": "gladiator_s0_t0_0",
+      "name": "검성의 기초",
+      "branch": "gladiator_s0_t0",
+      "class": "warrior",
+      "tier": 0,
+      "maxRank": 6,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 34,
+      "stats": [
+        {
+          "stat": "basicDamage",
+          "op": "multiply",
+          "value": 1.055
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "gladiator_s0_t0_1",
+      "name": "검성의 계승",
+      "branch": "gladiator_s0_t0",
+      "class": "warrior",
+      "tier": 1,
+      "maxRank": 6,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 37,
+      "stats": [
+        {
+          "stat": "crit",
+          "op": "add",
+          "value": 0.015
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "gladiator_s0_t0_2",
+      "name": "검성의 완성",
+      "branch": "gladiator_s0_t0",
+      "class": "warrior",
+      "tier": 2,
+      "maxRank": 5,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 40,
+      "stats": [
+        {
+          "stat": "attackSpeed",
+          "op": "multiply",
+          "value": 1.025
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "gladiator_s0_t0_3",
+      "name": "검성의 초월",
+      "branch": "gladiator_s0_t0",
+      "class": "warrior",
+      "tier": 3,
+      "maxRank": 5,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 43,
+      "stats": [
+        {
+          "stat": "basicDamage",
+          "op": "multiply",
+          "value": 1.055
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "gladiator_s0_t0_4",
+      "name": "검성의 궁극",
+      "branch": "gladiator_s0_t0",
+      "class": "warrior",
+      "tier": 4,
+      "maxRank": 3,
+      "requires": 12,
+      "cost": 1,
+      "minLevel": 46,
+      "stats": [
+        {
+          "stat": "crit",
+          "op": "add",
+          "value": 0.015
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": true
+    },
+    {
+      "id": "gladiator_s0_t1_0",
+      "name": "결투의 군주의 기초",
+      "branch": "gladiator_s0_t1",
+      "class": "warrior",
+      "tier": 0,
+      "maxRank": 6,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 34,
+      "stats": [
+        {
+          "stat": "crit",
+          "op": "add",
+          "value": 0.015
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "gladiator_s0_t1_1",
+      "name": "결투의 군주의 계승",
+      "branch": "gladiator_s0_t1",
+      "class": "warrior",
+      "tier": 1,
+      "maxRank": 6,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 37,
+      "stats": [
+        {
+          "stat": "attackSpeed",
+          "op": "multiply",
+          "value": 1.025
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "gladiator_s0_t1_2",
+      "name": "결투의 군주의 완성",
+      "branch": "gladiator_s0_t1",
+      "class": "warrior",
+      "tier": 2,
+      "maxRank": 5,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 40,
+      "stats": [
+        {
+          "stat": "manaRegen",
+          "op": "add",
+          "value": 0.18
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "gladiator_s0_t1_3",
+      "name": "결투의 군주의 초월",
+      "branch": "gladiator_s0_t1",
+      "class": "warrior",
+      "tier": 3,
+      "maxRank": 5,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 43,
+      "stats": [
+        {
+          "stat": "crit",
+          "op": "add",
+          "value": 0.015
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "gladiator_s0_t1_4",
+      "name": "결투의 군주의 궁극",
+      "branch": "gladiator_s0_t1",
+      "class": "warrior",
+      "tier": 4,
+      "maxRank": 3,
+      "requires": 12,
+      "cost": 1,
+      "minLevel": 46,
+      "stats": [
+        {
+          "stat": "attackSpeed",
+          "op": "multiply",
+          "value": 1.025
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": true
+    },
+    {
+      "id": "gladiator_s1_0",
+      "name": "블레이드댄서의 단련",
+      "branch": "gladiator_s1",
+      "class": "warrior",
+      "tier": 0,
+      "maxRank": 5,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 18,
+      "stats": [
+        {
+          "stat": "crit",
+          "op": "add",
+          "value": 0.015
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "gladiator_s1_1",
+      "name": "블레이드댄서의 기예",
+      "branch": "gladiator_s1",
+      "class": "warrior",
+      "tier": 1,
+      "maxRank": 5,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 21,
+      "stats": [
+        {
+          "stat": "hp",
+          "op": "multiply",
+          "value": 1.045
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "gladiator_s1_2",
+      "name": "블레이드댄서의 신념",
+      "branch": "gladiator_s1",
+      "class": "warrior",
+      "tier": 2,
+      "maxRank": 4,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 24,
+      "stats": [
+        {
+          "stat": "basicDamage",
+          "op": "multiply",
+          "value": 1.055
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "gladiator_s1_3",
+      "name": "블레이드댄서의 오의",
+      "branch": "gladiator_s1",
+      "class": "warrior",
+      "tier": 3,
+      "maxRank": 2,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 27,
+      "stats": [
+        {
+          "stat": "crit",
+          "op": "add",
+          "value": 0.015
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": true
+    },
+    {
+      "id": "gladiator_s1_t0_0",
+      "name": "폭풍 검무가의 기초",
+      "branch": "gladiator_s1_t0",
+      "class": "warrior",
+      "tier": 0,
+      "maxRank": 6,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 34,
+      "stats": [
+        {
+          "stat": "crit",
+          "op": "add",
+          "value": 0.015
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "gladiator_s1_t0_1",
+      "name": "폭풍 검무가의 계승",
+      "branch": "gladiator_s1_t0",
+      "class": "warrior",
+      "tier": 1,
+      "maxRank": 6,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 37,
+      "stats": [
+        {
+          "stat": "attackSpeed",
+          "op": "multiply",
+          "value": 1.025
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "gladiator_s1_t0_2",
+      "name": "폭풍 검무가의 완성",
+      "branch": "gladiator_s1_t0",
+      "class": "warrior",
+      "tier": 2,
+      "maxRank": 5,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 40,
+      "stats": [
+        {
+          "stat": "basicDamage",
+          "op": "multiply",
+          "value": 1.055
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "gladiator_s1_t0_3",
+      "name": "폭풍 검무가의 초월",
+      "branch": "gladiator_s1_t0",
+      "class": "warrior",
+      "tier": 3,
+      "maxRank": 5,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 43,
+      "stats": [
+        {
+          "stat": "crit",
+          "op": "add",
+          "value": 0.015
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "gladiator_s1_t0_4",
+      "name": "폭풍 검무가의 궁극",
+      "branch": "gladiator_s1_t0",
+      "class": "warrior",
+      "tier": 4,
+      "maxRank": 3,
+      "requires": 12,
+      "cost": 1,
+      "minLevel": 46,
+      "stats": [
+        {
+          "stat": "attackSpeed",
+          "op": "multiply",
+          "value": 1.025
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": true
+    },
+    {
+      "id": "gladiator_s1_t1_0",
+      "name": "혈월 무희의 기초",
+      "branch": "gladiator_s1_t1",
+      "class": "warrior",
+      "tier": 0,
+      "maxRank": 6,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 34,
+      "stats": [
+        {
+          "stat": "attackSpeed",
+          "op": "multiply",
+          "value": 1.025
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "gladiator_s1_t1_1",
+      "name": "혈월 무희의 계승",
+      "branch": "gladiator_s1_t1",
+      "class": "warrior",
+      "tier": 1,
+      "maxRank": 6,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 37,
+      "stats": [
+        {
+          "stat": "basicDamage",
+          "op": "multiply",
+          "value": 1.055
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "gladiator_s1_t1_2",
+      "name": "혈월 무희의 완성",
+      "branch": "gladiator_s1_t1",
+      "class": "warrior",
+      "tier": 2,
+      "maxRank": 5,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 40,
+      "stats": [
+        {
+          "stat": "manaRegen",
+          "op": "add",
+          "value": 0.18
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "gladiator_s1_t1_3",
+      "name": "혈월 무희의 초월",
+      "branch": "gladiator_s1_t1",
+      "class": "warrior",
+      "tier": 3,
+      "maxRank": 5,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 43,
+      "stats": [
+        {
+          "stat": "attackSpeed",
+          "op": "multiply",
+          "value": 1.025
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "gladiator_s1_t1_4",
+      "name": "혈월 무희의 궁극",
+      "branch": "gladiator_s1_t1",
+      "class": "warrior",
+      "tier": 4,
+      "maxRank": 3,
+      "requires": 12,
+      "cost": 1,
+      "minLevel": 46,
+      "stats": [
+        {
+          "stat": "basicDamage",
+          "op": "multiply",
+          "value": 1.055
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": true
+    },
+    {
+      "id": "berserker_deep_0",
+      "name": "버서커의 연마",
+      "branch": "berserker",
+      "class": "warrior",
+      "tier": 4,
+      "maxRank": 6,
+      "requires": 7,
+      "cost": 1,
+      "minLevel": 10,
+      "stats": [
+        {
+          "stat": "attack",
+          "op": "multiply",
+          "value": 1.055
+        }
+      ],
+      "description": "계열 능력을 반복 수련합니다.",
+      "capstone": false
+    },
+    {
+      "id": "berserker_deep_1",
+      "name": "버서커의 비전",
+      "branch": "berserker",
+      "class": "warrior",
+      "tier": 5,
+      "maxRank": 6,
+      "requires": 10,
+      "cost": 1,
+      "minLevel": 14,
+      "stats": [
+        {
+          "stat": "lifesteal",
+          "op": "add",
+          "value": 0.008
+        }
+      ],
+      "description": "계열 능력을 반복 수련합니다.",
+      "capstone": false
+    },
+    {
+      "id": "berserker_s0_0",
+      "name": "블러드리버의 단련",
+      "branch": "berserker_s0",
+      "class": "warrior",
+      "tier": 0,
+      "maxRank": 5,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 18,
+      "stats": [
+        {
+          "stat": "attack",
+          "op": "multiply",
+          "value": 1.055
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "berserker_s0_1",
+      "name": "블러드리버의 기예",
+      "branch": "berserker_s0",
+      "class": "warrior",
+      "tier": 1,
+      "maxRank": 5,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 21,
+      "stats": [
+        {
+          "stat": "lifesteal",
+          "op": "add",
+          "value": 0.008
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "berserker_s0_2",
+      "name": "블러드리버의 신념",
+      "branch": "berserker_s0",
+      "class": "warrior",
+      "tier": 2,
+      "maxRank": 4,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 24,
+      "stats": [
+        {
+          "stat": "lowHpDamage",
+          "op": "add",
+          "value": 0.035
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "berserker_s0_3",
+      "name": "블러드리버의 오의",
+      "branch": "berserker_s0",
+      "class": "warrior",
+      "tier": 3,
+      "maxRank": 2,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 27,
+      "stats": [
+        {
+          "stat": "attack",
+          "op": "multiply",
+          "value": 1.055
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": true
+    },
+    {
+      "id": "berserker_s0_t0_0",
+      "name": "혈왕의 기초",
+      "branch": "berserker_s0_t0",
+      "class": "warrior",
+      "tier": 0,
+      "maxRank": 6,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 34,
+      "stats": [
+        {
+          "stat": "attack",
+          "op": "multiply",
+          "value": 1.055
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "berserker_s0_t0_1",
+      "name": "혈왕의 계승",
+      "branch": "berserker_s0_t0",
+      "class": "warrior",
+      "tier": 1,
+      "maxRank": 6,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 37,
+      "stats": [
+        {
+          "stat": "lifesteal",
+          "op": "add",
+          "value": 0.008
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "berserker_s0_t0_2",
+      "name": "혈왕의 완성",
+      "branch": "berserker_s0_t0",
+      "class": "warrior",
+      "tier": 2,
+      "maxRank": 5,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 40,
+      "stats": [
+        {
+          "stat": "lowHpDamage",
+          "op": "add",
+          "value": 0.035
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "berserker_s0_t0_3",
+      "name": "혈왕의 초월",
+      "branch": "berserker_s0_t0",
+      "class": "warrior",
+      "tier": 3,
+      "maxRank": 5,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 43,
+      "stats": [
+        {
+          "stat": "attack",
+          "op": "multiply",
+          "value": 1.055
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "berserker_s0_t0_4",
+      "name": "혈왕의 궁극",
+      "branch": "berserker_s0_t0",
+      "class": "warrior",
+      "tier": 4,
+      "maxRank": 3,
+      "requires": 12,
+      "cost": 1,
+      "minLevel": 46,
+      "stats": [
+        {
+          "stat": "lifesteal",
+          "op": "add",
+          "value": 0.008
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": true
+    },
+    {
+      "id": "berserker_s0_t1_0",
+      "name": "불멸의 광전사의 기초",
+      "branch": "berserker_s0_t1",
+      "class": "warrior",
+      "tier": 0,
+      "maxRank": 6,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 34,
+      "stats": [
+        {
+          "stat": "lifesteal",
+          "op": "add",
+          "value": 0.008
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "berserker_s0_t1_1",
+      "name": "불멸의 광전사의 계승",
+      "branch": "berserker_s0_t1",
+      "class": "warrior",
+      "tier": 1,
+      "maxRank": 6,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 37,
+      "stats": [
+        {
+          "stat": "lowHpDamage",
+          "op": "add",
+          "value": 0.035
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "berserker_s0_t1_2",
+      "name": "불멸의 광전사의 완성",
+      "branch": "berserker_s0_t1",
+      "class": "warrior",
+      "tier": 2,
+      "maxRank": 5,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 40,
+      "stats": [
+        {
+          "stat": "manaRegen",
+          "op": "add",
+          "value": 0.18
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "berserker_s0_t1_3",
+      "name": "불멸의 광전사의 초월",
+      "branch": "berserker_s0_t1",
+      "class": "warrior",
+      "tier": 3,
+      "maxRank": 5,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 43,
+      "stats": [
+        {
+          "stat": "lifesteal",
+          "op": "add",
+          "value": 0.008
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "berserker_s0_t1_4",
+      "name": "불멸의 광전사의 궁극",
+      "branch": "berserker_s0_t1",
+      "class": "warrior",
+      "tier": 4,
+      "maxRank": 3,
+      "requires": 12,
+      "cost": 1,
+      "minLevel": 46,
+      "stats": [
+        {
+          "stat": "lowHpDamage",
+          "op": "add",
+          "value": 0.035
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": true
+    },
+    {
+      "id": "berserker_s1_0",
+      "name": "워로드의 단련",
+      "branch": "berserker_s1",
+      "class": "warrior",
+      "tier": 0,
+      "maxRank": 5,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 18,
+      "stats": [
+        {
+          "stat": "lifesteal",
+          "op": "add",
+          "value": 0.008
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "berserker_s1_1",
+      "name": "워로드의 기예",
+      "branch": "berserker_s1",
+      "class": "warrior",
+      "tier": 1,
+      "maxRank": 5,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 21,
+      "stats": [
+        {
+          "stat": "hp",
+          "op": "multiply",
+          "value": 1.045
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "berserker_s1_2",
+      "name": "워로드의 신념",
+      "branch": "berserker_s1",
+      "class": "warrior",
+      "tier": 2,
+      "maxRank": 4,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 24,
+      "stats": [
+        {
+          "stat": "attack",
+          "op": "multiply",
+          "value": 1.055
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "berserker_s1_3",
+      "name": "워로드의 오의",
+      "branch": "berserker_s1",
+      "class": "warrior",
+      "tier": 3,
+      "maxRank": 2,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 27,
+      "stats": [
+        {
+          "stat": "lifesteal",
+          "op": "add",
+          "value": 0.008
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": true
+    },
+    {
+      "id": "berserker_s1_t0_0",
+      "name": "전쟁군주의 기초",
+      "branch": "berserker_s1_t0",
+      "class": "warrior",
+      "tier": 0,
+      "maxRank": 6,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 34,
+      "stats": [
+        {
+          "stat": "lifesteal",
+          "op": "add",
+          "value": 0.008
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "berserker_s1_t0_1",
+      "name": "전쟁군주의 계승",
+      "branch": "berserker_s1_t0",
+      "class": "warrior",
+      "tier": 1,
+      "maxRank": 6,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 37,
+      "stats": [
+        {
+          "stat": "lowHpDamage",
+          "op": "add",
+          "value": 0.035
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "berserker_s1_t0_2",
+      "name": "전쟁군주의 완성",
+      "branch": "berserker_s1_t0",
+      "class": "warrior",
+      "tier": 2,
+      "maxRank": 5,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 40,
+      "stats": [
+        {
+          "stat": "attack",
+          "op": "multiply",
+          "value": 1.055
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "berserker_s1_t0_3",
+      "name": "전쟁군주의 초월",
+      "branch": "berserker_s1_t0",
+      "class": "warrior",
+      "tier": 3,
+      "maxRank": 5,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 43,
+      "stats": [
+        {
+          "stat": "lifesteal",
+          "op": "add",
+          "value": 0.008
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "berserker_s1_t0_4",
+      "name": "전쟁군주의 궁극",
+      "branch": "berserker_s1_t0",
+      "class": "warrior",
+      "tier": 4,
+      "maxRank": 3,
+      "requires": 12,
+      "cost": 1,
+      "minLevel": 46,
+      "stats": [
+        {
+          "stat": "lowHpDamage",
+          "op": "add",
+          "value": 0.035
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": true
+    },
+    {
+      "id": "berserker_s1_t1_0",
+      "name": "철혈 지휘관의 기초",
+      "branch": "berserker_s1_t1",
+      "class": "warrior",
+      "tier": 0,
+      "maxRank": 6,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 34,
+      "stats": [
+        {
+          "stat": "lowHpDamage",
+          "op": "add",
+          "value": 0.035
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "berserker_s1_t1_1",
+      "name": "철혈 지휘관의 계승",
+      "branch": "berserker_s1_t1",
+      "class": "warrior",
+      "tier": 1,
+      "maxRank": 6,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 37,
+      "stats": [
+        {
+          "stat": "attack",
+          "op": "multiply",
+          "value": 1.055
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "berserker_s1_t1_2",
+      "name": "철혈 지휘관의 완성",
+      "branch": "berserker_s1_t1",
+      "class": "warrior",
+      "tier": 2,
+      "maxRank": 5,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 40,
+      "stats": [
+        {
+          "stat": "manaRegen",
+          "op": "add",
+          "value": 0.18
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "berserker_s1_t1_3",
+      "name": "철혈 지휘관의 초월",
+      "branch": "berserker_s1_t1",
+      "class": "warrior",
+      "tier": 3,
+      "maxRank": 5,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 43,
+      "stats": [
+        {
+          "stat": "lowHpDamage",
+          "op": "add",
+          "value": 0.035
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "berserker_s1_t1_4",
+      "name": "철혈 지휘관의 궁극",
+      "branch": "berserker_s1_t1",
+      "class": "warrior",
+      "tier": 4,
+      "maxRank": 3,
+      "requires": 12,
+      "cost": 1,
+      "minLevel": 46,
+      "stats": [
+        {
+          "stat": "attack",
+          "op": "multiply",
+          "value": 1.055
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": true
+    },
+    {
+      "id": "rune_deep_0",
+      "name": "룬 기사의 연마",
+      "branch": "rune",
+      "class": "warrior",
+      "tier": 4,
+      "maxRank": 6,
+      "requires": 7,
+      "cost": 1,
+      "minLevel": 10,
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "op": "multiply",
+          "value": 1.06
+        }
+      ],
+      "description": "계열 능력을 반복 수련합니다.",
+      "capstone": false
+    },
+    {
+      "id": "rune_deep_1",
+      "name": "룬 기사의 비전",
+      "branch": "rune",
+      "class": "warrior",
+      "tier": 5,
+      "maxRank": 6,
+      "requires": 10,
+      "cost": 1,
+      "minLevel": 14,
+      "stats": [
+        {
+          "stat": "manaOnHit",
+          "op": "add",
+          "value": 0.25
+        }
+      ],
+      "description": "계열 능력을 반복 수련합니다.",
+      "capstone": false
+    },
+    {
+      "id": "rune_s0_0",
+      "name": "마검사의 단련",
+      "branch": "rune_s0",
+      "class": "warrior",
+      "tier": 0,
+      "maxRank": 5,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 18,
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "op": "multiply",
+          "value": 1.06
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "rune_s0_1",
+      "name": "마검사의 기예",
+      "branch": "rune_s0",
+      "class": "warrior",
+      "tier": 1,
+      "maxRank": 5,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 21,
+      "stats": [
+        {
+          "stat": "manaOnHit",
+          "op": "add",
+          "value": 0.25
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "rune_s0_2",
+      "name": "마검사의 신념",
+      "branch": "rune_s0",
+      "class": "warrior",
+      "tier": 2,
+      "maxRank": 4,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 24,
+      "stats": [
+        {
+          "stat": "cooldownRate",
+          "op": "multiply",
+          "value": 0.98
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "rune_s0_3",
+      "name": "마검사의 오의",
+      "branch": "rune_s0",
+      "class": "warrior",
+      "tier": 3,
+      "maxRank": 2,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 27,
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "op": "multiply",
+          "value": 1.06
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": true
+    },
+    {
+      "id": "rune_s0_t0_0",
+      "name": "별의 마검사의 기초",
+      "branch": "rune_s0_t0",
+      "class": "warrior",
+      "tier": 0,
+      "maxRank": 6,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 34,
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "op": "multiply",
+          "value": 1.06
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "rune_s0_t0_1",
+      "name": "별의 마검사의 계승",
+      "branch": "rune_s0_t0",
+      "class": "warrior",
+      "tier": 1,
+      "maxRank": 6,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 37,
+      "stats": [
+        {
+          "stat": "manaOnHit",
+          "op": "add",
+          "value": 0.25
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "rune_s0_t0_2",
+      "name": "별의 마검사의 완성",
+      "branch": "rune_s0_t0",
+      "class": "warrior",
+      "tier": 2,
+      "maxRank": 5,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 40,
+      "stats": [
+        {
+          "stat": "cooldownRate",
+          "op": "multiply",
+          "value": 0.98
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "rune_s0_t0_3",
+      "name": "별의 마검사의 초월",
+      "branch": "rune_s0_t0",
+      "class": "warrior",
+      "tier": 3,
+      "maxRank": 5,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 43,
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "op": "multiply",
+          "value": 1.06
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "rune_s0_t0_4",
+      "name": "별의 마검사의 궁극",
+      "branch": "rune_s0_t0",
+      "class": "warrior",
+      "tier": 4,
+      "maxRank": 3,
+      "requires": 12,
+      "cost": 1,
+      "minLevel": 46,
+      "stats": [
+        {
+          "stat": "manaOnHit",
+          "op": "add",
+          "value": 0.25
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": true
+    },
+    {
+      "id": "rune_s0_t1_0",
+      "name": "심연의 칼날의 기초",
+      "branch": "rune_s0_t1",
+      "class": "warrior",
+      "tier": 0,
+      "maxRank": 6,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 34,
+      "stats": [
+        {
+          "stat": "manaOnHit",
+          "op": "add",
+          "value": 0.25
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "rune_s0_t1_1",
+      "name": "심연의 칼날의 계승",
+      "branch": "rune_s0_t1",
+      "class": "warrior",
+      "tier": 1,
+      "maxRank": 6,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 37,
+      "stats": [
+        {
+          "stat": "cooldownRate",
+          "op": "multiply",
+          "value": 0.98
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "rune_s0_t1_2",
+      "name": "심연의 칼날의 완성",
+      "branch": "rune_s0_t1",
+      "class": "warrior",
+      "tier": 2,
+      "maxRank": 5,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 40,
+      "stats": [
+        {
+          "stat": "manaRegen",
+          "op": "add",
+          "value": 0.18
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "rune_s0_t1_3",
+      "name": "심연의 칼날의 초월",
+      "branch": "rune_s0_t1",
+      "class": "warrior",
+      "tier": 3,
+      "maxRank": 5,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 43,
+      "stats": [
+        {
+          "stat": "manaOnHit",
+          "op": "add",
+          "value": 0.25
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "rune_s0_t1_4",
+      "name": "심연의 칼날의 궁극",
+      "branch": "rune_s0_t1",
+      "class": "warrior",
+      "tier": 4,
+      "maxRank": 3,
+      "requires": 12,
+      "cost": 1,
+      "minLevel": 46,
+      "stats": [
+        {
+          "stat": "cooldownRate",
+          "op": "multiply",
+          "value": 0.98
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": true
+    },
+    {
+      "id": "rune_s1_0",
+      "name": "룬 수호자의 단련",
+      "branch": "rune_s1",
+      "class": "warrior",
+      "tier": 0,
+      "maxRank": 5,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 18,
+      "stats": [
+        {
+          "stat": "manaOnHit",
+          "op": "add",
+          "value": 0.25
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "rune_s1_1",
+      "name": "룬 수호자의 기예",
+      "branch": "rune_s1",
+      "class": "warrior",
+      "tier": 1,
+      "maxRank": 5,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 21,
+      "stats": [
+        {
+          "stat": "hp",
+          "op": "multiply",
+          "value": 1.045
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "rune_s1_2",
+      "name": "룬 수호자의 신념",
+      "branch": "rune_s1",
+      "class": "warrior",
+      "tier": 2,
+      "maxRank": 4,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 24,
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "op": "multiply",
+          "value": 1.06
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "rune_s1_3",
+      "name": "룬 수호자의 오의",
+      "branch": "rune_s1",
+      "class": "warrior",
+      "tier": 3,
+      "maxRank": 2,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 27,
+      "stats": [
+        {
+          "stat": "manaOnHit",
+          "op": "add",
+          "value": 0.25
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": true
+    },
+    {
+      "id": "rune_s1_t0_0",
+      "name": "봉인의 기사의 기초",
+      "branch": "rune_s1_t0",
+      "class": "warrior",
+      "tier": 0,
+      "maxRank": 6,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 34,
+      "stats": [
+        {
+          "stat": "manaOnHit",
+          "op": "add",
+          "value": 0.25
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "rune_s1_t0_1",
+      "name": "봉인의 기사의 계승",
+      "branch": "rune_s1_t0",
+      "class": "warrior",
+      "tier": 1,
+      "maxRank": 6,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 37,
+      "stats": [
+        {
+          "stat": "cooldownRate",
+          "op": "multiply",
+          "value": 0.98
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "rune_s1_t0_2",
+      "name": "봉인의 기사의 완성",
+      "branch": "rune_s1_t0",
+      "class": "warrior",
+      "tier": 2,
+      "maxRank": 5,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 40,
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "op": "multiply",
+          "value": 1.06
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "rune_s1_t0_3",
+      "name": "봉인의 기사의 초월",
+      "branch": "rune_s1_t0",
+      "class": "warrior",
+      "tier": 3,
+      "maxRank": 5,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 43,
+      "stats": [
+        {
+          "stat": "manaOnHit",
+          "op": "add",
+          "value": 0.25
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "rune_s1_t0_4",
+      "name": "봉인의 기사의 궁극",
+      "branch": "rune_s1_t0",
+      "class": "warrior",
+      "tier": 4,
+      "maxRank": 3,
+      "requires": 12,
+      "cost": 1,
+      "minLevel": 46,
+      "stats": [
+        {
+          "stat": "cooldownRate",
+          "op": "multiply",
+          "value": 0.98
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": true
+    },
+    {
+      "id": "rune_s1_t1_0",
+      "name": "황금 서약자의 기초",
+      "branch": "rune_s1_t1",
+      "class": "warrior",
+      "tier": 0,
+      "maxRank": 6,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 34,
+      "stats": [
+        {
+          "stat": "cooldownRate",
+          "op": "multiply",
+          "value": 0.98
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "rune_s1_t1_1",
+      "name": "황금 서약자의 계승",
+      "branch": "rune_s1_t1",
+      "class": "warrior",
+      "tier": 1,
+      "maxRank": 6,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 37,
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "op": "multiply",
+          "value": 1.06
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "rune_s1_t1_2",
+      "name": "황금 서약자의 완성",
+      "branch": "rune_s1_t1",
+      "class": "warrior",
+      "tier": 2,
+      "maxRank": 5,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 40,
+      "stats": [
+        {
+          "stat": "manaRegen",
+          "op": "add",
+          "value": 0.18
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "rune_s1_t1_3",
+      "name": "황금 서약자의 초월",
+      "branch": "rune_s1_t1",
+      "class": "warrior",
+      "tier": 3,
+      "maxRank": 5,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 43,
+      "stats": [
+        {
+          "stat": "cooldownRate",
+          "op": "multiply",
+          "value": 0.98
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "rune_s1_t1_4",
+      "name": "황금 서약자의 궁극",
+      "branch": "rune_s1_t1",
+      "class": "warrior",
+      "tier": 4,
+      "maxRank": 3,
+      "requires": 12,
+      "cost": 1,
+      "minLevel": 46,
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "op": "multiply",
+          "value": 1.06
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": true
+    },
+    {
+      "id": "marksman_deep_0",
+      "name": "명사수의 연마",
+      "branch": "marksman",
+      "class": "archer",
+      "tier": 4,
+      "maxRank": 6,
+      "requires": 7,
+      "cost": 1,
+      "minLevel": 10,
+      "stats": [
+        {
+          "stat": "basicDamage",
+          "op": "multiply",
+          "value": 1.06
+        }
+      ],
+      "description": "계열 능력을 반복 수련합니다.",
+      "capstone": false
+    },
+    {
+      "id": "marksman_deep_1",
+      "name": "명사수의 비전",
+      "branch": "marksman",
+      "class": "archer",
+      "tier": 5,
+      "maxRank": 6,
+      "requires": 10,
+      "cost": 1,
+      "minLevel": 14,
+      "stats": [
+        {
+          "stat": "critDamage",
+          "op": "add",
+          "value": 0.04
+        }
+      ],
+      "description": "계열 능력을 반복 수련합니다.",
+      "capstone": false
+    },
+    {
+      "id": "marksman_s0_0",
+      "name": "데드아이의 단련",
+      "branch": "marksman_s0",
+      "class": "archer",
+      "tier": 0,
+      "maxRank": 5,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 18,
+      "stats": [
+        {
+          "stat": "basicDamage",
+          "op": "multiply",
+          "value": 1.06
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "marksman_s0_1",
+      "name": "데드아이의 기예",
+      "branch": "marksman_s0",
+      "class": "archer",
+      "tier": 1,
+      "maxRank": 5,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 21,
+      "stats": [
+        {
+          "stat": "critDamage",
+          "op": "add",
+          "value": 0.04
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "marksman_s0_2",
+      "name": "데드아이의 신념",
+      "branch": "marksman_s0",
+      "class": "archer",
+      "tier": 2,
+      "maxRank": 4,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 24,
+      "stats": [
+        {
+          "stat": "range",
+          "op": "add",
+          "value": 0.1
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "marksman_s0_3",
+      "name": "데드아이의 오의",
+      "branch": "marksman_s0",
+      "class": "archer",
+      "tier": 3,
+      "maxRank": 2,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 27,
+      "stats": [
+        {
+          "stat": "basicDamage",
+          "op": "multiply",
+          "value": 1.06
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": true
+    },
+    {
+      "id": "marksman_s0_t0_0",
+      "name": "왕국 저격수의 기초",
+      "branch": "marksman_s0_t0",
+      "class": "archer",
+      "tier": 0,
+      "maxRank": 6,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 34,
+      "stats": [
+        {
+          "stat": "basicDamage",
+          "op": "multiply",
+          "value": 1.06
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "marksman_s0_t0_1",
+      "name": "왕국 저격수의 계승",
+      "branch": "marksman_s0_t0",
+      "class": "archer",
+      "tier": 1,
+      "maxRank": 6,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 37,
+      "stats": [
+        {
+          "stat": "critDamage",
+          "op": "add",
+          "value": 0.04
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "marksman_s0_t0_2",
+      "name": "왕국 저격수의 완성",
+      "branch": "marksman_s0_t0",
+      "class": "archer",
+      "tier": 2,
+      "maxRank": 5,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 40,
+      "stats": [
+        {
+          "stat": "range",
+          "op": "add",
+          "value": 0.1
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "marksman_s0_t0_3",
+      "name": "왕국 저격수의 초월",
+      "branch": "marksman_s0_t0",
+      "class": "archer",
+      "tier": 3,
+      "maxRank": 5,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 43,
+      "stats": [
+        {
+          "stat": "basicDamage",
+          "op": "multiply",
+          "value": 1.06
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "marksman_s0_t0_4",
+      "name": "왕국 저격수의 궁극",
+      "branch": "marksman_s0_t0",
+      "class": "archer",
+      "tier": 4,
+      "maxRank": 3,
+      "requires": 12,
+      "cost": 1,
+      "minLevel": 46,
+      "stats": [
+        {
+          "stat": "critDamage",
+          "op": "add",
+          "value": 0.04
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": true
+    },
+    {
+      "id": "marksman_s0_t1_0",
+      "name": "유성 사수의 기초",
+      "branch": "marksman_s0_t1",
+      "class": "archer",
+      "tier": 0,
+      "maxRank": 6,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 34,
+      "stats": [
+        {
+          "stat": "critDamage",
+          "op": "add",
+          "value": 0.04
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "marksman_s0_t1_1",
+      "name": "유성 사수의 계승",
+      "branch": "marksman_s0_t1",
+      "class": "archer",
+      "tier": 1,
+      "maxRank": 6,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 37,
+      "stats": [
+        {
+          "stat": "range",
+          "op": "add",
+          "value": 0.1
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "marksman_s0_t1_2",
+      "name": "유성 사수의 완성",
+      "branch": "marksman_s0_t1",
+      "class": "archer",
+      "tier": 2,
+      "maxRank": 5,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 40,
+      "stats": [
+        {
+          "stat": "manaRegen",
+          "op": "add",
+          "value": 0.18
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "marksman_s0_t1_3",
+      "name": "유성 사수의 초월",
+      "branch": "marksman_s0_t1",
+      "class": "archer",
+      "tier": 3,
+      "maxRank": 5,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 43,
+      "stats": [
+        {
+          "stat": "critDamage",
+          "op": "add",
+          "value": 0.04
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "marksman_s0_t1_4",
+      "name": "유성 사수의 궁극",
+      "branch": "marksman_s0_t1",
+      "class": "archer",
+      "tier": 4,
+      "maxRank": 3,
+      "requires": 12,
+      "cost": 1,
+      "minLevel": 46,
+      "stats": [
+        {
+          "stat": "range",
+          "op": "add",
+          "value": 0.1
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": true
+    },
+    {
+      "id": "marksman_s1_0",
+      "name": "호크아이의 단련",
+      "branch": "marksman_s1",
+      "class": "archer",
+      "tier": 0,
+      "maxRank": 5,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 18,
+      "stats": [
+        {
+          "stat": "critDamage",
+          "op": "add",
+          "value": 0.04
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "marksman_s1_1",
+      "name": "호크아이의 기예",
+      "branch": "marksman_s1",
+      "class": "archer",
+      "tier": 1,
+      "maxRank": 5,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 21,
+      "stats": [
+        {
+          "stat": "hp",
+          "op": "multiply",
+          "value": 1.045
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "marksman_s1_2",
+      "name": "호크아이의 신념",
+      "branch": "marksman_s1",
+      "class": "archer",
+      "tier": 2,
+      "maxRank": 4,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 24,
+      "stats": [
+        {
+          "stat": "basicDamage",
+          "op": "multiply",
+          "value": 1.06
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "marksman_s1_3",
+      "name": "호크아이의 오의",
+      "branch": "marksman_s1",
+      "class": "archer",
+      "tier": 3,
+      "maxRank": 2,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 27,
+      "stats": [
+        {
+          "stat": "critDamage",
+          "op": "add",
+          "value": 0.04
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": true
+    },
+    {
+      "id": "marksman_s1_t0_0",
+      "name": "매의 군주의 기초",
+      "branch": "marksman_s1_t0",
+      "class": "archer",
+      "tier": 0,
+      "maxRank": 6,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 34,
+      "stats": [
+        {
+          "stat": "critDamage",
+          "op": "add",
+          "value": 0.04
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "marksman_s1_t0_1",
+      "name": "매의 군주의 계승",
+      "branch": "marksman_s1_t0",
+      "class": "archer",
+      "tier": 1,
+      "maxRank": 6,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 37,
+      "stats": [
+        {
+          "stat": "range",
+          "op": "add",
+          "value": 0.1
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "marksman_s1_t0_2",
+      "name": "매의 군주의 완성",
+      "branch": "marksman_s1_t0",
+      "class": "archer",
+      "tier": 2,
+      "maxRank": 5,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 40,
+      "stats": [
+        {
+          "stat": "basicDamage",
+          "op": "multiply",
+          "value": 1.06
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "marksman_s1_t0_3",
+      "name": "매의 군주의 초월",
+      "branch": "marksman_s1_t0",
+      "class": "archer",
+      "tier": 3,
+      "maxRank": 5,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 43,
+      "stats": [
+        {
+          "stat": "critDamage",
+          "op": "add",
+          "value": 0.04
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "marksman_s1_t0_4",
+      "name": "매의 군주의 궁극",
+      "branch": "marksman_s1_t0",
+      "class": "archer",
+      "tier": 4,
+      "maxRank": 3,
+      "requires": 12,
+      "cost": 1,
+      "minLevel": 46,
+      "stats": [
+        {
+          "stat": "range",
+          "op": "add",
+          "value": 0.1
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": true
+    },
+    {
+      "id": "marksman_s1_t1_0",
+      "name": "천리안의 기초",
+      "branch": "marksman_s1_t1",
+      "class": "archer",
+      "tier": 0,
+      "maxRank": 6,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 34,
+      "stats": [
+        {
+          "stat": "range",
+          "op": "add",
+          "value": 0.1
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "marksman_s1_t1_1",
+      "name": "천리안의 계승",
+      "branch": "marksman_s1_t1",
+      "class": "archer",
+      "tier": 1,
+      "maxRank": 6,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 37,
+      "stats": [
+        {
+          "stat": "basicDamage",
+          "op": "multiply",
+          "value": 1.06
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "marksman_s1_t1_2",
+      "name": "천리안의 완성",
+      "branch": "marksman_s1_t1",
+      "class": "archer",
+      "tier": 2,
+      "maxRank": 5,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 40,
+      "stats": [
+        {
+          "stat": "manaRegen",
+          "op": "add",
+          "value": 0.18
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "marksman_s1_t1_3",
+      "name": "천리안의 초월",
+      "branch": "marksman_s1_t1",
+      "class": "archer",
+      "tier": 3,
+      "maxRank": 5,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 43,
+      "stats": [
+        {
+          "stat": "range",
+          "op": "add",
+          "value": 0.1
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "marksman_s1_t1_4",
+      "name": "천리안의 궁극",
+      "branch": "marksman_s1_t1",
+      "class": "archer",
+      "tier": 4,
+      "maxRank": 3,
+      "requires": 12,
+      "cost": 1,
+      "minLevel": 46,
+      "stats": [
+        {
+          "stat": "basicDamage",
+          "op": "multiply",
+          "value": 1.06
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": true
+    },
+    {
+      "id": "ranger_deep_0",
+      "name": "추적자의 연마",
+      "branch": "ranger",
+      "class": "archer",
+      "tier": 4,
+      "maxRank": 6,
+      "requires": 7,
+      "cost": 1,
+      "minLevel": 10,
+      "stats": [
+        {
+          "stat": "attackSpeed",
+          "op": "multiply",
+          "value": 1.035
+        }
+      ],
+      "description": "계열 능력을 반복 수련합니다.",
+      "capstone": false
+    },
+    {
+      "id": "ranger_deep_1",
+      "name": "추적자의 비전",
+      "branch": "ranger",
+      "class": "archer",
+      "tier": 5,
+      "maxRank": 6,
+      "requires": 10,
+      "cost": 1,
+      "minLevel": 14,
+      "stats": [
+        {
+          "stat": "poisonChance",
+          "op": "add",
+          "value": 0.025
+        }
+      ],
+      "description": "계열 능력을 반복 수련합니다.",
+      "capstone": false
+    },
+    {
+      "id": "ranger_s0_0",
+      "name": "숲의 파수꾼의 단련",
+      "branch": "ranger_s0",
+      "class": "archer",
+      "tier": 0,
+      "maxRank": 5,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 18,
+      "stats": [
+        {
+          "stat": "attackSpeed",
+          "op": "multiply",
+          "value": 1.035
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "ranger_s0_1",
+      "name": "숲의 파수꾼의 기예",
+      "branch": "ranger_s0",
+      "class": "archer",
+      "tier": 1,
+      "maxRank": 5,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 21,
+      "stats": [
+        {
+          "stat": "poisonChance",
+          "op": "add",
+          "value": 0.025
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "ranger_s0_2",
+      "name": "숲의 파수꾼의 신념",
+      "branch": "ranger_s0",
+      "class": "archer",
+      "tier": 2,
+      "maxRank": 4,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 24,
+      "stats": [
+        {
+          "stat": "speed",
+          "op": "multiply",
+          "value": 1.015
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "ranger_s0_3",
+      "name": "숲의 파수꾼의 오의",
+      "branch": "ranger_s0",
+      "class": "archer",
+      "tier": 3,
+      "maxRank": 2,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 27,
+      "stats": [
+        {
+          "stat": "attackSpeed",
+          "op": "multiply",
+          "value": 1.035
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": true
+    },
+    {
+      "id": "ranger_s0_t0_0",
+      "name": "야생의 수호자의 기초",
+      "branch": "ranger_s0_t0",
+      "class": "archer",
+      "tier": 0,
+      "maxRank": 6,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 34,
+      "stats": [
+        {
+          "stat": "attackSpeed",
+          "op": "multiply",
+          "value": 1.035
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "ranger_s0_t0_1",
+      "name": "야생의 수호자의 계승",
+      "branch": "ranger_s0_t0",
+      "class": "archer",
+      "tier": 1,
+      "maxRank": 6,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 37,
+      "stats": [
+        {
+          "stat": "poisonChance",
+          "op": "add",
+          "value": 0.025
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "ranger_s0_t0_2",
+      "name": "야생의 수호자의 완성",
+      "branch": "ranger_s0_t0",
+      "class": "archer",
+      "tier": 2,
+      "maxRank": 5,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 40,
+      "stats": [
+        {
+          "stat": "speed",
+          "op": "multiply",
+          "value": 1.015
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "ranger_s0_t0_3",
+      "name": "야생의 수호자의 초월",
+      "branch": "ranger_s0_t0",
+      "class": "archer",
+      "tier": 3,
+      "maxRank": 5,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 43,
+      "stats": [
+        {
+          "stat": "attackSpeed",
+          "op": "multiply",
+          "value": 1.035
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "ranger_s0_t0_4",
+      "name": "야생의 수호자의 궁극",
+      "branch": "ranger_s0_t0",
+      "class": "archer",
+      "tier": 4,
+      "maxRank": 3,
+      "requires": 12,
+      "cost": 1,
+      "minLevel": 46,
+      "stats": [
+        {
+          "stat": "poisonChance",
+          "op": "add",
+          "value": 0.025
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": true
+    },
+    {
+      "id": "ranger_s0_t1_0",
+      "name": "녹풍 사냥꾼의 기초",
+      "branch": "ranger_s0_t1",
+      "class": "archer",
+      "tier": 0,
+      "maxRank": 6,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 34,
+      "stats": [
+        {
+          "stat": "poisonChance",
+          "op": "add",
+          "value": 0.025
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "ranger_s0_t1_1",
+      "name": "녹풍 사냥꾼의 계승",
+      "branch": "ranger_s0_t1",
+      "class": "archer",
+      "tier": 1,
+      "maxRank": 6,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 37,
+      "stats": [
+        {
+          "stat": "speed",
+          "op": "multiply",
+          "value": 1.015
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "ranger_s0_t1_2",
+      "name": "녹풍 사냥꾼의 완성",
+      "branch": "ranger_s0_t1",
+      "class": "archer",
+      "tier": 2,
+      "maxRank": 5,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 40,
+      "stats": [
+        {
+          "stat": "manaRegen",
+          "op": "add",
+          "value": 0.18
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "ranger_s0_t1_3",
+      "name": "녹풍 사냥꾼의 초월",
+      "branch": "ranger_s0_t1",
+      "class": "archer",
+      "tier": 3,
+      "maxRank": 5,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 43,
+      "stats": [
+        {
+          "stat": "poisonChance",
+          "op": "add",
+          "value": 0.025
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "ranger_s0_t1_4",
+      "name": "녹풍 사냥꾼의 궁극",
+      "branch": "ranger_s0_t1",
+      "class": "archer",
+      "tier": 4,
+      "maxRank": 3,
+      "requires": 12,
+      "cost": 1,
+      "minLevel": 46,
+      "stats": [
+        {
+          "stat": "speed",
+          "op": "multiply",
+          "value": 1.015
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": true
+    },
+    {
+      "id": "ranger_s1_0",
+      "name": "트래퍼의 단련",
+      "branch": "ranger_s1",
+      "class": "archer",
+      "tier": 0,
+      "maxRank": 5,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 18,
+      "stats": [
+        {
+          "stat": "poisonChance",
+          "op": "add",
+          "value": 0.025
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "ranger_s1_1",
+      "name": "트래퍼의 기예",
+      "branch": "ranger_s1",
+      "class": "archer",
+      "tier": 1,
+      "maxRank": 5,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 21,
+      "stats": [
+        {
+          "stat": "hp",
+          "op": "multiply",
+          "value": 1.045
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "ranger_s1_2",
+      "name": "트래퍼의 신념",
+      "branch": "ranger_s1",
+      "class": "archer",
+      "tier": 2,
+      "maxRank": 4,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 24,
+      "stats": [
+        {
+          "stat": "attackSpeed",
+          "op": "multiply",
+          "value": 1.035
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "ranger_s1_3",
+      "name": "트래퍼의 오의",
+      "branch": "ranger_s1",
+      "class": "archer",
+      "tier": 3,
+      "maxRank": 2,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 27,
+      "stats": [
+        {
+          "stat": "poisonChance",
+          "op": "add",
+          "value": 0.025
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": true
+    },
+    {
+      "id": "ranger_s1_t0_0",
+      "name": "덫의 장인의 기초",
+      "branch": "ranger_s1_t0",
+      "class": "archer",
+      "tier": 0,
+      "maxRank": 6,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 34,
+      "stats": [
+        {
+          "stat": "poisonChance",
+          "op": "add",
+          "value": 0.025
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "ranger_s1_t0_1",
+      "name": "덫의 장인의 계승",
+      "branch": "ranger_s1_t0",
+      "class": "archer",
+      "tier": 1,
+      "maxRank": 6,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 37,
+      "stats": [
+        {
+          "stat": "speed",
+          "op": "multiply",
+          "value": 1.015
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "ranger_s1_t0_2",
+      "name": "덫의 장인의 완성",
+      "branch": "ranger_s1_t0",
+      "class": "archer",
+      "tier": 2,
+      "maxRank": 5,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 40,
+      "stats": [
+        {
+          "stat": "attackSpeed",
+          "op": "multiply",
+          "value": 1.035
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "ranger_s1_t0_3",
+      "name": "덫의 장인의 초월",
+      "branch": "ranger_s1_t0",
+      "class": "archer",
+      "tier": 3,
+      "maxRank": 5,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 43,
+      "stats": [
+        {
+          "stat": "poisonChance",
+          "op": "add",
+          "value": 0.025
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "ranger_s1_t0_4",
+      "name": "덫의 장인의 궁극",
+      "branch": "ranger_s1_t0",
+      "class": "archer",
+      "tier": 4,
+      "maxRank": 3,
+      "requires": 12,
+      "cost": 1,
+      "minLevel": 46,
+      "stats": [
+        {
+          "stat": "speed",
+          "op": "multiply",
+          "value": 1.015
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": true
+    },
+    {
+      "id": "ranger_s1_t1_0",
+      "name": "독안개 추적자의 기초",
+      "branch": "ranger_s1_t1",
+      "class": "archer",
+      "tier": 0,
+      "maxRank": 6,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 34,
+      "stats": [
+        {
+          "stat": "speed",
+          "op": "multiply",
+          "value": 1.015
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "ranger_s1_t1_1",
+      "name": "독안개 추적자의 계승",
+      "branch": "ranger_s1_t1",
+      "class": "archer",
+      "tier": 1,
+      "maxRank": 6,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 37,
+      "stats": [
+        {
+          "stat": "attackSpeed",
+          "op": "multiply",
+          "value": 1.035
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "ranger_s1_t1_2",
+      "name": "독안개 추적자의 완성",
+      "branch": "ranger_s1_t1",
+      "class": "archer",
+      "tier": 2,
+      "maxRank": 5,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 40,
+      "stats": [
+        {
+          "stat": "manaRegen",
+          "op": "add",
+          "value": 0.18
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "ranger_s1_t1_3",
+      "name": "독안개 추적자의 초월",
+      "branch": "ranger_s1_t1",
+      "class": "archer",
+      "tier": 3,
+      "maxRank": 5,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 43,
+      "stats": [
+        {
+          "stat": "speed",
+          "op": "multiply",
+          "value": 1.015
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "ranger_s1_t1_4",
+      "name": "독안개 추적자의 궁극",
+      "branch": "ranger_s1_t1",
+      "class": "archer",
+      "tier": 4,
+      "maxRank": 3,
+      "requires": 12,
+      "cost": 1,
+      "minLevel": 46,
+      "stats": [
+        {
+          "stat": "attackSpeed",
+          "op": "multiply",
+          "value": 1.035
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": true
+    },
+    {
+      "id": "venom_deep_0",
+      "name": "독 사냥꾼의 연마",
+      "branch": "venom",
+      "class": "archer",
+      "tier": 4,
+      "maxRank": 6,
+      "requires": 7,
+      "cost": 1,
+      "minLevel": 10,
+      "stats": [
+        {
+          "stat": "crit",
+          "op": "add",
+          "value": 0.02
+        }
+      ],
+      "description": "계열 능력을 반복 수련합니다.",
+      "capstone": false
+    },
+    {
+      "id": "venom_deep_1",
+      "name": "독 사냥꾼의 비전",
+      "branch": "venom",
+      "class": "archer",
+      "tier": 5,
+      "maxRank": 6,
+      "requires": 10,
+      "cost": 1,
+      "minLevel": 14,
+      "stats": [
+        {
+          "stat": "poisonDamage",
+          "op": "add",
+          "value": 0.025
+        }
+      ],
+      "description": "계열 능력을 반복 수련합니다.",
+      "capstone": false
+    },
+    {
+      "id": "venom_s0_0",
+      "name": "나이트스토커의 단련",
+      "branch": "venom_s0",
+      "class": "archer",
+      "tier": 0,
+      "maxRank": 5,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 18,
+      "stats": [
+        {
+          "stat": "crit",
+          "op": "add",
+          "value": 0.02
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "venom_s0_1",
+      "name": "나이트스토커의 기예",
+      "branch": "venom_s0",
+      "class": "archer",
+      "tier": 1,
+      "maxRank": 5,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 21,
+      "stats": [
+        {
+          "stat": "poisonDamage",
+          "op": "add",
+          "value": 0.025
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "venom_s0_2",
+      "name": "나이트스토커의 신념",
+      "branch": "venom_s0",
+      "class": "archer",
+      "tier": 2,
+      "maxRank": 4,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 24,
+      "stats": [
+        {
+          "stat": "lifesteal",
+          "op": "add",
+          "value": 0.006
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "venom_s0_3",
+      "name": "나이트스토커의 오의",
+      "branch": "venom_s0",
+      "class": "archer",
+      "tier": 3,
+      "maxRank": 2,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 27,
+      "stats": [
+        {
+          "stat": "crit",
+          "op": "add",
+          "value": 0.02
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": true
+    },
+    {
+      "id": "venom_s0_t0_0",
+      "name": "월영 추적자의 기초",
+      "branch": "venom_s0_t0",
+      "class": "archer",
+      "tier": 0,
+      "maxRank": 6,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 34,
+      "stats": [
+        {
+          "stat": "crit",
+          "op": "add",
+          "value": 0.02
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "venom_s0_t0_1",
+      "name": "월영 추적자의 계승",
+      "branch": "venom_s0_t0",
+      "class": "archer",
+      "tier": 1,
+      "maxRank": 6,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 37,
+      "stats": [
+        {
+          "stat": "poisonDamage",
+          "op": "add",
+          "value": 0.025
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "venom_s0_t0_2",
+      "name": "월영 추적자의 완성",
+      "branch": "venom_s0_t0",
+      "class": "archer",
+      "tier": 2,
+      "maxRank": 5,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 40,
+      "stats": [
+        {
+          "stat": "lifesteal",
+          "op": "add",
+          "value": 0.006
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "venom_s0_t0_3",
+      "name": "월영 추적자의 초월",
+      "branch": "venom_s0_t0",
+      "class": "archer",
+      "tier": 3,
+      "maxRank": 5,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 43,
+      "stats": [
+        {
+          "stat": "crit",
+          "op": "add",
+          "value": 0.02
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "venom_s0_t0_4",
+      "name": "월영 추적자의 궁극",
+      "branch": "venom_s0_t0",
+      "class": "archer",
+      "tier": 4,
+      "maxRank": 3,
+      "requires": 12,
+      "cost": 1,
+      "minLevel": 46,
+      "stats": [
+        {
+          "stat": "poisonDamage",
+          "op": "add",
+          "value": 0.025
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": true
+    },
+    {
+      "id": "venom_s0_t1_0",
+      "name": "칠흑의 화살의 기초",
+      "branch": "venom_s0_t1",
+      "class": "archer",
+      "tier": 0,
+      "maxRank": 6,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 34,
+      "stats": [
+        {
+          "stat": "poisonDamage",
+          "op": "add",
+          "value": 0.025
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "venom_s0_t1_1",
+      "name": "칠흑의 화살의 계승",
+      "branch": "venom_s0_t1",
+      "class": "archer",
+      "tier": 1,
+      "maxRank": 6,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 37,
+      "stats": [
+        {
+          "stat": "lifesteal",
+          "op": "add",
+          "value": 0.006
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "venom_s0_t1_2",
+      "name": "칠흑의 화살의 완성",
+      "branch": "venom_s0_t1",
+      "class": "archer",
+      "tier": 2,
+      "maxRank": 5,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 40,
+      "stats": [
+        {
+          "stat": "manaRegen",
+          "op": "add",
+          "value": 0.18
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "venom_s0_t1_3",
+      "name": "칠흑의 화살의 초월",
+      "branch": "venom_s0_t1",
+      "class": "archer",
+      "tier": 3,
+      "maxRank": 5,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 43,
+      "stats": [
+        {
+          "stat": "poisonDamage",
+          "op": "add",
+          "value": 0.025
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "venom_s0_t1_4",
+      "name": "칠흑의 화살의 궁극",
+      "branch": "venom_s0_t1",
+      "class": "archer",
+      "tier": 4,
+      "maxRank": 3,
+      "requires": 12,
+      "cost": 1,
+      "minLevel": 46,
+      "stats": [
+        {
+          "stat": "lifesteal",
+          "op": "add",
+          "value": 0.006
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": true
+    },
+    {
+      "id": "venom_s1_0",
+      "name": "베놈레인저의 단련",
+      "branch": "venom_s1",
+      "class": "archer",
+      "tier": 0,
+      "maxRank": 5,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 18,
+      "stats": [
+        {
+          "stat": "poisonDamage",
+          "op": "add",
+          "value": 0.025
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "venom_s1_1",
+      "name": "베놈레인저의 기예",
+      "branch": "venom_s1",
+      "class": "archer",
+      "tier": 1,
+      "maxRank": 5,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 21,
+      "stats": [
+        {
+          "stat": "hp",
+          "op": "multiply",
+          "value": 1.045
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "venom_s1_2",
+      "name": "베놈레인저의 신념",
+      "branch": "venom_s1",
+      "class": "archer",
+      "tier": 2,
+      "maxRank": 4,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 24,
+      "stats": [
+        {
+          "stat": "crit",
+          "op": "add",
+          "value": 0.02
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "venom_s1_3",
+      "name": "베놈레인저의 오의",
+      "branch": "venom_s1",
+      "class": "archer",
+      "tier": 3,
+      "maxRank": 2,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 27,
+      "stats": [
+        {
+          "stat": "poisonDamage",
+          "op": "add",
+          "value": 0.025
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": true
+    },
+    {
+      "id": "venom_s1_t0_0",
+      "name": "독왕의 기초",
+      "branch": "venom_s1_t0",
+      "class": "archer",
+      "tier": 0,
+      "maxRank": 6,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 34,
+      "stats": [
+        {
+          "stat": "poisonDamage",
+          "op": "add",
+          "value": 0.025
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "venom_s1_t0_1",
+      "name": "독왕의 계승",
+      "branch": "venom_s1_t0",
+      "class": "archer",
+      "tier": 1,
+      "maxRank": 6,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 37,
+      "stats": [
+        {
+          "stat": "lifesteal",
+          "op": "add",
+          "value": 0.006
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "venom_s1_t0_2",
+      "name": "독왕의 완성",
+      "branch": "venom_s1_t0",
+      "class": "archer",
+      "tier": 2,
+      "maxRank": 5,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 40,
+      "stats": [
+        {
+          "stat": "crit",
+          "op": "add",
+          "value": 0.02
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "venom_s1_t0_3",
+      "name": "독왕의 초월",
+      "branch": "venom_s1_t0",
+      "class": "archer",
+      "tier": 3,
+      "maxRank": 5,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 43,
+      "stats": [
+        {
+          "stat": "poisonDamage",
+          "op": "add",
+          "value": 0.025
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "venom_s1_t0_4",
+      "name": "독왕의 궁극",
+      "branch": "venom_s1_t0",
+      "class": "archer",
+      "tier": 4,
+      "maxRank": 3,
+      "requires": 12,
+      "cost": 1,
+      "minLevel": 46,
+      "stats": [
+        {
+          "stat": "lifesteal",
+          "op": "add",
+          "value": 0.006
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": true
+    },
+    {
+      "id": "venom_s1_t1_0",
+      "name": "가시 심장의 기초",
+      "branch": "venom_s1_t1",
+      "class": "archer",
+      "tier": 0,
+      "maxRank": 6,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 34,
+      "stats": [
+        {
+          "stat": "lifesteal",
+          "op": "add",
+          "value": 0.006
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "venom_s1_t1_1",
+      "name": "가시 심장의 계승",
+      "branch": "venom_s1_t1",
+      "class": "archer",
+      "tier": 1,
+      "maxRank": 6,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 37,
+      "stats": [
+        {
+          "stat": "crit",
+          "op": "add",
+          "value": 0.02
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "venom_s1_t1_2",
+      "name": "가시 심장의 완성",
+      "branch": "venom_s1_t1",
+      "class": "archer",
+      "tier": 2,
+      "maxRank": 5,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 40,
+      "stats": [
+        {
+          "stat": "manaRegen",
+          "op": "add",
+          "value": 0.18
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "venom_s1_t1_3",
+      "name": "가시 심장의 초월",
+      "branch": "venom_s1_t1",
+      "class": "archer",
+      "tier": 3,
+      "maxRank": 5,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 43,
+      "stats": [
+        {
+          "stat": "lifesteal",
+          "op": "add",
+          "value": 0.006
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "venom_s1_t1_4",
+      "name": "가시 심장의 궁극",
+      "branch": "venom_s1_t1",
+      "class": "archer",
+      "tier": 4,
+      "maxRank": 3,
+      "requires": 12,
+      "cost": 1,
+      "minLevel": 46,
+      "stats": [
+        {
+          "stat": "crit",
+          "op": "add",
+          "value": 0.02
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": true
+    },
+    {
+      "id": "pyromancer_deep_0",
+      "name": "화염술사의 연마",
+      "branch": "pyromancer",
+      "class": "magician",
+      "tier": 4,
+      "maxRank": 6,
+      "requires": 7,
+      "cost": 1,
+      "minLevel": 10,
+      "stats": [
+        {
+          "stat": "spell",
+          "op": "multiply",
+          "value": 1.055
+        }
+      ],
+      "description": "계열 능력을 반복 수련합니다.",
+      "capstone": false
+    },
+    {
+      "id": "pyromancer_deep_1",
+      "name": "화염술사의 비전",
+      "branch": "pyromancer",
+      "class": "magician",
+      "tier": 5,
+      "maxRank": 6,
+      "requires": 10,
+      "cost": 1,
+      "minLevel": 14,
+      "stats": [
+        {
+          "stat": "burnDamage",
+          "op": "add",
+          "value": 0.025
+        }
+      ],
+      "description": "계열 능력을 반복 수련합니다.",
+      "capstone": false
+    },
+    {
+      "id": "pyromancer_s0_0",
+      "name": "인페르노의 단련",
+      "branch": "pyromancer_s0",
+      "class": "magician",
+      "tier": 0,
+      "maxRank": 5,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 18,
+      "stats": [
+        {
+          "stat": "spell",
+          "op": "multiply",
+          "value": 1.055
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "pyromancer_s0_1",
+      "name": "인페르노의 기예",
+      "branch": "pyromancer_s0",
+      "class": "magician",
+      "tier": 1,
+      "maxRank": 5,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 21,
+      "stats": [
+        {
+          "stat": "burnDamage",
+          "op": "add",
+          "value": 0.025
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "pyromancer_s0_2",
+      "name": "인페르노의 신념",
+      "branch": "pyromancer_s0",
+      "class": "magician",
+      "tier": 2,
+      "maxRank": 4,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 24,
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "op": "multiply",
+          "value": 1.045
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "pyromancer_s0_3",
+      "name": "인페르노의 오의",
+      "branch": "pyromancer_s0",
+      "class": "magician",
+      "tier": 3,
+      "maxRank": 2,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 27,
+      "stats": [
+        {
+          "stat": "spell",
+          "op": "multiply",
+          "value": 1.055
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": true
+    },
+    {
+      "id": "pyromancer_s0_t0_0",
+      "name": "불사조 현자의 기초",
+      "branch": "pyromancer_s0_t0",
+      "class": "magician",
+      "tier": 0,
+      "maxRank": 6,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 34,
+      "stats": [
+        {
+          "stat": "spell",
+          "op": "multiply",
+          "value": 1.055
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "pyromancer_s0_t0_1",
+      "name": "불사조 현자의 계승",
+      "branch": "pyromancer_s0_t0",
+      "class": "magician",
+      "tier": 1,
+      "maxRank": 6,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 37,
+      "stats": [
+        {
+          "stat": "burnDamage",
+          "op": "add",
+          "value": 0.025
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "pyromancer_s0_t0_2",
+      "name": "불사조 현자의 완성",
+      "branch": "pyromancer_s0_t0",
+      "class": "magician",
+      "tier": 2,
+      "maxRank": 5,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 40,
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "op": "multiply",
+          "value": 1.045
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "pyromancer_s0_t0_3",
+      "name": "불사조 현자의 초월",
+      "branch": "pyromancer_s0_t0",
+      "class": "magician",
+      "tier": 3,
+      "maxRank": 5,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 43,
+      "stats": [
+        {
+          "stat": "spell",
+          "op": "multiply",
+          "value": 1.055
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "pyromancer_s0_t0_4",
+      "name": "불사조 현자의 궁극",
+      "branch": "pyromancer_s0_t0",
+      "class": "magician",
+      "tier": 4,
+      "maxRank": 3,
+      "requires": 12,
+      "cost": 1,
+      "minLevel": 46,
+      "stats": [
+        {
+          "stat": "burnDamage",
+          "op": "add",
+          "value": 0.025
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": true
+    },
+    {
+      "id": "pyromancer_s0_t1_0",
+      "name": "홍련의 군주의 기초",
+      "branch": "pyromancer_s0_t1",
+      "class": "magician",
+      "tier": 0,
+      "maxRank": 6,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 34,
+      "stats": [
+        {
+          "stat": "burnDamage",
+          "op": "add",
+          "value": 0.025
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "pyromancer_s0_t1_1",
+      "name": "홍련의 군주의 계승",
+      "branch": "pyromancer_s0_t1",
+      "class": "magician",
+      "tier": 1,
+      "maxRank": 6,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 37,
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "op": "multiply",
+          "value": 1.045
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "pyromancer_s0_t1_2",
+      "name": "홍련의 군주의 완성",
+      "branch": "pyromancer_s0_t1",
+      "class": "magician",
+      "tier": 2,
+      "maxRank": 5,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 40,
+      "stats": [
+        {
+          "stat": "manaRegen",
+          "op": "add",
+          "value": 0.18
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "pyromancer_s0_t1_3",
+      "name": "홍련의 군주의 초월",
+      "branch": "pyromancer_s0_t1",
+      "class": "magician",
+      "tier": 3,
+      "maxRank": 5,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 43,
+      "stats": [
+        {
+          "stat": "burnDamage",
+          "op": "add",
+          "value": 0.025
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "pyromancer_s0_t1_4",
+      "name": "홍련의 군주의 궁극",
+      "branch": "pyromancer_s0_t1",
+      "class": "magician",
+      "tier": 4,
+      "maxRank": 3,
+      "requires": 12,
+      "cost": 1,
+      "minLevel": 46,
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "op": "multiply",
+          "value": 1.045
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": true
+    },
+    {
+      "id": "pyromancer_s1_0",
+      "name": "플레임위버의 단련",
+      "branch": "pyromancer_s1",
+      "class": "magician",
+      "tier": 0,
+      "maxRank": 5,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 18,
+      "stats": [
+        {
+          "stat": "burnDamage",
+          "op": "add",
+          "value": 0.025
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "pyromancer_s1_1",
+      "name": "플레임위버의 기예",
+      "branch": "pyromancer_s1",
+      "class": "magician",
+      "tier": 1,
+      "maxRank": 5,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 21,
+      "stats": [
+        {
+          "stat": "hp",
+          "op": "multiply",
+          "value": 1.045
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "pyromancer_s1_2",
+      "name": "플레임위버의 신념",
+      "branch": "pyromancer_s1",
+      "class": "magician",
+      "tier": 2,
+      "maxRank": 4,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 24,
+      "stats": [
+        {
+          "stat": "spell",
+          "op": "multiply",
+          "value": 1.055
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "pyromancer_s1_3",
+      "name": "플레임위버의 오의",
+      "branch": "pyromancer_s1",
+      "class": "magician",
+      "tier": 3,
+      "maxRank": 2,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 27,
+      "stats": [
+        {
+          "stat": "burnDamage",
+          "op": "add",
+          "value": 0.025
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": true
+    },
+    {
+      "id": "pyromancer_s1_t0_0",
+      "name": "태양의 직조자의 기초",
+      "branch": "pyromancer_s1_t0",
+      "class": "magician",
+      "tier": 0,
+      "maxRank": 6,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 34,
+      "stats": [
+        {
+          "stat": "burnDamage",
+          "op": "add",
+          "value": 0.025
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "pyromancer_s1_t0_1",
+      "name": "태양의 직조자의 계승",
+      "branch": "pyromancer_s1_t0",
+      "class": "magician",
+      "tier": 1,
+      "maxRank": 6,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 37,
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "op": "multiply",
+          "value": 1.045
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "pyromancer_s1_t0_2",
+      "name": "태양의 직조자의 완성",
+      "branch": "pyromancer_s1_t0",
+      "class": "magician",
+      "tier": 2,
+      "maxRank": 5,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 40,
+      "stats": [
+        {
+          "stat": "spell",
+          "op": "multiply",
+          "value": 1.055
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "pyromancer_s1_t0_3",
+      "name": "태양의 직조자의 초월",
+      "branch": "pyromancer_s1_t0",
+      "class": "magician",
+      "tier": 3,
+      "maxRank": 5,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 43,
+      "stats": [
+        {
+          "stat": "burnDamage",
+          "op": "add",
+          "value": 0.025
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "pyromancer_s1_t0_4",
+      "name": "태양의 직조자의 궁극",
+      "branch": "pyromancer_s1_t0",
+      "class": "magician",
+      "tier": 4,
+      "maxRank": 3,
+      "requires": 12,
+      "cost": 1,
+      "minLevel": 46,
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "op": "multiply",
+          "value": 1.045
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": true
+    },
+    {
+      "id": "pyromancer_s1_t1_0",
+      "name": "재의 예언자의 기초",
+      "branch": "pyromancer_s1_t1",
+      "class": "magician",
+      "tier": 0,
+      "maxRank": 6,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 34,
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "op": "multiply",
+          "value": 1.045
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "pyromancer_s1_t1_1",
+      "name": "재의 예언자의 계승",
+      "branch": "pyromancer_s1_t1",
+      "class": "magician",
+      "tier": 1,
+      "maxRank": 6,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 37,
+      "stats": [
+        {
+          "stat": "spell",
+          "op": "multiply",
+          "value": 1.055
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "pyromancer_s1_t1_2",
+      "name": "재의 예언자의 완성",
+      "branch": "pyromancer_s1_t1",
+      "class": "magician",
+      "tier": 2,
+      "maxRank": 5,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 40,
+      "stats": [
+        {
+          "stat": "manaRegen",
+          "op": "add",
+          "value": 0.18
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "pyromancer_s1_t1_3",
+      "name": "재의 예언자의 초월",
+      "branch": "pyromancer_s1_t1",
+      "class": "magician",
+      "tier": 3,
+      "maxRank": 5,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 43,
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "op": "multiply",
+          "value": 1.045
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "pyromancer_s1_t1_4",
+      "name": "재의 예언자의 궁극",
+      "branch": "pyromancer_s1_t1",
+      "class": "magician",
+      "tier": 4,
+      "maxRank": 3,
+      "requires": 12,
+      "cost": 1,
+      "minLevel": 46,
+      "stats": [
+        {
+          "stat": "spell",
+          "op": "multiply",
+          "value": 1.055
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": true
+    },
+    {
+      "id": "frost_deep_0",
+      "name": "빙결술사의 연마",
+      "branch": "frost",
+      "class": "magician",
+      "tier": 4,
+      "maxRank": 6,
+      "requires": 7,
+      "cost": 1,
+      "minLevel": 10,
+      "stats": [
+        {
+          "stat": "slowChance",
+          "op": "add",
+          "value": 0.03
+        }
+      ],
+      "description": "계열 능력을 반복 수련합니다.",
+      "capstone": false
+    },
+    {
+      "id": "frost_deep_1",
+      "name": "빙결술사의 비전",
+      "branch": "frost",
+      "class": "magician",
+      "tier": 5,
+      "maxRank": 6,
+      "requires": 10,
+      "cost": 1,
+      "minLevel": 14,
+      "stats": [
+        {
+          "stat": "shieldOnSkill",
+          "op": "add",
+          "value": 1.2
+        }
+      ],
+      "description": "계열 능력을 반복 수련합니다.",
+      "capstone": false
+    },
+    {
+      "id": "frost_s0_0",
+      "name": "글레이셜의 단련",
+      "branch": "frost_s0",
+      "class": "magician",
+      "tier": 0,
+      "maxRank": 5,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 18,
+      "stats": [
+        {
+          "stat": "slowChance",
+          "op": "add",
+          "value": 0.03
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "frost_s0_1",
+      "name": "글레이셜의 기예",
+      "branch": "frost_s0",
+      "class": "magician",
+      "tier": 1,
+      "maxRank": 5,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 21,
+      "stats": [
+        {
+          "stat": "shieldOnSkill",
+          "op": "add",
+          "value": 1.2
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "frost_s0_2",
+      "name": "글레이셜의 신념",
+      "branch": "frost_s0",
+      "class": "magician",
+      "tier": 2,
+      "maxRank": 4,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 24,
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "op": "multiply",
+          "value": 1.05
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "frost_s0_3",
+      "name": "글레이셜의 오의",
+      "branch": "frost_s0",
+      "class": "magician",
+      "tier": 3,
+      "maxRank": 2,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 27,
+      "stats": [
+        {
+          "stat": "slowChance",
+          "op": "add",
+          "value": 0.03
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": true
+    },
+    {
+      "id": "frost_s0_t0_0",
+      "name": "겨울의 현자의 기초",
+      "branch": "frost_s0_t0",
+      "class": "magician",
+      "tier": 0,
+      "maxRank": 6,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 34,
+      "stats": [
+        {
+          "stat": "slowChance",
+          "op": "add",
+          "value": 0.03
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "frost_s0_t0_1",
+      "name": "겨울의 현자의 계승",
+      "branch": "frost_s0_t0",
+      "class": "magician",
+      "tier": 1,
+      "maxRank": 6,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 37,
+      "stats": [
+        {
+          "stat": "shieldOnSkill",
+          "op": "add",
+          "value": 1.2
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "frost_s0_t0_2",
+      "name": "겨울의 현자의 완성",
+      "branch": "frost_s0_t0",
+      "class": "magician",
+      "tier": 2,
+      "maxRank": 5,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 40,
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "op": "multiply",
+          "value": 1.05
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "frost_s0_t0_3",
+      "name": "겨울의 현자의 초월",
+      "branch": "frost_s0_t0",
+      "class": "magician",
+      "tier": 3,
+      "maxRank": 5,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 43,
+      "stats": [
+        {
+          "stat": "slowChance",
+          "op": "add",
+          "value": 0.03
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "frost_s0_t0_4",
+      "name": "겨울의 현자의 궁극",
+      "branch": "frost_s0_t0",
+      "class": "magician",
+      "tier": 4,
+      "maxRank": 3,
+      "requires": 12,
+      "cost": 1,
+      "minLevel": 46,
+      "stats": [
+        {
+          "stat": "shieldOnSkill",
+          "op": "add",
+          "value": 1.2
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": true
+    },
+    {
+      "id": "frost_s0_t1_0",
+      "name": "빙관의 군주의 기초",
+      "branch": "frost_s0_t1",
+      "class": "magician",
+      "tier": 0,
+      "maxRank": 6,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 34,
+      "stats": [
+        {
+          "stat": "shieldOnSkill",
+          "op": "add",
+          "value": 1.2
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "frost_s0_t1_1",
+      "name": "빙관의 군주의 계승",
+      "branch": "frost_s0_t1",
+      "class": "magician",
+      "tier": 1,
+      "maxRank": 6,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 37,
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "op": "multiply",
+          "value": 1.05
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "frost_s0_t1_2",
+      "name": "빙관의 군주의 완성",
+      "branch": "frost_s0_t1",
+      "class": "magician",
+      "tier": 2,
+      "maxRank": 5,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 40,
+      "stats": [
+        {
+          "stat": "manaRegen",
+          "op": "add",
+          "value": 0.18
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "frost_s0_t1_3",
+      "name": "빙관의 군주의 초월",
+      "branch": "frost_s0_t1",
+      "class": "magician",
+      "tier": 3,
+      "maxRank": 5,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 43,
+      "stats": [
+        {
+          "stat": "shieldOnSkill",
+          "op": "add",
+          "value": 1.2
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "frost_s0_t1_4",
+      "name": "빙관의 군주의 궁극",
+      "branch": "frost_s0_t1",
+      "class": "magician",
+      "tier": 4,
+      "maxRank": 3,
+      "requires": 12,
+      "cost": 1,
+      "minLevel": 46,
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "op": "multiply",
+          "value": 1.05
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": true
+    },
+    {
+      "id": "frost_s1_0",
+      "name": "프로스트가드의 단련",
+      "branch": "frost_s1",
+      "class": "magician",
+      "tier": 0,
+      "maxRank": 5,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 18,
+      "stats": [
+        {
+          "stat": "shieldOnSkill",
+          "op": "add",
+          "value": 1.2
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "frost_s1_1",
+      "name": "프로스트가드의 기예",
+      "branch": "frost_s1",
+      "class": "magician",
+      "tier": 1,
+      "maxRank": 5,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 21,
+      "stats": [
+        {
+          "stat": "hp",
+          "op": "multiply",
+          "value": 1.045
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "frost_s1_2",
+      "name": "프로스트가드의 신념",
+      "branch": "frost_s1",
+      "class": "magician",
+      "tier": 2,
+      "maxRank": 4,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 24,
+      "stats": [
+        {
+          "stat": "slowChance",
+          "op": "add",
+          "value": 0.03
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "frost_s1_3",
+      "name": "프로스트가드의 오의",
+      "branch": "frost_s1",
+      "class": "magician",
+      "tier": 3,
+      "maxRank": 2,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 27,
+      "stats": [
+        {
+          "stat": "shieldOnSkill",
+          "op": "add",
+          "value": 1.2
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": true
+    },
+    {
+      "id": "frost_s1_t0_0",
+      "name": "서리 수호자의 기초",
+      "branch": "frost_s1_t0",
+      "class": "magician",
+      "tier": 0,
+      "maxRank": 6,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 34,
+      "stats": [
+        {
+          "stat": "shieldOnSkill",
+          "op": "add",
+          "value": 1.2
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "frost_s1_t0_1",
+      "name": "서리 수호자의 계승",
+      "branch": "frost_s1_t0",
+      "class": "magician",
+      "tier": 1,
+      "maxRank": 6,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 37,
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "op": "multiply",
+          "value": 1.05
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "frost_s1_t0_2",
+      "name": "서리 수호자의 완성",
+      "branch": "frost_s1_t0",
+      "class": "magician",
+      "tier": 2,
+      "maxRank": 5,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 40,
+      "stats": [
+        {
+          "stat": "slowChance",
+          "op": "add",
+          "value": 0.03
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "frost_s1_t0_3",
+      "name": "서리 수호자의 초월",
+      "branch": "frost_s1_t0",
+      "class": "magician",
+      "tier": 3,
+      "maxRank": 5,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 43,
+      "stats": [
+        {
+          "stat": "shieldOnSkill",
+          "op": "add",
+          "value": 1.2
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "frost_s1_t0_4",
+      "name": "서리 수호자의 궁극",
+      "branch": "frost_s1_t0",
+      "class": "magician",
+      "tier": 4,
+      "maxRank": 3,
+      "requires": 12,
+      "cost": 1,
+      "minLevel": 46,
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "op": "multiply",
+          "value": 1.05
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": true
+    },
+    {
+      "id": "frost_s1_t1_0",
+      "name": "영원의 얼음의 기초",
+      "branch": "frost_s1_t1",
+      "class": "magician",
+      "tier": 0,
+      "maxRank": 6,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 34,
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "op": "multiply",
+          "value": 1.05
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "frost_s1_t1_1",
+      "name": "영원의 얼음의 계승",
+      "branch": "frost_s1_t1",
+      "class": "magician",
+      "tier": 1,
+      "maxRank": 6,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 37,
+      "stats": [
+        {
+          "stat": "slowChance",
+          "op": "add",
+          "value": 0.03
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "frost_s1_t1_2",
+      "name": "영원의 얼음의 완성",
+      "branch": "frost_s1_t1",
+      "class": "magician",
+      "tier": 2,
+      "maxRank": 5,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 40,
+      "stats": [
+        {
+          "stat": "manaRegen",
+          "op": "add",
+          "value": 0.18
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "frost_s1_t1_3",
+      "name": "영원의 얼음의 초월",
+      "branch": "frost_s1_t1",
+      "class": "magician",
+      "tier": 3,
+      "maxRank": 5,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 43,
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "op": "multiply",
+          "value": 1.05
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "frost_s1_t1_4",
+      "name": "영원의 얼음의 궁극",
+      "branch": "frost_s1_t1",
+      "class": "magician",
+      "tier": 4,
+      "maxRank": 3,
+      "requires": 12,
+      "cost": 1,
+      "minLevel": 46,
+      "stats": [
+        {
+          "stat": "slowChance",
+          "op": "add",
+          "value": 0.03
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": true
+    },
+    {
+      "id": "arcanist_deep_0",
+      "name": "비전술사의 연마",
+      "branch": "arcanist",
+      "class": "magician",
+      "tier": 4,
+      "maxRank": 6,
+      "requires": 7,
+      "cost": 1,
+      "minLevel": 10,
+      "stats": [
+        {
+          "stat": "manaRegen",
+          "op": "add",
+          "value": 0.15
+        }
+      ],
+      "description": "계열 능력을 반복 수련합니다.",
+      "capstone": false
+    },
+    {
+      "id": "arcanist_deep_1",
+      "name": "비전술사의 비전",
+      "branch": "arcanist",
+      "class": "magician",
+      "tier": 5,
+      "maxRank": 6,
+      "requires": 10,
+      "cost": 1,
+      "minLevel": 14,
+      "stats": [
+        {
+          "stat": "skillEcho",
+          "op": "add",
+          "value": 0.015
+        }
+      ],
+      "description": "계열 능력을 반복 수련합니다.",
+      "capstone": false
+    },
+    {
+      "id": "arcanist_s0_0",
+      "name": "아크메이지의 단련",
+      "branch": "arcanist_s0",
+      "class": "magician",
+      "tier": 0,
+      "maxRank": 5,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 18,
+      "stats": [
+        {
+          "stat": "manaRegen",
+          "op": "add",
+          "value": 0.15
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "arcanist_s0_1",
+      "name": "아크메이지의 기예",
+      "branch": "arcanist_s0",
+      "class": "magician",
+      "tier": 1,
+      "maxRank": 5,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 21,
+      "stats": [
+        {
+          "stat": "skillEcho",
+          "op": "add",
+          "value": 0.015
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "arcanist_s0_2",
+      "name": "아크메이지의 신념",
+      "branch": "arcanist_s0",
+      "class": "magician",
+      "tier": 2,
+      "maxRank": 4,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 24,
+      "stats": [
+        {
+          "stat": "spell",
+          "op": "multiply",
+          "value": 1.05
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "arcanist_s0_3",
+      "name": "아크메이지의 오의",
+      "branch": "arcanist_s0",
+      "class": "magician",
+      "tier": 3,
+      "maxRank": 2,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 27,
+      "stats": [
+        {
+          "stat": "manaRegen",
+          "op": "add",
+          "value": 0.15
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": true
+    },
+    {
+      "id": "arcanist_s0_t0_0",
+      "name": "별의 대마도사의 기초",
+      "branch": "arcanist_s0_t0",
+      "class": "magician",
+      "tier": 0,
+      "maxRank": 6,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 34,
+      "stats": [
+        {
+          "stat": "manaRegen",
+          "op": "add",
+          "value": 0.15
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "arcanist_s0_t0_1",
+      "name": "별의 대마도사의 계승",
+      "branch": "arcanist_s0_t0",
+      "class": "magician",
+      "tier": 1,
+      "maxRank": 6,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 37,
+      "stats": [
+        {
+          "stat": "skillEcho",
+          "op": "add",
+          "value": 0.015
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "arcanist_s0_t0_2",
+      "name": "별의 대마도사의 완성",
+      "branch": "arcanist_s0_t0",
+      "class": "magician",
+      "tier": 2,
+      "maxRank": 5,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 40,
+      "stats": [
+        {
+          "stat": "spell",
+          "op": "multiply",
+          "value": 1.05
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "arcanist_s0_t0_3",
+      "name": "별의 대마도사의 초월",
+      "branch": "arcanist_s0_t0",
+      "class": "magician",
+      "tier": 3,
+      "maxRank": 5,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 43,
+      "stats": [
+        {
+          "stat": "manaRegen",
+          "op": "add",
+          "value": 0.15
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "arcanist_s0_t0_4",
+      "name": "별의 대마도사의 궁극",
+      "branch": "arcanist_s0_t0",
+      "class": "magician",
+      "tier": 4,
+      "maxRank": 3,
+      "requires": 12,
+      "cost": 1,
+      "minLevel": 46,
+      "stats": [
+        {
+          "stat": "skillEcho",
+          "op": "add",
+          "value": 0.015
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": true
+    },
+    {
+      "id": "arcanist_s0_t1_0",
+      "name": "차원 여행자의 기초",
+      "branch": "arcanist_s0_t1",
+      "class": "magician",
+      "tier": 0,
+      "maxRank": 6,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 34,
+      "stats": [
+        {
+          "stat": "skillEcho",
+          "op": "add",
+          "value": 0.015
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "arcanist_s0_t1_1",
+      "name": "차원 여행자의 계승",
+      "branch": "arcanist_s0_t1",
+      "class": "magician",
+      "tier": 1,
+      "maxRank": 6,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 37,
+      "stats": [
+        {
+          "stat": "spell",
+          "op": "multiply",
+          "value": 1.05
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "arcanist_s0_t1_2",
+      "name": "차원 여행자의 완성",
+      "branch": "arcanist_s0_t1",
+      "class": "magician",
+      "tier": 2,
+      "maxRank": 5,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 40,
+      "stats": [
+        {
+          "stat": "manaRegen",
+          "op": "add",
+          "value": 0.18
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "arcanist_s0_t1_3",
+      "name": "차원 여행자의 초월",
+      "branch": "arcanist_s0_t1",
+      "class": "magician",
+      "tier": 3,
+      "maxRank": 5,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 43,
+      "stats": [
+        {
+          "stat": "skillEcho",
+          "op": "add",
+          "value": 0.015
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "arcanist_s0_t1_4",
+      "name": "차원 여행자의 궁극",
+      "branch": "arcanist_s0_t1",
+      "class": "magician",
+      "tier": 4,
+      "maxRank": 3,
+      "requires": 12,
+      "cost": 1,
+      "minLevel": 46,
+      "stats": [
+        {
+          "stat": "spell",
+          "op": "multiply",
+          "value": 1.05
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": true
+    },
+    {
+      "id": "arcanist_s1_0",
+      "name": "에테르위버의 단련",
+      "branch": "arcanist_s1",
+      "class": "magician",
+      "tier": 0,
+      "maxRank": 5,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 18,
+      "stats": [
+        {
+          "stat": "skillEcho",
+          "op": "add",
+          "value": 0.015
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "arcanist_s1_1",
+      "name": "에테르위버의 기예",
+      "branch": "arcanist_s1",
+      "class": "magician",
+      "tier": 1,
+      "maxRank": 5,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 21,
+      "stats": [
+        {
+          "stat": "hp",
+          "op": "multiply",
+          "value": 1.045
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "arcanist_s1_2",
+      "name": "에테르위버의 신념",
+      "branch": "arcanist_s1",
+      "class": "magician",
+      "tier": 2,
+      "maxRank": 4,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 24,
+      "stats": [
+        {
+          "stat": "manaRegen",
+          "op": "add",
+          "value": 0.15
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "arcanist_s1_3",
+      "name": "에테르위버의 오의",
+      "branch": "arcanist_s1",
+      "class": "magician",
+      "tier": 3,
+      "maxRank": 2,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 27,
+      "stats": [
+        {
+          "stat": "skillEcho",
+          "op": "add",
+          "value": 0.015
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": true
+    },
+    {
+      "id": "arcanist_s1_t0_0",
+      "name": "마력의 지배자의 기초",
+      "branch": "arcanist_s1_t0",
+      "class": "magician",
+      "tier": 0,
+      "maxRank": 6,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 34,
+      "stats": [
+        {
+          "stat": "skillEcho",
+          "op": "add",
+          "value": 0.015
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "arcanist_s1_t0_1",
+      "name": "마력의 지배자의 계승",
+      "branch": "arcanist_s1_t0",
+      "class": "magician",
+      "tier": 1,
+      "maxRank": 6,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 37,
+      "stats": [
+        {
+          "stat": "spell",
+          "op": "multiply",
+          "value": 1.05
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "arcanist_s1_t0_2",
+      "name": "마력의 지배자의 완성",
+      "branch": "arcanist_s1_t0",
+      "class": "magician",
+      "tier": 2,
+      "maxRank": 5,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 40,
+      "stats": [
+        {
+          "stat": "manaRegen",
+          "op": "add",
+          "value": 0.15
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "arcanist_s1_t0_3",
+      "name": "마력의 지배자의 초월",
+      "branch": "arcanist_s1_t0",
+      "class": "magician",
+      "tier": 3,
+      "maxRank": 5,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 43,
+      "stats": [
+        {
+          "stat": "skillEcho",
+          "op": "add",
+          "value": 0.015
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "arcanist_s1_t0_4",
+      "name": "마력의 지배자의 궁극",
+      "branch": "arcanist_s1_t0",
+      "class": "magician",
+      "tier": 4,
+      "maxRank": 3,
+      "requires": 12,
+      "cost": 1,
+      "minLevel": 46,
+      "stats": [
+        {
+          "stat": "spell",
+          "op": "multiply",
+          "value": 1.05
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": true
+    },
+    {
+      "id": "arcanist_s1_t1_0",
+      "name": "시간의 현자의 기초",
+      "branch": "arcanist_s1_t1",
+      "class": "magician",
+      "tier": 0,
+      "maxRank": 6,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 34,
+      "stats": [
+        {
+          "stat": "spell",
+          "op": "multiply",
+          "value": 1.05
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "arcanist_s1_t1_1",
+      "name": "시간의 현자의 계승",
+      "branch": "arcanist_s1_t1",
+      "class": "magician",
+      "tier": 1,
+      "maxRank": 6,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 37,
+      "stats": [
+        {
+          "stat": "manaRegen",
+          "op": "add",
+          "value": 0.15
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "arcanist_s1_t1_2",
+      "name": "시간의 현자의 완성",
+      "branch": "arcanist_s1_t1",
+      "class": "magician",
+      "tier": 2,
+      "maxRank": 5,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 40,
+      "stats": [
+        {
+          "stat": "manaRegen",
+          "op": "add",
+          "value": 0.18
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "arcanist_s1_t1_3",
+      "name": "시간의 현자의 초월",
+      "branch": "arcanist_s1_t1",
+      "class": "magician",
+      "tier": 3,
+      "maxRank": 5,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 43,
+      "stats": [
+        {
+          "stat": "spell",
+          "op": "multiply",
+          "value": 1.05
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "arcanist_s1_t1_4",
+      "name": "시간의 현자의 궁극",
+      "branch": "arcanist_s1_t1",
+      "class": "magician",
+      "tier": 4,
+      "maxRank": 3,
+      "requires": 12,
+      "cost": 1,
+      "minLevel": 46,
+      "stats": [
+        {
+          "stat": "manaRegen",
+          "op": "add",
+          "value": 0.15
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": true
+    },
+    {
+      "id": "fortress_deep_0",
+      "name": "철벽의 연마",
+      "branch": "fortress",
+      "class": "guardian",
+      "tier": 4,
+      "maxRank": 6,
+      "requires": 7,
+      "cost": 1,
+      "minLevel": 10,
+      "stats": [
+        {
+          "stat": "hp",
+          "op": "multiply",
+          "value": 1.045
+        }
+      ],
+      "description": "계열 능력을 반복 수련합니다.",
+      "capstone": false
+    },
+    {
+      "id": "fortress_deep_1",
+      "name": "철벽의 비전",
+      "branch": "fortress",
+      "class": "guardian",
+      "tier": 5,
+      "maxRank": 6,
+      "requires": 10,
+      "cost": 1,
+      "minLevel": 14,
+      "stats": [
+        {
+          "stat": "defense",
+          "op": "add",
+          "value": 0.8
+        }
+      ],
+      "description": "계열 능력을 반복 수련합니다.",
+      "capstone": false
+    },
+    {
+      "id": "fortress_s0_0",
+      "name": "바스티온의 단련",
+      "branch": "fortress_s0",
+      "class": "guardian",
+      "tier": 0,
+      "maxRank": 5,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 18,
+      "stats": [
+        {
+          "stat": "hp",
+          "op": "multiply",
+          "value": 1.045
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "fortress_s0_1",
+      "name": "바스티온의 기예",
+      "branch": "fortress_s0",
+      "class": "guardian",
+      "tier": 1,
+      "maxRank": 5,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 21,
+      "stats": [
+        {
+          "stat": "defense",
+          "op": "add",
+          "value": 0.8
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "fortress_s0_2",
+      "name": "바스티온의 신념",
+      "branch": "fortress_s0",
+      "class": "guardian",
+      "tier": 2,
+      "maxRank": 4,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 24,
+      "stats": [
+        {
+          "stat": "damageReduction",
+          "op": "add",
+          "value": 0.01
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "fortress_s0_3",
+      "name": "바스티온의 오의",
+      "branch": "fortress_s0",
+      "class": "guardian",
+      "tier": 3,
+      "maxRank": 2,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 27,
+      "stats": [
+        {
+          "stat": "hp",
+          "op": "multiply",
+          "value": 1.045
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": true
+    },
+    {
+      "id": "fortress_s0_t0_0",
+      "name": "불굴의 성채의 기초",
+      "branch": "fortress_s0_t0",
+      "class": "guardian",
+      "tier": 0,
+      "maxRank": 6,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 34,
+      "stats": [
+        {
+          "stat": "hp",
+          "op": "multiply",
+          "value": 1.045
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "fortress_s0_t0_1",
+      "name": "불굴의 성채의 계승",
+      "branch": "fortress_s0_t0",
+      "class": "guardian",
+      "tier": 1,
+      "maxRank": 6,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 37,
+      "stats": [
+        {
+          "stat": "defense",
+          "op": "add",
+          "value": 0.8
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "fortress_s0_t0_2",
+      "name": "불굴의 성채의 완성",
+      "branch": "fortress_s0_t0",
+      "class": "guardian",
+      "tier": 2,
+      "maxRank": 5,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 40,
+      "stats": [
+        {
+          "stat": "damageReduction",
+          "op": "add",
+          "value": 0.01
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "fortress_s0_t0_3",
+      "name": "불굴의 성채의 초월",
+      "branch": "fortress_s0_t0",
+      "class": "guardian",
+      "tier": 3,
+      "maxRank": 5,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 43,
+      "stats": [
+        {
+          "stat": "hp",
+          "op": "multiply",
+          "value": 1.045
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "fortress_s0_t0_4",
+      "name": "불굴의 성채의 궁극",
+      "branch": "fortress_s0_t0",
+      "class": "guardian",
+      "tier": 4,
+      "maxRank": 3,
+      "requires": 12,
+      "cost": 1,
+      "minLevel": 46,
+      "stats": [
+        {
+          "stat": "defense",
+          "op": "add",
+          "value": 0.8
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": true
+    },
+    {
+      "id": "fortress_s0_t1_0",
+      "name": "왕국의 보루의 기초",
+      "branch": "fortress_s0_t1",
+      "class": "guardian",
+      "tier": 0,
+      "maxRank": 6,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 34,
+      "stats": [
+        {
+          "stat": "defense",
+          "op": "add",
+          "value": 0.8
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "fortress_s0_t1_1",
+      "name": "왕국의 보루의 계승",
+      "branch": "fortress_s0_t1",
+      "class": "guardian",
+      "tier": 1,
+      "maxRank": 6,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 37,
+      "stats": [
+        {
+          "stat": "damageReduction",
+          "op": "add",
+          "value": 0.01
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "fortress_s0_t1_2",
+      "name": "왕국의 보루의 완성",
+      "branch": "fortress_s0_t1",
+      "class": "guardian",
+      "tier": 2,
+      "maxRank": 5,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 40,
+      "stats": [
+        {
+          "stat": "manaRegen",
+          "op": "add",
+          "value": 0.18
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "fortress_s0_t1_3",
+      "name": "왕국의 보루의 초월",
+      "branch": "fortress_s0_t1",
+      "class": "guardian",
+      "tier": 3,
+      "maxRank": 5,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 43,
+      "stats": [
+        {
+          "stat": "defense",
+          "op": "add",
+          "value": 0.8
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "fortress_s0_t1_4",
+      "name": "왕국의 보루의 궁극",
+      "branch": "fortress_s0_t1",
+      "class": "guardian",
+      "tier": 4,
+      "maxRank": 3,
+      "requires": 12,
+      "cost": 1,
+      "minLevel": 46,
+      "stats": [
+        {
+          "stat": "damageReduction",
+          "op": "add",
+          "value": 0.01
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": true
+    },
+    {
+      "id": "fortress_s1_0",
+      "name": "아이언가드의 단련",
+      "branch": "fortress_s1",
+      "class": "guardian",
+      "tier": 0,
+      "maxRank": 5,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 18,
+      "stats": [
+        {
+          "stat": "defense",
+          "op": "add",
+          "value": 0.8
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "fortress_s1_1",
+      "name": "아이언가드의 기예",
+      "branch": "fortress_s1",
+      "class": "guardian",
+      "tier": 1,
+      "maxRank": 5,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 21,
+      "stats": [
+        {
+          "stat": "hp",
+          "op": "multiply",
+          "value": 1.045
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "fortress_s1_2",
+      "name": "아이언가드의 신념",
+      "branch": "fortress_s1",
+      "class": "guardian",
+      "tier": 2,
+      "maxRank": 4,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 24,
+      "stats": [
+        {
+          "stat": "hp",
+          "op": "multiply",
+          "value": 1.045
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "fortress_s1_3",
+      "name": "아이언가드의 오의",
+      "branch": "fortress_s1",
+      "class": "guardian",
+      "tier": 3,
+      "maxRank": 2,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 27,
+      "stats": [
+        {
+          "stat": "defense",
+          "op": "add",
+          "value": 0.8
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": true
+    },
+    {
+      "id": "fortress_s1_t0_0",
+      "name": "강철의 거인의 기초",
+      "branch": "fortress_s1_t0",
+      "class": "guardian",
+      "tier": 0,
+      "maxRank": 6,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 34,
+      "stats": [
+        {
+          "stat": "defense",
+          "op": "add",
+          "value": 0.8
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "fortress_s1_t0_1",
+      "name": "강철의 거인의 계승",
+      "branch": "fortress_s1_t0",
+      "class": "guardian",
+      "tier": 1,
+      "maxRank": 6,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 37,
+      "stats": [
+        {
+          "stat": "damageReduction",
+          "op": "add",
+          "value": 0.01
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "fortress_s1_t0_2",
+      "name": "강철의 거인의 완성",
+      "branch": "fortress_s1_t0",
+      "class": "guardian",
+      "tier": 2,
+      "maxRank": 5,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 40,
+      "stats": [
+        {
+          "stat": "hp",
+          "op": "multiply",
+          "value": 1.045
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "fortress_s1_t0_3",
+      "name": "강철의 거인의 초월",
+      "branch": "fortress_s1_t0",
+      "class": "guardian",
+      "tier": 3,
+      "maxRank": 5,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 43,
+      "stats": [
+        {
+          "stat": "defense",
+          "op": "add",
+          "value": 0.8
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "fortress_s1_t0_4",
+      "name": "강철의 거인의 궁극",
+      "branch": "fortress_s1_t0",
+      "class": "guardian",
+      "tier": 4,
+      "maxRank": 3,
+      "requires": 12,
+      "cost": 1,
+      "minLevel": 46,
+      "stats": [
+        {
+          "stat": "damageReduction",
+          "op": "add",
+          "value": 0.01
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": true
+    },
+    {
+      "id": "fortress_s1_t1_0",
+      "name": "아다만트 수호자의 기초",
+      "branch": "fortress_s1_t1",
+      "class": "guardian",
+      "tier": 0,
+      "maxRank": 6,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 34,
+      "stats": [
+        {
+          "stat": "damageReduction",
+          "op": "add",
+          "value": 0.01
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "fortress_s1_t1_1",
+      "name": "아다만트 수호자의 계승",
+      "branch": "fortress_s1_t1",
+      "class": "guardian",
+      "tier": 1,
+      "maxRank": 6,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 37,
+      "stats": [
+        {
+          "stat": "hp",
+          "op": "multiply",
+          "value": 1.045
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "fortress_s1_t1_2",
+      "name": "아다만트 수호자의 완성",
+      "branch": "fortress_s1_t1",
+      "class": "guardian",
+      "tier": 2,
+      "maxRank": 5,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 40,
+      "stats": [
+        {
+          "stat": "manaRegen",
+          "op": "add",
+          "value": 0.18
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "fortress_s1_t1_3",
+      "name": "아다만트 수호자의 초월",
+      "branch": "fortress_s1_t1",
+      "class": "guardian",
+      "tier": 3,
+      "maxRank": 5,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 43,
+      "stats": [
+        {
+          "stat": "damageReduction",
+          "op": "add",
+          "value": 0.01
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "fortress_s1_t1_4",
+      "name": "아다만트 수호자의 궁극",
+      "branch": "fortress_s1_t1",
+      "class": "guardian",
+      "tier": 4,
+      "maxRank": 3,
+      "requires": 12,
+      "cost": 1,
+      "minLevel": 46,
+      "stats": [
+        {
+          "stat": "hp",
+          "op": "multiply",
+          "value": 1.045
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": true
+    },
+    {
+      "id": "paladin_deep_0",
+      "name": "성기사의 연마",
+      "branch": "paladin",
+      "class": "guardian",
+      "tier": 4,
+      "maxRank": 6,
+      "requires": 7,
+      "cost": 1,
+      "minLevel": 10,
+      "stats": [
+        {
+          "stat": "spell",
+          "op": "multiply",
+          "value": 1.05
+        }
+      ],
+      "description": "계열 능력을 반복 수련합니다.",
+      "capstone": false
+    },
+    {
+      "id": "paladin_deep_1",
+      "name": "성기사의 비전",
+      "branch": "paladin",
+      "class": "guardian",
+      "tier": 5,
+      "maxRank": 6,
+      "requires": 10,
+      "cost": 1,
+      "minLevel": 14,
+      "stats": [
+        {
+          "stat": "shieldOnSkill",
+          "op": "add",
+          "value": 1.4
+        }
+      ],
+      "description": "계열 능력을 반복 수련합니다.",
+      "capstone": false
+    },
+    {
+      "id": "paladin_s0_0",
+      "name": "하이템플러의 단련",
+      "branch": "paladin_s0",
+      "class": "guardian",
+      "tier": 0,
+      "maxRank": 5,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 18,
+      "stats": [
+        {
+          "stat": "spell",
+          "op": "multiply",
+          "value": 1.05
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "paladin_s0_1",
+      "name": "하이템플러의 기예",
+      "branch": "paladin_s0",
+      "class": "guardian",
+      "tier": 1,
+      "maxRank": 5,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 21,
+      "stats": [
+        {
+          "stat": "shieldOnSkill",
+          "op": "add",
+          "value": 1.4
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "paladin_s0_2",
+      "name": "하이템플러의 신념",
+      "branch": "paladin_s0",
+      "class": "guardian",
+      "tier": 2,
+      "maxRank": 4,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 24,
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "op": "multiply",
+          "value": 1.05
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "paladin_s0_3",
+      "name": "하이템플러의 오의",
+      "branch": "paladin_s0",
+      "class": "guardian",
+      "tier": 3,
+      "maxRank": 2,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 27,
+      "stats": [
+        {
+          "stat": "spell",
+          "op": "multiply",
+          "value": 1.05
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": true
+    },
+    {
+      "id": "paladin_s0_t0_0",
+      "name": "새벽의 성자의 기초",
+      "branch": "paladin_s0_t0",
+      "class": "guardian",
+      "tier": 0,
+      "maxRank": 6,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 34,
+      "stats": [
+        {
+          "stat": "spell",
+          "op": "multiply",
+          "value": 1.05
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "paladin_s0_t0_1",
+      "name": "새벽의 성자의 계승",
+      "branch": "paladin_s0_t0",
+      "class": "guardian",
+      "tier": 1,
+      "maxRank": 6,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 37,
+      "stats": [
+        {
+          "stat": "shieldOnSkill",
+          "op": "add",
+          "value": 1.4
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "paladin_s0_t0_2",
+      "name": "새벽의 성자의 완성",
+      "branch": "paladin_s0_t0",
+      "class": "guardian",
+      "tier": 2,
+      "maxRank": 5,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 40,
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "op": "multiply",
+          "value": 1.05
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "paladin_s0_t0_3",
+      "name": "새벽의 성자의 초월",
+      "branch": "paladin_s0_t0",
+      "class": "guardian",
+      "tier": 3,
+      "maxRank": 5,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 43,
+      "stats": [
+        {
+          "stat": "spell",
+          "op": "multiply",
+          "value": 1.05
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "paladin_s0_t0_4",
+      "name": "새벽의 성자의 궁극",
+      "branch": "paladin_s0_t0",
+      "class": "guardian",
+      "tier": 4,
+      "maxRank": 3,
+      "requires": 12,
+      "cost": 1,
+      "minLevel": 46,
+      "stats": [
+        {
+          "stat": "shieldOnSkill",
+          "op": "add",
+          "value": 1.4
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": true
+    },
+    {
+      "id": "paladin_s0_t1_0",
+      "name": "태양의 심판관의 기초",
+      "branch": "paladin_s0_t1",
+      "class": "guardian",
+      "tier": 0,
+      "maxRank": 6,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 34,
+      "stats": [
+        {
+          "stat": "shieldOnSkill",
+          "op": "add",
+          "value": 1.4
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "paladin_s0_t1_1",
+      "name": "태양의 심판관의 계승",
+      "branch": "paladin_s0_t1",
+      "class": "guardian",
+      "tier": 1,
+      "maxRank": 6,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 37,
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "op": "multiply",
+          "value": 1.05
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "paladin_s0_t1_2",
+      "name": "태양의 심판관의 완성",
+      "branch": "paladin_s0_t1",
+      "class": "guardian",
+      "tier": 2,
+      "maxRank": 5,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 40,
+      "stats": [
+        {
+          "stat": "manaRegen",
+          "op": "add",
+          "value": 0.18
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "paladin_s0_t1_3",
+      "name": "태양의 심판관의 초월",
+      "branch": "paladin_s0_t1",
+      "class": "guardian",
+      "tier": 3,
+      "maxRank": 5,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 43,
+      "stats": [
+        {
+          "stat": "shieldOnSkill",
+          "op": "add",
+          "value": 1.4
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "paladin_s0_t1_4",
+      "name": "태양의 심판관의 궁극",
+      "branch": "paladin_s0_t1",
+      "class": "guardian",
+      "tier": 4,
+      "maxRank": 3,
+      "requires": 12,
+      "cost": 1,
+      "minLevel": 46,
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "op": "multiply",
+          "value": 1.05
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": true
+    },
+    {
+      "id": "paladin_s1_0",
+      "name": "세이크리드가드의 단련",
+      "branch": "paladin_s1",
+      "class": "guardian",
+      "tier": 0,
+      "maxRank": 5,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 18,
+      "stats": [
+        {
+          "stat": "shieldOnSkill",
+          "op": "add",
+          "value": 1.4
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "paladin_s1_1",
+      "name": "세이크리드가드의 기예",
+      "branch": "paladin_s1",
+      "class": "guardian",
+      "tier": 1,
+      "maxRank": 5,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 21,
+      "stats": [
+        {
+          "stat": "hp",
+          "op": "multiply",
+          "value": 1.045
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "paladin_s1_2",
+      "name": "세이크리드가드의 신념",
+      "branch": "paladin_s1",
+      "class": "guardian",
+      "tier": 2,
+      "maxRank": 4,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 24,
+      "stats": [
+        {
+          "stat": "spell",
+          "op": "multiply",
+          "value": 1.05
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "paladin_s1_3",
+      "name": "세이크리드가드의 오의",
+      "branch": "paladin_s1",
+      "class": "guardian",
+      "tier": 3,
+      "maxRank": 2,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 27,
+      "stats": [
+        {
+          "stat": "shieldOnSkill",
+          "op": "add",
+          "value": 1.4
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": true
+    },
+    {
+      "id": "paladin_s1_t0_0",
+      "name": "성역의 수호자의 기초",
+      "branch": "paladin_s1_t0",
+      "class": "guardian",
+      "tier": 0,
+      "maxRank": 6,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 34,
+      "stats": [
+        {
+          "stat": "shieldOnSkill",
+          "op": "add",
+          "value": 1.4
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "paladin_s1_t0_1",
+      "name": "성역의 수호자의 계승",
+      "branch": "paladin_s1_t0",
+      "class": "guardian",
+      "tier": 1,
+      "maxRank": 6,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 37,
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "op": "multiply",
+          "value": 1.05
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "paladin_s1_t0_2",
+      "name": "성역의 수호자의 완성",
+      "branch": "paladin_s1_t0",
+      "class": "guardian",
+      "tier": 2,
+      "maxRank": 5,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 40,
+      "stats": [
+        {
+          "stat": "spell",
+          "op": "multiply",
+          "value": 1.05
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "paladin_s1_t0_3",
+      "name": "성역의 수호자의 초월",
+      "branch": "paladin_s1_t0",
+      "class": "guardian",
+      "tier": 3,
+      "maxRank": 5,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 43,
+      "stats": [
+        {
+          "stat": "shieldOnSkill",
+          "op": "add",
+          "value": 1.4
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "paladin_s1_t0_4",
+      "name": "성역의 수호자의 궁극",
+      "branch": "paladin_s1_t0",
+      "class": "guardian",
+      "tier": 4,
+      "maxRank": 3,
+      "requires": 12,
+      "cost": 1,
+      "minLevel": 46,
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "op": "multiply",
+          "value": 1.05
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": true
+    },
+    {
+      "id": "paladin_s1_t1_0",
+      "name": "빛의 순례자의 기초",
+      "branch": "paladin_s1_t1",
+      "class": "guardian",
+      "tier": 0,
+      "maxRank": 6,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 34,
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "op": "multiply",
+          "value": 1.05
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "paladin_s1_t1_1",
+      "name": "빛의 순례자의 계승",
+      "branch": "paladin_s1_t1",
+      "class": "guardian",
+      "tier": 1,
+      "maxRank": 6,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 37,
+      "stats": [
+        {
+          "stat": "spell",
+          "op": "multiply",
+          "value": 1.05
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "paladin_s1_t1_2",
+      "name": "빛의 순례자의 완성",
+      "branch": "paladin_s1_t1",
+      "class": "guardian",
+      "tier": 2,
+      "maxRank": 5,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 40,
+      "stats": [
+        {
+          "stat": "manaRegen",
+          "op": "add",
+          "value": 0.18
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "paladin_s1_t1_3",
+      "name": "빛의 순례자의 초월",
+      "branch": "paladin_s1_t1",
+      "class": "guardian",
+      "tier": 3,
+      "maxRank": 5,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 43,
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "op": "multiply",
+          "value": 1.05
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "paladin_s1_t1_4",
+      "name": "빛의 순례자의 궁극",
+      "branch": "paladin_s1_t1",
+      "class": "guardian",
+      "tier": 4,
+      "maxRank": 3,
+      "requires": 12,
+      "cost": 1,
+      "minLevel": 46,
+      "stats": [
+        {
+          "stat": "spell",
+          "op": "multiply",
+          "value": 1.05
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": true
+    },
+    {
+      "id": "avenger_deep_0",
+      "name": "응징자의 연마",
+      "branch": "avenger",
+      "class": "guardian",
+      "tier": 4,
+      "maxRank": 6,
+      "requires": 7,
+      "cost": 1,
+      "minLevel": 10,
+      "stats": [
+        {
+          "stat": "thorns",
+          "op": "add",
+          "value": 0.08
+        }
+      ],
+      "description": "계열 능력을 반복 수련합니다.",
+      "capstone": false
+    },
+    {
+      "id": "avenger_deep_1",
+      "name": "응징자의 비전",
+      "branch": "avenger",
+      "class": "guardian",
+      "tier": 5,
+      "maxRank": 6,
+      "requires": 10,
+      "cost": 1,
+      "minLevel": 14,
+      "stats": [
+        {
+          "stat": "attack",
+          "op": "multiply",
+          "value": 1.045
+        }
+      ],
+      "description": "계열 능력을 반복 수련합니다.",
+      "capstone": false
+    },
+    {
+      "id": "avenger_s0_0",
+      "name": "드레드노트의 단련",
+      "branch": "avenger_s0",
+      "class": "guardian",
+      "tier": 0,
+      "maxRank": 5,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 18,
+      "stats": [
+        {
+          "stat": "thorns",
+          "op": "add",
+          "value": 0.08
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "avenger_s0_1",
+      "name": "드레드노트의 기예",
+      "branch": "avenger_s0",
+      "class": "guardian",
+      "tier": 1,
+      "maxRank": 5,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 21,
+      "stats": [
+        {
+          "stat": "attack",
+          "op": "multiply",
+          "value": 1.045
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "avenger_s0_2",
+      "name": "드레드노트의 신념",
+      "branch": "avenger_s0",
+      "class": "guardian",
+      "tier": 2,
+      "maxRank": 4,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 24,
+      "stats": [
+        {
+          "stat": "hp",
+          "op": "multiply",
+          "value": 1.04
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "avenger_s0_3",
+      "name": "드레드노트의 오의",
+      "branch": "avenger_s0",
+      "class": "guardian",
+      "tier": 3,
+      "maxRank": 2,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 27,
+      "stats": [
+        {
+          "stat": "thorns",
+          "op": "add",
+          "value": 0.08
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": true
+    },
+    {
+      "id": "avenger_s0_t0_0",
+      "name": "복수의 군주의 기초",
+      "branch": "avenger_s0_t0",
+      "class": "guardian",
+      "tier": 0,
+      "maxRank": 6,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 34,
+      "stats": [
+        {
+          "stat": "thorns",
+          "op": "add",
+          "value": 0.08
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "avenger_s0_t0_1",
+      "name": "복수의 군주의 계승",
+      "branch": "avenger_s0_t0",
+      "class": "guardian",
+      "tier": 1,
+      "maxRank": 6,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 37,
+      "stats": [
+        {
+          "stat": "attack",
+          "op": "multiply",
+          "value": 1.045
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "avenger_s0_t0_2",
+      "name": "복수의 군주의 완성",
+      "branch": "avenger_s0_t0",
+      "class": "guardian",
+      "tier": 2,
+      "maxRank": 5,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 40,
+      "stats": [
+        {
+          "stat": "hp",
+          "op": "multiply",
+          "value": 1.04
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "avenger_s0_t0_3",
+      "name": "복수의 군주의 초월",
+      "branch": "avenger_s0_t0",
+      "class": "guardian",
+      "tier": 3,
+      "maxRank": 5,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 43,
+      "stats": [
+        {
+          "stat": "thorns",
+          "op": "add",
+          "value": 0.08
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "avenger_s0_t0_4",
+      "name": "복수의 군주의 궁극",
+      "branch": "avenger_s0_t0",
+      "class": "guardian",
+      "tier": 4,
+      "maxRank": 3,
+      "requires": 12,
+      "cost": 1,
+      "minLevel": 46,
+      "stats": [
+        {
+          "stat": "attack",
+          "op": "multiply",
+          "value": 1.045
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": true
+    },
+    {
+      "id": "avenger_s0_t1_0",
+      "name": "파멸의 방패의 기초",
+      "branch": "avenger_s0_t1",
+      "class": "guardian",
+      "tier": 0,
+      "maxRank": 6,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 34,
+      "stats": [
+        {
+          "stat": "attack",
+          "op": "multiply",
+          "value": 1.045
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "avenger_s0_t1_1",
+      "name": "파멸의 방패의 계승",
+      "branch": "avenger_s0_t1",
+      "class": "guardian",
+      "tier": 1,
+      "maxRank": 6,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 37,
+      "stats": [
+        {
+          "stat": "hp",
+          "op": "multiply",
+          "value": 1.04
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "avenger_s0_t1_2",
+      "name": "파멸의 방패의 완성",
+      "branch": "avenger_s0_t1",
+      "class": "guardian",
+      "tier": 2,
+      "maxRank": 5,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 40,
+      "stats": [
+        {
+          "stat": "manaRegen",
+          "op": "add",
+          "value": 0.18
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "avenger_s0_t1_3",
+      "name": "파멸의 방패의 초월",
+      "branch": "avenger_s0_t1",
+      "class": "guardian",
+      "tier": 3,
+      "maxRank": 5,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 43,
+      "stats": [
+        {
+          "stat": "attack",
+          "op": "multiply",
+          "value": 1.045
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "avenger_s0_t1_4",
+      "name": "파멸의 방패의 궁극",
+      "branch": "avenger_s0_t1",
+      "class": "guardian",
+      "tier": 4,
+      "maxRank": 3,
+      "requires": 12,
+      "cost": 1,
+      "minLevel": 46,
+      "stats": [
+        {
+          "stat": "hp",
+          "op": "multiply",
+          "value": 1.04
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": true
+    },
+    {
+      "id": "avenger_s1_0",
+      "name": "저거너트의 단련",
+      "branch": "avenger_s1",
+      "class": "guardian",
+      "tier": 0,
+      "maxRank": 5,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 18,
+      "stats": [
+        {
+          "stat": "attack",
+          "op": "multiply",
+          "value": 1.045
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "avenger_s1_1",
+      "name": "저거너트의 기예",
+      "branch": "avenger_s1",
+      "class": "guardian",
+      "tier": 1,
+      "maxRank": 5,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 21,
+      "stats": [
+        {
+          "stat": "hp",
+          "op": "multiply",
+          "value": 1.045
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "avenger_s1_2",
+      "name": "저거너트의 신념",
+      "branch": "avenger_s1",
+      "class": "guardian",
+      "tier": 2,
+      "maxRank": 4,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 24,
+      "stats": [
+        {
+          "stat": "thorns",
+          "op": "add",
+          "value": 0.08
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": false
+    },
+    {
+      "id": "avenger_s1_3",
+      "name": "저거너트의 오의",
+      "branch": "avenger_s1",
+      "class": "guardian",
+      "tier": 3,
+      "maxRank": 2,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 27,
+      "stats": [
+        {
+          "stat": "attack",
+          "op": "multiply",
+          "value": 1.045
+        }
+      ],
+      "description": "선택한 전직의 능력을 강화합니다.",
+      "capstone": true
+    },
+    {
+      "id": "avenger_s1_t0_0",
+      "name": "전장의 거신의 기초",
+      "branch": "avenger_s1_t0",
+      "class": "guardian",
+      "tier": 0,
+      "maxRank": 6,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 34,
+      "stats": [
+        {
+          "stat": "attack",
+          "op": "multiply",
+          "value": 1.045
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "avenger_s1_t0_1",
+      "name": "전장의 거신의 계승",
+      "branch": "avenger_s1_t0",
+      "class": "guardian",
+      "tier": 1,
+      "maxRank": 6,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 37,
+      "stats": [
+        {
+          "stat": "hp",
+          "op": "multiply",
+          "value": 1.04
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "avenger_s1_t0_2",
+      "name": "전장의 거신의 완성",
+      "branch": "avenger_s1_t0",
+      "class": "guardian",
+      "tier": 2,
+      "maxRank": 5,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 40,
+      "stats": [
+        {
+          "stat": "thorns",
+          "op": "add",
+          "value": 0.08
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "avenger_s1_t0_3",
+      "name": "전장의 거신의 초월",
+      "branch": "avenger_s1_t0",
+      "class": "guardian",
+      "tier": 3,
+      "maxRank": 5,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 43,
+      "stats": [
+        {
+          "stat": "attack",
+          "op": "multiply",
+          "value": 1.045
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "avenger_s1_t0_4",
+      "name": "전장의 거신의 궁극",
+      "branch": "avenger_s1_t0",
+      "class": "guardian",
+      "tier": 4,
+      "maxRank": 3,
+      "requires": 12,
+      "cost": 1,
+      "minLevel": 46,
+      "stats": [
+        {
+          "stat": "hp",
+          "op": "multiply",
+          "value": 1.04
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": true
+    },
+    {
+      "id": "avenger_s1_t1_0",
+      "name": "불굴의 응징자의 기초",
+      "branch": "avenger_s1_t1",
+      "class": "guardian",
+      "tier": 0,
+      "maxRank": 6,
+      "requires": 0,
+      "cost": 1,
+      "minLevel": 34,
+      "stats": [
+        {
+          "stat": "hp",
+          "op": "multiply",
+          "value": 1.04
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "avenger_s1_t1_1",
+      "name": "불굴의 응징자의 계승",
+      "branch": "avenger_s1_t1",
+      "class": "guardian",
+      "tier": 1,
+      "maxRank": 6,
+      "requires": 3,
+      "cost": 1,
+      "minLevel": 37,
+      "stats": [
+        {
+          "stat": "thorns",
+          "op": "add",
+          "value": 0.08
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "avenger_s1_t1_2",
+      "name": "불굴의 응징자의 완성",
+      "branch": "avenger_s1_t1",
+      "class": "guardian",
+      "tier": 2,
+      "maxRank": 5,
+      "requires": 6,
+      "cost": 1,
+      "minLevel": 40,
+      "stats": [
+        {
+          "stat": "manaRegen",
+          "op": "add",
+          "value": 0.18
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "avenger_s1_t1_3",
+      "name": "불굴의 응징자의 초월",
+      "branch": "avenger_s1_t1",
+      "class": "guardian",
+      "tier": 3,
+      "maxRank": 5,
+      "requires": 9,
+      "cost": 1,
+      "minLevel": 43,
+      "stats": [
+        {
+          "stat": "hp",
+          "op": "multiply",
+          "value": 1.04
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
+      "capstone": false
+    },
+    {
+      "id": "avenger_s1_t1_4",
+      "name": "불굴의 응징자의 궁극",
+      "branch": "avenger_s1_t1",
+      "class": "guardian",
+      "tier": 4,
+      "maxRank": 3,
+      "requires": 12,
+      "cost": 1,
+      "minLevel": 46,
+      "stats": [
+        {
+          "stat": "thorns",
+          "op": "add",
+          "value": 0.08
+        }
+      ],
+      "description": "최종 전직의 고유 능력을 성장시킵니다.",
       "capstone": true
     }
   ],
@@ -3073,6 +11251,799 @@ window.GAME_DB = {
       ],
       "icon": "signature",
       "description": "마력 총량을 희생해 기술 화력을 올립니다."
+    },
+    {
+      "id": "highland_heart",
+      "name": "가시 심장",
+      "slot": "relic",
+      "icon": "signature",
+      "boss": true,
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "op": "multiply",
+          "value": 1.12
+        },
+        {
+          "stat": "hp",
+          "op": "multiply",
+          "value": 0.95
+        },
+        {
+          "stat": "manaRegen",
+          "op": "add",
+          "value": 0.25
+        }
+      ],
+      "description": "기술 화력을 얻는 대신 최대 체력을 내줍니다."
+    },
+    {
+      "id": "frost_crest",
+      "name": "서리왕 문장",
+      "slot": "relic",
+      "icon": "signature",
+      "boss": true,
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "op": "multiply",
+          "value": 1.1300000000000001
+        },
+        {
+          "stat": "hp",
+          "op": "multiply",
+          "value": 0.95
+        },
+        {
+          "stat": "manaRegen",
+          "op": "add",
+          "value": 0.3
+        }
+      ],
+      "description": "기술 화력을 얻는 대신 최대 체력을 내줍니다."
+    },
+    {
+      "id": "sun_carapace",
+      "name": "태양의 갑각",
+      "slot": "relic",
+      "icon": "signature",
+      "boss": true,
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "op": "multiply",
+          "value": 1.1400000000000001
+        },
+        {
+          "stat": "hp",
+          "op": "multiply",
+          "value": 0.95
+        },
+        {
+          "stat": "manaRegen",
+          "op": "add",
+          "value": 0.35
+        }
+      ],
+      "description": "기술 화력을 얻는 대신 최대 체력을 내줍니다."
+    },
+    {
+      "id": "grave_seal",
+      "name": "망자의 인장",
+      "slot": "relic",
+      "icon": "signature",
+      "boss": true,
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "op": "multiply",
+          "value": 1.1500000000000001
+        },
+        {
+          "stat": "hp",
+          "op": "multiply",
+          "value": 0.95
+        },
+        {
+          "stat": "manaRegen",
+          "op": "add",
+          "value": 0.4
+        }
+      ],
+      "description": "기술 화력을 얻는 대신 최대 체력을 내줍니다."
+    },
+    {
+      "id": "eclipse_crown",
+      "name": "황혼의 왕관",
+      "slot": "relic",
+      "icon": "signature",
+      "boss": true,
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "op": "multiply",
+          "value": 1.1600000000000001
+        },
+        {
+          "stat": "hp",
+          "op": "multiply",
+          "value": 0.95
+        },
+        {
+          "stat": "manaRegen",
+          "op": "add",
+          "value": 0.45
+        }
+      ],
+      "description": "기술 화력을 얻는 대신 최대 체력을 내줍니다."
+    },
+    {
+      "id": "변경_warrior",
+      "name": "변경 철제 장검",
+      "slot": "weapon",
+      "classes": [
+        "warrior"
+      ],
+      "stats": [
+        {
+          "stat": "attack",
+          "op": "add",
+          "value": 8
+        },
+        {
+          "stat": "attackSpeed",
+          "op": "multiply",
+          "value": 1.04
+        },
+        {
+          "stat": "mp",
+          "op": "multiply",
+          "value": 0.94
+        }
+      ],
+      "icon": "attack",
+      "description": "높은 주력 공격력 / 최대 마력 -6%.",
+      "minLevel": 16
+    },
+    {
+      "id": "변경_archer",
+      "name": "변경 사냥꾼의 활",
+      "slot": "weapon",
+      "classes": [
+        "archer"
+      ],
+      "stats": [
+        {
+          "stat": "attack",
+          "op": "add",
+          "value": 8
+        },
+        {
+          "stat": "attackSpeed",
+          "op": "multiply",
+          "value": 1.04
+        },
+        {
+          "stat": "mp",
+          "op": "multiply",
+          "value": 0.94
+        }
+      ],
+      "icon": "bow",
+      "description": "높은 주력 공격력 / 최대 마력 -6%.",
+      "minLevel": 16
+    },
+    {
+      "id": "변경_magician",
+      "name": "변경 견습 지팡이",
+      "slot": "weapon",
+      "classes": [
+        "magician"
+      ],
+      "stats": [
+        {
+          "stat": "spell",
+          "op": "add",
+          "value": 8
+        },
+        {
+          "stat": "attackSpeed",
+          "op": "multiply",
+          "value": 1.04
+        },
+        {
+          "stat": "mp",
+          "op": "multiply",
+          "value": 0.94
+        }
+      ],
+      "icon": "staff",
+      "description": "높은 주력 공격력 / 최대 마력 -6%.",
+      "minLevel": 16
+    },
+    {
+      "id": "변경_guardian",
+      "name": "변경 서약의 철퇴",
+      "slot": "weapon",
+      "classes": [
+        "guardian"
+      ],
+      "stats": [
+        {
+          "stat": "attack",
+          "op": "add",
+          "value": 8
+        },
+        {
+          "stat": "defense",
+          "op": "add",
+          "value": 2
+        },
+        {
+          "stat": "mp",
+          "op": "multiply",
+          "value": 0.94
+        }
+      ],
+      "icon": "shield",
+      "description": "높은 주력 공격력 / 최대 마력 -6%.",
+      "minLevel": 16
+    },
+    {
+      "id": "region_0_armor",
+      "name": "변경 사슬갑옷",
+      "slot": "armor",
+      "icon": "shield",
+      "stats": [
+        {
+          "stat": "hp",
+          "op": "add",
+          "value": 25
+        },
+        {
+          "stat": "speed",
+          "op": "multiply",
+          "value": 0.97
+        }
+      ],
+      "description": "체력 / 이동 속도 감소.",
+      "minLevel": 16
+    },
+    {
+      "id": "region_0_accessory",
+      "name": "변경 사냥 반지",
+      "slot": "accessory",
+      "icon": "rank",
+      "stats": [
+        {
+          "stat": "crit",
+          "op": "add",
+          "value": 0.045
+        },
+        {
+          "stat": "defense",
+          "op": "add",
+          "value": -1
+        }
+      ],
+      "description": "치명타 / 방어력 감소.",
+      "minLevel": 16
+    },
+    {
+      "id": "서리_warrior",
+      "name": "서리 철제 장검",
+      "slot": "weapon",
+      "classes": [
+        "warrior"
+      ],
+      "stats": [
+        {
+          "stat": "attack",
+          "op": "add",
+          "value": 10
+        },
+        {
+          "stat": "attackSpeed",
+          "op": "multiply",
+          "value": 1.04
+        },
+        {
+          "stat": "mp",
+          "op": "multiply",
+          "value": 0.94
+        }
+      ],
+      "icon": "attack",
+      "description": "높은 주력 공격력 / 최대 마력 -6%.",
+      "minLevel": 24
+    },
+    {
+      "id": "서리_archer",
+      "name": "서리 사냥꾼의 활",
+      "slot": "weapon",
+      "classes": [
+        "archer"
+      ],
+      "stats": [
+        {
+          "stat": "attack",
+          "op": "add",
+          "value": 10
+        },
+        {
+          "stat": "attackSpeed",
+          "op": "multiply",
+          "value": 1.04
+        },
+        {
+          "stat": "mp",
+          "op": "multiply",
+          "value": 0.94
+        }
+      ],
+      "icon": "bow",
+      "description": "높은 주력 공격력 / 최대 마력 -6%.",
+      "minLevel": 24
+    },
+    {
+      "id": "서리_magician",
+      "name": "서리 견습 지팡이",
+      "slot": "weapon",
+      "classes": [
+        "magician"
+      ],
+      "stats": [
+        {
+          "stat": "spell",
+          "op": "add",
+          "value": 10
+        },
+        {
+          "stat": "attackSpeed",
+          "op": "multiply",
+          "value": 1.04
+        },
+        {
+          "stat": "mp",
+          "op": "multiply",
+          "value": 0.94
+        }
+      ],
+      "icon": "staff",
+      "description": "높은 주력 공격력 / 최대 마력 -6%.",
+      "minLevel": 24
+    },
+    {
+      "id": "서리_guardian",
+      "name": "서리 서약의 철퇴",
+      "slot": "weapon",
+      "classes": [
+        "guardian"
+      ],
+      "stats": [
+        {
+          "stat": "attack",
+          "op": "add",
+          "value": 10
+        },
+        {
+          "stat": "defense",
+          "op": "add",
+          "value": 3
+        },
+        {
+          "stat": "mp",
+          "op": "multiply",
+          "value": 0.94
+        }
+      ],
+      "icon": "shield",
+      "description": "높은 주력 공격력 / 최대 마력 -6%.",
+      "minLevel": 24
+    },
+    {
+      "id": "region_1_armor",
+      "name": "서리 사슬갑옷",
+      "slot": "armor",
+      "icon": "shield",
+      "stats": [
+        {
+          "stat": "hp",
+          "op": "add",
+          "value": 37
+        },
+        {
+          "stat": "speed",
+          "op": "multiply",
+          "value": 0.97
+        }
+      ],
+      "description": "체력 / 이동 속도 감소.",
+      "minLevel": 24
+    },
+    {
+      "id": "region_1_accessory",
+      "name": "서리 사냥 반지",
+      "slot": "accessory",
+      "icon": "rank",
+      "stats": [
+        {
+          "stat": "crit",
+          "op": "add",
+          "value": 0.053
+        },
+        {
+          "stat": "defense",
+          "op": "add",
+          "value": -1
+        }
+      ],
+      "description": "치명타 / 방어력 감소.",
+      "minLevel": 24
+    },
+    {
+      "id": "사막_warrior",
+      "name": "사막 철제 장검",
+      "slot": "weapon",
+      "classes": [
+        "warrior"
+      ],
+      "stats": [
+        {
+          "stat": "attack",
+          "op": "add",
+          "value": 12
+        },
+        {
+          "stat": "attackSpeed",
+          "op": "multiply",
+          "value": 1.04
+        },
+        {
+          "stat": "mp",
+          "op": "multiply",
+          "value": 0.94
+        }
+      ],
+      "icon": "attack",
+      "description": "높은 주력 공격력 / 최대 마력 -6%.",
+      "minLevel": 31
+    },
+    {
+      "id": "사막_archer",
+      "name": "사막 사냥꾼의 활",
+      "slot": "weapon",
+      "classes": [
+        "archer"
+      ],
+      "stats": [
+        {
+          "stat": "attack",
+          "op": "add",
+          "value": 12
+        },
+        {
+          "stat": "attackSpeed",
+          "op": "multiply",
+          "value": 1.04
+        },
+        {
+          "stat": "mp",
+          "op": "multiply",
+          "value": 0.94
+        }
+      ],
+      "icon": "bow",
+      "description": "높은 주력 공격력 / 최대 마력 -6%.",
+      "minLevel": 31
+    },
+    {
+      "id": "사막_magician",
+      "name": "사막 견습 지팡이",
+      "slot": "weapon",
+      "classes": [
+        "magician"
+      ],
+      "stats": [
+        {
+          "stat": "spell",
+          "op": "add",
+          "value": 12
+        },
+        {
+          "stat": "attackSpeed",
+          "op": "multiply",
+          "value": 1.04
+        },
+        {
+          "stat": "mp",
+          "op": "multiply",
+          "value": 0.94
+        }
+      ],
+      "icon": "staff",
+      "description": "높은 주력 공격력 / 최대 마력 -6%.",
+      "minLevel": 31
+    },
+    {
+      "id": "사막_guardian",
+      "name": "사막 서약의 철퇴",
+      "slot": "weapon",
+      "classes": [
+        "guardian"
+      ],
+      "stats": [
+        {
+          "stat": "attack",
+          "op": "add",
+          "value": 12
+        },
+        {
+          "stat": "defense",
+          "op": "add",
+          "value": 4
+        },
+        {
+          "stat": "mp",
+          "op": "multiply",
+          "value": 0.94
+        }
+      ],
+      "icon": "shield",
+      "description": "높은 주력 공격력 / 최대 마력 -6%.",
+      "minLevel": 31
+    },
+    {
+      "id": "region_2_armor",
+      "name": "사막 사슬갑옷",
+      "slot": "armor",
+      "icon": "shield",
+      "stats": [
+        {
+          "stat": "hp",
+          "op": "add",
+          "value": 49
+        },
+        {
+          "stat": "speed",
+          "op": "multiply",
+          "value": 0.97
+        }
+      ],
+      "description": "체력 / 이동 속도 감소.",
+      "minLevel": 31
+    },
+    {
+      "id": "region_2_accessory",
+      "name": "사막 사냥 반지",
+      "slot": "accessory",
+      "icon": "rank",
+      "stats": [
+        {
+          "stat": "crit",
+          "op": "add",
+          "value": 0.061
+        },
+        {
+          "stat": "defense",
+          "op": "add",
+          "value": -1
+        }
+      ],
+      "description": "치명타 / 방어력 감소.",
+      "minLevel": 31
+    },
+    {
+      "id": "황혼_warrior",
+      "name": "황혼 철제 장검",
+      "slot": "weapon",
+      "classes": [
+        "warrior"
+      ],
+      "stats": [
+        {
+          "stat": "attack",
+          "op": "add",
+          "value": 14
+        },
+        {
+          "stat": "attackSpeed",
+          "op": "multiply",
+          "value": 1.04
+        },
+        {
+          "stat": "mp",
+          "op": "multiply",
+          "value": 0.94
+        }
+      ],
+      "icon": "attack",
+      "description": "높은 주력 공격력 / 최대 마력 -6%.",
+      "minLevel": 40
+    },
+    {
+      "id": "황혼_archer",
+      "name": "황혼 사냥꾼의 활",
+      "slot": "weapon",
+      "classes": [
+        "archer"
+      ],
+      "stats": [
+        {
+          "stat": "attack",
+          "op": "add",
+          "value": 14
+        },
+        {
+          "stat": "attackSpeed",
+          "op": "multiply",
+          "value": 1.04
+        },
+        {
+          "stat": "mp",
+          "op": "multiply",
+          "value": 0.94
+        }
+      ],
+      "icon": "bow",
+      "description": "높은 주력 공격력 / 최대 마력 -6%.",
+      "minLevel": 40
+    },
+    {
+      "id": "황혼_magician",
+      "name": "황혼 견습 지팡이",
+      "slot": "weapon",
+      "classes": [
+        "magician"
+      ],
+      "stats": [
+        {
+          "stat": "spell",
+          "op": "add",
+          "value": 14
+        },
+        {
+          "stat": "attackSpeed",
+          "op": "multiply",
+          "value": 1.04
+        },
+        {
+          "stat": "mp",
+          "op": "multiply",
+          "value": 0.94
+        }
+      ],
+      "icon": "staff",
+      "description": "높은 주력 공격력 / 최대 마력 -6%.",
+      "minLevel": 40
+    },
+    {
+      "id": "황혼_guardian",
+      "name": "황혼 서약의 철퇴",
+      "slot": "weapon",
+      "classes": [
+        "guardian"
+      ],
+      "stats": [
+        {
+          "stat": "attack",
+          "op": "add",
+          "value": 14
+        },
+        {
+          "stat": "defense",
+          "op": "add",
+          "value": 5
+        },
+        {
+          "stat": "mp",
+          "op": "multiply",
+          "value": 0.94
+        }
+      ],
+      "icon": "shield",
+      "description": "높은 주력 공격력 / 최대 마력 -6%.",
+      "minLevel": 40
+    },
+    {
+      "id": "region_3_armor",
+      "name": "황혼 사슬갑옷",
+      "slot": "armor",
+      "icon": "shield",
+      "stats": [
+        {
+          "stat": "hp",
+          "op": "add",
+          "value": 61
+        },
+        {
+          "stat": "speed",
+          "op": "multiply",
+          "value": 0.97
+        }
+      ],
+      "description": "체력 / 이동 속도 감소.",
+      "minLevel": 40
+    },
+    {
+      "id": "region_3_accessory",
+      "name": "황혼 사냥 반지",
+      "slot": "accessory",
+      "icon": "rank",
+      "stats": [
+        {
+          "stat": "crit",
+          "op": "add",
+          "value": 0.069
+        },
+        {
+          "stat": "defense",
+          "op": "add",
+          "value": -1
+        }
+      ],
+      "description": "치명타 / 방어력 감소.",
+      "minLevel": 40
+    },
+    {
+      "id": "faction_rangers",
+      "name": "매의 맹약",
+      "slot": "relic",
+      "icon": "rank",
+      "stats": [
+        {
+          "stat": "basicDamage",
+          "op": "multiply",
+          "value": 1.18
+        },
+        {
+          "stat": "goldGain",
+          "op": "multiply",
+          "value": 0.92
+        }
+      ],
+      "description": "세력의 힘 / 금화 획득 -8%.",
+      "boss": true
+    },
+    {
+      "id": "faction_wardens",
+      "name": "수호의 서약",
+      "slot": "relic",
+      "icon": "rank",
+      "stats": [
+        {
+          "stat": "hp",
+          "op": "multiply",
+          "value": 1.18
+        },
+        {
+          "stat": "goldGain",
+          "op": "multiply",
+          "value": 0.92
+        }
+      ],
+      "description": "세력의 힘 / 금화 획득 -8%.",
+      "boss": true
+    },
+    {
+      "id": "faction_arcanum",
+      "name": "학회의 별",
+      "slot": "relic",
+      "icon": "rank",
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "op": "multiply",
+          "value": 1.2
+        },
+        {
+          "stat": "goldGain",
+          "op": "multiply",
+          "value": 0.92
+        }
+      ],
+      "description": "세력의 힘 / 금화 획득 -8%.",
+      "boss": true
     }
   ],
   "affixes": [
@@ -3256,6 +12227,21 @@ window.GAME_DB = {
       "id": "wood",
       "name": "단단한 목재",
       "icon": "tree"
+    },
+    {
+      "id": "moonstone",
+      "name": "월광석",
+      "icon": "signature"
+    },
+    {
+      "id": "ember",
+      "name": "불씨 핵",
+      "icon": "signature"
+    },
+    {
+      "id": "sigil",
+      "name": "정복 인장",
+      "icon": "rank"
     }
   ],
   "recipes": [
@@ -3473,6 +12459,313 @@ window.GAME_DB = {
       },
       "minLevel": 8,
       "classes": null
+    },
+    {
+      "id": "craft_변경_warrior",
+      "name": "변경 철제 장검 제작",
+      "item": "변경_warrior",
+      "rarity": "rare",
+      "gold": 620,
+      "materials": {
+        "ore": 12,
+        "wood": 10,
+        "crystal": 8
+      },
+      "minLevel": 16,
+      "classes": [
+        "warrior"
+      ]
+    },
+    {
+      "id": "craft_변경_archer",
+      "name": "변경 사냥꾼의 활 제작",
+      "item": "변경_archer",
+      "rarity": "rare",
+      "gold": 620,
+      "materials": {
+        "ore": 12,
+        "wood": 10,
+        "crystal": 8
+      },
+      "minLevel": 16,
+      "classes": [
+        "archer"
+      ]
+    },
+    {
+      "id": "craft_변경_magician",
+      "name": "변경 견습 지팡이 제작",
+      "item": "변경_magician",
+      "rarity": "rare",
+      "gold": 620,
+      "materials": {
+        "ore": 12,
+        "wood": 10,
+        "crystal": 8
+      },
+      "minLevel": 16,
+      "classes": [
+        "magician"
+      ]
+    },
+    {
+      "id": "craft_변경_guardian",
+      "name": "변경 서약의 철퇴 제작",
+      "item": "변경_guardian",
+      "rarity": "rare",
+      "gold": 620,
+      "materials": {
+        "ore": 12,
+        "wood": 10,
+        "crystal": 8
+      },
+      "minLevel": 16,
+      "classes": [
+        "guardian"
+      ]
+    },
+    {
+      "id": "craft_서리_warrior",
+      "name": "서리 철제 장검 제작",
+      "item": "서리_warrior",
+      "rarity": "rare",
+      "gold": 1140,
+      "materials": {
+        "moonstone": 16,
+        "wood": 13,
+        "crystal": 11
+      },
+      "minLevel": 24,
+      "classes": [
+        "warrior"
+      ]
+    },
+    {
+      "id": "craft_서리_archer",
+      "name": "서리 사냥꾼의 활 제작",
+      "item": "서리_archer",
+      "rarity": "rare",
+      "gold": 1140,
+      "materials": {
+        "moonstone": 16,
+        "wood": 13,
+        "crystal": 11
+      },
+      "minLevel": 24,
+      "classes": [
+        "archer"
+      ]
+    },
+    {
+      "id": "craft_서리_magician",
+      "name": "서리 견습 지팡이 제작",
+      "item": "서리_magician",
+      "rarity": "rare",
+      "gold": 1140,
+      "materials": {
+        "moonstone": 16,
+        "wood": 13,
+        "crystal": 11
+      },
+      "minLevel": 24,
+      "classes": [
+        "magician"
+      ]
+    },
+    {
+      "id": "craft_서리_guardian",
+      "name": "서리 서약의 철퇴 제작",
+      "item": "서리_guardian",
+      "rarity": "rare",
+      "gold": 1140,
+      "materials": {
+        "moonstone": 16,
+        "wood": 13,
+        "crystal": 11
+      },
+      "minLevel": 24,
+      "classes": [
+        "guardian"
+      ]
+    },
+    {
+      "id": "craft_사막_warrior",
+      "name": "사막 철제 장검 제작",
+      "item": "사막_warrior",
+      "rarity": "rare",
+      "gold": 1660,
+      "materials": {
+        "ember": 20,
+        "wood": 16,
+        "crystal": 14
+      },
+      "minLevel": 31,
+      "classes": [
+        "warrior"
+      ]
+    },
+    {
+      "id": "craft_사막_archer",
+      "name": "사막 사냥꾼의 활 제작",
+      "item": "사막_archer",
+      "rarity": "rare",
+      "gold": 1660,
+      "materials": {
+        "ember": 20,
+        "wood": 16,
+        "crystal": 14
+      },
+      "minLevel": 31,
+      "classes": [
+        "archer"
+      ]
+    },
+    {
+      "id": "craft_사막_magician",
+      "name": "사막 견습 지팡이 제작",
+      "item": "사막_magician",
+      "rarity": "rare",
+      "gold": 1660,
+      "materials": {
+        "ember": 20,
+        "wood": 16,
+        "crystal": 14
+      },
+      "minLevel": 31,
+      "classes": [
+        "magician"
+      ]
+    },
+    {
+      "id": "craft_사막_guardian",
+      "name": "사막 서약의 철퇴 제작",
+      "item": "사막_guardian",
+      "rarity": "rare",
+      "gold": 1660,
+      "materials": {
+        "ember": 20,
+        "wood": 16,
+        "crystal": 14
+      },
+      "minLevel": 31,
+      "classes": [
+        "guardian"
+      ]
+    },
+    {
+      "id": "craft_황혼_warrior",
+      "name": "황혼 철제 장검 제작",
+      "item": "황혼_warrior",
+      "rarity": "rare",
+      "gold": 2180,
+      "materials": {
+        "sigil": 24,
+        "wood": 19,
+        "crystal": 17
+      },
+      "minLevel": 40,
+      "classes": [
+        "warrior"
+      ]
+    },
+    {
+      "id": "craft_황혼_archer",
+      "name": "황혼 사냥꾼의 활 제작",
+      "item": "황혼_archer",
+      "rarity": "rare",
+      "gold": 2180,
+      "materials": {
+        "sigil": 24,
+        "wood": 19,
+        "crystal": 17
+      },
+      "minLevel": 40,
+      "classes": [
+        "archer"
+      ]
+    },
+    {
+      "id": "craft_황혼_magician",
+      "name": "황혼 견습 지팡이 제작",
+      "item": "황혼_magician",
+      "rarity": "rare",
+      "gold": 2180,
+      "materials": {
+        "sigil": 24,
+        "wood": 19,
+        "crystal": 17
+      },
+      "minLevel": 40,
+      "classes": [
+        "magician"
+      ]
+    },
+    {
+      "id": "craft_황혼_guardian",
+      "name": "황혼 서약의 철퇴 제작",
+      "item": "황혼_guardian",
+      "rarity": "rare",
+      "gold": 2180,
+      "materials": {
+        "sigil": 24,
+        "wood": 19,
+        "crystal": 17
+      },
+      "minLevel": 40,
+      "classes": [
+        "guardian"
+      ]
+    },
+    {
+      "id": "faction_rangers",
+      "name": "매의 맹약 제작",
+      "item": "faction_rangers",
+      "rarity": "rare",
+      "gold": 1300,
+      "materials": {
+        "sigil": 12,
+        "crystal": 20,
+        "moonstone": 10
+      },
+      "minLevel": 25,
+      "reputation": {
+        "rangers": 120
+      },
+      "description": "세력 평판 120과 정복 인장이 필요합니다."
+    },
+    {
+      "id": "faction_wardens",
+      "name": "수호의 서약 제작",
+      "item": "faction_wardens",
+      "rarity": "rare",
+      "gold": 1300,
+      "materials": {
+        "sigil": 12,
+        "crystal": 20,
+        "moonstone": 10
+      },
+      "minLevel": 25,
+      "reputation": {
+        "wardens": 120
+      },
+      "description": "세력 평판 120과 정복 인장이 필요합니다."
+    },
+    {
+      "id": "faction_arcanum",
+      "name": "학회의 별 제작",
+      "item": "faction_arcanum",
+      "rarity": "rare",
+      "gold": 1300,
+      "materials": {
+        "sigil": 12,
+        "crystal": 20,
+        "moonstone": 10
+      },
+      "minLevel": 25,
+      "reputation": {
+        "arcanum": 120
+      },
+      "description": "세력 평판 120과 정복 인장이 필요합니다."
     }
   ],
   "shop": [
@@ -3835,6 +13128,340 @@ window.GAME_DB = {
       "description": "얼음 기억 수정의 특성을 살린 모험 장비.",
       "price": 400,
       "icon": "staff"
+    },
+    {
+      "id": "shop_변경_warrior",
+      "kind": "equipment",
+      "item": "변경_warrior",
+      "name": "변경 철제 장검",
+      "description": "높은 주력 공격력 / 최대 마력 -6%.",
+      "price": 480,
+      "rarity": "uncommon",
+      "level": 16,
+      "minLevel": 16,
+      "limit": 1,
+      "icon": "attack"
+    },
+    {
+      "id": "shop_변경_archer",
+      "kind": "equipment",
+      "item": "변경_archer",
+      "name": "변경 사냥꾼의 활",
+      "description": "높은 주력 공격력 / 최대 마력 -6%.",
+      "price": 480,
+      "rarity": "uncommon",
+      "level": 16,
+      "minLevel": 16,
+      "limit": 1,
+      "icon": "bow"
+    },
+    {
+      "id": "shop_변경_magician",
+      "kind": "equipment",
+      "item": "변경_magician",
+      "name": "변경 견습 지팡이",
+      "description": "높은 주력 공격력 / 최대 마력 -6%.",
+      "price": 480,
+      "rarity": "uncommon",
+      "level": 16,
+      "minLevel": 16,
+      "limit": 1,
+      "icon": "staff"
+    },
+    {
+      "id": "shop_변경_guardian",
+      "kind": "equipment",
+      "item": "변경_guardian",
+      "name": "변경 서약의 철퇴",
+      "description": "높은 주력 공격력 / 최대 마력 -6%.",
+      "price": 480,
+      "rarity": "uncommon",
+      "level": 16,
+      "minLevel": 16,
+      "limit": 1,
+      "icon": "shield"
+    },
+    {
+      "id": "shop_region_0_armor",
+      "kind": "equipment",
+      "item": "region_0_armor",
+      "name": "변경 사슬갑옷",
+      "description": "체력 / 이동 속도 감소.",
+      "price": 420,
+      "rarity": "uncommon",
+      "level": 16,
+      "minLevel": 16,
+      "limit": 1,
+      "icon": "shield"
+    },
+    {
+      "id": "shop_region_0_accessory",
+      "kind": "equipment",
+      "item": "region_0_accessory",
+      "name": "변경 사냥 반지",
+      "description": "치명타 / 방어력 감소.",
+      "price": 420,
+      "rarity": "uncommon",
+      "level": 16,
+      "minLevel": 16,
+      "limit": 1,
+      "icon": "rank"
+    },
+    {
+      "id": "shop_서리_warrior",
+      "kind": "equipment",
+      "item": "서리_warrior",
+      "name": "서리 철제 장검",
+      "description": "높은 주력 공격력 / 최대 마력 -6%.",
+      "price": 920,
+      "rarity": "uncommon",
+      "level": 24,
+      "minLevel": 24,
+      "limit": 1,
+      "icon": "attack"
+    },
+    {
+      "id": "shop_서리_archer",
+      "kind": "equipment",
+      "item": "서리_archer",
+      "name": "서리 사냥꾼의 활",
+      "description": "높은 주력 공격력 / 최대 마력 -6%.",
+      "price": 920,
+      "rarity": "uncommon",
+      "level": 24,
+      "minLevel": 24,
+      "limit": 1,
+      "icon": "bow"
+    },
+    {
+      "id": "shop_서리_magician",
+      "kind": "equipment",
+      "item": "서리_magician",
+      "name": "서리 견습 지팡이",
+      "description": "높은 주력 공격력 / 최대 마력 -6%.",
+      "price": 920,
+      "rarity": "uncommon",
+      "level": 24,
+      "minLevel": 24,
+      "limit": 1,
+      "icon": "staff"
+    },
+    {
+      "id": "shop_서리_guardian",
+      "kind": "equipment",
+      "item": "서리_guardian",
+      "name": "서리 서약의 철퇴",
+      "description": "높은 주력 공격력 / 최대 마력 -6%.",
+      "price": 920,
+      "rarity": "uncommon",
+      "level": 24,
+      "minLevel": 24,
+      "limit": 1,
+      "icon": "shield"
+    },
+    {
+      "id": "shop_region_1_armor",
+      "kind": "equipment",
+      "item": "region_1_armor",
+      "name": "서리 사슬갑옷",
+      "description": "체력 / 이동 속도 감소.",
+      "price": 800,
+      "rarity": "uncommon",
+      "level": 24,
+      "minLevel": 24,
+      "limit": 1,
+      "icon": "shield"
+    },
+    {
+      "id": "shop_region_1_accessory",
+      "kind": "equipment",
+      "item": "region_1_accessory",
+      "name": "서리 사냥 반지",
+      "description": "치명타 / 방어력 감소.",
+      "price": 800,
+      "rarity": "uncommon",
+      "level": 24,
+      "minLevel": 24,
+      "limit": 1,
+      "icon": "rank"
+    },
+    {
+      "id": "shop_사막_warrior",
+      "kind": "equipment",
+      "item": "사막_warrior",
+      "name": "사막 철제 장검",
+      "description": "높은 주력 공격력 / 최대 마력 -6%.",
+      "price": 1360,
+      "rarity": "uncommon",
+      "level": 31,
+      "minLevel": 31,
+      "limit": 1,
+      "icon": "attack"
+    },
+    {
+      "id": "shop_사막_archer",
+      "kind": "equipment",
+      "item": "사막_archer",
+      "name": "사막 사냥꾼의 활",
+      "description": "높은 주력 공격력 / 최대 마력 -6%.",
+      "price": 1360,
+      "rarity": "uncommon",
+      "level": 31,
+      "minLevel": 31,
+      "limit": 1,
+      "icon": "bow"
+    },
+    {
+      "id": "shop_사막_magician",
+      "kind": "equipment",
+      "item": "사막_magician",
+      "name": "사막 견습 지팡이",
+      "description": "높은 주력 공격력 / 최대 마력 -6%.",
+      "price": 1360,
+      "rarity": "uncommon",
+      "level": 31,
+      "minLevel": 31,
+      "limit": 1,
+      "icon": "staff"
+    },
+    {
+      "id": "shop_사막_guardian",
+      "kind": "equipment",
+      "item": "사막_guardian",
+      "name": "사막 서약의 철퇴",
+      "description": "높은 주력 공격력 / 최대 마력 -6%.",
+      "price": 1360,
+      "rarity": "uncommon",
+      "level": 31,
+      "minLevel": 31,
+      "limit": 1,
+      "icon": "shield"
+    },
+    {
+      "id": "shop_region_2_armor",
+      "kind": "equipment",
+      "item": "region_2_armor",
+      "name": "사막 사슬갑옷",
+      "description": "체력 / 이동 속도 감소.",
+      "price": 1180,
+      "rarity": "uncommon",
+      "level": 31,
+      "minLevel": 31,
+      "limit": 1,
+      "icon": "shield"
+    },
+    {
+      "id": "shop_region_2_accessory",
+      "kind": "equipment",
+      "item": "region_2_accessory",
+      "name": "사막 사냥 반지",
+      "description": "치명타 / 방어력 감소.",
+      "price": 1180,
+      "rarity": "uncommon",
+      "level": 31,
+      "minLevel": 31,
+      "limit": 1,
+      "icon": "rank"
+    },
+    {
+      "id": "shop_황혼_warrior",
+      "kind": "equipment",
+      "item": "황혼_warrior",
+      "name": "황혼 철제 장검",
+      "description": "높은 주력 공격력 / 최대 마력 -6%.",
+      "price": 1800,
+      "rarity": "uncommon",
+      "level": 40,
+      "minLevel": 40,
+      "limit": 1,
+      "icon": "attack"
+    },
+    {
+      "id": "shop_황혼_archer",
+      "kind": "equipment",
+      "item": "황혼_archer",
+      "name": "황혼 사냥꾼의 활",
+      "description": "높은 주력 공격력 / 최대 마력 -6%.",
+      "price": 1800,
+      "rarity": "uncommon",
+      "level": 40,
+      "minLevel": 40,
+      "limit": 1,
+      "icon": "bow"
+    },
+    {
+      "id": "shop_황혼_magician",
+      "kind": "equipment",
+      "item": "황혼_magician",
+      "name": "황혼 견습 지팡이",
+      "description": "높은 주력 공격력 / 최대 마력 -6%.",
+      "price": 1800,
+      "rarity": "uncommon",
+      "level": 40,
+      "minLevel": 40,
+      "limit": 1,
+      "icon": "staff"
+    },
+    {
+      "id": "shop_황혼_guardian",
+      "kind": "equipment",
+      "item": "황혼_guardian",
+      "name": "황혼 서약의 철퇴",
+      "description": "높은 주력 공격력 / 최대 마력 -6%.",
+      "price": 1800,
+      "rarity": "uncommon",
+      "level": 40,
+      "minLevel": 40,
+      "limit": 1,
+      "icon": "shield"
+    },
+    {
+      "id": "shop_region_3_armor",
+      "kind": "equipment",
+      "item": "region_3_armor",
+      "name": "황혼 사슬갑옷",
+      "description": "체력 / 이동 속도 감소.",
+      "price": 1560,
+      "rarity": "uncommon",
+      "level": 40,
+      "minLevel": 40,
+      "limit": 1,
+      "icon": "shield"
+    },
+    {
+      "id": "shop_region_3_accessory",
+      "kind": "equipment",
+      "item": "region_3_accessory",
+      "name": "황혼 사냥 반지",
+      "description": "치명타 / 방어력 감소.",
+      "price": 1560,
+      "rarity": "uncommon",
+      "level": 40,
+      "minLevel": 40,
+      "limit": 1,
+      "icon": "rank"
+    },
+    {
+      "id": "mat_moonstone",
+      "kind": "material",
+      "material": "moonstone",
+      "name": "월광석",
+      "price": 50,
+      "amount": 1,
+      "minLevel": 20,
+      "icon": "signature",
+      "description": "고급 제작 재료."
+    },
+    {
+      "id": "mat_ember",
+      "kind": "material",
+      "material": "ember",
+      "name": "불씨 핵",
+      "price": 55,
+      "amount": 1,
+      "minLevel": 28,
+      "icon": "signature",
+      "description": "고급 제작 재료."
     }
   ],
   "blessings": [
@@ -3903,14 +13530,14 @@ window.GAME_DB = {
   "dungeonTiers": [
     {
       "id": 0,
-      "name": "이야기",
+      "name": "탐험",
       "levelBonus": 0,
       "reward": 1,
       "requiredClears": 0
     },
     {
       "id": 1,
-      "name": "수련",
+      "name": "정예",
       "levelBonus": 3,
       "reward": 1.4,
       "requiredClears": 1
@@ -3921,6 +13548,20 @@ window.GAME_DB = {
       "levelBonus": 6,
       "reward": 1.85,
       "requiredClears": 3
+    },
+    {
+      "id": 3,
+      "name": "악몽",
+      "levelBonus": 10,
+      "reward": 2.35,
+      "requiredClears": 6
+    },
+    {
+      "id": 4,
+      "name": "전설",
+      "levelBonus": 15,
+      "reward": 2.9,
+      "requiredClears": 10
     }
   ],
   "monsters": {
@@ -4151,6 +13792,15 @@ window.GAME_DB = {
           "windup": 1.2,
           "cooldown": 3,
           "damage": 0.9
+        },
+        {
+          "name": "포위의 울음",
+          "kind": "ring",
+          "radius": 4.2,
+          "windup": 1.3,
+          "cooldown": 2.6,
+          "damage": 1.05,
+          "innerRadius": 1.3
         }
       ],
       "adds": [
@@ -4200,6 +13850,15 @@ window.GAME_DB = {
           "windup": 1.4,
           "cooldown": 3,
           "damage": 1.3
+        },
+        {
+          "name": "채광 부채",
+          "kind": "cone",
+          "radius": 4.5,
+          "windup": 1.4,
+          "cooldown": 2.8,
+          "damage": 1.15,
+          "angle": 1.6
         }
       ],
       "adds": [
@@ -4249,6 +13908,30 @@ window.GAME_DB = {
           "windup": 1.25,
           "cooldown": 3,
           "damage": 1.1
+        },
+        {
+          "name": "연쇄 화염",
+          "kind": "target",
+          "radius": 1.8,
+          "windup": 1.3,
+          "cooldown": 2.7,
+          "damage": 1.1,
+          "bursts": 3,
+          "interval": 0.6,
+          "offsets": [
+            [
+              0,
+              0
+            ],
+            [
+              2,
+              0
+            ],
+            [
+              -2,
+              0
+            ]
+          ]
         }
       ],
       "adds": [
@@ -4329,6 +14012,1509 @@ window.GAME_DB = {
       "size": 1.4,
       "elite": true,
       "tint": "#b8a18a"
+    },
+    "moss_ent": {
+      "name": "이끼나무 수호자",
+      "sprite": "ent",
+      "hp": 150,
+      "attack": 24,
+      "defense": 5,
+      "speed": 1.2,
+      "range": 1.4,
+      "cooldown": 2.6,
+      "windup": 1,
+      "kind": "ring",
+      "radius": 3,
+      "xp": 38,
+      "gold": [
+        4,
+        7
+      ],
+      "material": {
+        "wood": 0.6
+      },
+      "size": 1.4,
+      "innerRadius": 1.15,
+      "tint": "#699d58"
+    },
+    "cave_bat": {
+      "name": "흡혈 박쥐",
+      "sprite": "bat",
+      "hp": 45,
+      "attack": 18,
+      "defense": 1,
+      "speed": 3.1,
+      "range": 0.9,
+      "cooldown": 1.65,
+      "windup": 0.55,
+      "kind": "line",
+      "radius": 0.6,
+      "length": 2.8,
+      "xp": 15,
+      "gold": [
+        1,
+        3
+      ],
+      "material": {
+        "hide": 0.32
+      },
+      "size": 0.85,
+      "dash": true
+    },
+    "bone_soldier": {
+      "name": "해골 보병",
+      "sprite": "skeleton",
+      "hp": 85,
+      "attack": 24,
+      "defense": 5,
+      "speed": 2,
+      "range": 0.85,
+      "cooldown": 1.55,
+      "windup": 0.45,
+      "kind": "circle",
+      "radius": 1,
+      "xp": 24,
+      "gold": [
+        2,
+        5
+      ],
+      "material": {
+        "ore": 0.38
+      },
+      "size": 1
+    },
+    "venom_spider": {
+      "name": "독니 거미",
+      "sprite": "spider",
+      "hp": 60,
+      "attack": 22,
+      "defense": 0,
+      "speed": 2.1,
+      "range": 3.4,
+      "cooldown": 1.7,
+      "windup": 0.9,
+      "kind": "target",
+      "radius": 1.25,
+      "xp": 24,
+      "gold": [
+        2,
+        4
+      ],
+      "material": {
+        "herb": 0.4
+      },
+      "size": 0.9
+    },
+    "highland_orc": {
+      "name": "고원 오크",
+      "sprite": "orc",
+      "hp": 95,
+      "attack": 25,
+      "defense": 3,
+      "speed": 2,
+      "range": 0.85,
+      "cooldown": 2.1,
+      "windup": 0.85,
+      "kind": "cone",
+      "radius": 2.2,
+      "xp": 29,
+      "gold": [
+        3,
+        6
+      ],
+      "material": {
+        "hide": 0.45,
+        "ore": 0.25
+      },
+      "size": 1,
+      "angle": 1.3
+    },
+    "orc_shaman": {
+      "name": "오크 불술사",
+      "sprite": "orc",
+      "hp": 90,
+      "attack": 29,
+      "defense": 3,
+      "speed": 1.7,
+      "range": 3.6,
+      "cooldown": 2.8,
+      "windup": 0.95,
+      "kind": "target",
+      "radius": 1.5,
+      "xp": 33,
+      "gold": [
+        3,
+        6
+      ],
+      "material": {
+        "ember": 0.2,
+        "crystal": 0.4
+      },
+      "size": 1.3,
+      "elite": false,
+      "tint": "#ca7c53"
+    },
+    "stone_wyvern": {
+      "name": "바위 와이번",
+      "sprite": "drake",
+      "hp": 115,
+      "attack": 27,
+      "defense": 1,
+      "speed": 2.4,
+      "range": 0.9,
+      "cooldown": 1.65,
+      "windup": 1.1,
+      "kind": "line",
+      "radius": 0.7,
+      "length": 4,
+      "xp": 36,
+      "gold": [
+        3,
+        7
+      ],
+      "material": {
+        "hide": 0.5
+      },
+      "size": 1.2,
+      "dash": true
+    },
+    "frost_wolf": {
+      "name": "서리 늑대",
+      "sprite": "wolf",
+      "hp": 95,
+      "attack": 26,
+      "defense": 1,
+      "speed": 2.75,
+      "range": 0.9,
+      "cooldown": 1.65,
+      "windup": 0.55,
+      "kind": "line",
+      "radius": 0.6,
+      "length": 2.1,
+      "xp": 31,
+      "gold": [
+        3,
+        6
+      ],
+      "material": {
+        "hide": 0.6
+      },
+      "size": 1.1,
+      "dash": true,
+      "tint": "#9fc7db"
+    },
+    "ice_wraith": {
+      "name": "빙결 망령",
+      "sprite": "ghost",
+      "hp": 90,
+      "attack": 30,
+      "defense": 3,
+      "speed": 1.7,
+      "range": 3.5,
+      "cooldown": 2.8,
+      "windup": 0.95,
+      "kind": "ring",
+      "radius": 3.8,
+      "xp": 37,
+      "gold": [
+        4,
+        7
+      ],
+      "material": {
+        "moonstone": 0.32
+      },
+      "size": 1.3,
+      "elite": false,
+      "tint": "#87b7ce",
+      "innerRadius": 1.4
+    },
+    "snow_golem": {
+      "name": "설원 골렘",
+      "sprite": "golem",
+      "hp": 180,
+      "attack": 28,
+      "defense": 5,
+      "speed": 1.2,
+      "range": 1.4,
+      "cooldown": 2.6,
+      "windup": 1.3,
+      "kind": "cone",
+      "radius": 3.1,
+      "xp": 44,
+      "gold": [
+        4,
+        8
+      ],
+      "material": {
+        "moonstone": 0.5,
+        "ore": 0.3
+      },
+      "size": 1.4,
+      "angle": 1.8,
+      "tint": "#b8d4df"
+    },
+    "sand_scorpion": {
+      "name": "사막 전갈",
+      "sprite": "scorpion",
+      "hp": 100,
+      "attack": 30,
+      "defense": 1,
+      "speed": 2.5,
+      "range": 1.2,
+      "cooldown": 1.65,
+      "windup": 0.85,
+      "kind": "line",
+      "radius": 0.6,
+      "length": 3.5,
+      "xp": 37,
+      "gold": [
+        4,
+        8
+      ],
+      "material": {
+        "hide": 0.4,
+        "ember": 0.22
+      },
+      "size": 1.1,
+      "dash": true,
+      "tint": "#b39a59"
+    },
+    "dune_raider": {
+      "name": "모래 약탈자",
+      "sprite": "orc",
+      "hp": 105,
+      "attack": 32,
+      "defense": 1,
+      "speed": 2,
+      "range": 0.85,
+      "cooldown": 1.55,
+      "windup": 0.75,
+      "kind": "cone",
+      "radius": 2.7,
+      "xp": 40,
+      "gold": [
+        5,
+        9
+      ],
+      "material": {
+        "ore": 0.4
+      },
+      "size": 1,
+      "angle": 1.4,
+      "tint": "#bd8c60"
+    },
+    "ember_drake": {
+      "name": "불씨 비룡",
+      "sprite": "drake",
+      "hp": 135,
+      "attack": 36,
+      "defense": 3,
+      "speed": 1.7,
+      "range": 3.6,
+      "cooldown": 2.8,
+      "windup": 0.95,
+      "kind": "target",
+      "radius": 1.5,
+      "xp": 48,
+      "gold": [
+        5,
+        10
+      ],
+      "material": {
+        "ember": 0.5
+      },
+      "size": 1.2,
+      "elite": false,
+      "tint": "#9a8ca3"
+    },
+    "grave_knight": {
+      "name": "묘지 기사",
+      "sprite": "knight",
+      "hp": 150,
+      "attack": 31,
+      "defense": 8,
+      "speed": 2,
+      "range": 0.85,
+      "cooldown": 1.55,
+      "windup": 1.1,
+      "kind": "line",
+      "radius": 0.7,
+      "xp": 46,
+      "gold": [
+        4,
+        9
+      ],
+      "material": {
+        "ore": 0.4,
+        "sigil": 0.09
+      },
+      "size": 1,
+      "length": 4,
+      "dash": true,
+      "tint": "#938eae"
+    },
+    "curse_wraith": {
+      "name": "저주 망령",
+      "sprite": "ghost",
+      "hp": 100,
+      "attack": 35,
+      "defense": 3,
+      "speed": 1.7,
+      "range": 4.1,
+      "cooldown": 2.8,
+      "windup": 0.95,
+      "kind": "ring",
+      "radius": 4.5,
+      "xp": 47,
+      "gold": [
+        5,
+        10
+      ],
+      "material": {
+        "crystal": 0.6
+      },
+      "size": 1.3,
+      "elite": false,
+      "tint": "#9f7eaf",
+      "innerRadius": 1.6
+    },
+    "abyss_spider": {
+      "name": "심연 거미",
+      "sprite": "spider",
+      "hp": 145,
+      "attack": 36,
+      "defense": 0,
+      "speed": 2.1,
+      "range": 3.4,
+      "cooldown": 1.7,
+      "windup": 1.15,
+      "kind": "target",
+      "radius": 1.7,
+      "xp": 51,
+      "gold": [
+        6,
+        11
+      ],
+      "material": {
+        "herb": 0.45,
+        "sigil": 0.08
+      },
+      "size": 0.9,
+      "bursts": 3,
+      "interval": 0.5,
+      "offsets": [
+        [
+          0,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          -2,
+          0
+        ]
+      ],
+      "tint": "#7e689b"
+    },
+    "dusk_sentinel": {
+      "name": "황혼 근위병",
+      "sprite": "knight",
+      "hp": 180,
+      "attack": 38,
+      "defense": 10,
+      "speed": 2,
+      "range": 0.85,
+      "cooldown": 1.55,
+      "windup": 0.9,
+      "kind": "cone",
+      "radius": 3.2,
+      "xp": 57,
+      "gold": [
+        6,
+        12
+      ],
+      "material": {
+        "ore": 0.5,
+        "sigil": 0.12
+      },
+      "size": 1,
+      "length": 4,
+      "dash": false,
+      "tint": "#b69664",
+      "angle": 1.8
+    },
+    "dusk_magus": {
+      "name": "황혼 마도사",
+      "sprite": "ghost",
+      "hp": 145,
+      "attack": 40,
+      "defense": 3,
+      "speed": 1.7,
+      "range": 4.1,
+      "cooldown": 2.8,
+      "windup": 1.3,
+      "kind": "target",
+      "radius": 1.8,
+      "xp": 59,
+      "gold": [
+        7,
+        12
+      ],
+      "material": {
+        "crystal": 0.55,
+        "moonstone": 0.3
+      },
+      "size": 1.3,
+      "elite": false,
+      "tint": "#b686b1",
+      "innerRadius": 1.6,
+      "bursts": 3,
+      "interval": 0.65,
+      "offsets": [
+        [
+          0,
+          0
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          -2,
+          -2
+        ]
+      ]
+    },
+    "thorn_queen": {
+      "name": "가시숲의 여왕",
+      "sprite": "ent",
+      "hp": 1450,
+      "attack": 32,
+      "defense": 8,
+      "speed": 1.65,
+      "range": 5.5,
+      "xp": 448,
+      "gold": [
+        64,
+        96
+      ],
+      "size": 2,
+      "boss": true,
+      "group": "highland",
+      "drop": "highland_heart",
+      "patterns": [
+        {
+          "name": "뿌리 감옥",
+          "kind": "ring",
+          "radius": 5,
+          "windup": 1.4,
+          "cooldown": 2.8,
+          "damage": 1.15,
+          "innerRadius": 1.8
+        },
+        {
+          "name": "가시 부채",
+          "kind": "cone",
+          "radius": 5.2,
+          "windup": 1.25,
+          "cooldown": 2.5,
+          "damage": 1.1,
+          "angle": 1.3
+        },
+        {
+          "name": "추적 씨앗",
+          "kind": "target",
+          "radius": 1.6,
+          "windup": 1.2,
+          "cooldown": 2.5,
+          "damage": 1,
+          "offsets": [
+            [
+              0,
+              0
+            ],
+            [
+              2,
+              0
+            ],
+            [
+              -2,
+              0
+            ]
+          ],
+          "interval": 0.55,
+          "bursts": 3
+        }
+      ],
+      "adds": [
+        "venom_spider",
+        "moss_ent"
+      ],
+      "phases": [
+        {
+          "threshold": 0.65,
+          "adds": [
+            "venom_spider",
+            "moss_ent"
+          ],
+          "patterns": [
+            {
+              "name": "추적 씨앗",
+              "kind": "target",
+              "radius": 1.6,
+              "windup": 1.2,
+              "cooldown": 2.5,
+              "damage": 1,
+              "offsets": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  2,
+                  0
+                ],
+                [
+                  -2,
+                  0
+                ]
+              ],
+              "interval": 0.55,
+              "bursts": 3
+            },
+            {
+              "name": "가시 부채",
+              "kind": "cone",
+              "radius": 5.2,
+              "windup": 1.25,
+              "cooldown": 2.5,
+              "damage": 1.1,
+              "angle": 1.3
+            },
+            {
+              "name": "뿌리 감옥",
+              "kind": "ring",
+              "radius": 5,
+              "windup": 1.4,
+              "cooldown": 2.8,
+              "damage": 1.15,
+              "innerRadius": 1.8
+            }
+          ]
+        },
+        {
+          "threshold": 0.3,
+          "adds": [
+            "venom_spider",
+            "moss_ent"
+          ],
+          "patterns": [
+            {
+              "name": "뿌리 감옥",
+              "kind": "ring",
+              "radius": 5,
+              "windup": 1.4,
+              "cooldown": 2.8,
+              "damage": 1.15,
+              "innerRadius": 1.8
+            },
+            {
+              "name": "가시 부채",
+              "kind": "cone",
+              "radius": 5.2,
+              "windup": 1.25,
+              "cooldown": 2.5,
+              "damage": 1.1,
+              "angle": 1.3
+            },
+            {
+              "name": "추적 씨앗",
+              "kind": "target",
+              "radius": 1.6,
+              "windup": 1.2,
+              "cooldown": 2.5,
+              "damage": 1,
+              "offsets": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  2,
+                  0
+                ],
+                [
+                  -2,
+                  0
+                ]
+              ],
+              "interval": 0.55,
+              "bursts": 3
+            },
+            {
+              "name": "뿌리 감옥",
+              "kind": "ring",
+              "radius": 5,
+              "windup": 1.4,
+              "cooldown": 2.8,
+              "damage": 1.15,
+              "innerRadius": 1.8
+            }
+          ]
+        }
+      ],
+      "tint": "#79a56f"
+    },
+    "frost_regent": {
+      "name": "서리왕 이스렌",
+      "sprite": "knight",
+      "hp": 1850,
+      "attack": 36,
+      "defense": 8,
+      "speed": 1.65,
+      "range": 5.5,
+      "xp": 464,
+      "gold": [
+        72,
+        108
+      ],
+      "size": 2,
+      "boss": true,
+      "group": "frost",
+      "drop": "frost_crest",
+      "patterns": [
+        {
+          "name": "서리 파동",
+          "kind": "ring",
+          "radius": 6,
+          "windup": 1.6,
+          "cooldown": 3,
+          "damage": 1.2,
+          "innerRadius": 2
+        },
+        {
+          "name": "얼음 십자",
+          "kind": "line",
+          "radius": 0.65,
+          "windup": 1.45,
+          "cooldown": 2.8,
+          "damage": 1.1,
+          "length": 9,
+          "angles": [
+            0,
+            1.5708,
+            3.1416,
+            4.7124
+          ]
+        },
+        {
+          "name": "쇄빙 돌진",
+          "kind": "line",
+          "radius": 1,
+          "windup": 1.2,
+          "cooldown": 2.6,
+          "damage": 1.2,
+          "length": 7,
+          "dash": true
+        }
+      ],
+      "adds": [
+        "ice_wraith",
+        "frost_wolf"
+      ],
+      "phases": [
+        {
+          "threshold": 0.65,
+          "adds": [
+            "ice_wraith",
+            "frost_wolf"
+          ],
+          "patterns": [
+            {
+              "name": "쇄빙 돌진",
+              "kind": "line",
+              "radius": 1,
+              "windup": 1.2,
+              "cooldown": 2.6,
+              "damage": 1.2,
+              "length": 7,
+              "dash": true
+            },
+            {
+              "name": "얼음 십자",
+              "kind": "line",
+              "radius": 0.65,
+              "windup": 1.45,
+              "cooldown": 2.8,
+              "damage": 1.1,
+              "length": 9,
+              "angles": [
+                0,
+                1.5708,
+                3.1416,
+                4.7124
+              ]
+            },
+            {
+              "name": "서리 파동",
+              "kind": "ring",
+              "radius": 6,
+              "windup": 1.6,
+              "cooldown": 3,
+              "damage": 1.2,
+              "innerRadius": 2
+            }
+          ]
+        },
+        {
+          "threshold": 0.3,
+          "adds": [
+            "ice_wraith",
+            "frost_wolf"
+          ],
+          "patterns": [
+            {
+              "name": "서리 파동",
+              "kind": "ring",
+              "radius": 6,
+              "windup": 1.6,
+              "cooldown": 3,
+              "damage": 1.2,
+              "innerRadius": 2
+            },
+            {
+              "name": "얼음 십자",
+              "kind": "line",
+              "radius": 0.65,
+              "windup": 1.45,
+              "cooldown": 2.8,
+              "damage": 1.1,
+              "length": 9,
+              "angles": [
+                0,
+                1.5708,
+                3.1416,
+                4.7124
+              ]
+            },
+            {
+              "name": "쇄빙 돌진",
+              "kind": "line",
+              "radius": 1,
+              "windup": 1.2,
+              "cooldown": 2.6,
+              "damage": 1.2,
+              "length": 7,
+              "dash": true
+            },
+            {
+              "name": "서리 파동",
+              "kind": "ring",
+              "radius": 6,
+              "windup": 1.6,
+              "cooldown": 3,
+              "damage": 1.2,
+              "innerRadius": 2
+            }
+          ]
+        }
+      ],
+      "tint": "#8aafce"
+    },
+    "sun_scorpion": {
+      "name": "태양을 삼킨 전갈",
+      "sprite": "scorpion",
+      "hp": 2100,
+      "attack": 39,
+      "defense": 8,
+      "speed": 1.65,
+      "range": 5.5,
+      "xp": 476,
+      "gold": [
+        78,
+        117
+      ],
+      "size": 2,
+      "boss": true,
+      "group": "sun",
+      "drop": "sun_carapace",
+      "patterns": [
+        {
+          "name": "모래 꼬리",
+          "kind": "cone",
+          "radius": 6,
+          "windup": 1.25,
+          "cooldown": 2.8,
+          "damage": 1.25,
+          "angle": 1.8
+        },
+        {
+          "name": "불씨 폭격",
+          "kind": "target",
+          "radius": 1.9,
+          "windup": 1.4,
+          "cooldown": 2.8,
+          "damage": 1,
+          "bursts": 4,
+          "interval": 0.45,
+          "offsets": [
+            [
+              0,
+              0
+            ],
+            [
+              2,
+              0
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              -2,
+              -2
+            ]
+          ]
+        },
+        {
+          "name": "열풍의 눈",
+          "kind": "ring",
+          "radius": 6.5,
+          "windup": 1.6,
+          "cooldown": 3,
+          "damage": 1.1,
+          "innerRadius": 1.8
+        }
+      ],
+      "adds": [
+        "sand_scorpion",
+        "ember_drake"
+      ],
+      "phases": [
+        {
+          "threshold": 0.65,
+          "adds": [
+            "sand_scorpion",
+            "ember_drake"
+          ],
+          "patterns": [
+            {
+              "name": "열풍의 눈",
+              "kind": "ring",
+              "radius": 6.5,
+              "windup": 1.6,
+              "cooldown": 3,
+              "damage": 1.1,
+              "innerRadius": 1.8
+            },
+            {
+              "name": "불씨 폭격",
+              "kind": "target",
+              "radius": 1.9,
+              "windup": 1.4,
+              "cooldown": 2.8,
+              "damage": 1,
+              "bursts": 4,
+              "interval": 0.45,
+              "offsets": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  2,
+                  0
+                ],
+                [
+                  0,
+                  2
+                ],
+                [
+                  -2,
+                  -2
+                ]
+              ]
+            },
+            {
+              "name": "모래 꼬리",
+              "kind": "cone",
+              "radius": 6,
+              "windup": 1.25,
+              "cooldown": 2.8,
+              "damage": 1.25,
+              "angle": 1.8
+            }
+          ]
+        },
+        {
+          "threshold": 0.3,
+          "adds": [
+            "sand_scorpion",
+            "ember_drake"
+          ],
+          "patterns": [
+            {
+              "name": "모래 꼬리",
+              "kind": "cone",
+              "radius": 6,
+              "windup": 1.25,
+              "cooldown": 2.8,
+              "damage": 1.25,
+              "angle": 1.8
+            },
+            {
+              "name": "불씨 폭격",
+              "kind": "target",
+              "radius": 1.9,
+              "windup": 1.4,
+              "cooldown": 2.8,
+              "damage": 1,
+              "bursts": 4,
+              "interval": 0.45,
+              "offsets": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  2,
+                  0
+                ],
+                [
+                  0,
+                  2
+                ],
+                [
+                  -2,
+                  -2
+                ]
+              ]
+            },
+            {
+              "name": "열풍의 눈",
+              "kind": "ring",
+              "radius": 6.5,
+              "windup": 1.6,
+              "cooldown": 3,
+              "damage": 1.1,
+              "innerRadius": 1.8
+            },
+            {
+              "name": "모래 꼬리",
+              "kind": "cone",
+              "radius": 6,
+              "windup": 1.25,
+              "cooldown": 2.8,
+              "damage": 1.25,
+              "angle": 1.8
+            }
+          ]
+        }
+      ],
+      "tint": "#c9a25c"
+    },
+    "grave_marshal": {
+      "name": "망자의 원수",
+      "sprite": "skeleton",
+      "hp": 2450,
+      "attack": 42,
+      "defense": 8,
+      "speed": 1.65,
+      "range": 5.5,
+      "xp": 488,
+      "gold": [
+        84,
+        126
+      ],
+      "size": 2,
+      "boss": true,
+      "group": "grave",
+      "drop": "grave_seal",
+      "patterns": [
+        {
+          "name": "사형 선고",
+          "kind": "line",
+          "radius": 1.1,
+          "windup": 1.2,
+          "cooldown": 2.6,
+          "damage": 1.35,
+          "length": 9
+        },
+        {
+          "name": "망자의 행진",
+          "kind": "cone",
+          "radius": 6.5,
+          "windup": 1.4,
+          "cooldown": 2.8,
+          "damage": 1.15,
+          "angle": 1.4
+        },
+        {
+          "name": "영혼 격류",
+          "kind": "ring",
+          "radius": 6.5,
+          "windup": 1.6,
+          "cooldown": 3,
+          "damage": 1.2,
+          "innerRadius": 2.2
+        }
+      ],
+      "adds": [
+        "grave_knight",
+        "curse_wraith"
+      ],
+      "phases": [
+        {
+          "threshold": 0.65,
+          "adds": [
+            "grave_knight",
+            "curse_wraith"
+          ],
+          "patterns": [
+            {
+              "name": "영혼 격류",
+              "kind": "ring",
+              "radius": 6.5,
+              "windup": 1.6,
+              "cooldown": 3,
+              "damage": 1.2,
+              "innerRadius": 2.2
+            },
+            {
+              "name": "망자의 행진",
+              "kind": "cone",
+              "radius": 6.5,
+              "windup": 1.4,
+              "cooldown": 2.8,
+              "damage": 1.15,
+              "angle": 1.4
+            },
+            {
+              "name": "사형 선고",
+              "kind": "line",
+              "radius": 1.1,
+              "windup": 1.2,
+              "cooldown": 2.6,
+              "damage": 1.35,
+              "length": 9
+            }
+          ]
+        },
+        {
+          "threshold": 0.3,
+          "adds": [
+            "grave_knight",
+            "curse_wraith"
+          ],
+          "patterns": [
+            {
+              "name": "사형 선고",
+              "kind": "line",
+              "radius": 1.1,
+              "windup": 1.2,
+              "cooldown": 2.6,
+              "damage": 1.35,
+              "length": 9
+            },
+            {
+              "name": "망자의 행진",
+              "kind": "cone",
+              "radius": 6.5,
+              "windup": 1.4,
+              "cooldown": 2.8,
+              "damage": 1.15,
+              "angle": 1.4
+            },
+            {
+              "name": "영혼 격류",
+              "kind": "ring",
+              "radius": 6.5,
+              "windup": 1.6,
+              "cooldown": 3,
+              "damage": 1.2,
+              "innerRadius": 2.2
+            },
+            {
+              "name": "사형 선고",
+              "kind": "line",
+              "radius": 1.1,
+              "windup": 1.2,
+              "cooldown": 2.6,
+              "damage": 1.35,
+              "length": 9
+            }
+          ]
+        }
+      ],
+      "tint": "#b5a4bd"
+    },
+    "eclipse_king": {
+      "name": "황혼왕 발테르",
+      "sprite": "knight",
+      "hp": 3200,
+      "attack": 46,
+      "defense": 8,
+      "speed": 1.65,
+      "range": 5.5,
+      "xp": 504,
+      "gold": [
+        92,
+        138
+      ],
+      "size": 2,
+      "boss": true,
+      "group": "eclipse",
+      "drop": "eclipse_crown",
+      "patterns": [
+        {
+          "name": "왕의 심판",
+          "kind": "cone",
+          "radius": 7,
+          "windup": 1.45,
+          "cooldown": 2.8,
+          "damage": 1.4,
+          "angle": 1.6
+        },
+        {
+          "name": "왕관의 궤도",
+          "kind": "ring",
+          "radius": 7.5,
+          "windup": 1.7,
+          "cooldown": 3,
+          "damage": 1.25,
+          "innerRadius": 2.3
+        },
+        {
+          "name": "황혼 십자",
+          "kind": "line",
+          "radius": 1,
+          "windup": 1.5,
+          "cooldown": 2.8,
+          "damage": 1.2,
+          "length": 10,
+          "angles": [
+            0,
+            1.5708,
+            3.1416,
+            4.7124
+          ]
+        },
+        {
+          "name": "별의 추락",
+          "kind": "target",
+          "radius": 2,
+          "windup": 1.5,
+          "cooldown": 3,
+          "damage": 1.15,
+          "bursts": 4,
+          "interval": 0.5,
+          "offsets": [
+            [
+              0,
+              0
+            ],
+            [
+              3,
+              0
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              -3,
+              -3
+            ]
+          ]
+        }
+      ],
+      "adds": [
+        "dusk_sentinel",
+        "dusk_magus"
+      ],
+      "phases": [
+        {
+          "threshold": 0.65,
+          "adds": [
+            "dusk_sentinel",
+            "dusk_magus"
+          ],
+          "patterns": [
+            {
+              "name": "별의 추락",
+              "kind": "target",
+              "radius": 2,
+              "windup": 1.5,
+              "cooldown": 3,
+              "damage": 1.15,
+              "bursts": 4,
+              "interval": 0.5,
+              "offsets": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  3,
+                  0
+                ],
+                [
+                  0,
+                  3
+                ],
+                [
+                  -3,
+                  -3
+                ]
+              ]
+            },
+            {
+              "name": "황혼 십자",
+              "kind": "line",
+              "radius": 1,
+              "windup": 1.5,
+              "cooldown": 2.8,
+              "damage": 1.2,
+              "length": 10,
+              "angles": [
+                0,
+                1.5708,
+                3.1416,
+                4.7124
+              ]
+            },
+            {
+              "name": "왕관의 궤도",
+              "kind": "ring",
+              "radius": 7.5,
+              "windup": 1.7,
+              "cooldown": 3,
+              "damage": 1.25,
+              "innerRadius": 2.3
+            },
+            {
+              "name": "왕의 심판",
+              "kind": "cone",
+              "radius": 7,
+              "windup": 1.45,
+              "cooldown": 2.8,
+              "damage": 1.4,
+              "angle": 1.6
+            }
+          ]
+        },
+        {
+          "threshold": 0.3,
+          "adds": [
+            "dusk_sentinel",
+            "dusk_magus"
+          ],
+          "patterns": [
+            {
+              "name": "왕의 심판",
+              "kind": "cone",
+              "radius": 7,
+              "windup": 1.45,
+              "cooldown": 2.8,
+              "damage": 1.4,
+              "angle": 1.6
+            },
+            {
+              "name": "왕관의 궤도",
+              "kind": "ring",
+              "radius": 7.5,
+              "windup": 1.7,
+              "cooldown": 3,
+              "damage": 1.25,
+              "innerRadius": 2.3
+            },
+            {
+              "name": "황혼 십자",
+              "kind": "line",
+              "radius": 1,
+              "windup": 1.5,
+              "cooldown": 2.8,
+              "damage": 1.2,
+              "length": 10,
+              "angles": [
+                0,
+                1.5708,
+                3.1416,
+                4.7124
+              ]
+            },
+            {
+              "name": "별의 추락",
+              "kind": "target",
+              "radius": 2,
+              "windup": 1.5,
+              "cooldown": 3,
+              "damage": 1.15,
+              "bursts": 4,
+              "interval": 0.5,
+              "offsets": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  3,
+                  0
+                ],
+                [
+                  0,
+                  3
+                ],
+                [
+                  -3,
+                  -3
+                ]
+              ]
+            },
+            {
+              "name": "왕의 심판",
+              "kind": "cone",
+              "radius": 7,
+              "windup": 1.45,
+              "cooldown": 2.8,
+              "damage": 1.4,
+              "angle": 1.6
+            }
+          ]
+        }
+      ],
+      "tint": "#d6b16c"
+    },
+    "highland_elite": {
+      "name": "가시바람의 우두머리",
+      "sprite": "orc",
+      "hp": 190,
+      "attack": 29,
+      "defense": 3,
+      "speed": 2,
+      "range": 0.85,
+      "cooldown": 2.1,
+      "windup": 0.85,
+      "kind": "cone",
+      "radius": 2.2,
+      "xp": 58,
+      "gold": [
+        3,
+        6
+      ],
+      "material": {
+        "hide": 0.45,
+        "ore": 0.25
+      },
+      "size": 1.5,
+      "angle": 1.3,
+      "elite": true
+    },
+    "snowfield_elite": {
+      "name": "백서리의 우두머리",
+      "sprite": "wolf",
+      "hp": 190,
+      "attack": 30,
+      "defense": 1,
+      "speed": 2.75,
+      "range": 0.9,
+      "cooldown": 1.65,
+      "windup": 0.55,
+      "kind": "line",
+      "radius": 0.6,
+      "length": 2.1,
+      "xp": 62,
+      "gold": [
+        3,
+        6
+      ],
+      "material": {
+        "hide": 0.6
+      },
+      "size": 1.5,
+      "dash": true,
+      "tint": "#9fc7db",
+      "elite": true
+    },
+    "sunwaste_elite": {
+      "name": "붉은의 우두머리",
+      "sprite": "scorpion",
+      "hp": 200,
+      "attack": 34,
+      "defense": 1,
+      "speed": 2.5,
+      "range": 1.2,
+      "cooldown": 1.65,
+      "windup": 0.85,
+      "kind": "line",
+      "radius": 0.6,
+      "length": 3.5,
+      "xp": 74,
+      "gold": [
+        4,
+        8
+      ],
+      "material": {
+        "hide": 0.4,
+        "ember": 0.22
+      },
+      "size": 1.5,
+      "dash": true,
+      "tint": "#b39a59",
+      "elite": true
+    },
+    "gravewood_elite": {
+      "name": "잊힌의 우두머리",
+      "sprite": "skeleton",
+      "hp": 170,
+      "attack": 28,
+      "defense": 5,
+      "speed": 2,
+      "range": 0.85,
+      "cooldown": 1.55,
+      "windup": 0.45,
+      "kind": "circle",
+      "radius": 1,
+      "xp": 48,
+      "gold": [
+        2,
+        5
+      ],
+      "material": {
+        "ore": 0.38
+      },
+      "size": 1.5,
+      "elite": true
+    },
+    "eclipse_plain_elite": {
+      "name": "황혼의의 우두머리",
+      "sprite": "knight",
+      "hp": 360,
+      "attack": 44,
+      "defense": 10,
+      "speed": 2,
+      "range": 0.85,
+      "cooldown": 1.55,
+      "windup": 0.9,
+      "kind": "cone",
+      "radius": 3.2,
+      "xp": 114,
+      "gold": [
+        6,
+        12
+      ],
+      "material": {
+        "ore": 0.5,
+        "sigil": 0.12
+      },
+      "size": 1.5,
+      "length": 4,
+      "dash": false,
+      "tint": "#b69664",
+      "angle": 1.8,
+      "elite": true
     }
   },
   "quests": [
@@ -4337,18 +15523,32 @@ window.GAME_DB = {
       "name": "길드에 첫발을",
       "npc": "maren",
       "main": true,
-      "description": "오크우드의 길드 안내인 마렌에게 모험가로 등록하세요.",
+      "description": "마렌과 대화하고 동쪽 초원길에서 슬라임을 처치해 첫 모험을 증명하세요.",
       "objectives": [
         {
           "kind": "interact",
           "target": "maren",
           "count": 1,
           "label": "마렌과 대화"
+        },
+        {
+          "kind": "kill",
+          "target": "slime",
+          "count": 4,
+          "label": "초원 슬라임 처치",
+          "map": "meadow"
+        },
+        {
+          "kind": "visit",
+          "target": "meadow",
+          "count": 1,
+          "label": "초원길 방문",
+          "map": "meadow"
         }
       ],
       "rewards": {
-        "xp": 12,
-        "gold": 13,
+        "xp": 35,
+        "gold": 35,
         "potions": 2
       }
     },
@@ -4363,25 +15563,35 @@ window.GAME_DB = {
         {
           "kind": "kill",
           "target": "slime",
-          "count": 5,
+          "count": 15,
           "label": "슬라임 처치",
           "map": "meadow"
         },
         {
           "kind": "kill",
           "target": "goblin",
-          "count": 3,
+          "count": 9,
           "label": "고블린 처치",
+          "map": "meadow"
+        },
+        {
+          "kind": "event",
+          "target": "meadow_event",
+          "count": 1,
+          "label": "지역 야영지 토벌",
           "map": "meadow"
         }
       ],
       "rewards": {
-        "xp": 34,
-        "gold": 26,
+        "xp": 102,
+        "gold": 90,
         "materials": {
           "ore": 2
         },
-        "potions": 2
+        "potions": 2,
+        "reputation": {
+          "rangers": 12
+        }
       }
     },
     {
@@ -4395,26 +15605,36 @@ window.GAME_DB = {
         {
           "kind": "kill",
           "target": "wolf",
-          "count": 4,
+          "count": 12,
           "label": "늑대 처치",
           "map": "forest"
         },
         {
           "kind": "kill",
           "target": "boar",
-          "count": 3,
+          "count": 9,
           "label": "호그 처치",
+          "map": "forest"
+        },
+        {
+          "kind": "event",
+          "target": "forest_event",
+          "count": 1,
+          "label": "지역 야영지 토벌",
           "map": "forest"
         }
       ],
       "rewards": {
-        "xp": 55,
-        "gold": 36,
+        "xp": 165,
+        "gold": 130,
         "materials": {
           "hide": 2,
           "ore": 2
         },
-        "points": 1
+        "points": 1,
+        "reputation": {
+          "rangers": 12
+        }
       }
     },
     {
@@ -4428,17 +15648,36 @@ window.GAME_DB = {
         {
           "kind": "boss",
           "target": "wolf_king",
-          "count": 1,
+          "count": 2,
           "label": "은빛 늑대왕 처치",
+          "map": "wolf_lair"
+        },
+        {
+          "kind": "kill",
+          "target": "goblin_guard",
+          "count": 8,
+          "label": "봉인 고블린 처치",
+          "map": "forest_den",
+          "group": "wolf"
+        },
+        {
+          "kind": "tier",
+          "target": "wolf:1",
+          "count": 1,
+          "label": "같은 던전 정예 난이도 격파",
           "map": "wolf_lair"
         }
       ],
       "rewards": {
-        "xp": 85,
-        "gold": 55,
+        "xp": 255,
+        "gold": 180,
         "points": 1,
         "materials": {
-          "crystal": 2
+          "sigil": 2,
+          "crystal": 5
+        },
+        "reputation": {
+          "wardens": 15
         }
       }
     },
@@ -4453,18 +15692,36 @@ window.GAME_DB = {
         {
           "kind": "boss",
           "target": "mine_golem",
-          "count": 1,
+          "count": 2,
           "label": "광산군주 처치",
+          "map": "forge_chamber"
+        },
+        {
+          "kind": "kill",
+          "target": "golem",
+          "count": 8,
+          "label": "광산 골렘 처치",
+          "map": "mine",
+          "group": "mine"
+        },
+        {
+          "kind": "tier",
+          "target": "mine:1",
+          "count": 1,
+          "label": "같은 던전 정예 난이도 격파",
           "map": "forge_chamber"
         }
       ],
       "rewards": {
-        "xp": 135,
-        "gold": 72,
+        "xp": 405,
+        "gold": 240,
         "points": 1,
         "materials": {
-          "ore": 5,
-          "crystal": 2
+          "sigil": 2,
+          "crystal": 5
+        },
+        "reputation": {
+          "wardens": 15
         }
       }
     },
@@ -4474,25 +15731,43 @@ window.GAME_DB = {
       "npc": "rhett",
       "main": true,
       "requires": "mine",
-      "description": "안개늪 너머 별의 유적에서 원룡을 쓰러뜨리세요.",
+      "description": "안개늪 너머 유적의 두 층을 돌파하고 정예 원룡을 격파하세요. 왕관의 흔적은 고원으로 이어집니다.",
       "objectives": [
         {
           "kind": "boss",
           "target": "ancient_drake",
-          "count": 1,
+          "count": 2,
           "label": "잿불의 원룡 처치",
+          "map": "dragon_sanctum"
+        },
+        {
+          "kind": "kill",
+          "target": "lizard_shaman",
+          "count": 8,
+          "label": "리자드 주술사 처치",
+          "map": "ruins",
+          "group": "ruins"
+        },
+        {
+          "kind": "tier",
+          "target": "ruins:1",
+          "count": 1,
+          "label": "같은 던전 정예 난이도 격파",
           "map": "dragon_sanctum"
         }
       ],
       "rewards": {
-        "xp": 220,
-        "gold": 117,
+        "xp": 660,
+        "gold": 340,
         "points": 2,
         "materials": {
+          "sigil": 2,
           "crystal": 5
+        },
+        "reputation": {
+          "wardens": 15
         }
-      },
-      "final": true
+      }
     },
     {
       "id": "herbs",
@@ -4504,16 +15779,26 @@ window.GAME_DB = {
         {
           "kind": "material",
           "target": "herb",
-          "count": 3,
+          "count": 12,
           "label": "약초 모으기",
           "map": "meadow",
           "consume": true
+        },
+        {
+          "kind": "kill",
+          "target": "slime",
+          "count": 12,
+          "label": "약초밭의 슬라임 처치",
+          "map": "meadow"
         }
       ],
       "rewards": {
-        "xp": 25,
-        "gold": 16,
-        "potions": 4
+        "xp": 120,
+        "gold": 70,
+        "potions": 4,
+        "reputation": {
+          "arcanum": 8
+        }
       }
     },
     {
@@ -4527,18 +15812,22 @@ window.GAME_DB = {
         {
           "kind": "kill",
           "target": "slime",
-          "count": 8,
+          "count": 24,
           "label": "슬라임 처치",
           "map": "meadow"
         }
       ],
       "rewards": {
-        "xp": 35,
-        "gold": 23,
+        "xp": 105,
+        "gold": 96,
         "materials": {
           "ore": 1
+        },
+        "reputation": {
+          "rangers": 5
         }
-      }
+      },
+      "cooldown": 180
     },
     {
       "id": "contract_wolf",
@@ -4551,18 +15840,22 @@ window.GAME_DB = {
         {
           "kind": "kill",
           "target": "wolf",
-          "count": 7,
+          "count": 21,
           "label": "늑대 처치",
           "map": "forest"
         }
       ],
       "rewards": {
-        "xp": 50,
-        "gold": 29,
+        "xp": 150,
+        "gold": 84,
         "materials": {
           "hide": 2
+        },
+        "reputation": {
+          "rangers": 5
         }
-      }
+      },
+      "cooldown": 180
     },
     {
       "id": "contract_lizard",
@@ -4575,18 +15868,22 @@ window.GAME_DB = {
         {
           "kind": "kill",
           "target": "lizard",
-          "count": 6,
+          "count": 18,
           "label": "리자드 처치",
           "map": "marsh"
         }
       ],
       "rewards": {
-        "xp": 65,
-        "gold": 39,
+        "xp": 195,
+        "gold": 72,
         "materials": {
           "crystal": 1
+        },
+        "reputation": {
+          "rangers": 5
         }
-      }
+      },
+      "cooldown": 180
     },
     {
       "id": "explore_meadow",
@@ -4608,11 +15905,21 @@ window.GAME_DB = {
           "count": 1,
           "label": "여명의 제단 발견",
           "map": "meadow"
+        },
+        {
+          "kind": "kill",
+          "target": "goblin",
+          "count": 15,
+          "label": "고블린 처치",
+          "map": "meadow"
         }
       ],
       "rewards": {
-        "xp": 35,
-        "gold": 18
+        "xp": 160,
+        "gold": 90,
+        "reputation": {
+          "arcanum": 12
+        }
       }
     },
     {
@@ -4635,11 +15942,1930 @@ window.GAME_DB = {
           "count": 1,
           "label": "바람의 성소 발견",
           "map": "forest"
+        },
+        {
+          "kind": "kill",
+          "target": "boar",
+          "count": 12,
+          "label": "숲 호그 처치",
+          "map": "forest"
         }
       ],
       "rewards": {
-        "xp": 50,
-        "gold": 24
+        "xp": 160,
+        "gold": 90,
+        "reputation": {
+          "arcanum": 12
+        }
+      }
+    },
+    {
+      "id": "highland_survey",
+      "name": "가시바람 고원 · 길을 잇다",
+      "npc": "rhett",
+      "requires": "drake",
+      "description": "가시바람 고원 · 길을 잇다의 목표를 달성하고 의뢰인에게 보고하세요.",
+      "objectives": [
+        {
+          "kind": "visit",
+          "target": "highland",
+          "count": 1,
+          "label": "새 지역 방문",
+          "map": "highland"
+        },
+        {
+          "kind": "discover",
+          "target": "highland_poi_0",
+          "count": 1,
+          "label": "잊힌 망루 조사",
+          "map": "highland"
+        },
+        {
+          "kind": "kill",
+          "target": "highland_orc",
+          "count": 18,
+          "label": "고원 오크 처치",
+          "map": "highland"
+        }
+      ],
+      "rewards": {
+        "xp": 540,
+        "gold": 210,
+        "reputation": {
+          "arcanum": 10
+        }
+      },
+      "main": true,
+      "chapter": 2,
+      "minLevel": 14
+    },
+    {
+      "id": "highland_hunt",
+      "name": "가시바람 고원 · 전초기지",
+      "npc": "rhett",
+      "requires": "highland_survey",
+      "description": "가시바람 고원 · 전초기지의 목표를 달성하고 의뢰인에게 보고하세요.",
+      "objectives": [
+        {
+          "kind": "kill",
+          "target": "moss_ent",
+          "count": 18,
+          "label": "이끼나무 수호자 처치",
+          "map": "highland"
+        },
+        {
+          "kind": "kill",
+          "target": "stone_wyvern",
+          "count": 12,
+          "label": "바위 와이번 처치",
+          "map": "highland"
+        },
+        {
+          "kind": "event",
+          "target": "highland_event_0",
+          "count": 1,
+          "label": "전초기지 토벌 완료",
+          "map": "highland"
+        },
+        {
+          "kind": "event",
+          "target": "highland_event_1",
+          "count": 1,
+          "label": "봉인 방어전 완료",
+          "map": "highland"
+        }
+      ],
+      "rewards": {
+        "xp": 688,
+        "gold": 266,
+        "reputation": {
+          "rangers": 12
+        }
+      },
+      "main": true,
+      "chapter": 2
+    },
+    {
+      "id": "highland_crown",
+      "name": "가시숲의 여왕의 왕관",
+      "npc": "rhett",
+      "requires": "highland_hunt",
+      "description": "가시숲의 여왕의 왕관의 목표를 달성하고 의뢰인에게 보고하세요.",
+      "objectives": [
+        {
+          "kind": "boss",
+          "target": "thorn_queen",
+          "count": 2,
+          "label": "가시숲의 여왕 격파",
+          "map": "highland_throne"
+        },
+        {
+          "kind": "tier",
+          "target": "highland:1",
+          "count": 1,
+          "label": "정예 난이도 왕관 탈환",
+          "map": "highland_throne"
+        },
+        {
+          "kind": "discover",
+          "target": "highland_depth_1_record",
+          "count": 1,
+          "label": "1층 군주 기록 조사",
+          "map": "highland_depth_1"
+        },
+        {
+          "kind": "discover",
+          "target": "highland_depth_2_record",
+          "count": 1,
+          "label": "2층 군주 기록 조사",
+          "map": "highland_depth_2"
+        }
+      ],
+      "rewards": {
+        "xp": 1000,
+        "gold": 358,
+        "points": 1,
+        "materials": {
+          "sigil": 3,
+          "moonstone": 3
+        },
+        "reputation": {
+          "wardens": 18
+        }
+      },
+      "main": true,
+      "chapter": 2,
+      "final": false,
+      "choices": [
+        {
+          "id": "supply",
+          "name": "변경 보급 지원",
+          "description": "회복 물약 3개 / 사냥단 평판 +12",
+          "rewards": {
+            "potions": 3,
+            "reputation": {
+              "rangers": 12
+            }
+          }
+        },
+        {
+          "id": "study",
+          "name": "봉인 연구 지원",
+          "description": "마력 물약 3개 / 학회 평판 +12",
+          "rewards": {
+            "supplies": {
+              "mana": 3
+            },
+            "reputation": {
+              "arcanum": 12
+            }
+          }
+        },
+        {
+          "id": "forge",
+          "name": "수호회 재건 지원",
+          "description": "철광석 8개 / 수호회 평판 +12",
+          "rewards": {
+            "materials": {
+              "ore": 8
+            },
+            "reputation": {
+              "wardens": 12
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "highland_bounty_0",
+      "name": "가시바람 고원 현상 · 고원 오크",
+      "npc": "board",
+      "requires": "highland_survey",
+      "description": "가시바람 고원 현상 · 고원 오크의 목표를 달성하고 의뢰인에게 보고하세요.",
+      "objectives": [
+        {
+          "kind": "kill",
+          "target": "highland_orc",
+          "count": 24,
+          "label": "고원 오크 처치",
+          "map": "highland"
+        }
+      ],
+      "rewards": {
+        "xp": 380,
+        "gold": 180,
+        "materials": {
+          "sigil": 1
+        },
+        "reputation": {
+          "rangers": 6
+        }
+      },
+      "repeatable": true,
+      "cooldown": 240,
+      "minLevel": 14
+    },
+    {
+      "id": "highland_bounty_1",
+      "name": "가시바람 고원 현상 · 이끼나무 수호자",
+      "npc": "board",
+      "requires": "highland_survey",
+      "description": "가시바람 고원 현상 · 이끼나무 수호자의 목표를 달성하고 의뢰인에게 보고하세요.",
+      "objectives": [
+        {
+          "kind": "kill",
+          "target": "moss_ent",
+          "count": 24,
+          "label": "이끼나무 수호자 처치",
+          "map": "highland"
+        }
+      ],
+      "rewards": {
+        "xp": 380,
+        "gold": 180,
+        "materials": {
+          "sigil": 1
+        },
+        "reputation": {
+          "rangers": 6
+        }
+      },
+      "repeatable": true,
+      "cooldown": 240,
+      "minLevel": 14
+    },
+    {
+      "id": "highland_bounty_2",
+      "name": "가시바람 고원 현상 · 독니 거미",
+      "npc": "board",
+      "requires": "highland_survey",
+      "description": "가시바람 고원 현상 · 독니 거미의 목표를 달성하고 의뢰인에게 보고하세요.",
+      "objectives": [
+        {
+          "kind": "kill",
+          "target": "venom_spider",
+          "count": 24,
+          "label": "독니 거미 처치",
+          "map": "highland"
+        }
+      ],
+      "rewards": {
+        "xp": 380,
+        "gold": 180,
+        "materials": {
+          "sigil": 1
+        },
+        "reputation": {
+          "rangers": 6
+        }
+      },
+      "repeatable": true,
+      "cooldown": 240,
+      "minLevel": 14
+    },
+    {
+      "id": "highland_bounty_3",
+      "name": "가시바람 고원 현상 · 바위 와이번",
+      "npc": "board",
+      "requires": "highland_survey",
+      "description": "가시바람 고원 현상 · 바위 와이번의 목표를 달성하고 의뢰인에게 보고하세요.",
+      "objectives": [
+        {
+          "kind": "kill",
+          "target": "stone_wyvern",
+          "count": 24,
+          "label": "바위 와이번 처치",
+          "map": "highland"
+        }
+      ],
+      "rewards": {
+        "xp": 380,
+        "gold": 180,
+        "materials": {
+          "sigil": 1
+        },
+        "reputation": {
+          "rangers": 6
+        }
+      },
+      "repeatable": true,
+      "cooldown": 240,
+      "minLevel": 14
+    },
+    {
+      "id": "highland_relics",
+      "name": "가시바람 고원 · 잊힌 유산",
+      "npc": "rhett",
+      "requires": "highland_survey",
+      "description": "가시바람 고원 · 잊힌 유산의 목표를 달성하고 의뢰인에게 보고하세요.",
+      "objectives": [
+        {
+          "kind": "discover",
+          "target": "highland_poi_1",
+          "count": 1,
+          "label": "지역 성소 조사",
+          "map": "highland"
+        },
+        {
+          "kind": "event",
+          "target": "highland_event_1",
+          "count": 2,
+          "label": "봉인 방어전 완료",
+          "map": "highland"
+        },
+        {
+          "kind": "material",
+          "target": "crystal",
+          "count": 12,
+          "label": "마력 결정 납품",
+          "map": "highland",
+          "consume": true
+        }
+      ],
+      "rewards": {
+        "xp": 560,
+        "gold": 230,
+        "reputation": {
+          "arcanum": 18
+        },
+        "materials": {
+          "sigil": 2
+        }
+      },
+      "minLevel": 16
+    },
+    {
+      "id": "frost_survey",
+      "name": "백서리 설원 · 길을 잇다",
+      "npc": "selene",
+      "requires": "highland_crown",
+      "description": "백서리 설원 · 길을 잇다의 목표를 달성하고 의뢰인에게 보고하세요.",
+      "objectives": [
+        {
+          "kind": "visit",
+          "target": "snowfield",
+          "count": 1,
+          "label": "새 지역 방문",
+          "map": "snowfield"
+        },
+        {
+          "kind": "discover",
+          "target": "snowfield_poi_0",
+          "count": 1,
+          "label": "잊힌 망루 조사",
+          "map": "snowfield"
+        },
+        {
+          "kind": "kill",
+          "target": "frost_wolf",
+          "count": 20,
+          "label": "서리 늑대 처치",
+          "map": "snowfield"
+        }
+      ],
+      "rewards": {
+        "xp": 630,
+        "gold": 240,
+        "reputation": {
+          "arcanum": 10
+        }
+      },
+      "main": true,
+      "chapter": 3,
+      "minLevel": 20
+    },
+    {
+      "id": "frost_hunt",
+      "name": "백서리 설원 · 전초기지",
+      "npc": "selene",
+      "requires": "frost_survey",
+      "description": "백서리 설원 · 전초기지의 목표를 달성하고 의뢰인에게 보고하세요.",
+      "objectives": [
+        {
+          "kind": "kill",
+          "target": "ice_wraith",
+          "count": 20,
+          "label": "빙결 망령 처치",
+          "map": "snowfield"
+        },
+        {
+          "kind": "kill",
+          "target": "snow_golem",
+          "count": 14,
+          "label": "설원 골렘 처치",
+          "map": "snowfield"
+        },
+        {
+          "kind": "event",
+          "target": "snowfield_event_0",
+          "count": 1,
+          "label": "전초기지 토벌 완료",
+          "map": "snowfield"
+        },
+        {
+          "kind": "event",
+          "target": "snowfield_event_1",
+          "count": 1,
+          "label": "봉인 방어전 완료",
+          "map": "snowfield"
+        }
+      ],
+      "rewards": {
+        "xp": 796,
+        "gold": 302,
+        "reputation": {
+          "rangers": 12
+        }
+      },
+      "main": true,
+      "chapter": 3
+    },
+    {
+      "id": "frost_crown",
+      "name": "서리왕 이스렌의 왕관",
+      "npc": "selene",
+      "requires": "frost_hunt",
+      "description": "서리왕 이스렌의 왕관의 목표를 달성하고 의뢰인에게 보고하세요.",
+      "objectives": [
+        {
+          "kind": "boss",
+          "target": "frost_regent",
+          "count": 2,
+          "label": "서리왕 이스렌 격파",
+          "map": "frost_throne"
+        },
+        {
+          "kind": "tier",
+          "target": "frost:1",
+          "count": 1,
+          "label": "정예 난이도 왕관 탈환",
+          "map": "frost_throne"
+        },
+        {
+          "kind": "discover",
+          "target": "frost_depth_1_record",
+          "count": 1,
+          "label": "1층 군주 기록 조사",
+          "map": "frost_depth_1"
+        },
+        {
+          "kind": "discover",
+          "target": "frost_depth_2_record",
+          "count": 1,
+          "label": "2층 군주 기록 조사",
+          "map": "frost_depth_2"
+        }
+      ],
+      "rewards": {
+        "xp": 1150,
+        "gold": 406,
+        "points": 1,
+        "materials": {
+          "sigil": 4,
+          "moonstone": 3
+        },
+        "reputation": {
+          "wardens": 18
+        }
+      },
+      "main": true,
+      "chapter": 3,
+      "final": false,
+      "choices": [
+        {
+          "id": "supply",
+          "name": "변경 보급 지원",
+          "description": "회복 물약 3개 / 사냥단 평판 +12",
+          "rewards": {
+            "potions": 3,
+            "reputation": {
+              "rangers": 12
+            }
+          }
+        },
+        {
+          "id": "study",
+          "name": "봉인 연구 지원",
+          "description": "마력 물약 3개 / 학회 평판 +12",
+          "rewards": {
+            "supplies": {
+              "mana": 3
+            },
+            "reputation": {
+              "arcanum": 12
+            }
+          }
+        },
+        {
+          "id": "forge",
+          "name": "수호회 재건 지원",
+          "description": "철광석 8개 / 수호회 평판 +12",
+          "rewards": {
+            "materials": {
+              "ore": 8
+            },
+            "reputation": {
+              "wardens": 12
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "snowfield_bounty_0",
+      "name": "백서리 설원 현상 · 서리 늑대",
+      "npc": "board",
+      "requires": "frost_survey",
+      "description": "백서리 설원 현상 · 서리 늑대의 목표를 달성하고 의뢰인에게 보고하세요.",
+      "objectives": [
+        {
+          "kind": "kill",
+          "target": "frost_wolf",
+          "count": 27,
+          "label": "서리 늑대 처치",
+          "map": "snowfield"
+        }
+      ],
+      "rewards": {
+        "xp": 440,
+        "gold": 210,
+        "materials": {
+          "sigil": 1
+        },
+        "reputation": {
+          "rangers": 6
+        }
+      },
+      "repeatable": true,
+      "cooldown": 240,
+      "minLevel": 20
+    },
+    {
+      "id": "snowfield_bounty_1",
+      "name": "백서리 설원 현상 · 빙결 망령",
+      "npc": "board",
+      "requires": "frost_survey",
+      "description": "백서리 설원 현상 · 빙결 망령의 목표를 달성하고 의뢰인에게 보고하세요.",
+      "objectives": [
+        {
+          "kind": "kill",
+          "target": "ice_wraith",
+          "count": 27,
+          "label": "빙결 망령 처치",
+          "map": "snowfield"
+        }
+      ],
+      "rewards": {
+        "xp": 440,
+        "gold": 210,
+        "materials": {
+          "sigil": 1
+        },
+        "reputation": {
+          "rangers": 6
+        }
+      },
+      "repeatable": true,
+      "cooldown": 240,
+      "minLevel": 20
+    },
+    {
+      "id": "snowfield_bounty_2",
+      "name": "백서리 설원 현상 · 설원 골렘",
+      "npc": "board",
+      "requires": "frost_survey",
+      "description": "백서리 설원 현상 · 설원 골렘의 목표를 달성하고 의뢰인에게 보고하세요.",
+      "objectives": [
+        {
+          "kind": "kill",
+          "target": "snow_golem",
+          "count": 27,
+          "label": "설원 골렘 처치",
+          "map": "snowfield"
+        }
+      ],
+      "rewards": {
+        "xp": 440,
+        "gold": 210,
+        "materials": {
+          "sigil": 1
+        },
+        "reputation": {
+          "rangers": 6
+        }
+      },
+      "repeatable": true,
+      "cooldown": 240,
+      "minLevel": 20
+    },
+    {
+      "id": "snowfield_relics",
+      "name": "백서리 설원 · 잊힌 유산",
+      "npc": "selene",
+      "requires": "frost_survey",
+      "description": "백서리 설원 · 잊힌 유산의 목표를 달성하고 의뢰인에게 보고하세요.",
+      "objectives": [
+        {
+          "kind": "discover",
+          "target": "snowfield_poi_1",
+          "count": 1,
+          "label": "지역 성소 조사",
+          "map": "snowfield"
+        },
+        {
+          "kind": "event",
+          "target": "snowfield_event_1",
+          "count": 2,
+          "label": "봉인 방어전 완료",
+          "map": "snowfield"
+        },
+        {
+          "kind": "material",
+          "target": "crystal",
+          "count": 14,
+          "label": "마력 결정 납품",
+          "map": "snowfield",
+          "consume": true
+        }
+      ],
+      "rewards": {
+        "xp": 620,
+        "gold": 260,
+        "reputation": {
+          "arcanum": 18
+        },
+        "materials": {
+          "sigil": 2
+        }
+      },
+      "minLevel": 22
+    },
+    {
+      "id": "sun_survey",
+      "name": "붉은 해 사막 · 길을 잇다",
+      "npc": "selene",
+      "requires": "frost_crown",
+      "description": "붉은 해 사막 · 길을 잇다의 목표를 달성하고 의뢰인에게 보고하세요.",
+      "objectives": [
+        {
+          "kind": "visit",
+          "target": "sunwaste",
+          "count": 1,
+          "label": "새 지역 방문",
+          "map": "sunwaste"
+        },
+        {
+          "kind": "discover",
+          "target": "sunwaste_poi_0",
+          "count": 1,
+          "label": "잊힌 망루 조사",
+          "map": "sunwaste"
+        },
+        {
+          "kind": "kill",
+          "target": "sand_scorpion",
+          "count": 22,
+          "label": "사막 전갈 처치",
+          "map": "sunwaste"
+        }
+      ],
+      "rewards": {
+        "xp": 720,
+        "gold": 270,
+        "reputation": {
+          "arcanum": 10
+        }
+      },
+      "main": true,
+      "chapter": 4,
+      "minLevel": 26
+    },
+    {
+      "id": "sun_hunt",
+      "name": "붉은 해 사막 · 전초기지",
+      "npc": "selene",
+      "requires": "sun_survey",
+      "description": "붉은 해 사막 · 전초기지의 목표를 달성하고 의뢰인에게 보고하세요.",
+      "objectives": [
+        {
+          "kind": "kill",
+          "target": "dune_raider",
+          "count": 22,
+          "label": "모래 약탈자 처치",
+          "map": "sunwaste"
+        },
+        {
+          "kind": "kill",
+          "target": "ember_drake",
+          "count": 16,
+          "label": "불씨 비룡 처치",
+          "map": "sunwaste"
+        },
+        {
+          "kind": "event",
+          "target": "sunwaste_event_0",
+          "count": 1,
+          "label": "전초기지 토벌 완료",
+          "map": "sunwaste"
+        },
+        {
+          "kind": "event",
+          "target": "sunwaste_event_1",
+          "count": 1,
+          "label": "봉인 방어전 완료",
+          "map": "sunwaste"
+        }
+      ],
+      "rewards": {
+        "xp": 904,
+        "gold": 338,
+        "reputation": {
+          "rangers": 12
+        }
+      },
+      "main": true,
+      "chapter": 4
+    },
+    {
+      "id": "sun_crown",
+      "name": "태양을 삼킨 전갈의 왕관",
+      "npc": "selene",
+      "requires": "sun_hunt",
+      "description": "태양을 삼킨 전갈의 왕관의 목표를 달성하고 의뢰인에게 보고하세요.",
+      "objectives": [
+        {
+          "kind": "boss",
+          "target": "sun_scorpion",
+          "count": 2,
+          "label": "태양을 삼킨 전갈 격파",
+          "map": "sun_throne"
+        },
+        {
+          "kind": "tier",
+          "target": "sun:1",
+          "count": 1,
+          "label": "정예 난이도 왕관 탈환",
+          "map": "sun_throne"
+        },
+        {
+          "kind": "discover",
+          "target": "sun_depth_1_record",
+          "count": 1,
+          "label": "1층 군주 기록 조사",
+          "map": "sun_depth_1"
+        },
+        {
+          "kind": "discover",
+          "target": "sun_depth_2_record",
+          "count": 1,
+          "label": "2층 군주 기록 조사",
+          "map": "sun_depth_2"
+        }
+      ],
+      "rewards": {
+        "xp": 1300,
+        "gold": 454,
+        "points": 1,
+        "materials": {
+          "sigil": 5,
+          "moonstone": 3
+        },
+        "reputation": {
+          "wardens": 18
+        }
+      },
+      "main": true,
+      "chapter": 4,
+      "final": false,
+      "choices": [
+        {
+          "id": "supply",
+          "name": "변경 보급 지원",
+          "description": "회복 물약 3개 / 사냥단 평판 +12",
+          "rewards": {
+            "potions": 3,
+            "reputation": {
+              "rangers": 12
+            }
+          }
+        },
+        {
+          "id": "study",
+          "name": "봉인 연구 지원",
+          "description": "마력 물약 3개 / 학회 평판 +12",
+          "rewards": {
+            "supplies": {
+              "mana": 3
+            },
+            "reputation": {
+              "arcanum": 12
+            }
+          }
+        },
+        {
+          "id": "forge",
+          "name": "수호회 재건 지원",
+          "description": "철광석 8개 / 수호회 평판 +12",
+          "rewards": {
+            "materials": {
+              "ore": 8
+            },
+            "reputation": {
+              "wardens": 12
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "sunwaste_bounty_0",
+      "name": "붉은 해 사막 현상 · 사막 전갈",
+      "npc": "board",
+      "requires": "sun_survey",
+      "description": "붉은 해 사막 현상 · 사막 전갈의 목표를 달성하고 의뢰인에게 보고하세요.",
+      "objectives": [
+        {
+          "kind": "kill",
+          "target": "sand_scorpion",
+          "count": 30,
+          "label": "사막 전갈 처치",
+          "map": "sunwaste"
+        }
+      ],
+      "rewards": {
+        "xp": 500,
+        "gold": 240,
+        "materials": {
+          "sigil": 1
+        },
+        "reputation": {
+          "rangers": 6
+        }
+      },
+      "repeatable": true,
+      "cooldown": 240,
+      "minLevel": 26
+    },
+    {
+      "id": "sunwaste_bounty_1",
+      "name": "붉은 해 사막 현상 · 모래 약탈자",
+      "npc": "board",
+      "requires": "sun_survey",
+      "description": "붉은 해 사막 현상 · 모래 약탈자의 목표를 달성하고 의뢰인에게 보고하세요.",
+      "objectives": [
+        {
+          "kind": "kill",
+          "target": "dune_raider",
+          "count": 30,
+          "label": "모래 약탈자 처치",
+          "map": "sunwaste"
+        }
+      ],
+      "rewards": {
+        "xp": 500,
+        "gold": 240,
+        "materials": {
+          "sigil": 1
+        },
+        "reputation": {
+          "rangers": 6
+        }
+      },
+      "repeatable": true,
+      "cooldown": 240,
+      "minLevel": 26
+    },
+    {
+      "id": "sunwaste_bounty_2",
+      "name": "붉은 해 사막 현상 · 불씨 비룡",
+      "npc": "board",
+      "requires": "sun_survey",
+      "description": "붉은 해 사막 현상 · 불씨 비룡의 목표를 달성하고 의뢰인에게 보고하세요.",
+      "objectives": [
+        {
+          "kind": "kill",
+          "target": "ember_drake",
+          "count": 30,
+          "label": "불씨 비룡 처치",
+          "map": "sunwaste"
+        }
+      ],
+      "rewards": {
+        "xp": 500,
+        "gold": 240,
+        "materials": {
+          "sigil": 1
+        },
+        "reputation": {
+          "rangers": 6
+        }
+      },
+      "repeatable": true,
+      "cooldown": 240,
+      "minLevel": 26
+    },
+    {
+      "id": "sunwaste_relics",
+      "name": "붉은 해 사막 · 잊힌 유산",
+      "npc": "selene",
+      "requires": "sun_survey",
+      "description": "붉은 해 사막 · 잊힌 유산의 목표를 달성하고 의뢰인에게 보고하세요.",
+      "objectives": [
+        {
+          "kind": "discover",
+          "target": "sunwaste_poi_1",
+          "count": 1,
+          "label": "지역 성소 조사",
+          "map": "sunwaste"
+        },
+        {
+          "kind": "event",
+          "target": "sunwaste_event_1",
+          "count": 2,
+          "label": "봉인 방어전 완료",
+          "map": "sunwaste"
+        },
+        {
+          "kind": "material",
+          "target": "crystal",
+          "count": 16,
+          "label": "마력 결정 납품",
+          "map": "sunwaste",
+          "consume": true
+        }
+      ],
+      "rewards": {
+        "xp": 680,
+        "gold": 290,
+        "reputation": {
+          "arcanum": 18
+        },
+        "materials": {
+          "sigil": 2
+        }
+      },
+      "minLevel": 28
+    },
+    {
+      "id": "grave_survey",
+      "name": "잊힌 왕의 묘역 · 길을 잇다",
+      "npc": "darius",
+      "requires": "sun_crown",
+      "description": "잊힌 왕의 묘역 · 길을 잇다의 목표를 달성하고 의뢰인에게 보고하세요.",
+      "objectives": [
+        {
+          "kind": "visit",
+          "target": "gravewood",
+          "count": 1,
+          "label": "새 지역 방문",
+          "map": "gravewood"
+        },
+        {
+          "kind": "discover",
+          "target": "gravewood_poi_0",
+          "count": 1,
+          "label": "잊힌 망루 조사",
+          "map": "gravewood"
+        },
+        {
+          "kind": "kill",
+          "target": "bone_soldier",
+          "count": 24,
+          "label": "해골 보병 처치",
+          "map": "gravewood"
+        }
+      ],
+      "rewards": {
+        "xp": 810,
+        "gold": 300,
+        "reputation": {
+          "arcanum": 10
+        }
+      },
+      "main": true,
+      "chapter": 5,
+      "minLevel": 32
+    },
+    {
+      "id": "grave_hunt",
+      "name": "잊힌 왕의 묘역 · 전초기지",
+      "npc": "darius",
+      "requires": "grave_survey",
+      "description": "잊힌 왕의 묘역 · 전초기지의 목표를 달성하고 의뢰인에게 보고하세요.",
+      "objectives": [
+        {
+          "kind": "kill",
+          "target": "grave_knight",
+          "count": 24,
+          "label": "묘지 기사 처치",
+          "map": "gravewood"
+        },
+        {
+          "kind": "kill",
+          "target": "curse_wraith",
+          "count": 18,
+          "label": "저주 망령 처치",
+          "map": "gravewood"
+        },
+        {
+          "kind": "event",
+          "target": "gravewood_event_0",
+          "count": 1,
+          "label": "전초기지 토벌 완료",
+          "map": "gravewood"
+        },
+        {
+          "kind": "event",
+          "target": "gravewood_event_1",
+          "count": 1,
+          "label": "봉인 방어전 완료",
+          "map": "gravewood"
+        }
+      ],
+      "rewards": {
+        "xp": 1012,
+        "gold": 374,
+        "reputation": {
+          "rangers": 12
+        }
+      },
+      "main": true,
+      "chapter": 5
+    },
+    {
+      "id": "grave_crown",
+      "name": "망자의 원수의 왕관",
+      "npc": "darius",
+      "requires": "grave_hunt",
+      "description": "망자의 원수의 왕관의 목표를 달성하고 의뢰인에게 보고하세요.",
+      "objectives": [
+        {
+          "kind": "boss",
+          "target": "grave_marshal",
+          "count": 2,
+          "label": "망자의 원수 격파",
+          "map": "grave_throne"
+        },
+        {
+          "kind": "tier",
+          "target": "grave:1",
+          "count": 1,
+          "label": "정예 난이도 왕관 탈환",
+          "map": "grave_throne"
+        },
+        {
+          "kind": "discover",
+          "target": "grave_depth_1_record",
+          "count": 1,
+          "label": "1층 군주 기록 조사",
+          "map": "grave_depth_1"
+        },
+        {
+          "kind": "discover",
+          "target": "grave_depth_2_record",
+          "count": 1,
+          "label": "2층 군주 기록 조사",
+          "map": "grave_depth_2"
+        }
+      ],
+      "rewards": {
+        "xp": 1450,
+        "gold": 502,
+        "points": 1,
+        "materials": {
+          "sigil": 6,
+          "moonstone": 3
+        },
+        "reputation": {
+          "wardens": 18
+        }
+      },
+      "main": true,
+      "chapter": 5,
+      "final": false,
+      "choices": [
+        {
+          "id": "supply",
+          "name": "변경 보급 지원",
+          "description": "회복 물약 3개 / 사냥단 평판 +12",
+          "rewards": {
+            "potions": 3,
+            "reputation": {
+              "rangers": 12
+            }
+          }
+        },
+        {
+          "id": "study",
+          "name": "봉인 연구 지원",
+          "description": "마력 물약 3개 / 학회 평판 +12",
+          "rewards": {
+            "supplies": {
+              "mana": 3
+            },
+            "reputation": {
+              "arcanum": 12
+            }
+          }
+        },
+        {
+          "id": "forge",
+          "name": "수호회 재건 지원",
+          "description": "철광석 8개 / 수호회 평판 +12",
+          "rewards": {
+            "materials": {
+              "ore": 8
+            },
+            "reputation": {
+              "wardens": 12
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "gravewood_bounty_0",
+      "name": "잊힌 왕의 묘역 현상 · 해골 보병",
+      "npc": "board",
+      "requires": "grave_survey",
+      "description": "잊힌 왕의 묘역 현상 · 해골 보병의 목표를 달성하고 의뢰인에게 보고하세요.",
+      "objectives": [
+        {
+          "kind": "kill",
+          "target": "bone_soldier",
+          "count": 33,
+          "label": "해골 보병 처치",
+          "map": "gravewood"
+        }
+      ],
+      "rewards": {
+        "xp": 560,
+        "gold": 270,
+        "materials": {
+          "sigil": 1
+        },
+        "reputation": {
+          "rangers": 6
+        }
+      },
+      "repeatable": true,
+      "cooldown": 240,
+      "minLevel": 32
+    },
+    {
+      "id": "gravewood_bounty_1",
+      "name": "잊힌 왕의 묘역 현상 · 묘지 기사",
+      "npc": "board",
+      "requires": "grave_survey",
+      "description": "잊힌 왕의 묘역 현상 · 묘지 기사의 목표를 달성하고 의뢰인에게 보고하세요.",
+      "objectives": [
+        {
+          "kind": "kill",
+          "target": "grave_knight",
+          "count": 33,
+          "label": "묘지 기사 처치",
+          "map": "gravewood"
+        }
+      ],
+      "rewards": {
+        "xp": 560,
+        "gold": 270,
+        "materials": {
+          "sigil": 1
+        },
+        "reputation": {
+          "rangers": 6
+        }
+      },
+      "repeatable": true,
+      "cooldown": 240,
+      "minLevel": 32
+    },
+    {
+      "id": "gravewood_bounty_2",
+      "name": "잊힌 왕의 묘역 현상 · 저주 망령",
+      "npc": "board",
+      "requires": "grave_survey",
+      "description": "잊힌 왕의 묘역 현상 · 저주 망령의 목표를 달성하고 의뢰인에게 보고하세요.",
+      "objectives": [
+        {
+          "kind": "kill",
+          "target": "curse_wraith",
+          "count": 33,
+          "label": "저주 망령 처치",
+          "map": "gravewood"
+        }
+      ],
+      "rewards": {
+        "xp": 560,
+        "gold": 270,
+        "materials": {
+          "sigil": 1
+        },
+        "reputation": {
+          "rangers": 6
+        }
+      },
+      "repeatable": true,
+      "cooldown": 240,
+      "minLevel": 32
+    },
+    {
+      "id": "gravewood_relics",
+      "name": "잊힌 왕의 묘역 · 잊힌 유산",
+      "npc": "darius",
+      "requires": "grave_survey",
+      "description": "잊힌 왕의 묘역 · 잊힌 유산의 목표를 달성하고 의뢰인에게 보고하세요.",
+      "objectives": [
+        {
+          "kind": "discover",
+          "target": "gravewood_poi_1",
+          "count": 1,
+          "label": "지역 성소 조사",
+          "map": "gravewood"
+        },
+        {
+          "kind": "event",
+          "target": "gravewood_event_1",
+          "count": 2,
+          "label": "봉인 방어전 완료",
+          "map": "gravewood"
+        },
+        {
+          "kind": "material",
+          "target": "crystal",
+          "count": 18,
+          "label": "마력 결정 납품",
+          "map": "gravewood",
+          "consume": true
+        }
+      ],
+      "rewards": {
+        "xp": 740,
+        "gold": 320,
+        "reputation": {
+          "arcanum": 18
+        },
+        "materials": {
+          "sigil": 2
+        }
+      },
+      "minLevel": 34
+    },
+    {
+      "id": "eclipse_survey",
+      "name": "황혼의 국경 · 길을 잇다",
+      "npc": "darius",
+      "requires": "grave_crown",
+      "description": "황혼의 국경 · 길을 잇다의 목표를 달성하고 의뢰인에게 보고하세요.",
+      "objectives": [
+        {
+          "kind": "visit",
+          "target": "eclipse_plain",
+          "count": 1,
+          "label": "새 지역 방문",
+          "map": "eclipse_plain"
+        },
+        {
+          "kind": "discover",
+          "target": "eclipse_plain_poi_0",
+          "count": 1,
+          "label": "잊힌 망루 조사",
+          "map": "eclipse_plain"
+        },
+        {
+          "kind": "kill",
+          "target": "dusk_sentinel",
+          "count": 26,
+          "label": "황혼 근위병 처치",
+          "map": "eclipse_plain"
+        }
+      ],
+      "rewards": {
+        "xp": 900,
+        "gold": 330,
+        "reputation": {
+          "arcanum": 10
+        }
+      },
+      "main": true,
+      "chapter": 6,
+      "minLevel": 38
+    },
+    {
+      "id": "eclipse_hunt",
+      "name": "황혼의 국경 · 전초기지",
+      "npc": "darius",
+      "requires": "eclipse_survey",
+      "description": "황혼의 국경 · 전초기지의 목표를 달성하고 의뢰인에게 보고하세요.",
+      "objectives": [
+        {
+          "kind": "kill",
+          "target": "dusk_magus",
+          "count": 26,
+          "label": "황혼 마도사 처치",
+          "map": "eclipse_plain"
+        },
+        {
+          "kind": "kill",
+          "target": "abyss_spider",
+          "count": 20,
+          "label": "심연 거미 처치",
+          "map": "eclipse_plain"
+        },
+        {
+          "kind": "event",
+          "target": "eclipse_plain_event_0",
+          "count": 1,
+          "label": "전초기지 토벌 완료",
+          "map": "eclipse_plain"
+        },
+        {
+          "kind": "event",
+          "target": "eclipse_plain_event_1",
+          "count": 1,
+          "label": "봉인 방어전 완료",
+          "map": "eclipse_plain"
+        }
+      ],
+      "rewards": {
+        "xp": 1120,
+        "gold": 410,
+        "reputation": {
+          "rangers": 12
+        }
+      },
+      "main": true,
+      "chapter": 6
+    },
+    {
+      "id": "eclipse_crown",
+      "name": "황혼왕 발테르의 왕관",
+      "npc": "darius",
+      "requires": "eclipse_hunt",
+      "description": "황혼왕 발테르의 왕관의 목표를 달성하고 의뢰인에게 보고하세요.",
+      "objectives": [
+        {
+          "kind": "boss",
+          "target": "eclipse_king",
+          "count": 2,
+          "label": "황혼왕 발테르 격파",
+          "map": "eclipse_throne"
+        },
+        {
+          "kind": "tier",
+          "target": "eclipse:1",
+          "count": 1,
+          "label": "정예 난이도 왕관 탈환",
+          "map": "eclipse_throne"
+        },
+        {
+          "kind": "discover",
+          "target": "eclipse_depth_1_record",
+          "count": 1,
+          "label": "1층 군주 기록 조사",
+          "map": "eclipse_depth_1"
+        },
+        {
+          "kind": "discover",
+          "target": "eclipse_depth_2_record",
+          "count": 1,
+          "label": "2층 군주 기록 조사",
+          "map": "eclipse_depth_2"
+        }
+      ],
+      "rewards": {
+        "xp": 1600,
+        "gold": 550,
+        "points": 1,
+        "materials": {
+          "sigil": 7,
+          "moonstone": 3
+        },
+        "reputation": {
+          "wardens": 18
+        }
+      },
+      "main": true,
+      "chapter": 6,
+      "final": true,
+      "choices": [
+        {
+          "id": "supply",
+          "name": "변경 보급 지원",
+          "description": "회복 물약 3개 / 사냥단 평판 +12",
+          "rewards": {
+            "potions": 3,
+            "reputation": {
+              "rangers": 12
+            }
+          }
+        },
+        {
+          "id": "study",
+          "name": "봉인 연구 지원",
+          "description": "마력 물약 3개 / 학회 평판 +12",
+          "rewards": {
+            "supplies": {
+              "mana": 3
+            },
+            "reputation": {
+              "arcanum": 12
+            }
+          }
+        },
+        {
+          "id": "forge",
+          "name": "수호회 재건 지원",
+          "description": "철광석 8개 / 수호회 평판 +12",
+          "rewards": {
+            "materials": {
+              "ore": 8
+            },
+            "reputation": {
+              "wardens": 12
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "eclipse_plain_bounty_0",
+      "name": "황혼의 국경 현상 · 황혼 근위병",
+      "npc": "board",
+      "requires": "eclipse_survey",
+      "description": "황혼의 국경 현상 · 황혼 근위병의 목표를 달성하고 의뢰인에게 보고하세요.",
+      "objectives": [
+        {
+          "kind": "kill",
+          "target": "dusk_sentinel",
+          "count": 36,
+          "label": "황혼 근위병 처치",
+          "map": "eclipse_plain"
+        }
+      ],
+      "rewards": {
+        "xp": 620,
+        "gold": 300,
+        "materials": {
+          "sigil": 1
+        },
+        "reputation": {
+          "rangers": 6
+        }
+      },
+      "repeatable": true,
+      "cooldown": 240,
+      "minLevel": 38
+    },
+    {
+      "id": "eclipse_plain_bounty_1",
+      "name": "황혼의 국경 현상 · 황혼 마도사",
+      "npc": "board",
+      "requires": "eclipse_survey",
+      "description": "황혼의 국경 현상 · 황혼 마도사의 목표를 달성하고 의뢰인에게 보고하세요.",
+      "objectives": [
+        {
+          "kind": "kill",
+          "target": "dusk_magus",
+          "count": 36,
+          "label": "황혼 마도사 처치",
+          "map": "eclipse_plain"
+        }
+      ],
+      "rewards": {
+        "xp": 620,
+        "gold": 300,
+        "materials": {
+          "sigil": 1
+        },
+        "reputation": {
+          "rangers": 6
+        }
+      },
+      "repeatable": true,
+      "cooldown": 240,
+      "minLevel": 38
+    },
+    {
+      "id": "eclipse_plain_bounty_2",
+      "name": "황혼의 국경 현상 · 심연 거미",
+      "npc": "board",
+      "requires": "eclipse_survey",
+      "description": "황혼의 국경 현상 · 심연 거미의 목표를 달성하고 의뢰인에게 보고하세요.",
+      "objectives": [
+        {
+          "kind": "kill",
+          "target": "abyss_spider",
+          "count": 36,
+          "label": "심연 거미 처치",
+          "map": "eclipse_plain"
+        }
+      ],
+      "rewards": {
+        "xp": 620,
+        "gold": 300,
+        "materials": {
+          "sigil": 1
+        },
+        "reputation": {
+          "rangers": 6
+        }
+      },
+      "repeatable": true,
+      "cooldown": 240,
+      "minLevel": 38
+    },
+    {
+      "id": "eclipse_plain_relics",
+      "name": "황혼의 국경 · 잊힌 유산",
+      "npc": "darius",
+      "requires": "eclipse_survey",
+      "description": "황혼의 국경 · 잊힌 유산의 목표를 달성하고 의뢰인에게 보고하세요.",
+      "objectives": [
+        {
+          "kind": "discover",
+          "target": "eclipse_plain_poi_1",
+          "count": 1,
+          "label": "지역 성소 조사",
+          "map": "eclipse_plain"
+        },
+        {
+          "kind": "event",
+          "target": "eclipse_plain_event_1",
+          "count": 2,
+          "label": "봉인 방어전 완료",
+          "map": "eclipse_plain"
+        },
+        {
+          "kind": "material",
+          "target": "crystal",
+          "count": 20,
+          "label": "마력 결정 납품",
+          "map": "eclipse_plain",
+          "consume": true
+        }
+      ],
+      "rewards": {
+        "xp": 800,
+        "gold": 350,
+        "reputation": {
+          "arcanum": 18
+        },
+        "materials": {
+          "sigil": 2
+        }
+      },
+      "minLevel": 40
+    },
+    {
+      "id": "companion_lyra",
+      "name": "동료의 맹약 · 리라",
+      "npc": "lyra_npc",
+      "requires": "forest",
+      "description": "동료의 부탁을 해결하면 함께 모험할 수 있습니다.",
+      "objectives": [
+        {
+          "kind": "kill",
+          "target": "wolf",
+          "count": 24,
+          "label": "회색 늑대 처치",
+          "map": "forest"
+        },
+        {
+          "kind": "event",
+          "target": "forest_event",
+          "count": 2,
+          "label": "지역 사건 해결",
+          "map": "forest"
+        }
+      ],
+      "rewards": {
+        "xp": 500,
+        "gold": 150,
+        "companion": "lyra"
+      }
+    },
+    {
+      "id": "companion_brann",
+      "name": "동료의 맹약 · 브란",
+      "npc": "brann_npc",
+      "requires": "highland_hunt",
+      "description": "동료의 부탁을 해결하면 함께 모험할 수 있습니다.",
+      "objectives": [
+        {
+          "kind": "kill",
+          "target": "highland_orc",
+          "count": 32,
+          "label": "고원 오크 처치",
+          "map": "highland"
+        },
+        {
+          "kind": "event",
+          "target": "highland_event_1",
+          "count": 2,
+          "label": "지역 사건 해결",
+          "map": "highland"
+        }
+      ],
+      "rewards": {
+        "xp": 500,
+        "gold": 150,
+        "companion": "brann"
+      }
+    },
+    {
+      "id": "companion_eris",
+      "name": "동료의 맹약 · 에리스",
+      "npc": "eris_npc",
+      "requires": "sun_hunt",
+      "description": "동료의 부탁을 해결하면 함께 모험할 수 있습니다.",
+      "objectives": [
+        {
+          "kind": "kill",
+          "target": "ember_drake",
+          "count": 32,
+          "label": "불씨 비룡 처치",
+          "map": "sunwaste"
+        },
+        {
+          "kind": "event",
+          "target": "sunwaste_event_1",
+          "count": 2,
+          "label": "지역 사건 해결",
+          "map": "sunwaste"
+        }
+      ],
+      "rewards": {
+        "xp": 500,
+        "gold": 150,
+        "companion": "eris"
+      }
+    },
+    {
+      "id": "trial_bronze",
+      "name": "청동 연전 정복",
+      "npc": "board",
+      "requires": "wolf",
+      "description": "청동 연전 정복의 목표를 달성하고 의뢰인에게 보고하세요.",
+      "objectives": [
+        {
+          "kind": "trial",
+          "target": "bronze",
+          "count": 3,
+          "label": "연전 완주",
+          "map": "guild_arena"
+        }
+      ],
+      "rewards": {
+        "xp": 800,
+        "gold": 250,
+        "materials": {
+          "sigil": 4
+        },
+        "reputation": {
+          "wardens": 15
+        }
+      },
+      "minLevel": 10
+    },
+    {
+      "id": "trial_silver",
+      "name": "은빛 연전 정복",
+      "npc": "board",
+      "requires": "frost_hunt",
+      "description": "은빛 연전 정복의 목표를 달성하고 의뢰인에게 보고하세요.",
+      "objectives": [
+        {
+          "kind": "trial",
+          "target": "silver",
+          "count": 3,
+          "label": "연전 완주",
+          "map": "guild_arena"
+        }
+      ],
+      "rewards": {
+        "xp": 1600,
+        "gold": 450,
+        "materials": {
+          "sigil": 7
+        },
+        "reputation": {
+          "wardens": 15
+        }
+      },
+      "minLevel": 24
+    },
+    {
+      "id": "trial_gold",
+      "name": "왕관 연전 정복",
+      "npc": "board",
+      "requires": "eclipse_hunt",
+      "description": "왕관 연전 정복의 목표를 달성하고 의뢰인에게 보고하세요.",
+      "objectives": [
+        {
+          "kind": "trial",
+          "target": "gold",
+          "count": 3,
+          "label": "연전 완주",
+          "map": "guild_arena"
+        }
+      ],
+      "rewards": {
+        "xp": 2400,
+        "gold": 650,
+        "materials": {
+          "sigil": 10
+        },
+        "reputation": {
+          "wardens": 15
+        }
+      },
+      "minLevel": 40
+    },
+    {
+      "id": "highland_contract",
+      "name": "현상 의뢰 · 고원 오크",
+      "npc": "board",
+      "requires": "highland_survey",
+      "repeatable": true,
+      "minLevel": 14,
+      "cooldown": 180,
+      "description": "수주 이후 처치만 집계합니다. 게시판에서 반복 보급과 평판을 확보하세요.",
+      "objectives": [
+        {
+          "kind": "kill",
+          "target": "highland_orc",
+          "count": 30,
+          "label": "고원 오크 처치",
+          "map": "highland"
+        },
+        {
+          "kind": "event",
+          "target": "highland_event_0",
+          "count": 1,
+          "label": "전초기지 토벌 완료",
+          "map": "highland"
+        }
+      ],
+      "rewards": {
+        "xp": 542,
+        "gold": 180,
+        "potions": 2,
+        "materials": {
+          "sigil": 1
+        },
+        "reputation": {
+          "rangers": 8
+        }
+      }
+    },
+    {
+      "id": "snowfield_contract",
+      "name": "현상 의뢰 · 서리 늑대",
+      "npc": "board",
+      "requires": "frost_survey",
+      "repeatable": true,
+      "minLevel": 20,
+      "cooldown": 180,
+      "description": "수주 이후 처치만 집계합니다. 게시판에서 반복 보급과 평판을 확보하세요.",
+      "objectives": [
+        {
+          "kind": "kill",
+          "target": "frost_wolf",
+          "count": 30,
+          "label": "서리 늑대 처치",
+          "map": "snowfield"
+        },
+        {
+          "kind": "event",
+          "target": "snowfield_event_0",
+          "count": 1,
+          "label": "전초기지 토벌 완료",
+          "map": "snowfield"
+        }
+      ],
+      "rewards": {
+        "xp": 614,
+        "gold": 210,
+        "potions": 2,
+        "materials": {
+          "sigil": 1
+        },
+        "reputation": {
+          "rangers": 8
+        }
+      }
+    },
+    {
+      "id": "sunwaste_contract",
+      "name": "현상 의뢰 · 사막 전갈",
+      "npc": "board",
+      "requires": "sun_survey",
+      "repeatable": true,
+      "minLevel": 26,
+      "cooldown": 180,
+      "description": "수주 이후 처치만 집계합니다. 게시판에서 반복 보급과 평판을 확보하세요.",
+      "objectives": [
+        {
+          "kind": "kill",
+          "target": "sand_scorpion",
+          "count": 30,
+          "label": "사막 전갈 처치",
+          "map": "sunwaste"
+        },
+        {
+          "kind": "event",
+          "target": "sunwaste_event_0",
+          "count": 1,
+          "label": "전초기지 토벌 완료",
+          "map": "sunwaste"
+        }
+      ],
+      "rewards": {
+        "xp": 686,
+        "gold": 240,
+        "potions": 2,
+        "materials": {
+          "sigil": 1
+        },
+        "reputation": {
+          "rangers": 8
+        }
+      }
+    },
+    {
+      "id": "gravewood_contract",
+      "name": "현상 의뢰 · 묘지 기사",
+      "npc": "board",
+      "requires": "grave_survey",
+      "repeatable": true,
+      "minLevel": 32,
+      "cooldown": 180,
+      "description": "수주 이후 처치만 집계합니다. 게시판에서 반복 보급과 평판을 확보하세요.",
+      "objectives": [
+        {
+          "kind": "kill",
+          "target": "grave_knight",
+          "count": 30,
+          "label": "묘지 기사 처치",
+          "map": "gravewood"
+        },
+        {
+          "kind": "event",
+          "target": "gravewood_event_0",
+          "count": 1,
+          "label": "전초기지 토벌 완료",
+          "map": "gravewood"
+        }
+      ],
+      "rewards": {
+        "xp": 758,
+        "gold": 270,
+        "potions": 2,
+        "materials": {
+          "sigil": 1
+        },
+        "reputation": {
+          "rangers": 8
+        }
+      }
+    },
+    {
+      "id": "eclipse_plain_contract",
+      "name": "현상 의뢰 · 황혼 근위병",
+      "npc": "board",
+      "requires": "eclipse_survey",
+      "repeatable": true,
+      "minLevel": 38,
+      "cooldown": 180,
+      "description": "수주 이후 처치만 집계합니다. 게시판에서 반복 보급과 평판을 확보하세요.",
+      "objectives": [
+        {
+          "kind": "kill",
+          "target": "dusk_sentinel",
+          "count": 30,
+          "label": "황혼 근위병 처치",
+          "map": "eclipse_plain"
+        },
+        {
+          "kind": "event",
+          "target": "eclipse_plain_event_0",
+          "count": 1,
+          "label": "전초기지 토벌 완료",
+          "map": "eclipse_plain"
+        }
+      ],
+      "rewards": {
+        "xp": 830,
+        "gold": 300,
+        "potions": 2,
+        "materials": {
+          "sigil": 1
+        },
+        "reputation": {
+          "rangers": 8
+        }
       }
     }
   ],
@@ -4680,6 +17906,16 @@ window.GAME_DB = {
       "icon": "portal",
       "sprite": "waystone",
       "scale": 3
+    },
+    "arena": {
+      "name": "길드 연전",
+      "icon": "fight",
+      "sprite": "warrior"
+    },
+    "companion": {
+      "name": "동료",
+      "icon": "heart",
+      "sprite": "villager"
     }
   },
   "terrain": {
@@ -4737,6 +17973,31 @@ window.GAME_DB = {
       "name": "lava",
       "walk": false,
       "color": "lava"
+    },
+    "n": {
+      "name": "snow",
+      "walk": true,
+      "color": "snow"
+    },
+    "i": {
+      "name": "ice",
+      "walk": false,
+      "color": "ice"
+    },
+    "a": {
+      "name": "ash",
+      "walk": true,
+      "color": "ash"
+    },
+    "v": {
+      "name": "dusk",
+      "walk": true,
+      "color": "dusk"
+    },
+    "r": {
+      "name": "sand",
+      "walk": true,
+      "color": "redSand"
     }
   },
   "maps": {
@@ -4829,6 +18090,13 @@ window.GAME_DB = {
           "service": "waystone",
           "x": 13,
           "y": 13
+        },
+        {
+          "id": "arena_oak",
+          "name": "연전 관리인",
+          "service": "arena",
+          "x": 24,
+          "y": 14
         }
       ],
       "portals": [
@@ -4914,7 +18182,9 @@ window.GAME_DB = {
         13
       ],
       "discoveries": [],
-      "events": []
+      "events": [],
+      "mechanisms": [],
+      "zones": []
     },
     "meadow": {
       "id": "meadow",
@@ -5328,7 +18598,9 @@ window.GAME_DB = {
             }
           }
         }
-      ]
+      ],
+      "mechanisms": [],
+      "zones": []
     },
     "forest": {
       "id": "forest",
@@ -5737,7 +19009,9 @@ window.GAME_DB = {
             }
           }
         }
-      ]
+      ],
+      "mechanisms": [],
+      "zones": []
     },
     "silverhaven": {
       "id": "silverhaven",
@@ -5826,6 +19100,13 @@ window.GAME_DB = {
           "service": "waystone",
           "x": 16,
           "y": 14
+        },
+        {
+          "id": "lyra_npc",
+          "name": "리라",
+          "service": "companion",
+          "x": 18,
+          "y": 19
         }
       ],
       "portals": [
@@ -5906,7 +19187,9 @@ window.GAME_DB = {
         14
       ],
       "discoveries": [],
-      "events": []
+      "events": [],
+      "mechanisms": [],
+      "zones": []
     },
     "marsh": {
       "id": "marsh",
@@ -5999,6 +19282,19 @@ window.GAME_DB = {
             12.5
           ],
           "requiresQuest": "mine",
+          "requiresGuardians": false
+        },
+        {
+          "id": "to_highland",
+          "name": "가시바람 고원",
+          "x": 41,
+          "y": 15,
+          "to": "highland",
+          "spawn": [
+            3.5,
+            17.5
+          ],
+          "requiresQuest": "drake",
           "requiresGuardians": false
         }
       ],
@@ -6271,7 +19567,9 @@ window.GAME_DB = {
             }
           }
         }
-      ]
+      ],
+      "mechanisms": [],
+      "zones": []
     },
     "forest_den": {
       "id": "forest_den",
@@ -6328,13 +19626,13 @@ window.GAME_DB = {
         },
         {
           "id": "boss",
-          "name": "보스의 방",
+          "name": "심층으로",
           "x": 28,
           "y": 12,
-          "to": "wolf_lair",
+          "to": "forest_den_deep",
           "spawn": [
             3.5,
-            11.5
+            14.5
           ],
           "requiresQuest": null,
           "requiresGuardians": true
@@ -6421,7 +19719,9 @@ window.GAME_DB = {
       "group": "wolf",
       "guardianTotal": 2,
       "discoveries": [],
-      "events": []
+      "events": [],
+      "mechanisms": [],
+      "zones": []
     },
     "mine": {
       "id": "mine",
@@ -6480,13 +19780,13 @@ window.GAME_DB = {
         },
         {
           "id": "boss",
-          "name": "보스의 방",
+          "name": "심층으로",
           "x": 30,
           "y": 12,
-          "to": "forge_chamber",
+          "to": "mine_deep",
           "spawn": [
             3.5,
-            11.5
+            14.5
           ],
           "requiresQuest": null,
           "requiresGuardians": true
@@ -6573,7 +19873,9 @@ window.GAME_DB = {
       "group": "mine",
       "guardianTotal": 2,
       "discoveries": [],
-      "events": []
+      "events": [],
+      "mechanisms": [],
+      "zones": []
     },
     "ruins": {
       "id": "ruins",
@@ -6632,13 +19934,13 @@ window.GAME_DB = {
         },
         {
           "id": "boss",
-          "name": "보스의 방",
+          "name": "심층으로",
           "x": 32,
           "y": 12,
-          "to": "dragon_sanctum",
+          "to": "ruins_deep",
           "spawn": [
             3.5,
-            11.5
+            14.5
           ],
           "requiresQuest": null,
           "requiresGuardians": true
@@ -6732,7 +20034,9 @@ window.GAME_DB = {
       "group": "ruins",
       "guardianTotal": 3,
       "discoveries": [],
-      "events": []
+      "events": [],
+      "mechanisms": [],
+      "zones": []
     },
     "wolf_lair": {
       "id": "wolf_lair",
@@ -6779,10 +20083,10 @@ window.GAME_DB = {
           "name": "입구로",
           "x": 2,
           "y": 11,
-          "to": "forest_den",
+          "to": "forest_den_deep",
           "spawn": [
-            27,
-            12.5
+            32,
+            14.5
           ],
           "requiresQuest": null,
           "requiresGuardians": false
@@ -6821,7 +20125,9 @@ window.GAME_DB = {
       "group": "wolf",
       "boss": "wolf_king",
       "discoveries": [],
-      "events": []
+      "events": [],
+      "mechanisms": [],
+      "zones": []
     },
     "forge_chamber": {
       "id": "forge_chamber",
@@ -6868,10 +20174,10 @@ window.GAME_DB = {
           "name": "입구로",
           "x": 2,
           "y": 11,
-          "to": "mine",
+          "to": "mine_deep",
           "spawn": [
-            29,
-            12.5
+            32,
+            14.5
           ],
           "requiresQuest": null,
           "requiresGuardians": false
@@ -6910,7 +20216,9 @@ window.GAME_DB = {
       "group": "mine",
       "boss": "mine_golem",
       "discoveries": [],
-      "events": []
+      "events": [],
+      "mechanisms": [],
+      "zones": []
     },
     "dragon_sanctum": {
       "id": "dragon_sanctum",
@@ -6957,10 +20265,10 @@ window.GAME_DB = {
           "name": "입구로",
           "x": 2,
           "y": 11,
-          "to": "ruins",
+          "to": "ruins_deep",
           "spawn": [
-            31,
-            12.5
+            32,
+            14.5
           ],
           "requiresQuest": null,
           "requiresGuardians": false
@@ -6999,7 +20307,7984 @@ window.GAME_DB = {
       "group": "ruins",
       "boss": "ancient_drake",
       "discoveries": [],
-      "events": []
+      "events": [],
+      "mechanisms": [],
+      "zones": []
+    },
+    "highland": {
+      "id": "highland",
+      "name": "가시바람 고원",
+      "kind": "field",
+      "width": 48,
+      "height": 34,
+      "level": 16,
+      "music": "field",
+      "spawn": [
+        3.5,
+        17.5
+      ],
+      "tiles": [
+        "tttttttttttttttttttttttttttttttttttttttttttttttt",
+        "t..............................................t",
+        "t..............................................t",
+        "t......#.......#.......#.......#.......#.......t",
+        "t......#.......:.......#.......#.......#.......t",
+        "t......#.......:.......#.......#.......#.......t",
+        "t......#.......:.......#.......#.......#.......t",
+        "t......#.......:.......#.......#.......#.......t",
+        "t......#.......:.......#.......#.......#.......t",
+        "t......#.......:.......#.......#...............t",
+        "t......#.......:.......#.......#...............t",
+        "t......#.......:...............#...............t",
+        "t......#.......:...............#...............t",
+        "t..............:...............#...............t",
+        "t..............:...............#.......#.......t",
+        "t..............:...............#.......#.......t",
+        "t..............:.......#.......#.......#.......t",
+        "t.::::::::::::::::::::::::::::::::::::::::::::.t",
+        "t.::::::::::::::::::::::::::::::::::::::::::::.t",
+        "t......:.......:.......:...............:.......t",
+        "t......:.......:.......:...............:.......t",
+        "t......:...............:...............:.......t",
+        "t......:...............:...............:.......t",
+        "t......:...............:...............:.......t",
+        "t......:...............:.......#.......:.......t",
+        "t......:...............:.......#.......:.......t",
+        "t......:.......#.......:.......#.......:.......t",
+        "t......:.......#.......:.......#.......:.......t",
+        "t......:.......#.......:.......#.......:.......t",
+        "t......:.......#.......:.......#.......:.......t",
+        "t......#.......#.......:.......#.......#.......t",
+        "t..............................................t",
+        "t..............................................t",
+        "tttttttttttttttttttttttttttttttttttttttttttttttt"
+      ],
+      "props": [],
+      "npcs": [
+        {
+          "id": "highland_stone",
+          "name": "여행의 돌",
+          "service": "waystone",
+          "x": 5,
+          "y": 17
+        },
+        {
+          "id": "highland_vendor",
+          "name": "원정 상인",
+          "service": "merchant",
+          "x": 7,
+          "y": 29,
+          "vendorType": "wanderer",
+          "schedule": {
+            "period": 300,
+            "activeFor": 150,
+            "offset": 0
+          }
+        }
+      ],
+      "portals": [
+        {
+          "id": "to_marsh",
+          "name": "안개늪",
+          "x": 2,
+          "y": 17,
+          "to": "marsh",
+          "spawn": [
+            40,
+            15.5
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": false
+        },
+        {
+          "id": "to_frostgate",
+          "name": "서리문 요새",
+          "x": 45,
+          "y": 17,
+          "to": "frostgate",
+          "spawn": [
+            3.5,
+            14.5
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": false
+        },
+        {
+          "id": "highland_entry",
+          "name": "가시뿌리 미궁",
+          "x": 42,
+          "y": 4,
+          "to": "highland_depth_1",
+          "spawn": [
+            3.5,
+            15.5
+          ],
+          "requiresQuest": "highland_hunt",
+          "requiresGuardians": false
+        }
+      ],
+      "spawns": [
+        {
+          "id": "highland_mob_0",
+          "monster": "highland_orc",
+          "x": 8,
+          "y": 8,
+          "level": 17,
+          "guardian": false
+        },
+        {
+          "id": "highland_mob_1",
+          "monster": "moss_ent",
+          "x": 13,
+          "y": 7,
+          "level": 16,
+          "guardian": false
+        },
+        {
+          "id": "highland_mob_2",
+          "monster": "venom_spider",
+          "x": 19,
+          "y": 9,
+          "level": 16,
+          "guardian": false
+        },
+        {
+          "id": "highland_mob_3",
+          "monster": "stone_wyvern",
+          "x": 26,
+          "y": 7,
+          "level": 17,
+          "guardian": false
+        },
+        {
+          "id": "highland_mob_4",
+          "monster": "highland_orc",
+          "x": 33,
+          "y": 8,
+          "level": 16,
+          "guardian": false
+        },
+        {
+          "id": "highland_mob_5",
+          "monster": "moss_ent",
+          "x": 40,
+          "y": 7,
+          "level": 16,
+          "guardian": false
+        },
+        {
+          "id": "highland_mob_6",
+          "monster": "venom_spider",
+          "x": 43,
+          "y": 12,
+          "level": 17,
+          "guardian": false
+        },
+        {
+          "id": "highland_mob_7",
+          "monster": "stone_wyvern",
+          "x": 10,
+          "y": 14,
+          "level": 16,
+          "guardian": false
+        },
+        {
+          "id": "highland_mob_8",
+          "monster": "highland_orc",
+          "x": 18,
+          "y": 14,
+          "level": 16,
+          "guardian": false
+        },
+        {
+          "id": "highland_mob_9",
+          "monster": "moss_ent",
+          "x": 26,
+          "y": 14,
+          "level": 17,
+          "guardian": false
+        },
+        {
+          "id": "highland_mob_10",
+          "monster": "venom_spider",
+          "x": 34,
+          "y": 14,
+          "level": 16,
+          "guardian": false
+        },
+        {
+          "id": "highland_mob_11",
+          "monster": "stone_wyvern",
+          "x": 40,
+          "y": 18,
+          "level": 16,
+          "guardian": false
+        },
+        {
+          "id": "highland_mob_12",
+          "monster": "highland_orc",
+          "x": 9,
+          "y": 23,
+          "level": 17,
+          "guardian": false
+        },
+        {
+          "id": "highland_mob_13",
+          "monster": "moss_ent",
+          "x": 15,
+          "y": 25,
+          "level": 16,
+          "guardian": false
+        },
+        {
+          "id": "highland_mob_14",
+          "monster": "venom_spider",
+          "x": 22,
+          "y": 24,
+          "level": 16,
+          "guardian": false
+        },
+        {
+          "id": "highland_mob_15",
+          "monster": "stone_wyvern",
+          "x": 29,
+          "y": 25,
+          "level": 17,
+          "guardian": false
+        },
+        {
+          "id": "highland_mob_16",
+          "monster": "highland_orc",
+          "x": 36,
+          "y": 26,
+          "level": 16,
+          "guardian": false
+        },
+        {
+          "id": "highland_mob_17",
+          "monster": "moss_ent",
+          "x": 43,
+          "y": 25,
+          "level": 16,
+          "guardian": false
+        },
+        {
+          "id": "highland_mob_18",
+          "monster": "venom_spider",
+          "x": 12,
+          "y": 29,
+          "level": 17,
+          "guardian": false
+        },
+        {
+          "id": "highland_mob_19",
+          "monster": "stone_wyvern",
+          "x": 24,
+          "y": 29,
+          "level": 16,
+          "guardian": false
+        },
+        {
+          "id": "highland_mob_20",
+          "monster": "highland_orc",
+          "x": 37,
+          "y": 30,
+          "level": 16,
+          "guardian": false
+        },
+        {
+          "id": "highland_mob_21",
+          "monster": "moss_ent",
+          "x": 43,
+          "y": 30,
+          "level": 17,
+          "guardian": false
+        },
+        {
+          "id": "highland_mob_22",
+          "monster": "venom_spider",
+          "x": 20,
+          "y": 20,
+          "level": 16,
+          "guardian": false
+        },
+        {
+          "id": "highland_mob_23",
+          "monster": "stone_wyvern",
+          "x": 32,
+          "y": 20,
+          "level": 16,
+          "guardian": false
+        },
+        {
+          "id": "highland_elite",
+          "monster": "highland_elite",
+          "x": 40,
+          "y": 28,
+          "level": 18,
+          "guardian": false,
+          "patrol": [
+            [
+              40,
+              28
+            ],
+            [
+              43,
+              24
+            ],
+            [
+              35,
+              23
+            ]
+          ]
+        }
+      ],
+      "resources": [
+        {
+          "id": "highland_resource_0",
+          "x": 11,
+          "y": 5,
+          "type": "ore",
+          "sprite": "ore",
+          "amount": 1,
+          "respawn": 120
+        },
+        {
+          "id": "highland_resource_1",
+          "x": 23,
+          "y": 30,
+          "type": "herb",
+          "sprite": "herb",
+          "amount": 1,
+          "respawn": 120
+        },
+        {
+          "id": "highland_resource_2",
+          "x": 34,
+          "y": 4,
+          "type": "wood",
+          "sprite": "wood",
+          "amount": 1,
+          "respawn": 120
+        },
+        {
+          "id": "highland_resource_3",
+          "x": 8,
+          "y": 27,
+          "type": "crystal",
+          "sprite": "crystal",
+          "amount": 1,
+          "respawn": 120
+        },
+        {
+          "id": "highland_resource_4",
+          "x": 28,
+          "y": 24,
+          "type": "moonstone",
+          "sprite": "crystal",
+          "amount": 1,
+          "respawn": 120
+        },
+        {
+          "id": "highland_resource_5",
+          "x": 39,
+          "y": 29,
+          "type": "ember",
+          "sprite": "crystal",
+          "amount": 1,
+          "respawn": 120
+        }
+      ],
+      "chests": [
+        {
+          "id": "highland_cache_0",
+          "x": 15,
+          "y": 4,
+          "gold": 26,
+          "materials": {
+            "ore": 2,
+            "crystal": 1
+          },
+          "equipmentChance": 0.12
+        },
+        {
+          "id": "highland_cache_1",
+          "x": 29,
+          "y": 30,
+          "gold": 26,
+          "materials": {
+            "ore": 2,
+            "crystal": 1
+          },
+          "equipmentChance": 0.12
+        },
+        {
+          "id": "highland_cache_2",
+          "x": 43,
+          "y": 4,
+          "gold": 26,
+          "materials": {
+            "ore": 2,
+            "crystal": 1
+          },
+          "equipmentChance": 0.12
+        }
+      ],
+      "discoveries": [
+        {
+          "id": "highland_poi_0",
+          "name": "가시바람 잊힌 망루",
+          "kind": "landmark",
+          "sprite": "ruin",
+          "x": 20,
+          "y": 4,
+          "description": "지역의 역사와 봉인의 흔적을 조사했습니다.",
+          "stats": [],
+          "rewards": {
+            "xp": 144,
+            "gold": 26,
+            "reputation": {
+              "arcanum": 4
+            }
+          }
+        },
+        {
+          "id": "highland_poi_1",
+          "name": "가시바람 지역의 성소",
+          "kind": "shrine",
+          "sprite": "waystone",
+          "x": 42,
+          "y": 30,
+          "description": "지역의 역사와 봉인의 흔적을 조사했습니다.",
+          "stats": [
+            {
+              "stat": "hp",
+              "op": "add",
+              "value": 5
+            }
+          ],
+          "rewards": {
+            "xp": 144,
+            "gold": 26,
+            "reputation": {
+              "arcanum": 4
+            }
+          }
+        }
+      ],
+      "events": [
+        {
+          "id": "highland_event_0",
+          "name": "전초기지 토벌",
+          "x": 24,
+          "y": 5,
+          "sprite": "camp",
+          "description": "두 차례 몰려오는 몬스터를 모두 격파하세요.",
+          "spawns": [
+            {
+              "monster": "highland_orc",
+              "x": 23,
+              "y": 5,
+              "level": 16,
+              "guardian": false
+            },
+            {
+              "monster": "moss_ent",
+              "x": 25,
+              "y": 5,
+              "level": 16,
+              "guardian": false
+            },
+            {
+              "monster": "venom_spider",
+              "x": 23,
+              "y": 7,
+              "level": 16,
+              "guardian": false
+            }
+          ],
+          "waves": [
+            [
+              {
+                "monster": "highland_orc",
+                "x": 23,
+                "y": 5,
+                "level": 16,
+                "guardian": false
+              },
+              {
+                "monster": "moss_ent",
+                "x": 25,
+                "y": 5,
+                "level": 16,
+                "guardian": false
+              },
+              {
+                "monster": "venom_spider",
+                "x": 23,
+                "y": 7,
+                "level": 16,
+                "guardian": false
+              }
+            ],
+            [
+              {
+                "monster": "highland_orc",
+                "x": 23,
+                "y": 5,
+                "level": 16,
+                "guardian": false
+              },
+              {
+                "monster": "moss_ent",
+                "x": 25,
+                "y": 5,
+                "level": 16,
+                "guardian": false
+              },
+              {
+                "monster": "venom_spider",
+                "x": 23,
+                "y": 7,
+                "level": 16,
+                "guardian": false
+              },
+              {
+                "monster": "stone_wyvern",
+                "x": 25,
+                "y": 7,
+                "level": 16,
+                "guardian": false
+              }
+            ]
+          ],
+          "cooldown": 420,
+          "rewards": {
+            "xp": 150,
+            "gold": 52,
+            "materials": {
+              "sigil": 1
+            },
+            "reputation": {
+              "rangers": 6
+            }
+          }
+        },
+        {
+          "id": "highland_event_1",
+          "name": "봉인 방어전",
+          "x": 34,
+          "y": 29,
+          "sprite": "camp",
+          "description": "두 차례 몰려오는 몬스터를 모두 격파하세요.",
+          "spawns": [
+            {
+              "monster": "moss_ent",
+              "x": 33,
+              "y": 29,
+              "level": 16,
+              "guardian": false
+            },
+            {
+              "monster": "venom_spider",
+              "x": 35,
+              "y": 29,
+              "level": 16,
+              "guardian": false
+            },
+            {
+              "monster": "stone_wyvern",
+              "x": 33,
+              "y": 31,
+              "level": 16,
+              "guardian": false
+            }
+          ],
+          "waves": [
+            [
+              {
+                "monster": "moss_ent",
+                "x": 33,
+                "y": 29,
+                "level": 16,
+                "guardian": false
+              },
+              {
+                "monster": "venom_spider",
+                "x": 35,
+                "y": 29,
+                "level": 16,
+                "guardian": false
+              },
+              {
+                "monster": "stone_wyvern",
+                "x": 33,
+                "y": 31,
+                "level": 16,
+                "guardian": false
+              }
+            ],
+            [
+              {
+                "monster": "moss_ent",
+                "x": 33,
+                "y": 29,
+                "level": 16,
+                "guardian": false
+              },
+              {
+                "monster": "venom_spider",
+                "x": 35,
+                "y": 29,
+                "level": 16,
+                "guardian": false
+              },
+              {
+                "monster": "stone_wyvern",
+                "x": 33,
+                "y": 31,
+                "level": 16,
+                "guardian": false
+              },
+              {
+                "monster": "highland_orc",
+                "x": 35,
+                "y": 31,
+                "level": 16,
+                "guardian": false
+              }
+            ]
+          ],
+          "cooldown": 420,
+          "rewards": {
+            "xp": 150,
+            "gold": 52,
+            "materials": {
+              "sigil": 1
+            },
+            "reputation": {
+              "wardens": 6
+            }
+          }
+        }
+      ],
+      "mechanisms": [],
+      "zones": [],
+      "waypoint": [
+        5,
+        17
+      ]
+    },
+    "snowfield": {
+      "id": "snowfield",
+      "name": "백서리 설원",
+      "kind": "field",
+      "width": 48,
+      "height": 34,
+      "level": 22,
+      "music": "field",
+      "spawn": [
+        3.5,
+        17.5
+      ],
+      "tiles": [
+        "tttttttttttttttttttttttttttttttttttttttttttttttt",
+        "tnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnt",
+        "tnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnt",
+        "tnnnnnn~nnnnnnn~nnnnnnn~nnnnnnn~nnnnnnn~nnnnnnnt",
+        "tnnnnnn~nnnnnnn:nnnnnnn~nnnnnnn~nnnnnnn~nnnnnnnt",
+        "tnnnnnn~nnnnnnn:nnnnnnn~nnnnnnn~nnnnnnn~nnnnnnnt",
+        "tnnnnnn~nnnnnnn:nnnnnnn~nnnnnnn~nnnnnnn~nnnnnnnt",
+        "tnnnnnn~nnnnnnn:nnnnnnn~nnnnnnn~nnnnnnn~nnnnnnnt",
+        "tnnnnnn~nnnnnnn:nnnnnnn~nnnnnnn~nnnnnnn~nnnnnnnt",
+        "tnnnnnn~nnnnnnn:nnnnnnn~nnnnnnn~nnnnnnn~nnnnnnnt",
+        "tnnnnnn~nnnnnnn:nnnnnnn~nnnnnnn~nnnnnnnnnnnnnnnt",
+        "tnnnnnn~nnnnnnn:nnnnnnn~nnnnnnn~nnnnnnnnnnnnnnnt",
+        "tnnnnnn~nnnnnnn:nnnnnnnnnnnnnnn~nnnnnnnnnnnnnnnt",
+        "tnnnnnn~nnnnnnn:nnnnnnnnnnnnnnn~nnnnnnnnnnnnnnnt",
+        "tnnnnnnnnnnnnnn:nnnnnnnnnnnnnnn~nnnnnnnnnnnnnnnt",
+        "tnnnnnnnnnnnnnn:nnnnnnnnnnnnnnn~nnnnnnn~nnnnnnnt",
+        "tnnnnnnnnnnnnnn:nnnnnnnnnnnnnnn~nnnnnnn~nnnnnnnt",
+        "tn::::::::::::::::::::::::::::::::::::::::::::nt",
+        "tn::::::::::::::::::::::::::::::::::::::::::::nt",
+        "tnnnnnn:nnnnnnn:nnnnnnn:nnnnnnn~nnnnnnn:nnnnnnnt",
+        "tnnnnnn:nnnnnnn:nnnnnnn:nnnnnnnnnnnnnnn:nnnnnnnt",
+        "tnnnnnn:nnnnnnn:nnnnnnn:nnnnnnnnnnnnnnn:nnnnnnnt",
+        "tnnnnnn:nnnnnnnnnnnnnnn:nnnnnnnnnnnnnnn:nnnnnnnt",
+        "tnnnnnn:nnnnnnnnnnnnnnn:nnnnnnnnnnnnnnn:nnnnnnnt",
+        "tnnnnnn:nnnnnnnnnnnnnnn:nnnnnnnnnnnnnnn:nnnnnnnt",
+        "tnnnnnn:nnnnnnnnnnnnnnn:nnnnnnn~nnnnnnn:nnnnnnnt",
+        "tnnnnnn:nnnnnnnnnnnnnnn:nnnnnnn~nnnnnnn:nnnnnnnt",
+        "tnnnnnn:nnnnnnn~nnnnnnn:nnnnnnn~nnnnnnn:nnnnnnnt",
+        "tnnnnnn:nnnnnnn~nnnnnnn:nnnnnnn~nnnnnnn:nnnnnnnt",
+        "tnnnnnn:nnnnnnn~nnnnnnn:nnnnnnn~nnnnnnn:nnnnnnnt",
+        "tnnnnnn~nnnnnnn~nnnnnnn:nnnnnnn~nnnnnnn~nnnnnnnt",
+        "tnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnt",
+        "tnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnt",
+        "tttttttttttttttttttttttttttttttttttttttttttttttt"
+      ],
+      "props": [],
+      "npcs": [
+        {
+          "id": "snowfield_stone",
+          "name": "여행의 돌",
+          "service": "waystone",
+          "x": 5,
+          "y": 17
+        },
+        {
+          "id": "snowfield_vendor",
+          "name": "원정 상인",
+          "service": "merchant",
+          "x": 7,
+          "y": 29,
+          "vendorType": "wanderer",
+          "schedule": {
+            "period": 300,
+            "activeFor": 150,
+            "offset": 40
+          }
+        }
+      ],
+      "portals": [
+        {
+          "id": "to_frostgate",
+          "name": "서리문 요새",
+          "x": 2,
+          "y": 17,
+          "to": "frostgate",
+          "spawn": [
+            34,
+            14.5
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": false
+        },
+        {
+          "id": "to_sunwaste",
+          "name": "붉은 해 사막",
+          "x": 45,
+          "y": 17,
+          "to": "sunwaste",
+          "spawn": [
+            3.5,
+            17.5
+          ],
+          "requiresQuest": "frost_crown",
+          "requiresGuardians": false
+        },
+        {
+          "id": "frost_entry",
+          "name": "빙관의 지하성",
+          "x": 42,
+          "y": 4,
+          "to": "frost_depth_1",
+          "spawn": [
+            3.5,
+            15.5
+          ],
+          "requiresQuest": "frost_hunt",
+          "requiresGuardians": false
+        }
+      ],
+      "spawns": [
+        {
+          "id": "snowfield_mob_0",
+          "monster": "frost_wolf",
+          "x": 8,
+          "y": 8,
+          "level": 23,
+          "guardian": false
+        },
+        {
+          "id": "snowfield_mob_1",
+          "monster": "ice_wraith",
+          "x": 13,
+          "y": 7,
+          "level": 22,
+          "guardian": false
+        },
+        {
+          "id": "snowfield_mob_2",
+          "monster": "snow_golem",
+          "x": 19,
+          "y": 9,
+          "level": 22,
+          "guardian": false
+        },
+        {
+          "id": "snowfield_mob_3",
+          "monster": "frost_wolf",
+          "x": 26,
+          "y": 7,
+          "level": 23,
+          "guardian": false
+        },
+        {
+          "id": "snowfield_mob_4",
+          "monster": "ice_wraith",
+          "x": 33,
+          "y": 8,
+          "level": 22,
+          "guardian": false
+        },
+        {
+          "id": "snowfield_mob_5",
+          "monster": "snow_golem",
+          "x": 40,
+          "y": 7,
+          "level": 22,
+          "guardian": false
+        },
+        {
+          "id": "snowfield_mob_6",
+          "monster": "frost_wolf",
+          "x": 43,
+          "y": 12,
+          "level": 23,
+          "guardian": false
+        },
+        {
+          "id": "snowfield_mob_7",
+          "monster": "ice_wraith",
+          "x": 10,
+          "y": 14,
+          "level": 22,
+          "guardian": false
+        },
+        {
+          "id": "snowfield_mob_8",
+          "monster": "snow_golem",
+          "x": 18,
+          "y": 14,
+          "level": 22,
+          "guardian": false
+        },
+        {
+          "id": "snowfield_mob_9",
+          "monster": "frost_wolf",
+          "x": 26,
+          "y": 14,
+          "level": 23,
+          "guardian": false
+        },
+        {
+          "id": "snowfield_mob_10",
+          "monster": "ice_wraith",
+          "x": 34,
+          "y": 14,
+          "level": 22,
+          "guardian": false
+        },
+        {
+          "id": "snowfield_mob_11",
+          "monster": "snow_golem",
+          "x": 40,
+          "y": 18,
+          "level": 22,
+          "guardian": false
+        },
+        {
+          "id": "snowfield_mob_12",
+          "monster": "frost_wolf",
+          "x": 9,
+          "y": 23,
+          "level": 23,
+          "guardian": false
+        },
+        {
+          "id": "snowfield_mob_13",
+          "monster": "ice_wraith",
+          "x": 15,
+          "y": 25,
+          "level": 22,
+          "guardian": false
+        },
+        {
+          "id": "snowfield_mob_14",
+          "monster": "snow_golem",
+          "x": 22,
+          "y": 24,
+          "level": 22,
+          "guardian": false
+        },
+        {
+          "id": "snowfield_mob_15",
+          "monster": "frost_wolf",
+          "x": 29,
+          "y": 25,
+          "level": 23,
+          "guardian": false
+        },
+        {
+          "id": "snowfield_mob_16",
+          "monster": "ice_wraith",
+          "x": 36,
+          "y": 26,
+          "level": 22,
+          "guardian": false
+        },
+        {
+          "id": "snowfield_mob_17",
+          "monster": "snow_golem",
+          "x": 43,
+          "y": 25,
+          "level": 22,
+          "guardian": false
+        },
+        {
+          "id": "snowfield_mob_18",
+          "monster": "frost_wolf",
+          "x": 12,
+          "y": 29,
+          "level": 23,
+          "guardian": false
+        },
+        {
+          "id": "snowfield_mob_19",
+          "monster": "ice_wraith",
+          "x": 24,
+          "y": 29,
+          "level": 22,
+          "guardian": false
+        },
+        {
+          "id": "snowfield_mob_20",
+          "monster": "snow_golem",
+          "x": 37,
+          "y": 30,
+          "level": 22,
+          "guardian": false
+        },
+        {
+          "id": "snowfield_mob_21",
+          "monster": "frost_wolf",
+          "x": 43,
+          "y": 30,
+          "level": 23,
+          "guardian": false
+        },
+        {
+          "id": "snowfield_mob_22",
+          "monster": "ice_wraith",
+          "x": 20,
+          "y": 20,
+          "level": 22,
+          "guardian": false
+        },
+        {
+          "id": "snowfield_mob_23",
+          "monster": "snow_golem",
+          "x": 32,
+          "y": 20,
+          "level": 22,
+          "guardian": false
+        },
+        {
+          "id": "snowfield_elite",
+          "monster": "snowfield_elite",
+          "x": 40,
+          "y": 28,
+          "level": 24,
+          "guardian": false,
+          "patrol": [
+            [
+              40,
+              28
+            ],
+            [
+              43,
+              24
+            ],
+            [
+              35,
+              23
+            ]
+          ]
+        }
+      ],
+      "resources": [
+        {
+          "id": "snowfield_resource_0",
+          "x": 11,
+          "y": 5,
+          "type": "ore",
+          "sprite": "ore",
+          "amount": 1,
+          "respawn": 120
+        },
+        {
+          "id": "snowfield_resource_1",
+          "x": 23,
+          "y": 30,
+          "type": "herb",
+          "sprite": "herb",
+          "amount": 1,
+          "respawn": 120
+        },
+        {
+          "id": "snowfield_resource_2",
+          "x": 34,
+          "y": 4,
+          "type": "wood",
+          "sprite": "wood",
+          "amount": 1,
+          "respawn": 120
+        },
+        {
+          "id": "snowfield_resource_3",
+          "x": 8,
+          "y": 27,
+          "type": "crystal",
+          "sprite": "crystal",
+          "amount": 1,
+          "respawn": 120
+        },
+        {
+          "id": "snowfield_resource_4",
+          "x": 28,
+          "y": 24,
+          "type": "moonstone",
+          "sprite": "crystal",
+          "amount": 1,
+          "respawn": 120
+        },
+        {
+          "id": "snowfield_resource_5",
+          "x": 39,
+          "y": 29,
+          "type": "ember",
+          "sprite": "crystal",
+          "amount": 1,
+          "respawn": 120
+        }
+      ],
+      "chests": [
+        {
+          "id": "snowfield_cache_0",
+          "x": 15,
+          "y": 4,
+          "gold": 32,
+          "materials": {
+            "ore": 2,
+            "crystal": 1
+          },
+          "equipmentChance": 0.12
+        },
+        {
+          "id": "snowfield_cache_1",
+          "x": 29,
+          "y": 30,
+          "gold": 32,
+          "materials": {
+            "ore": 2,
+            "crystal": 1
+          },
+          "equipmentChance": 0.12
+        },
+        {
+          "id": "snowfield_cache_2",
+          "x": 43,
+          "y": 4,
+          "gold": 32,
+          "materials": {
+            "ore": 2,
+            "crystal": 1
+          },
+          "equipmentChance": 0.12
+        }
+      ],
+      "discoveries": [
+        {
+          "id": "snowfield_poi_0",
+          "name": "백서리 잊힌 망루",
+          "kind": "landmark",
+          "sprite": "ruin",
+          "x": 20,
+          "y": 4,
+          "description": "지역의 역사와 봉인의 흔적을 조사했습니다.",
+          "stats": [],
+          "rewards": {
+            "xp": 168,
+            "gold": 32,
+            "reputation": {
+              "arcanum": 4
+            }
+          }
+        },
+        {
+          "id": "snowfield_poi_1",
+          "name": "백서리 지역의 성소",
+          "kind": "shrine",
+          "sprite": "waystone",
+          "x": 42,
+          "y": 30,
+          "description": "지역의 역사와 봉인의 흔적을 조사했습니다.",
+          "stats": [
+            {
+              "stat": "hp",
+              "op": "add",
+              "value": 5
+            }
+          ],
+          "rewards": {
+            "xp": 168,
+            "gold": 32,
+            "reputation": {
+              "arcanum": 4
+            }
+          }
+        }
+      ],
+      "events": [
+        {
+          "id": "snowfield_event_0",
+          "name": "전초기지 토벌",
+          "x": 24,
+          "y": 5,
+          "sprite": "camp",
+          "description": "두 차례 몰려오는 몬스터를 모두 격파하세요.",
+          "spawns": [
+            {
+              "monster": "frost_wolf",
+              "x": 23,
+              "y": 5,
+              "level": 22,
+              "guardian": false
+            },
+            {
+              "monster": "ice_wraith",
+              "x": 25,
+              "y": 5,
+              "level": 22,
+              "guardian": false
+            },
+            {
+              "monster": "snow_golem",
+              "x": 23,
+              "y": 7,
+              "level": 22,
+              "guardian": false
+            }
+          ],
+          "waves": [
+            [
+              {
+                "monster": "frost_wolf",
+                "x": 23,
+                "y": 5,
+                "level": 22,
+                "guardian": false
+              },
+              {
+                "monster": "ice_wraith",
+                "x": 25,
+                "y": 5,
+                "level": 22,
+                "guardian": false
+              },
+              {
+                "monster": "snow_golem",
+                "x": 23,
+                "y": 7,
+                "level": 22,
+                "guardian": false
+              }
+            ],
+            [
+              {
+                "monster": "frost_wolf",
+                "x": 23,
+                "y": 5,
+                "level": 22,
+                "guardian": false
+              },
+              {
+                "monster": "ice_wraith",
+                "x": 25,
+                "y": 5,
+                "level": 22,
+                "guardian": false
+              },
+              {
+                "monster": "snow_golem",
+                "x": 23,
+                "y": 7,
+                "level": 22,
+                "guardian": false
+              },
+              {
+                "monster": "frost_wolf",
+                "x": 25,
+                "y": 7,
+                "level": 22,
+                "guardian": false
+              }
+            ]
+          ],
+          "cooldown": 420,
+          "rewards": {
+            "xp": 180,
+            "gold": 64,
+            "materials": {
+              "sigil": 1
+            },
+            "reputation": {
+              "rangers": 6
+            }
+          }
+        },
+        {
+          "id": "snowfield_event_1",
+          "name": "봉인 방어전",
+          "x": 34,
+          "y": 29,
+          "sprite": "camp",
+          "description": "두 차례 몰려오는 몬스터를 모두 격파하세요.",
+          "spawns": [
+            {
+              "monster": "ice_wraith",
+              "x": 33,
+              "y": 29,
+              "level": 22,
+              "guardian": false
+            },
+            {
+              "monster": "snow_golem",
+              "x": 35,
+              "y": 29,
+              "level": 22,
+              "guardian": false
+            },
+            {
+              "monster": "frost_wolf",
+              "x": 33,
+              "y": 31,
+              "level": 22,
+              "guardian": false
+            }
+          ],
+          "waves": [
+            [
+              {
+                "monster": "ice_wraith",
+                "x": 33,
+                "y": 29,
+                "level": 22,
+                "guardian": false
+              },
+              {
+                "monster": "snow_golem",
+                "x": 35,
+                "y": 29,
+                "level": 22,
+                "guardian": false
+              },
+              {
+                "monster": "frost_wolf",
+                "x": 33,
+                "y": 31,
+                "level": 22,
+                "guardian": false
+              }
+            ],
+            [
+              {
+                "monster": "ice_wraith",
+                "x": 33,
+                "y": 29,
+                "level": 22,
+                "guardian": false
+              },
+              {
+                "monster": "snow_golem",
+                "x": 35,
+                "y": 29,
+                "level": 22,
+                "guardian": false
+              },
+              {
+                "monster": "frost_wolf",
+                "x": 33,
+                "y": 31,
+                "level": 22,
+                "guardian": false
+              },
+              {
+                "monster": "ice_wraith",
+                "x": 35,
+                "y": 31,
+                "level": 22,
+                "guardian": false
+              }
+            ]
+          ],
+          "cooldown": 420,
+          "rewards": {
+            "xp": 180,
+            "gold": 64,
+            "materials": {
+              "sigil": 1
+            },
+            "reputation": {
+              "wardens": 6
+            }
+          }
+        }
+      ],
+      "mechanisms": [],
+      "zones": [],
+      "waypoint": [
+        5,
+        17
+      ]
+    },
+    "sunwaste": {
+      "id": "sunwaste",
+      "name": "붉은 해 사막",
+      "kind": "field",
+      "width": 48,
+      "height": 34,
+      "level": 28,
+      "music": "field",
+      "spawn": [
+        3.5,
+        17.5
+      ],
+      "tiles": [
+        "tttttttttttttttttttttttttttttttttttttttttttttttt",
+        "trrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrt",
+        "trrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrt",
+        "trrrrrr#rrrrrrr#rrrrrrr#rrrrrrr#rrrrrrr#rrrrrrrt",
+        "trrrrrr#rrrrrrr:rrrrrrr#rrrrrrr#rrrrrrr#rrrrrrrt",
+        "trrrrrr#rrrrrrr:rrrrrrr#rrrrrrr#rrrrrrr#rrrrrrrt",
+        "trrrrrr#rrrrrrr:rrrrrrr#rrrrrrr#rrrrrrr#rrrrrrrt",
+        "trrrrrr#rrrrrrr:rrrrrrr#rrrrrrr#rrrrrrr#rrrrrrrt",
+        "trrrrrr#rrrrrrr:rrrrrrr#rrrrrrr#rrrrrrr#rrrrrrrt",
+        "trrrrrr#rrrrrrr:rrrrrrr#rrrrrrr#rrrrrrr#rrrrrrrt",
+        "trrrrrr#rrrrrrr:rrrrrrr#rrrrrrr#rrrrrrr#rrrrrrrt",
+        "trrrrrr#rrrrrrr:rrrrrrr#rrrrrrr#rrrrrrrrrrrrrrrt",
+        "trrrrrr#rrrrrrr:rrrrrrr#rrrrrrr#rrrrrrrrrrrrrrrt",
+        "trrrrrr#rrrrrrr:rrrrrrrrrrrrrrr#rrrrrrrrrrrrrrrt",
+        "trrrrrr#rrrrrrr:rrrrrrrrrrrrrrr#rrrrrrrrrrrrrrrt",
+        "trrrrrrrrrrrrrr:rrrrrrrrrrrrrrr#rrrrrrrrrrrrrrrt",
+        "trrrrrrrrrrrrrr:rrrrrrrrrrrrrrr#rrrrrrr#rrrrrrrt",
+        "tr::::::::::::::::::::::::::::::::::::::::::::rt",
+        "tr::::::::::::::::::::::::::::::::::::::::::::rt",
+        "trrrrrrrrrrrrrr:rrrrrrr:rrrrrrr#rrrrrrr:rrrrrrrt",
+        "trrrrrr:rrrrrrr:rrrrrrr:rrrrrrr#rrrrrrr:rrrrrrrt",
+        "trrrrrr:rrrrrrr:rrrrrrr:rrrrrrrrrrrrrrr:rrrrrrrt",
+        "trrrrrr:rrrrrrr:rrrrrrr:rrrrrrrrrrrrrrr:rrrrrrrt",
+        "trrrrrr:rrrrrrrrrrrrrrr:rrrrrrrrrrrrrrr:rrrrrrrt",
+        "trrrrrr:rrrrrrrrrrrrrrr:rrrrrrrrrrrrrrr:rrrrrrrt",
+        "trrrrrr:rrrrrrrrrrrrrrr:rrrrrrrrrrrrrrr:rrrrrrrt",
+        "trrrrrr:rrrrrrrrrrrrrrr:rrrrrrr#rrrrrrr:rrrrrrrt",
+        "trrrrrr:rrrrrrrrrrrrrrr:rrrrrrr#rrrrrrr:rrrrrrrt",
+        "trrrrrr:rrrrrrr#rrrrrrr:rrrrrrr#rrrrrrr:rrrrrrrt",
+        "trrrrrr:rrrrrrr#rrrrrrr:rrrrrrr#rrrrrrr:rrrrrrrt",
+        "trrrrrr#rrrrrrr#rrrrrrr:rrrrrrr#rrrrrrr#rrrrrrrt",
+        "trrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrt",
+        "trrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrt",
+        "tttttttttttttttttttttttttttttttttttttttttttttttt"
+      ],
+      "props": [],
+      "npcs": [
+        {
+          "id": "sunwaste_stone",
+          "name": "여행의 돌",
+          "service": "waystone",
+          "x": 5,
+          "y": 17
+        },
+        {
+          "id": "sunwaste_vendor",
+          "name": "원정 상인",
+          "service": "merchant",
+          "x": 7,
+          "y": 29,
+          "vendorType": "wanderer",
+          "schedule": {
+            "period": 300,
+            "activeFor": 150,
+            "offset": 80
+          }
+        }
+      ],
+      "portals": [
+        {
+          "id": "to_snowfield",
+          "name": "백서리 설원",
+          "x": 2,
+          "y": 17,
+          "to": "snowfield",
+          "spawn": [
+            44,
+            17.5
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": false
+        },
+        {
+          "id": "to_sunharbor",
+          "name": "태양나루",
+          "x": 45,
+          "y": 17,
+          "to": "sunharbor",
+          "spawn": [
+            3.5,
+            14.5
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": false
+        },
+        {
+          "id": "sun_entry",
+          "name": "태양의 신전",
+          "x": 42,
+          "y": 4,
+          "to": "sun_depth_1",
+          "spawn": [
+            3.5,
+            15.5
+          ],
+          "requiresQuest": "sun_hunt",
+          "requiresGuardians": false
+        }
+      ],
+      "spawns": [
+        {
+          "id": "sunwaste_mob_0",
+          "monster": "sand_scorpion",
+          "x": 8,
+          "y": 8,
+          "level": 29,
+          "guardian": false
+        },
+        {
+          "id": "sunwaste_mob_1",
+          "monster": "dune_raider",
+          "x": 13,
+          "y": 7,
+          "level": 28,
+          "guardian": false
+        },
+        {
+          "id": "sunwaste_mob_2",
+          "monster": "ember_drake",
+          "x": 19,
+          "y": 9,
+          "level": 28,
+          "guardian": false
+        },
+        {
+          "id": "sunwaste_mob_3",
+          "monster": "sand_scorpion",
+          "x": 26,
+          "y": 7,
+          "level": 29,
+          "guardian": false
+        },
+        {
+          "id": "sunwaste_mob_4",
+          "monster": "dune_raider",
+          "x": 33,
+          "y": 8,
+          "level": 28,
+          "guardian": false
+        },
+        {
+          "id": "sunwaste_mob_5",
+          "monster": "ember_drake",
+          "x": 40,
+          "y": 7,
+          "level": 28,
+          "guardian": false
+        },
+        {
+          "id": "sunwaste_mob_6",
+          "monster": "sand_scorpion",
+          "x": 43,
+          "y": 12,
+          "level": 29,
+          "guardian": false
+        },
+        {
+          "id": "sunwaste_mob_7",
+          "monster": "dune_raider",
+          "x": 10,
+          "y": 14,
+          "level": 28,
+          "guardian": false
+        },
+        {
+          "id": "sunwaste_mob_8",
+          "monster": "ember_drake",
+          "x": 18,
+          "y": 14,
+          "level": 28,
+          "guardian": false
+        },
+        {
+          "id": "sunwaste_mob_9",
+          "monster": "sand_scorpion",
+          "x": 26,
+          "y": 14,
+          "level": 29,
+          "guardian": false
+        },
+        {
+          "id": "sunwaste_mob_10",
+          "monster": "dune_raider",
+          "x": 34,
+          "y": 14,
+          "level": 28,
+          "guardian": false
+        },
+        {
+          "id": "sunwaste_mob_11",
+          "monster": "ember_drake",
+          "x": 40,
+          "y": 18,
+          "level": 28,
+          "guardian": false
+        },
+        {
+          "id": "sunwaste_mob_12",
+          "monster": "sand_scorpion",
+          "x": 9,
+          "y": 23,
+          "level": 29,
+          "guardian": false
+        },
+        {
+          "id": "sunwaste_mob_13",
+          "monster": "dune_raider",
+          "x": 15,
+          "y": 25,
+          "level": 28,
+          "guardian": false
+        },
+        {
+          "id": "sunwaste_mob_14",
+          "monster": "ember_drake",
+          "x": 22,
+          "y": 24,
+          "level": 28,
+          "guardian": false
+        },
+        {
+          "id": "sunwaste_mob_15",
+          "monster": "sand_scorpion",
+          "x": 29,
+          "y": 25,
+          "level": 29,
+          "guardian": false
+        },
+        {
+          "id": "sunwaste_mob_16",
+          "monster": "dune_raider",
+          "x": 36,
+          "y": 26,
+          "level": 28,
+          "guardian": false
+        },
+        {
+          "id": "sunwaste_mob_17",
+          "monster": "ember_drake",
+          "x": 43,
+          "y": 25,
+          "level": 28,
+          "guardian": false
+        },
+        {
+          "id": "sunwaste_mob_18",
+          "monster": "sand_scorpion",
+          "x": 12,
+          "y": 29,
+          "level": 29,
+          "guardian": false
+        },
+        {
+          "id": "sunwaste_mob_19",
+          "monster": "dune_raider",
+          "x": 24,
+          "y": 29,
+          "level": 28,
+          "guardian": false
+        },
+        {
+          "id": "sunwaste_mob_20",
+          "monster": "ember_drake",
+          "x": 37,
+          "y": 30,
+          "level": 28,
+          "guardian": false
+        },
+        {
+          "id": "sunwaste_mob_21",
+          "monster": "sand_scorpion",
+          "x": 43,
+          "y": 30,
+          "level": 29,
+          "guardian": false
+        },
+        {
+          "id": "sunwaste_mob_22",
+          "monster": "dune_raider",
+          "x": 20,
+          "y": 20,
+          "level": 28,
+          "guardian": false
+        },
+        {
+          "id": "sunwaste_mob_23",
+          "monster": "ember_drake",
+          "x": 32,
+          "y": 20,
+          "level": 28,
+          "guardian": false
+        },
+        {
+          "id": "sunwaste_elite",
+          "monster": "sunwaste_elite",
+          "x": 40,
+          "y": 28,
+          "level": 30,
+          "guardian": false,
+          "patrol": [
+            [
+              40,
+              28
+            ],
+            [
+              43,
+              24
+            ],
+            [
+              35,
+              23
+            ]
+          ]
+        }
+      ],
+      "resources": [
+        {
+          "id": "sunwaste_resource_0",
+          "x": 11,
+          "y": 5,
+          "type": "ore",
+          "sprite": "ore",
+          "amount": 1,
+          "respawn": 120
+        },
+        {
+          "id": "sunwaste_resource_1",
+          "x": 23,
+          "y": 30,
+          "type": "herb",
+          "sprite": "herb",
+          "amount": 1,
+          "respawn": 120
+        },
+        {
+          "id": "sunwaste_resource_2",
+          "x": 34,
+          "y": 4,
+          "type": "wood",
+          "sprite": "wood",
+          "amount": 1,
+          "respawn": 120
+        },
+        {
+          "id": "sunwaste_resource_3",
+          "x": 8,
+          "y": 27,
+          "type": "crystal",
+          "sprite": "crystal",
+          "amount": 1,
+          "respawn": 120
+        },
+        {
+          "id": "sunwaste_resource_4",
+          "x": 28,
+          "y": 24,
+          "type": "moonstone",
+          "sprite": "crystal",
+          "amount": 1,
+          "respawn": 120
+        },
+        {
+          "id": "sunwaste_resource_5",
+          "x": 39,
+          "y": 29,
+          "type": "ember",
+          "sprite": "crystal",
+          "amount": 1,
+          "respawn": 120
+        }
+      ],
+      "chests": [
+        {
+          "id": "sunwaste_cache_0",
+          "x": 15,
+          "y": 4,
+          "gold": 38,
+          "materials": {
+            "ore": 2,
+            "crystal": 1
+          },
+          "equipmentChance": 0.12
+        },
+        {
+          "id": "sunwaste_cache_1",
+          "x": 29,
+          "y": 30,
+          "gold": 38,
+          "materials": {
+            "ore": 2,
+            "crystal": 1
+          },
+          "equipmentChance": 0.12
+        },
+        {
+          "id": "sunwaste_cache_2",
+          "x": 43,
+          "y": 4,
+          "gold": 38,
+          "materials": {
+            "ore": 2,
+            "crystal": 1
+          },
+          "equipmentChance": 0.12
+        }
+      ],
+      "discoveries": [
+        {
+          "id": "sunwaste_poi_0",
+          "name": "붉은 잊힌 망루",
+          "kind": "landmark",
+          "sprite": "ruin",
+          "x": 20,
+          "y": 4,
+          "description": "지역의 역사와 봉인의 흔적을 조사했습니다.",
+          "stats": [],
+          "rewards": {
+            "xp": 192,
+            "gold": 38,
+            "reputation": {
+              "arcanum": 4
+            }
+          }
+        },
+        {
+          "id": "sunwaste_poi_1",
+          "name": "붉은 지역의 성소",
+          "kind": "shrine",
+          "sprite": "waystone",
+          "x": 42,
+          "y": 30,
+          "description": "지역의 역사와 봉인의 흔적을 조사했습니다.",
+          "stats": [
+            {
+              "stat": "hp",
+              "op": "add",
+              "value": 5
+            }
+          ],
+          "rewards": {
+            "xp": 192,
+            "gold": 38,
+            "reputation": {
+              "arcanum": 4
+            }
+          }
+        }
+      ],
+      "events": [
+        {
+          "id": "sunwaste_event_0",
+          "name": "전초기지 토벌",
+          "x": 24,
+          "y": 5,
+          "sprite": "camp",
+          "description": "두 차례 몰려오는 몬스터를 모두 격파하세요.",
+          "spawns": [
+            {
+              "monster": "sand_scorpion",
+              "x": 23,
+              "y": 5,
+              "level": 28,
+              "guardian": false
+            },
+            {
+              "monster": "dune_raider",
+              "x": 25,
+              "y": 5,
+              "level": 28,
+              "guardian": false
+            },
+            {
+              "monster": "ember_drake",
+              "x": 23,
+              "y": 7,
+              "level": 28,
+              "guardian": false
+            }
+          ],
+          "waves": [
+            [
+              {
+                "monster": "sand_scorpion",
+                "x": 23,
+                "y": 5,
+                "level": 28,
+                "guardian": false
+              },
+              {
+                "monster": "dune_raider",
+                "x": 25,
+                "y": 5,
+                "level": 28,
+                "guardian": false
+              },
+              {
+                "monster": "ember_drake",
+                "x": 23,
+                "y": 7,
+                "level": 28,
+                "guardian": false
+              }
+            ],
+            [
+              {
+                "monster": "sand_scorpion",
+                "x": 23,
+                "y": 5,
+                "level": 28,
+                "guardian": false
+              },
+              {
+                "monster": "dune_raider",
+                "x": 25,
+                "y": 5,
+                "level": 28,
+                "guardian": false
+              },
+              {
+                "monster": "ember_drake",
+                "x": 23,
+                "y": 7,
+                "level": 28,
+                "guardian": false
+              },
+              {
+                "monster": "sand_scorpion",
+                "x": 25,
+                "y": 7,
+                "level": 28,
+                "guardian": false
+              }
+            ]
+          ],
+          "cooldown": 420,
+          "rewards": {
+            "xp": 210,
+            "gold": 76,
+            "materials": {
+              "sigil": 1
+            },
+            "reputation": {
+              "rangers": 6
+            }
+          }
+        },
+        {
+          "id": "sunwaste_event_1",
+          "name": "봉인 방어전",
+          "x": 34,
+          "y": 29,
+          "sprite": "camp",
+          "description": "두 차례 몰려오는 몬스터를 모두 격파하세요.",
+          "spawns": [
+            {
+              "monster": "dune_raider",
+              "x": 33,
+              "y": 29,
+              "level": 28,
+              "guardian": false
+            },
+            {
+              "monster": "ember_drake",
+              "x": 35,
+              "y": 29,
+              "level": 28,
+              "guardian": false
+            },
+            {
+              "monster": "sand_scorpion",
+              "x": 33,
+              "y": 31,
+              "level": 28,
+              "guardian": false
+            }
+          ],
+          "waves": [
+            [
+              {
+                "monster": "dune_raider",
+                "x": 33,
+                "y": 29,
+                "level": 28,
+                "guardian": false
+              },
+              {
+                "monster": "ember_drake",
+                "x": 35,
+                "y": 29,
+                "level": 28,
+                "guardian": false
+              },
+              {
+                "monster": "sand_scorpion",
+                "x": 33,
+                "y": 31,
+                "level": 28,
+                "guardian": false
+              }
+            ],
+            [
+              {
+                "monster": "dune_raider",
+                "x": 33,
+                "y": 29,
+                "level": 28,
+                "guardian": false
+              },
+              {
+                "monster": "ember_drake",
+                "x": 35,
+                "y": 29,
+                "level": 28,
+                "guardian": false
+              },
+              {
+                "monster": "sand_scorpion",
+                "x": 33,
+                "y": 31,
+                "level": 28,
+                "guardian": false
+              },
+              {
+                "monster": "dune_raider",
+                "x": 35,
+                "y": 31,
+                "level": 28,
+                "guardian": false
+              }
+            ]
+          ],
+          "cooldown": 420,
+          "rewards": {
+            "xp": 210,
+            "gold": 76,
+            "materials": {
+              "sigil": 1
+            },
+            "reputation": {
+              "wardens": 6
+            }
+          }
+        }
+      ],
+      "mechanisms": [],
+      "zones": [],
+      "waypoint": [
+        5,
+        17
+      ]
+    },
+    "gravewood": {
+      "id": "gravewood",
+      "name": "잊힌 왕의 묘역",
+      "kind": "field",
+      "width": 48,
+      "height": 34,
+      "level": 34,
+      "music": "field",
+      "spawn": [
+        3.5,
+        17.5
+      ],
+      "tiles": [
+        "tttttttttttttttttttttttttttttttttttttttttttttttt",
+        "tvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvt",
+        "tvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvt",
+        "tvvvvvv~vvvvvvv~vvvvvvv~vvvvvvv~vvvvvvv~vvvvvvvt",
+        "tvvvvvv~vvvvvvv:vvvvvvv~vvvvvvv~vvvvvvv~vvvvvvvt",
+        "tvvvvvv~vvvvvvv:vvvvvvv~vvvvvvv~vvvvvvv~vvvvvvvt",
+        "tvvvvvv~vvvvvvvvvvvvvvv~vvvvvvv~vvvvvvv~vvvvvvvt",
+        "tvvvvvv~vvvvvvvvvvvvvvv~vvvvvvv~vvvvvvv~vvvvvvvt",
+        "tvvvvvv~vvvvvvvvvvvvvvv~vvvvvvv~vvvvvvv~vvvvvvvt",
+        "tvvvvvv~vvvvvvvvvvvvvvv~vvvvvvv~vvvvvvv~vvvvvvvt",
+        "tvvvvvv~vvvvvvvvvvvvvvv~vvvvvvv~vvvvvvv~vvvvvvvt",
+        "tvvvvvv~vvvvvvv:vvvvvvv~vvvvvvv~vvvvvvv~vvvvvvvt",
+        "tvvvvvv~vvvvvvv:vvvvvvv~vvvvvvv~vvvvvvvvvvvvvvvt",
+        "tvvvvvv~vvvvvvv:vvvvvvv~vvvvvvv~vvvvvvvvvvvvvvvt",
+        "tvvvvvv~vvvvvvv:vvvvvvvvvvvvvvv~vvvvvvvvvvvvvvvt",
+        "tvvvvvv~vvvvvvv:vvvvvvvvvvvvvvv~vvvvvvvvvvvvvvvt",
+        "tvvvvvvvvvvvvvv:vvvvvvvvvvvvvvv~vvvvvvvvvvvvvvvt",
+        "tv::::::::::::::::::::::::::::::::::::::::::::vt",
+        "tv::::::::::::::::::::::::::::::::::::::::::::vt",
+        "tvvvvvvvvvvvvvv:vvvvvvv:vvvvvvv~vvvvvvv:vvvvvvvt",
+        "tvvvvvvvvvvvvvv:vvvvvvv:vvvvvvv~vvvvvvv:vvvvvvvt",
+        "tvvvvvv:vvvvvvv:vvvvvvv:vvvvvvv~vvvvvvv:vvvvvvvt",
+        "tvvvvvv:vvvvvvv:vvvvvvv:vvvvvvvvvvvvvvv:vvvvvvvt",
+        "tvvvvvv:vvvvvvv:vvvvvvv:vvvvvvvvvvvvvvv:vvvvvvvt",
+        "tvvvvvv:vvvvvvv:vvvvvvv:vvvvvvvvvvvvvvv:vvvvvvvt",
+        "tvvvvvv:vvvvvvv:vvvvvvv:vvvvvvvvvvvvvvv:vvvvvvvt",
+        "tvvvvvv:vvvvvvv~vvvvvvv:vvvvvvvvvvvvvvv:vvvvvvvt",
+        "tvvvvvv:vvvvvvv~vvvvvvv:vvvvvvv~vvvvvvv:vvvvvvvt",
+        "tvvvvvv:vvvvvvv~vvvvvvv:vvvvvvv~vvvvvvv:vvvvvvvt",
+        "tvvvvvv:vvvvvvv~vvvvvvv:vvvvvvv~vvvvvvv:vvvvvvvt",
+        "tvvvvvv~vvvvvvv~vvvvvvv:vvvvvvv~vvvvvvv~vvvvvvvt",
+        "tvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvt",
+        "tvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvt",
+        "tttttttttttttttttttttttttttttttttttttttttttttttt"
+      ],
+      "props": [],
+      "npcs": [
+        {
+          "id": "gravewood_stone",
+          "name": "여행의 돌",
+          "service": "waystone",
+          "x": 5,
+          "y": 17
+        },
+        {
+          "id": "gravewood_vendor",
+          "name": "원정 상인",
+          "service": "merchant",
+          "x": 7,
+          "y": 29,
+          "vendorType": "wanderer",
+          "schedule": {
+            "period": 300,
+            "activeFor": 150,
+            "offset": 120
+          }
+        }
+      ],
+      "portals": [
+        {
+          "id": "to_sunharbor",
+          "name": "태양나루",
+          "x": 2,
+          "y": 17,
+          "to": "sunharbor",
+          "spawn": [
+            34,
+            14.5
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": false
+        },
+        {
+          "id": "to_eclipse_plain",
+          "name": "황혼의 국경",
+          "x": 45,
+          "y": 17,
+          "to": "eclipse_plain",
+          "spawn": [
+            3.5,
+            17.5
+          ],
+          "requiresQuest": "grave_crown",
+          "requiresGuardians": false
+        },
+        {
+          "id": "grave_entry",
+          "name": "왕가의 납골당",
+          "x": 42,
+          "y": 4,
+          "to": "grave_depth_1",
+          "spawn": [
+            3.5,
+            15.5
+          ],
+          "requiresQuest": "grave_hunt",
+          "requiresGuardians": false
+        }
+      ],
+      "spawns": [
+        {
+          "id": "gravewood_mob_0",
+          "monster": "bone_soldier",
+          "x": 8,
+          "y": 8,
+          "level": 35,
+          "guardian": false
+        },
+        {
+          "id": "gravewood_mob_1",
+          "monster": "grave_knight",
+          "x": 13,
+          "y": 7,
+          "level": 34,
+          "guardian": false
+        },
+        {
+          "id": "gravewood_mob_2",
+          "monster": "curse_wraith",
+          "x": 19,
+          "y": 9,
+          "level": 34,
+          "guardian": false
+        },
+        {
+          "id": "gravewood_mob_3",
+          "monster": "bone_soldier",
+          "x": 26,
+          "y": 7,
+          "level": 35,
+          "guardian": false
+        },
+        {
+          "id": "gravewood_mob_4",
+          "monster": "grave_knight",
+          "x": 33,
+          "y": 8,
+          "level": 34,
+          "guardian": false
+        },
+        {
+          "id": "gravewood_mob_5",
+          "monster": "curse_wraith",
+          "x": 40,
+          "y": 7,
+          "level": 34,
+          "guardian": false
+        },
+        {
+          "id": "gravewood_mob_6",
+          "monster": "bone_soldier",
+          "x": 43,
+          "y": 12,
+          "level": 35,
+          "guardian": false
+        },
+        {
+          "id": "gravewood_mob_7",
+          "monster": "grave_knight",
+          "x": 10,
+          "y": 14,
+          "level": 34,
+          "guardian": false
+        },
+        {
+          "id": "gravewood_mob_8",
+          "monster": "curse_wraith",
+          "x": 18,
+          "y": 14,
+          "level": 34,
+          "guardian": false
+        },
+        {
+          "id": "gravewood_mob_9",
+          "monster": "bone_soldier",
+          "x": 26,
+          "y": 14,
+          "level": 35,
+          "guardian": false
+        },
+        {
+          "id": "gravewood_mob_10",
+          "monster": "grave_knight",
+          "x": 34,
+          "y": 14,
+          "level": 34,
+          "guardian": false
+        },
+        {
+          "id": "gravewood_mob_11",
+          "monster": "curse_wraith",
+          "x": 40,
+          "y": 18,
+          "level": 34,
+          "guardian": false
+        },
+        {
+          "id": "gravewood_mob_12",
+          "monster": "bone_soldier",
+          "x": 9,
+          "y": 23,
+          "level": 35,
+          "guardian": false
+        },
+        {
+          "id": "gravewood_mob_13",
+          "monster": "grave_knight",
+          "x": 15,
+          "y": 25,
+          "level": 34,
+          "guardian": false
+        },
+        {
+          "id": "gravewood_mob_14",
+          "monster": "curse_wraith",
+          "x": 22,
+          "y": 24,
+          "level": 34,
+          "guardian": false
+        },
+        {
+          "id": "gravewood_mob_15",
+          "monster": "bone_soldier",
+          "x": 29,
+          "y": 25,
+          "level": 35,
+          "guardian": false
+        },
+        {
+          "id": "gravewood_mob_16",
+          "monster": "grave_knight",
+          "x": 36,
+          "y": 26,
+          "level": 34,
+          "guardian": false
+        },
+        {
+          "id": "gravewood_mob_17",
+          "monster": "curse_wraith",
+          "x": 43,
+          "y": 25,
+          "level": 34,
+          "guardian": false
+        },
+        {
+          "id": "gravewood_mob_18",
+          "monster": "bone_soldier",
+          "x": 12,
+          "y": 29,
+          "level": 35,
+          "guardian": false
+        },
+        {
+          "id": "gravewood_mob_19",
+          "monster": "grave_knight",
+          "x": 24,
+          "y": 29,
+          "level": 34,
+          "guardian": false
+        },
+        {
+          "id": "gravewood_mob_20",
+          "monster": "curse_wraith",
+          "x": 37,
+          "y": 30,
+          "level": 34,
+          "guardian": false
+        },
+        {
+          "id": "gravewood_mob_21",
+          "monster": "bone_soldier",
+          "x": 43,
+          "y": 30,
+          "level": 35,
+          "guardian": false
+        },
+        {
+          "id": "gravewood_mob_22",
+          "monster": "grave_knight",
+          "x": 20,
+          "y": 20,
+          "level": 34,
+          "guardian": false
+        },
+        {
+          "id": "gravewood_mob_23",
+          "monster": "curse_wraith",
+          "x": 32,
+          "y": 20,
+          "level": 34,
+          "guardian": false
+        },
+        {
+          "id": "gravewood_elite",
+          "monster": "gravewood_elite",
+          "x": 40,
+          "y": 28,
+          "level": 36,
+          "guardian": false,
+          "patrol": [
+            [
+              40,
+              28
+            ],
+            [
+              43,
+              24
+            ],
+            [
+              35,
+              23
+            ]
+          ]
+        }
+      ],
+      "resources": [
+        {
+          "id": "gravewood_resource_0",
+          "x": 11,
+          "y": 5,
+          "type": "ore",
+          "sprite": "ore",
+          "amount": 1,
+          "respawn": 120
+        },
+        {
+          "id": "gravewood_resource_1",
+          "x": 23,
+          "y": 30,
+          "type": "herb",
+          "sprite": "herb",
+          "amount": 1,
+          "respawn": 120
+        },
+        {
+          "id": "gravewood_resource_2",
+          "x": 34,
+          "y": 4,
+          "type": "wood",
+          "sprite": "wood",
+          "amount": 1,
+          "respawn": 120
+        },
+        {
+          "id": "gravewood_resource_3",
+          "x": 8,
+          "y": 27,
+          "type": "crystal",
+          "sprite": "crystal",
+          "amount": 1,
+          "respawn": 120
+        },
+        {
+          "id": "gravewood_resource_4",
+          "x": 28,
+          "y": 24,
+          "type": "moonstone",
+          "sprite": "crystal",
+          "amount": 1,
+          "respawn": 120
+        },
+        {
+          "id": "gravewood_resource_5",
+          "x": 39,
+          "y": 29,
+          "type": "ember",
+          "sprite": "crystal",
+          "amount": 1,
+          "respawn": 120
+        }
+      ],
+      "chests": [
+        {
+          "id": "gravewood_cache_0",
+          "x": 15,
+          "y": 4,
+          "gold": 44,
+          "materials": {
+            "ore": 2,
+            "crystal": 1
+          },
+          "equipmentChance": 0.12
+        },
+        {
+          "id": "gravewood_cache_1",
+          "x": 29,
+          "y": 30,
+          "gold": 44,
+          "materials": {
+            "ore": 2,
+            "crystal": 1
+          },
+          "equipmentChance": 0.12
+        },
+        {
+          "id": "gravewood_cache_2",
+          "x": 43,
+          "y": 4,
+          "gold": 44,
+          "materials": {
+            "ore": 2,
+            "crystal": 1
+          },
+          "equipmentChance": 0.12
+        }
+      ],
+      "discoveries": [
+        {
+          "id": "gravewood_poi_0",
+          "name": "잊힌 잊힌 망루",
+          "kind": "landmark",
+          "sprite": "ruin",
+          "x": 20,
+          "y": 4,
+          "description": "지역의 역사와 봉인의 흔적을 조사했습니다.",
+          "stats": [],
+          "rewards": {
+            "xp": 216,
+            "gold": 44,
+            "reputation": {
+              "arcanum": 4
+            }
+          }
+        },
+        {
+          "id": "gravewood_poi_1",
+          "name": "잊힌 지역의 성소",
+          "kind": "shrine",
+          "sprite": "waystone",
+          "x": 42,
+          "y": 30,
+          "description": "지역의 역사와 봉인의 흔적을 조사했습니다.",
+          "stats": [
+            {
+              "stat": "hp",
+              "op": "add",
+              "value": 5
+            }
+          ],
+          "rewards": {
+            "xp": 216,
+            "gold": 44,
+            "reputation": {
+              "arcanum": 4
+            }
+          }
+        }
+      ],
+      "events": [
+        {
+          "id": "gravewood_event_0",
+          "name": "전초기지 토벌",
+          "x": 24,
+          "y": 5,
+          "sprite": "camp",
+          "description": "두 차례 몰려오는 몬스터를 모두 격파하세요.",
+          "spawns": [
+            {
+              "monster": "bone_soldier",
+              "x": 23,
+              "y": 5,
+              "level": 34,
+              "guardian": false
+            },
+            {
+              "monster": "grave_knight",
+              "x": 25,
+              "y": 5,
+              "level": 34,
+              "guardian": false
+            },
+            {
+              "monster": "curse_wraith",
+              "x": 23,
+              "y": 7,
+              "level": 34,
+              "guardian": false
+            }
+          ],
+          "waves": [
+            [
+              {
+                "monster": "bone_soldier",
+                "x": 23,
+                "y": 5,
+                "level": 34,
+                "guardian": false
+              },
+              {
+                "monster": "grave_knight",
+                "x": 25,
+                "y": 5,
+                "level": 34,
+                "guardian": false
+              },
+              {
+                "monster": "curse_wraith",
+                "x": 23,
+                "y": 7,
+                "level": 34,
+                "guardian": false
+              }
+            ],
+            [
+              {
+                "monster": "bone_soldier",
+                "x": 23,
+                "y": 5,
+                "level": 34,
+                "guardian": false
+              },
+              {
+                "monster": "grave_knight",
+                "x": 25,
+                "y": 5,
+                "level": 34,
+                "guardian": false
+              },
+              {
+                "monster": "curse_wraith",
+                "x": 23,
+                "y": 7,
+                "level": 34,
+                "guardian": false
+              },
+              {
+                "monster": "bone_soldier",
+                "x": 25,
+                "y": 7,
+                "level": 34,
+                "guardian": false
+              }
+            ]
+          ],
+          "cooldown": 420,
+          "rewards": {
+            "xp": 240,
+            "gold": 88,
+            "materials": {
+              "sigil": 1
+            },
+            "reputation": {
+              "rangers": 6
+            }
+          }
+        },
+        {
+          "id": "gravewood_event_1",
+          "name": "봉인 방어전",
+          "x": 34,
+          "y": 29,
+          "sprite": "camp",
+          "description": "두 차례 몰려오는 몬스터를 모두 격파하세요.",
+          "spawns": [
+            {
+              "monster": "grave_knight",
+              "x": 33,
+              "y": 29,
+              "level": 34,
+              "guardian": false
+            },
+            {
+              "monster": "curse_wraith",
+              "x": 35,
+              "y": 29,
+              "level": 34,
+              "guardian": false
+            },
+            {
+              "monster": "bone_soldier",
+              "x": 33,
+              "y": 31,
+              "level": 34,
+              "guardian": false
+            }
+          ],
+          "waves": [
+            [
+              {
+                "monster": "grave_knight",
+                "x": 33,
+                "y": 29,
+                "level": 34,
+                "guardian": false
+              },
+              {
+                "monster": "curse_wraith",
+                "x": 35,
+                "y": 29,
+                "level": 34,
+                "guardian": false
+              },
+              {
+                "monster": "bone_soldier",
+                "x": 33,
+                "y": 31,
+                "level": 34,
+                "guardian": false
+              }
+            ],
+            [
+              {
+                "monster": "grave_knight",
+                "x": 33,
+                "y": 29,
+                "level": 34,
+                "guardian": false
+              },
+              {
+                "monster": "curse_wraith",
+                "x": 35,
+                "y": 29,
+                "level": 34,
+                "guardian": false
+              },
+              {
+                "monster": "bone_soldier",
+                "x": 33,
+                "y": 31,
+                "level": 34,
+                "guardian": false
+              },
+              {
+                "monster": "grave_knight",
+                "x": 35,
+                "y": 31,
+                "level": 34,
+                "guardian": false
+              }
+            ]
+          ],
+          "cooldown": 420,
+          "rewards": {
+            "xp": 240,
+            "gold": 88,
+            "materials": {
+              "sigil": 1
+            },
+            "reputation": {
+              "wardens": 6
+            }
+          }
+        }
+      ],
+      "mechanisms": [],
+      "zones": [],
+      "waypoint": [
+        5,
+        17
+      ]
+    },
+    "eclipse_plain": {
+      "id": "eclipse_plain",
+      "name": "황혼의 국경",
+      "kind": "field",
+      "width": 48,
+      "height": 34,
+      "level": 40,
+      "music": "field",
+      "spawn": [
+        3.5,
+        17.5
+      ],
+      "tiles": [
+        "tttttttttttttttttttttttttttttttttttttttttttttttt",
+        "taaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaat",
+        "taaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaat",
+        "taaaaaa#aaaaaaa#aaaaaaa#aaaaaaa#aaaaaaa#aaaaaaat",
+        "taaaaaa#aaaaaaa:aaaaaaa#aaaaaaa#aaaaaaa#aaaaaaat",
+        "taaaaaa#aaaaaaa:aaaaaaa#aaaaaaa#aaaaaaa#aaaaaaat",
+        "taaaaaa#aaaaaaa:aaaaaaa#aaaaaaa#aaaaaaa#aaaaaaat",
+        "taaaaaa#aaaaaaaaaaaaaaa#aaaaaaa#aaaaaaa#aaaaaaat",
+        "taaaaaa#aaaaaaaaaaaaaaa#aaaaaaa#aaaaaaa#aaaaaaat",
+        "taaaaaa#aaaaaaaaaaaaaaa#aaaaaaa#aaaaaaa#aaaaaaat",
+        "taaaaaa#aaaaaaaaaaaaaaa#aaaaaaa#aaaaaaa#aaaaaaat",
+        "taaaaaa#aaaaaaaaaaaaaaa#aaaaaaa#aaaaaaa#aaaaaaat",
+        "taaaaaa#aaaaaaa:aaaaaaa#aaaaaaa#aaaaaaa#aaaaaaat",
+        "taaaaaa#aaaaaaa:aaaaaaa#aaaaaaa#aaaaaaaaaaaaaaat",
+        "taaaaaa#aaaaaaa:aaaaaaa#aaaaaaa#aaaaaaaaaaaaaaat",
+        "taaaaaa#aaaaaaa:aaaaaaaaaaaaaaa#aaaaaaaaaaaaaaat",
+        "taaaaaa#aaaaaaa:aaaaaaaaaaaaaaa#aaaaaaaaaaaaaaat",
+        "ta::::::::::::::::::::::::::::::::::::::::::::at",
+        "ta::::::::::::::::::::::::::::::::::::::::::::at",
+        "taaaaaaaaaaaaaa:aaaaaaaaaaaaaaa#aaaaaaa:aaaaaaat",
+        "taaaaaaaaaaaaaa:aaaaaaa:aaaaaaa#aaaaaaa:aaaaaaat",
+        "taaaaaaaaaaaaaa:aaaaaaa:aaaaaaa#aaaaaaa:aaaaaaat",
+        "taaaaaa:aaaaaaa:aaaaaaa:aaaaaaa#aaaaaaa:aaaaaaat",
+        "taaaaaa:aaaaaaa:aaaaaaa:aaaaaaaaaaaaaaa:aaaaaaat",
+        "taaaaaa:aaaaaaa:aaaaaaa:aaaaaaaaaaaaaaa:aaaaaaat",
+        "taaaaaa:aaaaaaa:aaaaaaa:aaaaaaaaaaaaaaa:aaaaaaat",
+        "taaaaaa:aaaaaaa#aaaaaaa:aaaaaaaaaaaaaaa:aaaaaaat",
+        "taaaaaa:aaaaaaa#aaaaaaa:aaaaaaaaaaaaaaa:aaaaaaat",
+        "taaaaaa:aaaaaaa#aaaaaaa:aaaaaaa#aaaaaaa:aaaaaaat",
+        "taaaaaa:aaaaaaa#aaaaaaa:aaaaaaa#aaaaaaa:aaaaaaat",
+        "taaaaaa#aaaaaaa#aaaaaaa:aaaaaaa#aaaaaaa#aaaaaaat",
+        "taaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaat",
+        "taaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaat",
+        "tttttttttttttttttttttttttttttttttttttttttttttttt"
+      ],
+      "props": [],
+      "npcs": [
+        {
+          "id": "eclipse_plain_stone",
+          "name": "여행의 돌",
+          "service": "waystone",
+          "x": 5,
+          "y": 17
+        },
+        {
+          "id": "eclipse_plain_vendor",
+          "name": "원정 상인",
+          "service": "merchant",
+          "x": 7,
+          "y": 29,
+          "vendorType": "wanderer",
+          "schedule": {
+            "period": 300,
+            "activeFor": 150,
+            "offset": 160
+          }
+        }
+      ],
+      "portals": [
+        {
+          "id": "to_gravewood",
+          "name": "잊힌 왕의 묘역",
+          "x": 2,
+          "y": 17,
+          "to": "gravewood",
+          "spawn": [
+            44,
+            17.5
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": false
+        },
+        {
+          "id": "eclipse_entry",
+          "name": "황혼 성채",
+          "x": 42,
+          "y": 4,
+          "to": "eclipse_depth_1",
+          "spawn": [
+            3.5,
+            15.5
+          ],
+          "requiresQuest": "eclipse_hunt",
+          "requiresGuardians": false
+        }
+      ],
+      "spawns": [
+        {
+          "id": "eclipse_plain_mob_0",
+          "monster": "dusk_sentinel",
+          "x": 8,
+          "y": 8,
+          "level": 41,
+          "guardian": false
+        },
+        {
+          "id": "eclipse_plain_mob_1",
+          "monster": "dusk_magus",
+          "x": 13,
+          "y": 7,
+          "level": 40,
+          "guardian": false
+        },
+        {
+          "id": "eclipse_plain_mob_2",
+          "monster": "abyss_spider",
+          "x": 19,
+          "y": 9,
+          "level": 40,
+          "guardian": false
+        },
+        {
+          "id": "eclipse_plain_mob_3",
+          "monster": "dusk_sentinel",
+          "x": 26,
+          "y": 7,
+          "level": 41,
+          "guardian": false
+        },
+        {
+          "id": "eclipse_plain_mob_4",
+          "monster": "dusk_magus",
+          "x": 33,
+          "y": 8,
+          "level": 40,
+          "guardian": false
+        },
+        {
+          "id": "eclipse_plain_mob_5",
+          "monster": "abyss_spider",
+          "x": 40,
+          "y": 7,
+          "level": 40,
+          "guardian": false
+        },
+        {
+          "id": "eclipse_plain_mob_6",
+          "monster": "dusk_sentinel",
+          "x": 43,
+          "y": 12,
+          "level": 41,
+          "guardian": false
+        },
+        {
+          "id": "eclipse_plain_mob_7",
+          "monster": "dusk_magus",
+          "x": 10,
+          "y": 14,
+          "level": 40,
+          "guardian": false
+        },
+        {
+          "id": "eclipse_plain_mob_8",
+          "monster": "abyss_spider",
+          "x": 18,
+          "y": 14,
+          "level": 40,
+          "guardian": false
+        },
+        {
+          "id": "eclipse_plain_mob_9",
+          "monster": "dusk_sentinel",
+          "x": 26,
+          "y": 14,
+          "level": 41,
+          "guardian": false
+        },
+        {
+          "id": "eclipse_plain_mob_10",
+          "monster": "dusk_magus",
+          "x": 34,
+          "y": 14,
+          "level": 40,
+          "guardian": false
+        },
+        {
+          "id": "eclipse_plain_mob_11",
+          "monster": "abyss_spider",
+          "x": 40,
+          "y": 18,
+          "level": 40,
+          "guardian": false
+        },
+        {
+          "id": "eclipse_plain_mob_12",
+          "monster": "dusk_sentinel",
+          "x": 9,
+          "y": 23,
+          "level": 41,
+          "guardian": false
+        },
+        {
+          "id": "eclipse_plain_mob_13",
+          "monster": "dusk_magus",
+          "x": 15,
+          "y": 25,
+          "level": 40,
+          "guardian": false
+        },
+        {
+          "id": "eclipse_plain_mob_14",
+          "monster": "abyss_spider",
+          "x": 22,
+          "y": 24,
+          "level": 40,
+          "guardian": false
+        },
+        {
+          "id": "eclipse_plain_mob_15",
+          "monster": "dusk_sentinel",
+          "x": 29,
+          "y": 25,
+          "level": 41,
+          "guardian": false
+        },
+        {
+          "id": "eclipse_plain_mob_16",
+          "monster": "dusk_magus",
+          "x": 36,
+          "y": 26,
+          "level": 40,
+          "guardian": false
+        },
+        {
+          "id": "eclipse_plain_mob_17",
+          "monster": "abyss_spider",
+          "x": 43,
+          "y": 25,
+          "level": 40,
+          "guardian": false
+        },
+        {
+          "id": "eclipse_plain_mob_18",
+          "monster": "dusk_sentinel",
+          "x": 12,
+          "y": 29,
+          "level": 41,
+          "guardian": false
+        },
+        {
+          "id": "eclipse_plain_mob_19",
+          "monster": "dusk_magus",
+          "x": 24,
+          "y": 29,
+          "level": 40,
+          "guardian": false
+        },
+        {
+          "id": "eclipse_plain_mob_20",
+          "monster": "abyss_spider",
+          "x": 37,
+          "y": 30,
+          "level": 40,
+          "guardian": false
+        },
+        {
+          "id": "eclipse_plain_mob_21",
+          "monster": "dusk_sentinel",
+          "x": 43,
+          "y": 30,
+          "level": 41,
+          "guardian": false
+        },
+        {
+          "id": "eclipse_plain_mob_22",
+          "monster": "dusk_magus",
+          "x": 20,
+          "y": 20,
+          "level": 40,
+          "guardian": false
+        },
+        {
+          "id": "eclipse_plain_mob_23",
+          "monster": "abyss_spider",
+          "x": 32,
+          "y": 20,
+          "level": 40,
+          "guardian": false
+        },
+        {
+          "id": "eclipse_plain_elite",
+          "monster": "eclipse_plain_elite",
+          "x": 40,
+          "y": 28,
+          "level": 42,
+          "guardian": false,
+          "patrol": [
+            [
+              40,
+              28
+            ],
+            [
+              43,
+              24
+            ],
+            [
+              35,
+              23
+            ]
+          ]
+        }
+      ],
+      "resources": [
+        {
+          "id": "eclipse_plain_resource_0",
+          "x": 11,
+          "y": 5,
+          "type": "ore",
+          "sprite": "ore",
+          "amount": 1,
+          "respawn": 120
+        },
+        {
+          "id": "eclipse_plain_resource_1",
+          "x": 23,
+          "y": 30,
+          "type": "herb",
+          "sprite": "herb",
+          "amount": 1,
+          "respawn": 120
+        },
+        {
+          "id": "eclipse_plain_resource_2",
+          "x": 34,
+          "y": 4,
+          "type": "wood",
+          "sprite": "wood",
+          "amount": 1,
+          "respawn": 120
+        },
+        {
+          "id": "eclipse_plain_resource_3",
+          "x": 8,
+          "y": 27,
+          "type": "crystal",
+          "sprite": "crystal",
+          "amount": 1,
+          "respawn": 120
+        },
+        {
+          "id": "eclipse_plain_resource_4",
+          "x": 28,
+          "y": 24,
+          "type": "moonstone",
+          "sprite": "crystal",
+          "amount": 1,
+          "respawn": 120
+        },
+        {
+          "id": "eclipse_plain_resource_5",
+          "x": 39,
+          "y": 29,
+          "type": "ember",
+          "sprite": "crystal",
+          "amount": 1,
+          "respawn": 120
+        }
+      ],
+      "chests": [
+        {
+          "id": "eclipse_plain_cache_0",
+          "x": 15,
+          "y": 4,
+          "gold": 50,
+          "materials": {
+            "ore": 2,
+            "crystal": 1
+          },
+          "equipmentChance": 0.12
+        },
+        {
+          "id": "eclipse_plain_cache_1",
+          "x": 29,
+          "y": 30,
+          "gold": 50,
+          "materials": {
+            "ore": 2,
+            "crystal": 1
+          },
+          "equipmentChance": 0.12
+        },
+        {
+          "id": "eclipse_plain_cache_2",
+          "x": 43,
+          "y": 4,
+          "gold": 50,
+          "materials": {
+            "ore": 2,
+            "crystal": 1
+          },
+          "equipmentChance": 0.12
+        }
+      ],
+      "discoveries": [
+        {
+          "id": "eclipse_plain_poi_0",
+          "name": "황혼의 잊힌 망루",
+          "kind": "landmark",
+          "sprite": "ruin",
+          "x": 20,
+          "y": 4,
+          "description": "지역의 역사와 봉인의 흔적을 조사했습니다.",
+          "stats": [],
+          "rewards": {
+            "xp": 240,
+            "gold": 50,
+            "reputation": {
+              "arcanum": 4
+            }
+          }
+        },
+        {
+          "id": "eclipse_plain_poi_1",
+          "name": "황혼의 지역의 성소",
+          "kind": "shrine",
+          "sprite": "waystone",
+          "x": 42,
+          "y": 30,
+          "description": "지역의 역사와 봉인의 흔적을 조사했습니다.",
+          "stats": [
+            {
+              "stat": "hp",
+              "op": "add",
+              "value": 5
+            }
+          ],
+          "rewards": {
+            "xp": 240,
+            "gold": 50,
+            "reputation": {
+              "arcanum": 4
+            }
+          }
+        }
+      ],
+      "events": [
+        {
+          "id": "eclipse_plain_event_0",
+          "name": "전초기지 토벌",
+          "x": 24,
+          "y": 5,
+          "sprite": "camp",
+          "description": "두 차례 몰려오는 몬스터를 모두 격파하세요.",
+          "spawns": [
+            {
+              "monster": "dusk_sentinel",
+              "x": 23,
+              "y": 5,
+              "level": 40,
+              "guardian": false
+            },
+            {
+              "monster": "dusk_magus",
+              "x": 25,
+              "y": 5,
+              "level": 40,
+              "guardian": false
+            },
+            {
+              "monster": "abyss_spider",
+              "x": 23,
+              "y": 7,
+              "level": 40,
+              "guardian": false
+            }
+          ],
+          "waves": [
+            [
+              {
+                "monster": "dusk_sentinel",
+                "x": 23,
+                "y": 5,
+                "level": 40,
+                "guardian": false
+              },
+              {
+                "monster": "dusk_magus",
+                "x": 25,
+                "y": 5,
+                "level": 40,
+                "guardian": false
+              },
+              {
+                "monster": "abyss_spider",
+                "x": 23,
+                "y": 7,
+                "level": 40,
+                "guardian": false
+              }
+            ],
+            [
+              {
+                "monster": "dusk_sentinel",
+                "x": 23,
+                "y": 5,
+                "level": 40,
+                "guardian": false
+              },
+              {
+                "monster": "dusk_magus",
+                "x": 25,
+                "y": 5,
+                "level": 40,
+                "guardian": false
+              },
+              {
+                "monster": "abyss_spider",
+                "x": 23,
+                "y": 7,
+                "level": 40,
+                "guardian": false
+              },
+              {
+                "monster": "dusk_sentinel",
+                "x": 25,
+                "y": 7,
+                "level": 40,
+                "guardian": false
+              }
+            ]
+          ],
+          "cooldown": 420,
+          "rewards": {
+            "xp": 270,
+            "gold": 100,
+            "materials": {
+              "sigil": 1
+            },
+            "reputation": {
+              "rangers": 6
+            }
+          }
+        },
+        {
+          "id": "eclipse_plain_event_1",
+          "name": "봉인 방어전",
+          "x": 34,
+          "y": 29,
+          "sprite": "camp",
+          "description": "두 차례 몰려오는 몬스터를 모두 격파하세요.",
+          "spawns": [
+            {
+              "monster": "dusk_magus",
+              "x": 33,
+              "y": 29,
+              "level": 40,
+              "guardian": false
+            },
+            {
+              "monster": "abyss_spider",
+              "x": 35,
+              "y": 29,
+              "level": 40,
+              "guardian": false
+            },
+            {
+              "monster": "dusk_sentinel",
+              "x": 33,
+              "y": 31,
+              "level": 40,
+              "guardian": false
+            }
+          ],
+          "waves": [
+            [
+              {
+                "monster": "dusk_magus",
+                "x": 33,
+                "y": 29,
+                "level": 40,
+                "guardian": false
+              },
+              {
+                "monster": "abyss_spider",
+                "x": 35,
+                "y": 29,
+                "level": 40,
+                "guardian": false
+              },
+              {
+                "monster": "dusk_sentinel",
+                "x": 33,
+                "y": 31,
+                "level": 40,
+                "guardian": false
+              }
+            ],
+            [
+              {
+                "monster": "dusk_magus",
+                "x": 33,
+                "y": 29,
+                "level": 40,
+                "guardian": false
+              },
+              {
+                "monster": "abyss_spider",
+                "x": 35,
+                "y": 29,
+                "level": 40,
+                "guardian": false
+              },
+              {
+                "monster": "dusk_sentinel",
+                "x": 33,
+                "y": 31,
+                "level": 40,
+                "guardian": false
+              },
+              {
+                "monster": "dusk_magus",
+                "x": 35,
+                "y": 31,
+                "level": 40,
+                "guardian": false
+              }
+            ]
+          ],
+          "cooldown": 420,
+          "rewards": {
+            "xp": 270,
+            "gold": 100,
+            "materials": {
+              "sigil": 1
+            },
+            "reputation": {
+              "wardens": 6
+            }
+          }
+        }
+      ],
+      "mechanisms": [],
+      "zones": [],
+      "waypoint": [
+        5,
+        17
+      ]
+    },
+    "frostgate": {
+      "id": "frostgate",
+      "name": "서리문 요새",
+      "kind": "town",
+      "width": 38,
+      "height": 28,
+      "level": 21,
+      "music": "town",
+      "spawn": [
+        3.5,
+        14.5
+      ],
+      "tiles": [
+        "######################################",
+        "#....................................#",
+        "#....................................#",
+        "#....................................#",
+        "#....................................#",
+        "#....................................#",
+        "#....................................#",
+        "#....................................#",
+        "#....................................#",
+        "#....................................#",
+        "#......:..........:..........:.......#",
+        "#....................................#",
+        "#.....................:..............#",
+        "#....................................#",
+        "#.:...............:................:.#",
+        "#.........................:..........#",
+        "#....................................#",
+        "#....................................#",
+        "#....................................#",
+        "#.................:..................#",
+        "#......:.....................:.......#",
+        "#....................................#",
+        "#....................................#",
+        "#....................................#",
+        "#....................................#",
+        "#....................................#",
+        "#....................................#",
+        "######################################"
+      ],
+      "props": [
+        {
+          "type": "house",
+          "x": 4,
+          "y": 3,
+          "width": 6,
+          "height": 4,
+          "solid": true,
+          "name": "대장간"
+        },
+        {
+          "type": "house",
+          "x": 14,
+          "y": 3,
+          "width": 6,
+          "height": 4,
+          "solid": true,
+          "name": "원정 길드"
+        },
+        {
+          "type": "house",
+          "x": 26,
+          "y": 3,
+          "width": 6,
+          "height": 4,
+          "solid": true,
+          "name": "교역소"
+        },
+        {
+          "type": "house",
+          "x": 4,
+          "y": 21,
+          "width": 6,
+          "height": 4,
+          "solid": true,
+          "name": "여관"
+        },
+        {
+          "type": "house",
+          "x": 26,
+          "y": 21,
+          "width": 6,
+          "height": 4,
+          "solid": true,
+          "name": "성당"
+        }
+      ],
+      "npcs": [
+        {
+          "id": "selene",
+          "name": "원정 길드장",
+          "service": "guild",
+          "x": 18,
+          "y": 10
+        },
+        {
+          "id": "frostgate_smith",
+          "name": "왕립 대장장이",
+          "service": "smith",
+          "x": 7,
+          "y": 10
+        },
+        {
+          "id": "frostgate_shop",
+          "name": "보급 상인",
+          "service": "merchant",
+          "x": 29,
+          "y": 10
+        },
+        {
+          "id": "frostgate_inn",
+          "name": "여관 주인",
+          "service": "inn",
+          "x": 7,
+          "y": 20
+        },
+        {
+          "id": "frostgate_priest",
+          "name": "순례 사제",
+          "service": "temple",
+          "x": 29,
+          "y": 20
+        },
+        {
+          "id": "board",
+          "name": "의뢰 게시판",
+          "service": "board",
+          "x": 22,
+          "y": 12
+        },
+        {
+          "id": "frostgate_stone",
+          "name": "여행의 돌",
+          "service": "waystone",
+          "x": 18,
+          "y": 14
+        },
+        {
+          "id": "frostgate_arena",
+          "name": "연전 관리인",
+          "service": "arena",
+          "x": 26,
+          "y": 15
+        },
+        {
+          "id": "brann_npc",
+          "name": "브란",
+          "service": "companion",
+          "x": 18,
+          "y": 19
+        }
+      ],
+      "portals": [
+        {
+          "id": "to_highland",
+          "name": "가시바람 고원",
+          "x": 2,
+          "y": 14,
+          "to": "highland",
+          "spawn": [
+            44,
+            17.5
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": false
+        },
+        {
+          "id": "to_snowfield",
+          "name": "백서리 설원",
+          "x": 35,
+          "y": 14,
+          "to": "snowfield",
+          "spawn": [
+            3.5,
+            17.5
+          ],
+          "requiresQuest": "highland_crown",
+          "requiresGuardians": false
+        }
+      ],
+      "spawns": [],
+      "resources": [],
+      "chests": [],
+      "discoveries": [],
+      "events": [],
+      "mechanisms": [],
+      "zones": [],
+      "waypoint": [
+        18,
+        14
+      ]
+    },
+    "sunharbor": {
+      "id": "sunharbor",
+      "name": "태양나루",
+      "kind": "town",
+      "width": 38,
+      "height": 28,
+      "level": 30,
+      "music": "town",
+      "spawn": [
+        3.5,
+        14.5
+      ],
+      "tiles": [
+        "######################################",
+        "#....................................#",
+        "#....................................#",
+        "#....................................#",
+        "#....................................#",
+        "#....................................#",
+        "#....................................#",
+        "#....................................#",
+        "#....................................#",
+        "#....................................#",
+        "#......:..........:..........:.......#",
+        "#....................................#",
+        "#.....................:..............#",
+        "#....................................#",
+        "#.:...............:................:.#",
+        "#.........................:..........#",
+        "#....................................#",
+        "#....................................#",
+        "#....................................#",
+        "#.................:..................#",
+        "#......:.....................:.......#",
+        "#....................................#",
+        "#....................................#",
+        "#....................................#",
+        "#....................................#",
+        "#....................................#",
+        "#....................................#",
+        "######################################"
+      ],
+      "props": [
+        {
+          "type": "house",
+          "x": 4,
+          "y": 3,
+          "width": 6,
+          "height": 4,
+          "solid": true,
+          "name": "대장간"
+        },
+        {
+          "type": "house",
+          "x": 14,
+          "y": 3,
+          "width": 6,
+          "height": 4,
+          "solid": true,
+          "name": "원정 길드"
+        },
+        {
+          "type": "house",
+          "x": 26,
+          "y": 3,
+          "width": 6,
+          "height": 4,
+          "solid": true,
+          "name": "교역소"
+        },
+        {
+          "type": "house",
+          "x": 4,
+          "y": 21,
+          "width": 6,
+          "height": 4,
+          "solid": true,
+          "name": "여관"
+        },
+        {
+          "type": "house",
+          "x": 26,
+          "y": 21,
+          "width": 6,
+          "height": 4,
+          "solid": true,
+          "name": "성당"
+        }
+      ],
+      "npcs": [
+        {
+          "id": "darius",
+          "name": "원정 길드장",
+          "service": "guild",
+          "x": 18,
+          "y": 10
+        },
+        {
+          "id": "sunharbor_smith",
+          "name": "왕립 대장장이",
+          "service": "smith",
+          "x": 7,
+          "y": 10
+        },
+        {
+          "id": "sunharbor_shop",
+          "name": "보급 상인",
+          "service": "merchant",
+          "x": 29,
+          "y": 10
+        },
+        {
+          "id": "sunharbor_inn",
+          "name": "여관 주인",
+          "service": "inn",
+          "x": 7,
+          "y": 20
+        },
+        {
+          "id": "sunharbor_priest",
+          "name": "순례 사제",
+          "service": "temple",
+          "x": 29,
+          "y": 20
+        },
+        {
+          "id": "board",
+          "name": "의뢰 게시판",
+          "service": "board",
+          "x": 22,
+          "y": 12
+        },
+        {
+          "id": "sunharbor_stone",
+          "name": "여행의 돌",
+          "service": "waystone",
+          "x": 18,
+          "y": 14
+        },
+        {
+          "id": "sunharbor_arena",
+          "name": "연전 관리인",
+          "service": "arena",
+          "x": 26,
+          "y": 15
+        },
+        {
+          "id": "eris_npc",
+          "name": "에리스",
+          "service": "companion",
+          "x": 18,
+          "y": 19
+        }
+      ],
+      "portals": [
+        {
+          "id": "to_sunwaste",
+          "name": "붉은 해 사막",
+          "x": 2,
+          "y": 14,
+          "to": "sunwaste",
+          "spawn": [
+            44,
+            17.5
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": false
+        },
+        {
+          "id": "to_gravewood",
+          "name": "잊힌 왕의 묘역",
+          "x": 35,
+          "y": 14,
+          "to": "gravewood",
+          "spawn": [
+            3.5,
+            17.5
+          ],
+          "requiresQuest": "sun_crown",
+          "requiresGuardians": false
+        }
+      ],
+      "spawns": [],
+      "resources": [],
+      "chests": [],
+      "discoveries": [],
+      "events": [],
+      "mechanisms": [],
+      "zones": [],
+      "waypoint": [
+        18,
+        14
+      ]
+    },
+    "highland_depth_1": {
+      "id": "highland_depth_1",
+      "name": "가시뿌리 미궁 · 1층",
+      "kind": "dungeon",
+      "width": 40,
+      "height": 30,
+      "level": 17,
+      "music": "dungeon",
+      "spawn": [
+        3.5,
+        15.5
+      ],
+      "tiles": [
+        "########################################",
+        "#......................................#",
+        "#......................................#",
+        "#......#.......#.......#.......#.......#",
+        "#......#.......#.......#.......#.......#",
+        "#......#.......#.......#.......#.......#",
+        "#..............#.......#.......#.......#",
+        "#..............#.......#...............#",
+        "#......................#...............#",
+        "#......................#...............#",
+        "#......................#...............#",
+        "#......................#...............#",
+        "#......................#...............#",
+        "#......................#...............#",
+        "#......................#...............#",
+        "#......................................#",
+        "#......................................#",
+        "#..............#...............#.......#",
+        "#..............#...............#.......#",
+        "#..............#...............#.......#",
+        "#..............#...............#.......#",
+        "#..............#.......#.......#.......#",
+        "#..............#.......#.......#.......#",
+        "#..............#.......#.......#.......#",
+        "#..............#.......#.......#.......#",
+        "#......#.......#.......#.......#.......#",
+        "#......#.......#.......#.......#.......#",
+        "#......................................#",
+        "#......................................#",
+        "########################################"
+      ],
+      "props": [
+        {
+          "type": "tree",
+          "x": 10,
+          "y": 3,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        },
+        {
+          "type": "tree",
+          "x": 35,
+          "y": 4,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        },
+        {
+          "type": "tree",
+          "x": 35,
+          "y": 26,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        }
+      ],
+      "npcs": [],
+      "portals": [
+        {
+          "id": "exit",
+          "name": "지상으로",
+          "x": 2,
+          "y": 15,
+          "to": "highland",
+          "spawn": [
+            41,
+            5
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": false
+        },
+        {
+          "id": "down",
+          "name": "아래층",
+          "x": 37,
+          "y": 15,
+          "to": "highland_depth_2",
+          "spawn": [
+            3.5,
+            15.5
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": true
+        }
+      ],
+      "spawns": [
+        {
+          "id": "highland_depth_1_mob_0",
+          "monster": "highland_orc",
+          "x": 10,
+          "y": 7,
+          "level": 17,
+          "guardian": false
+        },
+        {
+          "id": "highland_depth_1_mob_1",
+          "monster": "moss_ent",
+          "x": 20,
+          "y": 7,
+          "level": 17,
+          "guardian": false
+        },
+        {
+          "id": "highland_depth_1_mob_2",
+          "monster": "venom_spider",
+          "x": 30,
+          "y": 7,
+          "level": 17,
+          "guardian": true
+        },
+        {
+          "id": "highland_depth_1_mob_3",
+          "monster": "stone_wyvern",
+          "x": 8,
+          "y": 15,
+          "level": 17,
+          "guardian": false
+        },
+        {
+          "id": "highland_depth_1_mob_4",
+          "monster": "highland_orc",
+          "x": 16,
+          "y": 15,
+          "level": 17,
+          "guardian": false
+        },
+        {
+          "id": "highland_depth_1_mob_5",
+          "monster": "moss_ent",
+          "x": 25,
+          "y": 16,
+          "level": 17,
+          "guardian": false
+        },
+        {
+          "id": "highland_depth_1_mob_6",
+          "monster": "venom_spider",
+          "x": 33,
+          "y": 16,
+          "level": 17,
+          "guardian": true
+        },
+        {
+          "id": "highland_depth_1_mob_7",
+          "monster": "stone_wyvern",
+          "x": 10,
+          "y": 24,
+          "level": 17,
+          "guardian": false
+        },
+        {
+          "id": "highland_depth_1_mob_8",
+          "monster": "highland_orc",
+          "x": 19,
+          "y": 24,
+          "level": 17,
+          "guardian": false
+        },
+        {
+          "id": "highland_depth_1_mob_9",
+          "monster": "moss_ent",
+          "x": 28,
+          "y": 24,
+          "level": 17,
+          "guardian": false
+        },
+        {
+          "id": "highland_depth_1_mob_10",
+          "monster": "venom_spider",
+          "x": 34,
+          "y": 25,
+          "level": 17,
+          "guardian": true
+        },
+        {
+          "id": "highland_depth_1_mob_11",
+          "monster": "stone_wyvern",
+          "x": 15,
+          "y": 11,
+          "level": 17,
+          "guardian": false
+        }
+      ],
+      "resources": [],
+      "chests": [
+        {
+          "id": "highland_depth_1_chest",
+          "x": 34,
+          "y": 5,
+          "gold": 47,
+          "materials": {
+            "crystal": 2,
+            "ore": 3
+          },
+          "equipmentChance": 0.3
+        }
+      ],
+      "discoveries": [
+        {
+          "id": "highland_depth_1_record",
+          "name": "가시뿌리 미궁의 기록 1",
+          "kind": "landmark",
+          "sprite": "ruin",
+          "x": 6,
+          "y": 24,
+          "description": "군주의 약점과 봉인 장치의 기록입니다.",
+          "rewards": {
+            "xp": 151,
+            "reputation": {
+              "arcanum": 4
+            }
+          }
+        }
+      ],
+      "events": [],
+      "mechanisms": [
+        {
+          "id": "highland_depth_1_lever",
+          "name": "위험 장치 차단",
+          "x": 6,
+          "y": 6,
+          "circuit": "vents",
+          "description": "이 층의 환경 위험을 멈춥니다."
+        }
+      ],
+      "zones": [
+        {
+          "id": "highland_depth_1_vent_0",
+          "circuit": "vents",
+          "x": 16,
+          "y": 15,
+          "kind": "circle",
+          "radius": 1.8,
+          "windup": 1.2,
+          "period": 5.5,
+          "damage": 32,
+          "offset": 0.0,
+          "name": "가시 뿌리"
+        },
+        {
+          "id": "highland_depth_1_vent_1",
+          "circuit": "vents",
+          "x": 25,
+          "y": 16,
+          "kind": "circle",
+          "radius": 1.8,
+          "windup": 1.2,
+          "period": 5.5,
+          "damage": 32,
+          "offset": 1.3,
+          "name": "가시 뿌리"
+        },
+        {
+          "id": "highland_depth_1_vent_2",
+          "circuit": "vents",
+          "x": 30,
+          "y": 24,
+          "kind": "circle",
+          "radius": 1.8,
+          "windup": 1.2,
+          "period": 5.5,
+          "damage": 32,
+          "offset": 2.6,
+          "name": "가시 뿌리"
+        }
+      ],
+      "waypoint": null,
+      "group": "highland",
+      "guardianTotal": 3
+    },
+    "highland_depth_2": {
+      "id": "highland_depth_2",
+      "name": "가시뿌리 미궁 · 2층",
+      "kind": "dungeon",
+      "width": 40,
+      "height": 30,
+      "level": 18,
+      "music": "dungeon",
+      "spawn": [
+        3.5,
+        15.5
+      ],
+      "tiles": [
+        "########################################",
+        "#......................................#",
+        "#......................................#",
+        "#......#.......#.......#.......#.......#",
+        "#......#.......#.......#.......#.......#",
+        "#......#.......#.......#.......#.......#",
+        "#..............#.......#.......#.......#",
+        "#..............#.......#...............#",
+        "#..............#.......#...............#",
+        "#......................#...............#",
+        "#......................#...............#",
+        "#......................#...............#",
+        "#......................#...............#",
+        "#......................#...............#",
+        "#......................#...............#",
+        "#......................................#",
+        "#......................................#",
+        "#..............#...............#.......#",
+        "#..............#...............#.......#",
+        "#..............#...............#.......#",
+        "#..............#...............#.......#",
+        "#..............#...............#.......#",
+        "#..............#.......#.......#.......#",
+        "#..............#.......#.......#.......#",
+        "#..............#.......#.......#.......#",
+        "#......#.......#.......#.......#.......#",
+        "#......#.......#.......#.......#.......#",
+        "#......................................#",
+        "#......................................#",
+        "########################################"
+      ],
+      "props": [
+        {
+          "type": "tree",
+          "x": 10,
+          "y": 3,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        },
+        {
+          "type": "tree",
+          "x": 35,
+          "y": 4,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        },
+        {
+          "type": "tree",
+          "x": 35,
+          "y": 26,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        }
+      ],
+      "npcs": [],
+      "portals": [
+        {
+          "id": "up",
+          "name": "위층",
+          "x": 2,
+          "y": 15,
+          "to": "highland_depth_1",
+          "spawn": [
+            36,
+            15.5
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": false
+        },
+        {
+          "id": "throne",
+          "name": "군주의 방",
+          "x": 37,
+          "y": 15,
+          "to": "highland_throne",
+          "spawn": [
+            3.5,
+            14
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": true
+        }
+      ],
+      "spawns": [
+        {
+          "id": "highland_depth_2_mob_0",
+          "monster": "highland_orc",
+          "x": 10,
+          "y": 7,
+          "level": 18,
+          "guardian": false
+        },
+        {
+          "id": "highland_depth_2_mob_1",
+          "monster": "moss_ent",
+          "x": 20,
+          "y": 7,
+          "level": 18,
+          "guardian": false
+        },
+        {
+          "id": "highland_depth_2_mob_2",
+          "monster": "venom_spider",
+          "x": 30,
+          "y": 7,
+          "level": 18,
+          "guardian": true
+        },
+        {
+          "id": "highland_depth_2_mob_3",
+          "monster": "stone_wyvern",
+          "x": 8,
+          "y": 15,
+          "level": 18,
+          "guardian": false
+        },
+        {
+          "id": "highland_depth_2_mob_4",
+          "monster": "highland_orc",
+          "x": 16,
+          "y": 15,
+          "level": 18,
+          "guardian": false
+        },
+        {
+          "id": "highland_depth_2_mob_5",
+          "monster": "moss_ent",
+          "x": 25,
+          "y": 16,
+          "level": 18,
+          "guardian": false
+        },
+        {
+          "id": "highland_depth_2_mob_6",
+          "monster": "venom_spider",
+          "x": 33,
+          "y": 16,
+          "level": 18,
+          "guardian": true
+        },
+        {
+          "id": "highland_depth_2_mob_7",
+          "monster": "stone_wyvern",
+          "x": 10,
+          "y": 24,
+          "level": 18,
+          "guardian": false
+        },
+        {
+          "id": "highland_depth_2_mob_8",
+          "monster": "highland_orc",
+          "x": 19,
+          "y": 24,
+          "level": 18,
+          "guardian": false
+        },
+        {
+          "id": "highland_depth_2_mob_9",
+          "monster": "moss_ent",
+          "x": 28,
+          "y": 24,
+          "level": 18,
+          "guardian": false
+        },
+        {
+          "id": "highland_depth_2_mob_10",
+          "monster": "venom_spider",
+          "x": 34,
+          "y": 25,
+          "level": 18,
+          "guardian": true
+        },
+        {
+          "id": "highland_depth_2_mob_11",
+          "monster": "stone_wyvern",
+          "x": 15,
+          "y": 11,
+          "level": 18,
+          "guardian": false
+        }
+      ],
+      "resources": [],
+      "chests": [
+        {
+          "id": "highland_depth_2_chest",
+          "x": 34,
+          "y": 5,
+          "gold": 47,
+          "materials": {
+            "crystal": 2,
+            "ore": 3
+          },
+          "equipmentChance": 0.3
+        }
+      ],
+      "discoveries": [
+        {
+          "id": "highland_depth_2_record",
+          "name": "가시뿌리 미궁의 기록 2",
+          "kind": "landmark",
+          "sprite": "ruin",
+          "x": 6,
+          "y": 24,
+          "description": "군주의 약점과 봉인 장치의 기록입니다.",
+          "rewards": {
+            "xp": 151,
+            "reputation": {
+              "arcanum": 4
+            }
+          }
+        }
+      ],
+      "events": [],
+      "mechanisms": [
+        {
+          "id": "highland_depth_2_lever",
+          "name": "위험 장치 차단",
+          "x": 6,
+          "y": 6,
+          "circuit": "vents",
+          "description": "이 층의 환경 위험을 멈춥니다."
+        }
+      ],
+      "zones": [
+        {
+          "id": "highland_depth_2_vent_0",
+          "circuit": "vents",
+          "x": 16,
+          "y": 15,
+          "kind": "circle",
+          "radius": 1.8,
+          "windup": 1.2,
+          "period": 5.5,
+          "damage": 32,
+          "offset": 0.0,
+          "name": "가시 뿌리"
+        },
+        {
+          "id": "highland_depth_2_vent_1",
+          "circuit": "vents",
+          "x": 25,
+          "y": 16,
+          "kind": "circle",
+          "radius": 1.8,
+          "windup": 1.2,
+          "period": 5.5,
+          "damage": 32,
+          "offset": 1.3,
+          "name": "가시 뿌리"
+        },
+        {
+          "id": "highland_depth_2_vent_2",
+          "circuit": "vents",
+          "x": 30,
+          "y": 24,
+          "kind": "circle",
+          "radius": 1.8,
+          "windup": 1.2,
+          "period": 5.5,
+          "damage": 32,
+          "offset": 2.6,
+          "name": "가시 뿌리"
+        }
+      ],
+      "waypoint": null,
+      "group": "highland",
+      "guardianTotal": 3
+    },
+    "highland_throne": {
+      "id": "highland_throne",
+      "name": "가시숲의 여왕의 전당",
+      "kind": "boss",
+      "width": 34,
+      "height": 28,
+      "level": 19,
+      "music": "boss",
+      "spawn": [
+        3.5,
+        14.5
+      ],
+      "tiles": [
+        "##################################",
+        "#................................#",
+        "#................................#",
+        "#................................#",
+        "#................................#",
+        "#................................#",
+        "#................................#",
+        "#................................#",
+        "#................................#",
+        "#................................#",
+        "#................................#",
+        "#................................#",
+        "#................................#",
+        "#................................#",
+        "#................................#",
+        "#................................#",
+        "#................................#",
+        "#................................#",
+        "#................................#",
+        "#................................#",
+        "#................................#",
+        "#................................#",
+        "#................................#",
+        "#................................#",
+        "#................................#",
+        "#................................#",
+        "#................................#",
+        "##################################"
+      ],
+      "props": [
+        {
+          "type": "tree",
+          "x": 10,
+          "y": 3,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        },
+        {
+          "type": "tree",
+          "x": 29,
+          "y": 4,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        },
+        {
+          "type": "tree",
+          "x": 29,
+          "y": 24,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        }
+      ],
+      "npcs": [],
+      "portals": [
+        {
+          "id": "exit",
+          "name": "입구로",
+          "x": 2,
+          "y": 14,
+          "to": "highland_depth_2",
+          "spawn": [
+            36,
+            15.5
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": false
+        }
+      ],
+      "spawns": [
+        {
+          "id": "highland_boss",
+          "monster": "thorn_queen",
+          "x": 23,
+          "y": 14,
+          "level": 19,
+          "guardian": false
+        }
+      ],
+      "resources": [],
+      "chests": [],
+      "discoveries": [],
+      "events": [],
+      "mechanisms": [
+        {
+          "id": "highland_ward_0",
+          "name": "수호석 1",
+          "x": 9,
+          "y": 5,
+          "ward": true,
+          "description": "해제하면 군주의 피해 감소 12%가 사라집니다."
+        },
+        {
+          "id": "highland_ward_1",
+          "name": "수호석 2",
+          "x": 28,
+          "y": 23,
+          "ward": true,
+          "description": "해제하면 군주의 피해 감소 12%가 사라집니다."
+        }
+      ],
+      "zones": [
+        {
+          "id": "highland_zone_0",
+          "x": 15,
+          "y": 8,
+          "kind": "circle",
+          "radius": 2,
+          "windup": 1.4,
+          "period": 7,
+          "damage": 37,
+          "offset": 0,
+          "name": "가시 뿌리"
+        },
+        {
+          "id": "highland_zone_1",
+          "x": 18,
+          "y": 21,
+          "kind": "circle",
+          "radius": 2,
+          "windup": 1.4,
+          "period": 7,
+          "damage": 37,
+          "offset": 2,
+          "name": "가시 뿌리"
+        }
+      ],
+      "waypoint": null,
+      "group": "highland",
+      "boss": "thorn_queen"
+    },
+    "frost_depth_1": {
+      "id": "frost_depth_1",
+      "name": "빙관의 지하성 · 1층",
+      "kind": "dungeon",
+      "width": 40,
+      "height": 30,
+      "level": 23,
+      "music": "dungeon",
+      "spawn": [
+        3.5,
+        15.5
+      ],
+      "tiles": [
+        "########################################",
+        "#nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn#",
+        "#nnnnnn#nnnnnnn#nnnnnnn#nnnnnnn#nnnnnnn#",
+        "#nnnnnn#nnnnnnn#nnnnnnn#nnnnnnn#nnnnnnn#",
+        "#nnnnnn#nnnnnnn#nnnnnnn#nnnnnnn#nnnnnnn#",
+        "#nnnnnnnnnnnnnn#nnnnnnn#nnnnnnn#nnnnnnn#",
+        "#nnnnnnnnnnnnnn#nnnnnnn#nnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnn#nnnnnnn#nnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnn#nnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnn#nnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnn#nnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnn#nnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnn#nnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnn#nnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnn#nnnnnnnnnnnnnnn#nnnnnnn#",
+        "#nnnnnnnnnnnnnn#nnnnnnnnnnnnnnn#nnnnnnn#",
+        "#nnnnnnnnnnnnnn#nnnnnnnnnnnnnnn#nnnnnnn#",
+        "#nnnnnnnnnnnnnn#nnnnnnnnnnnnnnn#nnnnnnn#",
+        "#nnnnnnnnnnnnnn#nnnnnnnnnnnnnnn#nnnnnnn#",
+        "#nnnnnnnnnnnnnn#nnnnnnn#nnnnnnn#nnnnnnn#",
+        "#nnnnnnnnnnnnnn#nnnnnnn#nnnnnnn#nnnnnnn#",
+        "#nnnnnnnnnnnnnn#nnnnnnn#nnnnnnn#nnnnnnn#",
+        "#nnnnnn#nnnnnnn#nnnnnnn#nnnnnnn#nnnnnnn#",
+        "#nnnnnn#nnnnnnn#nnnnnnn#nnnnnnn#nnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn#",
+        "########################################"
+      ],
+      "props": [
+        {
+          "type": "crystal",
+          "x": 10,
+          "y": 3,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        },
+        {
+          "type": "crystal",
+          "x": 35,
+          "y": 4,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        },
+        {
+          "type": "crystal",
+          "x": 35,
+          "y": 26,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        }
+      ],
+      "npcs": [],
+      "portals": [
+        {
+          "id": "exit",
+          "name": "지상으로",
+          "x": 2,
+          "y": 15,
+          "to": "snowfield",
+          "spawn": [
+            41,
+            5
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": false
+        },
+        {
+          "id": "down",
+          "name": "아래층",
+          "x": 37,
+          "y": 15,
+          "to": "frost_depth_2",
+          "spawn": [
+            3.5,
+            15.5
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": true
+        }
+      ],
+      "spawns": [
+        {
+          "id": "frost_depth_1_mob_0",
+          "monster": "frost_wolf",
+          "x": 10,
+          "y": 7,
+          "level": 23,
+          "guardian": false
+        },
+        {
+          "id": "frost_depth_1_mob_1",
+          "monster": "ice_wraith",
+          "x": 20,
+          "y": 7,
+          "level": 23,
+          "guardian": false
+        },
+        {
+          "id": "frost_depth_1_mob_2",
+          "monster": "snow_golem",
+          "x": 30,
+          "y": 7,
+          "level": 23,
+          "guardian": true
+        },
+        {
+          "id": "frost_depth_1_mob_3",
+          "monster": "frost_wolf",
+          "x": 8,
+          "y": 15,
+          "level": 23,
+          "guardian": false
+        },
+        {
+          "id": "frost_depth_1_mob_4",
+          "monster": "ice_wraith",
+          "x": 16,
+          "y": 15,
+          "level": 23,
+          "guardian": false
+        },
+        {
+          "id": "frost_depth_1_mob_5",
+          "monster": "snow_golem",
+          "x": 25,
+          "y": 16,
+          "level": 23,
+          "guardian": false
+        },
+        {
+          "id": "frost_depth_1_mob_6",
+          "monster": "frost_wolf",
+          "x": 33,
+          "y": 16,
+          "level": 23,
+          "guardian": true
+        },
+        {
+          "id": "frost_depth_1_mob_7",
+          "monster": "ice_wraith",
+          "x": 10,
+          "y": 24,
+          "level": 23,
+          "guardian": false
+        },
+        {
+          "id": "frost_depth_1_mob_8",
+          "monster": "snow_golem",
+          "x": 19,
+          "y": 24,
+          "level": 23,
+          "guardian": false
+        },
+        {
+          "id": "frost_depth_1_mob_9",
+          "monster": "frost_wolf",
+          "x": 28,
+          "y": 24,
+          "level": 23,
+          "guardian": false
+        },
+        {
+          "id": "frost_depth_1_mob_10",
+          "monster": "ice_wraith",
+          "x": 34,
+          "y": 25,
+          "level": 23,
+          "guardian": true
+        },
+        {
+          "id": "frost_depth_1_mob_11",
+          "monster": "snow_golem",
+          "x": 15,
+          "y": 11,
+          "level": 23,
+          "guardian": false
+        }
+      ],
+      "resources": [],
+      "chests": [
+        {
+          "id": "frost_depth_1_chest",
+          "x": 34,
+          "y": 5,
+          "gold": 53,
+          "materials": {
+            "crystal": 2,
+            "ore": 3
+          },
+          "equipmentChance": 0.3
+        }
+      ],
+      "discoveries": [
+        {
+          "id": "frost_depth_1_record",
+          "name": "빙관의 지하성의 기록 1",
+          "kind": "landmark",
+          "sprite": "ruin",
+          "x": 6,
+          "y": 24,
+          "description": "군주의 약점과 봉인 장치의 기록입니다.",
+          "rewards": {
+            "xp": 169,
+            "reputation": {
+              "arcanum": 4
+            }
+          }
+        }
+      ],
+      "events": [],
+      "mechanisms": [
+        {
+          "id": "frost_depth_1_lever",
+          "name": "위험 장치 차단",
+          "x": 6,
+          "y": 6,
+          "circuit": "vents",
+          "description": "이 층의 환경 위험을 멈춥니다."
+        }
+      ],
+      "zones": [
+        {
+          "id": "frost_depth_1_vent_0",
+          "circuit": "vents",
+          "x": 16,
+          "y": 15,
+          "kind": "ring",
+          "radius": 3.2,
+          "windup": 1.2,
+          "period": 5.5,
+          "damage": 38,
+          "offset": 0.0,
+          "name": "서리 파동",
+          "innerRadius": 1
+        },
+        {
+          "id": "frost_depth_1_vent_1",
+          "circuit": "vents",
+          "x": 25,
+          "y": 16,
+          "kind": "ring",
+          "radius": 3.2,
+          "windup": 1.2,
+          "period": 5.5,
+          "damage": 38,
+          "offset": 1.3,
+          "name": "서리 파동",
+          "innerRadius": 1
+        },
+        {
+          "id": "frost_depth_1_vent_2",
+          "circuit": "vents",
+          "x": 30,
+          "y": 24,
+          "kind": "ring",
+          "radius": 3.2,
+          "windup": 1.2,
+          "period": 5.5,
+          "damage": 38,
+          "offset": 2.6,
+          "name": "서리 파동",
+          "innerRadius": 1
+        }
+      ],
+      "waypoint": null,
+      "group": "frost",
+      "guardianTotal": 3
+    },
+    "frost_depth_2": {
+      "id": "frost_depth_2",
+      "name": "빙관의 지하성 · 2층",
+      "kind": "dungeon",
+      "width": 40,
+      "height": 30,
+      "level": 24,
+      "music": "dungeon",
+      "spawn": [
+        3.5,
+        15.5
+      ],
+      "tiles": [
+        "########################################",
+        "#nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn#",
+        "#nnnnnn#nnnnnnn#nnnnnnn#nnnnnnn#nnnnnnn#",
+        "#nnnnnn#nnnnnnn#nnnnnnn#nnnnnnn#nnnnnnn#",
+        "#nnnnnn#nnnnnnn#nnnnnnn#nnnnnnn#nnnnnnn#",
+        "#nnnnnnnnnnnnnn#nnnnnnn#nnnnnnn#nnnnnnn#",
+        "#nnnnnnnnnnnnnn#nnnnnnn#nnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnn#nnnnnnn#nnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnn#nnnnnnn#nnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnn#nnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnn#nnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnn#nnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnn#nnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnn#nnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnn#nnnnnnn#nnnnnnn#nnnnnnn#",
+        "#nnnnnnnnnnnnnn#nnnnnnnnnnnnnnn#nnnnnnn#",
+        "#nnnnnnnnnnnnnn#nnnnnnnnnnnnnnn#nnnnnnn#",
+        "#nnnnnnnnnnnnnn#nnnnnnnnnnnnnnn#nnnnnnn#",
+        "#nnnnnnnnnnnnnn#nnnnnnnnnnnnnnn#nnnnnnn#",
+        "#nnnnnnnnnnnnnn#nnnnnnnnnnnnnnn#nnnnnnn#",
+        "#nnnnnnnnnnnnnn#nnnnnnn#nnnnnnn#nnnnnnn#",
+        "#nnnnnnnnnnnnnn#nnnnnnn#nnnnnnn#nnnnnnn#",
+        "#nnnnnn#nnnnnnn#nnnnnnn#nnnnnnn#nnnnnnn#",
+        "#nnnnnn#nnnnnnn#nnnnnnn#nnnnnnn#nnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn#",
+        "########################################"
+      ],
+      "props": [
+        {
+          "type": "crystal",
+          "x": 10,
+          "y": 3,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        },
+        {
+          "type": "crystal",
+          "x": 35,
+          "y": 4,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        },
+        {
+          "type": "crystal",
+          "x": 35,
+          "y": 26,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        }
+      ],
+      "npcs": [],
+      "portals": [
+        {
+          "id": "up",
+          "name": "위층",
+          "x": 2,
+          "y": 15,
+          "to": "frost_depth_1",
+          "spawn": [
+            36,
+            15.5
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": false
+        },
+        {
+          "id": "throne",
+          "name": "군주의 방",
+          "x": 37,
+          "y": 15,
+          "to": "frost_throne",
+          "spawn": [
+            3.5,
+            14
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": true
+        }
+      ],
+      "spawns": [
+        {
+          "id": "frost_depth_2_mob_0",
+          "monster": "frost_wolf",
+          "x": 10,
+          "y": 7,
+          "level": 24,
+          "guardian": false
+        },
+        {
+          "id": "frost_depth_2_mob_1",
+          "monster": "ice_wraith",
+          "x": 20,
+          "y": 7,
+          "level": 24,
+          "guardian": false
+        },
+        {
+          "id": "frost_depth_2_mob_2",
+          "monster": "snow_golem",
+          "x": 30,
+          "y": 7,
+          "level": 24,
+          "guardian": true
+        },
+        {
+          "id": "frost_depth_2_mob_3",
+          "monster": "frost_wolf",
+          "x": 8,
+          "y": 15,
+          "level": 24,
+          "guardian": false
+        },
+        {
+          "id": "frost_depth_2_mob_4",
+          "monster": "ice_wraith",
+          "x": 16,
+          "y": 15,
+          "level": 24,
+          "guardian": false
+        },
+        {
+          "id": "frost_depth_2_mob_5",
+          "monster": "snow_golem",
+          "x": 25,
+          "y": 16,
+          "level": 24,
+          "guardian": false
+        },
+        {
+          "id": "frost_depth_2_mob_6",
+          "monster": "frost_wolf",
+          "x": 33,
+          "y": 16,
+          "level": 24,
+          "guardian": true
+        },
+        {
+          "id": "frost_depth_2_mob_7",
+          "monster": "ice_wraith",
+          "x": 10,
+          "y": 24,
+          "level": 24,
+          "guardian": false
+        },
+        {
+          "id": "frost_depth_2_mob_8",
+          "monster": "snow_golem",
+          "x": 19,
+          "y": 24,
+          "level": 24,
+          "guardian": false
+        },
+        {
+          "id": "frost_depth_2_mob_9",
+          "monster": "frost_wolf",
+          "x": 28,
+          "y": 24,
+          "level": 24,
+          "guardian": false
+        },
+        {
+          "id": "frost_depth_2_mob_10",
+          "monster": "ice_wraith",
+          "x": 34,
+          "y": 25,
+          "level": 24,
+          "guardian": true
+        },
+        {
+          "id": "frost_depth_2_mob_11",
+          "monster": "snow_golem",
+          "x": 15,
+          "y": 11,
+          "level": 24,
+          "guardian": false
+        }
+      ],
+      "resources": [],
+      "chests": [
+        {
+          "id": "frost_depth_2_chest",
+          "x": 34,
+          "y": 5,
+          "gold": 53,
+          "materials": {
+            "crystal": 2,
+            "ore": 3
+          },
+          "equipmentChance": 0.3
+        }
+      ],
+      "discoveries": [
+        {
+          "id": "frost_depth_2_record",
+          "name": "빙관의 지하성의 기록 2",
+          "kind": "landmark",
+          "sprite": "ruin",
+          "x": 6,
+          "y": 24,
+          "description": "군주의 약점과 봉인 장치의 기록입니다.",
+          "rewards": {
+            "xp": 169,
+            "reputation": {
+              "arcanum": 4
+            }
+          }
+        }
+      ],
+      "events": [],
+      "mechanisms": [
+        {
+          "id": "frost_depth_2_lever",
+          "name": "위험 장치 차단",
+          "x": 6,
+          "y": 6,
+          "circuit": "vents",
+          "description": "이 층의 환경 위험을 멈춥니다."
+        }
+      ],
+      "zones": [
+        {
+          "id": "frost_depth_2_vent_0",
+          "circuit": "vents",
+          "x": 16,
+          "y": 15,
+          "kind": "ring",
+          "radius": 3.2,
+          "windup": 1.2,
+          "period": 5.5,
+          "damage": 38,
+          "offset": 0.0,
+          "name": "서리 파동",
+          "innerRadius": 1
+        },
+        {
+          "id": "frost_depth_2_vent_1",
+          "circuit": "vents",
+          "x": 25,
+          "y": 16,
+          "kind": "ring",
+          "radius": 3.2,
+          "windup": 1.2,
+          "period": 5.5,
+          "damage": 38,
+          "offset": 1.3,
+          "name": "서리 파동",
+          "innerRadius": 1
+        },
+        {
+          "id": "frost_depth_2_vent_2",
+          "circuit": "vents",
+          "x": 30,
+          "y": 24,
+          "kind": "ring",
+          "radius": 3.2,
+          "windup": 1.2,
+          "period": 5.5,
+          "damage": 38,
+          "offset": 2.6,
+          "name": "서리 파동",
+          "innerRadius": 1
+        }
+      ],
+      "waypoint": null,
+      "group": "frost",
+      "guardianTotal": 3
+    },
+    "frost_throne": {
+      "id": "frost_throne",
+      "name": "서리왕 이스렌의 전당",
+      "kind": "boss",
+      "width": 34,
+      "height": 28,
+      "level": 25,
+      "music": "boss",
+      "spawn": [
+        3.5,
+        14.5
+      ],
+      "tiles": [
+        "##################################",
+        "#nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn#",
+        "##################################"
+      ],
+      "props": [
+        {
+          "type": "crystal",
+          "x": 10,
+          "y": 3,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        },
+        {
+          "type": "crystal",
+          "x": 29,
+          "y": 4,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        },
+        {
+          "type": "crystal",
+          "x": 29,
+          "y": 24,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        }
+      ],
+      "npcs": [],
+      "portals": [
+        {
+          "id": "exit",
+          "name": "입구로",
+          "x": 2,
+          "y": 14,
+          "to": "frost_depth_2",
+          "spawn": [
+            36,
+            15.5
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": false
+        }
+      ],
+      "spawns": [
+        {
+          "id": "frost_boss",
+          "monster": "frost_regent",
+          "x": 23,
+          "y": 14,
+          "level": 25,
+          "guardian": false
+        }
+      ],
+      "resources": [],
+      "chests": [],
+      "discoveries": [],
+      "events": [],
+      "mechanisms": [
+        {
+          "id": "frost_ward_0",
+          "name": "수호석 1",
+          "x": 9,
+          "y": 5,
+          "ward": true,
+          "description": "해제하면 군주의 피해 감소 12%가 사라집니다."
+        },
+        {
+          "id": "frost_ward_1",
+          "name": "수호석 2",
+          "x": 28,
+          "y": 23,
+          "ward": true,
+          "description": "해제하면 군주의 피해 감소 12%가 사라집니다."
+        }
+      ],
+      "zones": [
+        {
+          "id": "frost_zone_0",
+          "x": 15,
+          "y": 8,
+          "kind": "ring",
+          "radius": 3.2,
+          "windup": 1.4,
+          "period": 7,
+          "damage": 43,
+          "offset": 0,
+          "name": "서리 파동",
+          "innerRadius": 1
+        },
+        {
+          "id": "frost_zone_1",
+          "x": 18,
+          "y": 21,
+          "kind": "ring",
+          "radius": 3.2,
+          "windup": 1.4,
+          "period": 7,
+          "damage": 43,
+          "offset": 2,
+          "name": "서리 파동",
+          "innerRadius": 1
+        }
+      ],
+      "waypoint": null,
+      "group": "frost",
+      "boss": "frost_regent"
+    },
+    "sun_depth_1": {
+      "id": "sun_depth_1",
+      "name": "태양의 신전 · 1층",
+      "kind": "dungeon",
+      "width": 40,
+      "height": 30,
+      "level": 29,
+      "music": "dungeon",
+      "spawn": [
+        3.5,
+        15.5
+      ],
+      "tiles": [
+        "########################################",
+        "#rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr#",
+        "#rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr#",
+        "#rrrrrr#rrrrrrr#rrrrrrr#rrrrrrr#rrrrrrr#",
+        "#rrrrrr#rrrrrrr#rrrrrrr#rrrrrrr#rrrrrrr#",
+        "#rrrrrr#rrrrrrr#rrrrrrr#rrrrrrr#rrrrrrr#",
+        "#rrrrrrrrrrrrrr#rrrrrrr#rrrrrrr#rrrrrrr#",
+        "#rrrrrrrrrrrrrr#rrrrrrr#rrrrrrrrrrrrrrr#",
+        "#rrrrrrrrrrrrrr#rrrrrrr#rrrrrrrrrrrrrrr#",
+        "#rrrrrrrrrrrrrr#rrrrrrr#rrrrrrrrrrrrrrr#",
+        "#rrrrrrrrrrrrrrrrrrrrrr#rrrrrrrrrrrrrrr#",
+        "#rrrrrrrrrrrrrrrrrrrrrr#rrrrrrrrrrrrrrr#",
+        "#rrrrrrrrrrrrrrrrrrrrrr#rrrrrrrrrrrrrrr#",
+        "#rrrrrrrrrrrrrrrrrrrrrr#rrrrrrrrrrrrrrr#",
+        "#rrrrrrrrrrrrrrrrrrrrrr#rrrrrrrrrrrrrrr#",
+        "#rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr#",
+        "#rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr#",
+        "#rrrrrrrrrrrrrr#rrrrrrr#rrrrrrr#rrrrrrr#",
+        "#rrrrrrrrrrrrrr#rrrrrrrrrrrrrrr#rrrrrrr#",
+        "#rrrrrrrrrrrrrr#rrrrrrrrrrrrrrr#rrrrrrr#",
+        "#rrrrrrrrrrrrrr#rrrrrrrrrrrrrrr#rrrrrrr#",
+        "#rrrrrrrrrrrrrr#rrrrrrrrrrrrrrr#rrrrrrr#",
+        "#rrrrrrrrrrrrrr#rrrrrrrrrrrrrrr#rrrrrrr#",
+        "#rrrrrrrrrrrrrr#rrrrrrr#rrrrrrr#rrrrrrr#",
+        "#rrrrrrrrrrrrrr#rrrrrrr#rrrrrrr#rrrrrrr#",
+        "#rrrrrr#rrrrrrr#rrrrrrr#rrrrrrr#rrrrrrr#",
+        "#rrrrrr#rrrrrrr#rrrrrrr#rrrrrrr#rrrrrrr#",
+        "#rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr#",
+        "#rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr#",
+        "########################################"
+      ],
+      "props": [
+        {
+          "type": "ruin",
+          "x": 10,
+          "y": 3,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        },
+        {
+          "type": "ruin",
+          "x": 35,
+          "y": 4,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        },
+        {
+          "type": "ruin",
+          "x": 35,
+          "y": 26,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        }
+      ],
+      "npcs": [],
+      "portals": [
+        {
+          "id": "exit",
+          "name": "지상으로",
+          "x": 2,
+          "y": 15,
+          "to": "sunwaste",
+          "spawn": [
+            41,
+            5
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": false
+        },
+        {
+          "id": "down",
+          "name": "아래층",
+          "x": 37,
+          "y": 15,
+          "to": "sun_depth_2",
+          "spawn": [
+            3.5,
+            15.5
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": true
+        }
+      ],
+      "spawns": [
+        {
+          "id": "sun_depth_1_mob_0",
+          "monster": "sand_scorpion",
+          "x": 10,
+          "y": 7,
+          "level": 29,
+          "guardian": false
+        },
+        {
+          "id": "sun_depth_1_mob_1",
+          "monster": "dune_raider",
+          "x": 20,
+          "y": 7,
+          "level": 29,
+          "guardian": false
+        },
+        {
+          "id": "sun_depth_1_mob_2",
+          "monster": "ember_drake",
+          "x": 30,
+          "y": 7,
+          "level": 29,
+          "guardian": true
+        },
+        {
+          "id": "sun_depth_1_mob_3",
+          "monster": "sand_scorpion",
+          "x": 8,
+          "y": 15,
+          "level": 29,
+          "guardian": false
+        },
+        {
+          "id": "sun_depth_1_mob_4",
+          "monster": "dune_raider",
+          "x": 16,
+          "y": 15,
+          "level": 29,
+          "guardian": false
+        },
+        {
+          "id": "sun_depth_1_mob_5",
+          "monster": "ember_drake",
+          "x": 25,
+          "y": 16,
+          "level": 29,
+          "guardian": false
+        },
+        {
+          "id": "sun_depth_1_mob_6",
+          "monster": "sand_scorpion",
+          "x": 33,
+          "y": 16,
+          "level": 29,
+          "guardian": true
+        },
+        {
+          "id": "sun_depth_1_mob_7",
+          "monster": "dune_raider",
+          "x": 10,
+          "y": 24,
+          "level": 29,
+          "guardian": false
+        },
+        {
+          "id": "sun_depth_1_mob_8",
+          "monster": "ember_drake",
+          "x": 19,
+          "y": 24,
+          "level": 29,
+          "guardian": false
+        },
+        {
+          "id": "sun_depth_1_mob_9",
+          "monster": "sand_scorpion",
+          "x": 28,
+          "y": 24,
+          "level": 29,
+          "guardian": false
+        },
+        {
+          "id": "sun_depth_1_mob_10",
+          "monster": "dune_raider",
+          "x": 34,
+          "y": 25,
+          "level": 29,
+          "guardian": true
+        },
+        {
+          "id": "sun_depth_1_mob_11",
+          "monster": "ember_drake",
+          "x": 15,
+          "y": 11,
+          "level": 29,
+          "guardian": false
+        }
+      ],
+      "resources": [],
+      "chests": [
+        {
+          "id": "sun_depth_1_chest",
+          "x": 34,
+          "y": 5,
+          "gold": 59,
+          "materials": {
+            "crystal": 2,
+            "ore": 3
+          },
+          "equipmentChance": 0.3
+        }
+      ],
+      "discoveries": [
+        {
+          "id": "sun_depth_1_record",
+          "name": "태양의 신전의 기록 1",
+          "kind": "landmark",
+          "sprite": "ruin",
+          "x": 6,
+          "y": 24,
+          "description": "군주의 약점과 봉인 장치의 기록입니다.",
+          "rewards": {
+            "xp": 187,
+            "reputation": {
+              "arcanum": 4
+            }
+          }
+        }
+      ],
+      "events": [],
+      "mechanisms": [
+        {
+          "id": "sun_depth_1_lever",
+          "name": "위험 장치 차단",
+          "x": 6,
+          "y": 6,
+          "circuit": "vents",
+          "description": "이 층의 환경 위험을 멈춥니다."
+        }
+      ],
+      "zones": [
+        {
+          "id": "sun_depth_1_vent_0",
+          "circuit": "vents",
+          "x": 16,
+          "y": 15,
+          "kind": "line",
+          "radius": 0.75,
+          "windup": 1.2,
+          "period": 5.5,
+          "damage": 44,
+          "offset": 0.0,
+          "name": "신전의 불꽃",
+          "length": 7,
+          "angles": [
+            0,
+            1.5707963267948966
+          ]
+        },
+        {
+          "id": "sun_depth_1_vent_1",
+          "circuit": "vents",
+          "x": 25,
+          "y": 16,
+          "kind": "line",
+          "radius": 0.75,
+          "windup": 1.2,
+          "period": 5.5,
+          "damage": 44,
+          "offset": 1.3,
+          "name": "신전의 불꽃",
+          "length": 7,
+          "angles": [
+            0,
+            1.5707963267948966
+          ]
+        },
+        {
+          "id": "sun_depth_1_vent_2",
+          "circuit": "vents",
+          "x": 30,
+          "y": 24,
+          "kind": "line",
+          "radius": 0.75,
+          "windup": 1.2,
+          "period": 5.5,
+          "damage": 44,
+          "offset": 2.6,
+          "name": "신전의 불꽃",
+          "length": 7,
+          "angles": [
+            0,
+            1.5707963267948966
+          ]
+        }
+      ],
+      "waypoint": null,
+      "group": "sun",
+      "guardianTotal": 3
+    },
+    "sun_depth_2": {
+      "id": "sun_depth_2",
+      "name": "태양의 신전 · 2층",
+      "kind": "dungeon",
+      "width": 40,
+      "height": 30,
+      "level": 30,
+      "music": "dungeon",
+      "spawn": [
+        3.5,
+        15.5
+      ],
+      "tiles": [
+        "########################################",
+        "#rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr#",
+        "#rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr#",
+        "#rrrrrr#rrrrrrr#rrrrrrr#rrrrrrr#rrrrrrr#",
+        "#rrrrrr#rrrrrrr#rrrrrrr#rrrrrrr#rrrrrrr#",
+        "#rrrrrr#rrrrrrr#rrrrrrr#rrrrrrr#rrrrrrr#",
+        "#rrrrrrrrrrrrrr#rrrrrrr#rrrrrrr#rrrrrrr#",
+        "#rrrrrrrrrrrrrr#rrrrrrr#rrrrrrrrrrrrrrr#",
+        "#rrrrrrrrrrrrrr#rrrrrrr#rrrrrrrrrrrrrrr#",
+        "#rrrrrrrrrrrrrr#rrrrrrr#rrrrrrrrrrrrrrr#",
+        "#rrrrrrrrrrrrrr#rrrrrrr#rrrrrrrrrrrrrrr#",
+        "#rrrrrrrrrrrrrrrrrrrrrr#rrrrrrrrrrrrrrr#",
+        "#rrrrrrrrrrrrrrrrrrrrrr#rrrrrrrrrrrrrrr#",
+        "#rrrrrrrrrrrrrrrrrrrrrr#rrrrrrrrrrrrrrr#",
+        "#rrrrrrrrrrrrrrrrrrrrrr#rrrrrrrrrrrrrrr#",
+        "#rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr#",
+        "#rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr#",
+        "#rrrrrrrrrrrrrr#rrrrrrr#rrrrrrrrrrrrrrr#",
+        "#rrrrrrrrrrrrrr#rrrrrrr#rrrrrrr#rrrrrrr#",
+        "#rrrrrrrrrrrrrr#rrrrrrrrrrrrrrr#rrrrrrr#",
+        "#rrrrrrrrrrrrrr#rrrrrrrrrrrrrrr#rrrrrrr#",
+        "#rrrrrrrrrrrrrr#rrrrrrrrrrrrrrr#rrrrrrr#",
+        "#rrrrrrrrrrrrrr#rrrrrrrrrrrrrrr#rrrrrrr#",
+        "#rrrrrrrrrrrrrr#rrrrrrrrrrrrrrr#rrrrrrr#",
+        "#rrrrrrrrrrrrrr#rrrrrrr#rrrrrrr#rrrrrrr#",
+        "#rrrrrr#rrrrrrr#rrrrrrr#rrrrrrr#rrrrrrr#",
+        "#rrrrrr#rrrrrrr#rrrrrrr#rrrrrrr#rrrrrrr#",
+        "#rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr#",
+        "#rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr#",
+        "########################################"
+      ],
+      "props": [
+        {
+          "type": "ruin",
+          "x": 10,
+          "y": 3,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        },
+        {
+          "type": "ruin",
+          "x": 35,
+          "y": 4,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        },
+        {
+          "type": "ruin",
+          "x": 35,
+          "y": 26,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        }
+      ],
+      "npcs": [],
+      "portals": [
+        {
+          "id": "up",
+          "name": "위층",
+          "x": 2,
+          "y": 15,
+          "to": "sun_depth_1",
+          "spawn": [
+            36,
+            15.5
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": false
+        },
+        {
+          "id": "throne",
+          "name": "군주의 방",
+          "x": 37,
+          "y": 15,
+          "to": "sun_throne",
+          "spawn": [
+            3.5,
+            14
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": true
+        }
+      ],
+      "spawns": [
+        {
+          "id": "sun_depth_2_mob_0",
+          "monster": "sand_scorpion",
+          "x": 10,
+          "y": 7,
+          "level": 30,
+          "guardian": false
+        },
+        {
+          "id": "sun_depth_2_mob_1",
+          "monster": "dune_raider",
+          "x": 20,
+          "y": 7,
+          "level": 30,
+          "guardian": false
+        },
+        {
+          "id": "sun_depth_2_mob_2",
+          "monster": "ember_drake",
+          "x": 30,
+          "y": 7,
+          "level": 30,
+          "guardian": true
+        },
+        {
+          "id": "sun_depth_2_mob_3",
+          "monster": "sand_scorpion",
+          "x": 8,
+          "y": 15,
+          "level": 30,
+          "guardian": false
+        },
+        {
+          "id": "sun_depth_2_mob_4",
+          "monster": "dune_raider",
+          "x": 16,
+          "y": 15,
+          "level": 30,
+          "guardian": false
+        },
+        {
+          "id": "sun_depth_2_mob_5",
+          "monster": "ember_drake",
+          "x": 25,
+          "y": 16,
+          "level": 30,
+          "guardian": false
+        },
+        {
+          "id": "sun_depth_2_mob_6",
+          "monster": "sand_scorpion",
+          "x": 33,
+          "y": 16,
+          "level": 30,
+          "guardian": true
+        },
+        {
+          "id": "sun_depth_2_mob_7",
+          "monster": "dune_raider",
+          "x": 10,
+          "y": 24,
+          "level": 30,
+          "guardian": false
+        },
+        {
+          "id": "sun_depth_2_mob_8",
+          "monster": "ember_drake",
+          "x": 19,
+          "y": 24,
+          "level": 30,
+          "guardian": false
+        },
+        {
+          "id": "sun_depth_2_mob_9",
+          "monster": "sand_scorpion",
+          "x": 28,
+          "y": 24,
+          "level": 30,
+          "guardian": false
+        },
+        {
+          "id": "sun_depth_2_mob_10",
+          "monster": "dune_raider",
+          "x": 34,
+          "y": 25,
+          "level": 30,
+          "guardian": true
+        },
+        {
+          "id": "sun_depth_2_mob_11",
+          "monster": "ember_drake",
+          "x": 15,
+          "y": 11,
+          "level": 30,
+          "guardian": false
+        }
+      ],
+      "resources": [],
+      "chests": [
+        {
+          "id": "sun_depth_2_chest",
+          "x": 34,
+          "y": 5,
+          "gold": 59,
+          "materials": {
+            "crystal": 2,
+            "ore": 3
+          },
+          "equipmentChance": 0.3
+        }
+      ],
+      "discoveries": [
+        {
+          "id": "sun_depth_2_record",
+          "name": "태양의 신전의 기록 2",
+          "kind": "landmark",
+          "sprite": "ruin",
+          "x": 6,
+          "y": 24,
+          "description": "군주의 약점과 봉인 장치의 기록입니다.",
+          "rewards": {
+            "xp": 187,
+            "reputation": {
+              "arcanum": 4
+            }
+          }
+        }
+      ],
+      "events": [],
+      "mechanisms": [
+        {
+          "id": "sun_depth_2_lever",
+          "name": "위험 장치 차단",
+          "x": 6,
+          "y": 6,
+          "circuit": "vents",
+          "description": "이 층의 환경 위험을 멈춥니다."
+        }
+      ],
+      "zones": [
+        {
+          "id": "sun_depth_2_vent_0",
+          "circuit": "vents",
+          "x": 16,
+          "y": 15,
+          "kind": "line",
+          "radius": 0.75,
+          "windup": 1.2,
+          "period": 5.5,
+          "damage": 44,
+          "offset": 0.0,
+          "name": "신전의 불꽃",
+          "length": 7,
+          "angles": [
+            0,
+            1.5707963267948966
+          ]
+        },
+        {
+          "id": "sun_depth_2_vent_1",
+          "circuit": "vents",
+          "x": 25,
+          "y": 16,
+          "kind": "line",
+          "radius": 0.75,
+          "windup": 1.2,
+          "period": 5.5,
+          "damage": 44,
+          "offset": 1.3,
+          "name": "신전의 불꽃",
+          "length": 7,
+          "angles": [
+            0,
+            1.5707963267948966
+          ]
+        },
+        {
+          "id": "sun_depth_2_vent_2",
+          "circuit": "vents",
+          "x": 30,
+          "y": 24,
+          "kind": "line",
+          "radius": 0.75,
+          "windup": 1.2,
+          "period": 5.5,
+          "damage": 44,
+          "offset": 2.6,
+          "name": "신전의 불꽃",
+          "length": 7,
+          "angles": [
+            0,
+            1.5707963267948966
+          ]
+        }
+      ],
+      "waypoint": null,
+      "group": "sun",
+      "guardianTotal": 3
+    },
+    "sun_throne": {
+      "id": "sun_throne",
+      "name": "태양을 삼킨 전갈의 전당",
+      "kind": "boss",
+      "width": 34,
+      "height": 28,
+      "level": 31,
+      "music": "boss",
+      "spawn": [
+        3.5,
+        14.5
+      ],
+      "tiles": [
+        "##################################",
+        "#rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr#",
+        "#rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr#",
+        "#rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr#",
+        "#rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr#",
+        "#rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr#",
+        "#rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr#",
+        "#rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr#",
+        "#rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr#",
+        "#rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr#",
+        "#rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr#",
+        "#rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr#",
+        "#rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr#",
+        "#rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr#",
+        "#rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr#",
+        "#rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr#",
+        "#rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr#",
+        "#rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr#",
+        "#rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr#",
+        "#rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr#",
+        "#rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr#",
+        "#rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr#",
+        "#rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr#",
+        "#rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr#",
+        "#rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr#",
+        "#rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr#",
+        "#rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr#",
+        "##################################"
+      ],
+      "props": [
+        {
+          "type": "ruin",
+          "x": 10,
+          "y": 3,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        },
+        {
+          "type": "ruin",
+          "x": 29,
+          "y": 4,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        },
+        {
+          "type": "ruin",
+          "x": 29,
+          "y": 24,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        }
+      ],
+      "npcs": [],
+      "portals": [
+        {
+          "id": "exit",
+          "name": "입구로",
+          "x": 2,
+          "y": 14,
+          "to": "sun_depth_2",
+          "spawn": [
+            36,
+            15.5
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": false
+        }
+      ],
+      "spawns": [
+        {
+          "id": "sun_boss",
+          "monster": "sun_scorpion",
+          "x": 23,
+          "y": 14,
+          "level": 31,
+          "guardian": false
+        }
+      ],
+      "resources": [],
+      "chests": [],
+      "discoveries": [],
+      "events": [],
+      "mechanisms": [
+        {
+          "id": "sun_ward_0",
+          "name": "수호석 1",
+          "x": 9,
+          "y": 5,
+          "ward": true,
+          "description": "해제하면 군주의 피해 감소 12%가 사라집니다."
+        },
+        {
+          "id": "sun_ward_1",
+          "name": "수호석 2",
+          "x": 28,
+          "y": 23,
+          "ward": true,
+          "description": "해제하면 군주의 피해 감소 12%가 사라집니다."
+        }
+      ],
+      "zones": [
+        {
+          "id": "sun_zone_0",
+          "x": 15,
+          "y": 8,
+          "kind": "line",
+          "radius": 0.75,
+          "windup": 1.4,
+          "period": 7,
+          "damage": 49,
+          "offset": 0,
+          "name": "신전의 불꽃",
+          "length": 7,
+          "angles": [
+            0,
+            1.5707963267948966
+          ]
+        },
+        {
+          "id": "sun_zone_1",
+          "x": 18,
+          "y": 21,
+          "kind": "line",
+          "radius": 0.75,
+          "windup": 1.4,
+          "period": 7,
+          "damage": 49,
+          "offset": 2,
+          "name": "신전의 불꽃",
+          "length": 7,
+          "angles": [
+            0,
+            1.5707963267948966
+          ]
+        }
+      ],
+      "waypoint": null,
+      "group": "sun",
+      "boss": "sun_scorpion"
+    },
+    "grave_depth_1": {
+      "id": "grave_depth_1",
+      "name": "왕가의 납골당 · 1층",
+      "kind": "dungeon",
+      "width": 40,
+      "height": 30,
+      "level": 35,
+      "music": "dungeon",
+      "spawn": [
+        3.5,
+        15.5
+      ],
+      "tiles": [
+        "########################################",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvv#vvvvvvv#vvvvvvv#vvvvvvv#vvvvvvv#",
+        "#vvvvvv#vvvvvvv#vvvvvvv#vvvvvvv#vvvvvvv#",
+        "#vvvvvv#vvvvvvv#vvvvvvv#vvvvvvv#vvvvvvv#",
+        "#vvvvvvvvvvvvvv#vvvvvvv#vvvvvvv#vvvvvvv#",
+        "#vvvvvvvvvvvvvv#vvvvvvv#vvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvv#vvvvvvv#vvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvv#vvvvvvv#vvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvv#vvvvvvv#vvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvv#vvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvv#vvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvv#vvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvv#vvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvv#vvvvvvv#vvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvv#vvvvvvv#vvvvvvv#vvvvvvv#",
+        "#vvvvvvvvvvvvvv#vvvvvvvvvvvvvvv#vvvvvvv#",
+        "#vvvvvvvvvvvvvv#vvvvvvvvvvvvvvv#vvvvvvv#",
+        "#vvvvvvvvvvvvvv#vvvvvvvvvvvvvvv#vvvvvvv#",
+        "#vvvvvvvvvvvvvv#vvvvvvvvvvvvvvv#vvvvvvv#",
+        "#vvvvvvvvvvvvvv#vvvvvvvvvvvvvvv#vvvvvvv#",
+        "#vvvvvvvvvvvvvv#vvvvvvv#vvvvvvv#vvvvvvv#",
+        "#vvvvvv#vvvvvvv#vvvvvvv#vvvvvvv#vvvvvvv#",
+        "#vvvvvv#vvvvvvv#vvvvvvv#vvvvvvv#vvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "########################################"
+      ],
+      "props": [
+        {
+          "type": "ruin",
+          "x": 10,
+          "y": 3,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        },
+        {
+          "type": "ruin",
+          "x": 35,
+          "y": 4,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        },
+        {
+          "type": "ruin",
+          "x": 35,
+          "y": 26,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        }
+      ],
+      "npcs": [],
+      "portals": [
+        {
+          "id": "exit",
+          "name": "지상으로",
+          "x": 2,
+          "y": 15,
+          "to": "gravewood",
+          "spawn": [
+            41,
+            5
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": false
+        },
+        {
+          "id": "down",
+          "name": "아래층",
+          "x": 37,
+          "y": 15,
+          "to": "grave_depth_2",
+          "spawn": [
+            3.5,
+            15.5
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": true
+        }
+      ],
+      "spawns": [
+        {
+          "id": "grave_depth_1_mob_0",
+          "monster": "bone_soldier",
+          "x": 10,
+          "y": 7,
+          "level": 35,
+          "guardian": false
+        },
+        {
+          "id": "grave_depth_1_mob_1",
+          "monster": "grave_knight",
+          "x": 20,
+          "y": 7,
+          "level": 35,
+          "guardian": false
+        },
+        {
+          "id": "grave_depth_1_mob_2",
+          "monster": "curse_wraith",
+          "x": 30,
+          "y": 7,
+          "level": 35,
+          "guardian": true
+        },
+        {
+          "id": "grave_depth_1_mob_3",
+          "monster": "bone_soldier",
+          "x": 8,
+          "y": 15,
+          "level": 35,
+          "guardian": false
+        },
+        {
+          "id": "grave_depth_1_mob_4",
+          "monster": "grave_knight",
+          "x": 16,
+          "y": 15,
+          "level": 35,
+          "guardian": false
+        },
+        {
+          "id": "grave_depth_1_mob_5",
+          "monster": "curse_wraith",
+          "x": 25,
+          "y": 16,
+          "level": 35,
+          "guardian": false
+        },
+        {
+          "id": "grave_depth_1_mob_6",
+          "monster": "bone_soldier",
+          "x": 33,
+          "y": 16,
+          "level": 35,
+          "guardian": true
+        },
+        {
+          "id": "grave_depth_1_mob_7",
+          "monster": "grave_knight",
+          "x": 10,
+          "y": 24,
+          "level": 35,
+          "guardian": false
+        },
+        {
+          "id": "grave_depth_1_mob_8",
+          "monster": "curse_wraith",
+          "x": 19,
+          "y": 24,
+          "level": 35,
+          "guardian": false
+        },
+        {
+          "id": "grave_depth_1_mob_9",
+          "monster": "bone_soldier",
+          "x": 28,
+          "y": 24,
+          "level": 35,
+          "guardian": false
+        },
+        {
+          "id": "grave_depth_1_mob_10",
+          "monster": "grave_knight",
+          "x": 34,
+          "y": 25,
+          "level": 35,
+          "guardian": true
+        },
+        {
+          "id": "grave_depth_1_mob_11",
+          "monster": "curse_wraith",
+          "x": 15,
+          "y": 11,
+          "level": 35,
+          "guardian": false
+        }
+      ],
+      "resources": [],
+      "chests": [
+        {
+          "id": "grave_depth_1_chest",
+          "x": 34,
+          "y": 5,
+          "gold": 65,
+          "materials": {
+            "crystal": 2,
+            "ore": 3
+          },
+          "equipmentChance": 0.3
+        }
+      ],
+      "discoveries": [
+        {
+          "id": "grave_depth_1_record",
+          "name": "왕가의 납골당의 기록 1",
+          "kind": "landmark",
+          "sprite": "ruin",
+          "x": 6,
+          "y": 24,
+          "description": "군주의 약점과 봉인 장치의 기록입니다.",
+          "rewards": {
+            "xp": 205,
+            "reputation": {
+              "arcanum": 4
+            }
+          }
+        }
+      ],
+      "events": [],
+      "mechanisms": [
+        {
+          "id": "grave_depth_1_lever",
+          "name": "위험 장치 차단",
+          "x": 6,
+          "y": 6,
+          "circuit": "vents",
+          "description": "이 층의 환경 위험을 멈춥니다."
+        }
+      ],
+      "zones": [
+        {
+          "id": "grave_depth_1_vent_0",
+          "circuit": "vents",
+          "x": 16,
+          "y": 15,
+          "kind": "ring",
+          "radius": 3.2,
+          "windup": 1.2,
+          "period": 5.5,
+          "damage": 50,
+          "offset": 0.0,
+          "name": "영혼 고리",
+          "innerRadius": 1
+        },
+        {
+          "id": "grave_depth_1_vent_1",
+          "circuit": "vents",
+          "x": 25,
+          "y": 16,
+          "kind": "ring",
+          "radius": 3.2,
+          "windup": 1.2,
+          "period": 5.5,
+          "damage": 50,
+          "offset": 1.3,
+          "name": "영혼 고리",
+          "innerRadius": 1
+        },
+        {
+          "id": "grave_depth_1_vent_2",
+          "circuit": "vents",
+          "x": 30,
+          "y": 24,
+          "kind": "ring",
+          "radius": 3.2,
+          "windup": 1.2,
+          "period": 5.5,
+          "damage": 50,
+          "offset": 2.6,
+          "name": "영혼 고리",
+          "innerRadius": 1
+        }
+      ],
+      "waypoint": null,
+      "group": "grave",
+      "guardianTotal": 3
+    },
+    "grave_depth_2": {
+      "id": "grave_depth_2",
+      "name": "왕가의 납골당 · 2층",
+      "kind": "dungeon",
+      "width": 40,
+      "height": 30,
+      "level": 36,
+      "music": "dungeon",
+      "spawn": [
+        3.5,
+        15.5
+      ],
+      "tiles": [
+        "########################################",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvv#vvvvvvv#vvvvvvv#vvvvvvv#vvvvvvv#",
+        "#vvvvvv#vvvvvvv#vvvvvvv#vvvvvvv#vvvvvvv#",
+        "#vvvvvv#vvvvvvv#vvvvvvv#vvvvvvv#vvvvvvv#",
+        "#vvvvvvvvvvvvvv#vvvvvvvvvvvvvvv#vvvvvvv#",
+        "#vvvvvvvvvvvvvv#vvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvv#vvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvv#vvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvv#vvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvv#vvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvv#vvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvv#vvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvv#vvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvv#vvvvvvv#vvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvv#vvvvvvv#vvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvv#vvvvvvv#vvvvvvv#vvvvvvv#",
+        "#vvvvvvvvvvvvvv#vvvvvvv#vvvvvvv#vvvvvvv#",
+        "#vvvvvvvvvvvvvv#vvvvvvv#vvvvvvv#vvvvvvv#",
+        "#vvvvvvvvvvvvvv#vvvvvvv#vvvvvvv#vvvvvvv#",
+        "#vvvvvvvvvvvvvv#vvvvvvv#vvvvvvv#vvvvvvv#",
+        "#vvvvvvvvvvvvvv#vvvvvvv#vvvvvvv#vvvvvvv#",
+        "#vvvvvv#vvvvvvv#vvvvvvv#vvvvvvv#vvvvvvv#",
+        "#vvvvvv#vvvvvvv#vvvvvvv#vvvvvvv#vvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "########################################"
+      ],
+      "props": [
+        {
+          "type": "ruin",
+          "x": 10,
+          "y": 3,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        },
+        {
+          "type": "ruin",
+          "x": 35,
+          "y": 4,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        },
+        {
+          "type": "ruin",
+          "x": 35,
+          "y": 26,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        }
+      ],
+      "npcs": [],
+      "portals": [
+        {
+          "id": "up",
+          "name": "위층",
+          "x": 2,
+          "y": 15,
+          "to": "grave_depth_1",
+          "spawn": [
+            36,
+            15.5
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": false
+        },
+        {
+          "id": "throne",
+          "name": "군주의 방",
+          "x": 37,
+          "y": 15,
+          "to": "grave_throne",
+          "spawn": [
+            3.5,
+            14
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": true
+        }
+      ],
+      "spawns": [
+        {
+          "id": "grave_depth_2_mob_0",
+          "monster": "bone_soldier",
+          "x": 10,
+          "y": 7,
+          "level": 36,
+          "guardian": false
+        },
+        {
+          "id": "grave_depth_2_mob_1",
+          "monster": "grave_knight",
+          "x": 20,
+          "y": 7,
+          "level": 36,
+          "guardian": false
+        },
+        {
+          "id": "grave_depth_2_mob_2",
+          "monster": "curse_wraith",
+          "x": 30,
+          "y": 7,
+          "level": 36,
+          "guardian": true
+        },
+        {
+          "id": "grave_depth_2_mob_3",
+          "monster": "bone_soldier",
+          "x": 8,
+          "y": 15,
+          "level": 36,
+          "guardian": false
+        },
+        {
+          "id": "grave_depth_2_mob_4",
+          "monster": "grave_knight",
+          "x": 16,
+          "y": 15,
+          "level": 36,
+          "guardian": false
+        },
+        {
+          "id": "grave_depth_2_mob_5",
+          "monster": "curse_wraith",
+          "x": 25,
+          "y": 16,
+          "level": 36,
+          "guardian": false
+        },
+        {
+          "id": "grave_depth_2_mob_6",
+          "monster": "bone_soldier",
+          "x": 33,
+          "y": 16,
+          "level": 36,
+          "guardian": true
+        },
+        {
+          "id": "grave_depth_2_mob_7",
+          "monster": "grave_knight",
+          "x": 10,
+          "y": 24,
+          "level": 36,
+          "guardian": false
+        },
+        {
+          "id": "grave_depth_2_mob_8",
+          "monster": "curse_wraith",
+          "x": 19,
+          "y": 24,
+          "level": 36,
+          "guardian": false
+        },
+        {
+          "id": "grave_depth_2_mob_9",
+          "monster": "bone_soldier",
+          "x": 28,
+          "y": 24,
+          "level": 36,
+          "guardian": false
+        },
+        {
+          "id": "grave_depth_2_mob_10",
+          "monster": "grave_knight",
+          "x": 34,
+          "y": 25,
+          "level": 36,
+          "guardian": true
+        },
+        {
+          "id": "grave_depth_2_mob_11",
+          "monster": "curse_wraith",
+          "x": 15,
+          "y": 11,
+          "level": 36,
+          "guardian": false
+        }
+      ],
+      "resources": [],
+      "chests": [
+        {
+          "id": "grave_depth_2_chest",
+          "x": 34,
+          "y": 5,
+          "gold": 65,
+          "materials": {
+            "crystal": 2,
+            "ore": 3
+          },
+          "equipmentChance": 0.3
+        }
+      ],
+      "discoveries": [
+        {
+          "id": "grave_depth_2_record",
+          "name": "왕가의 납골당의 기록 2",
+          "kind": "landmark",
+          "sprite": "ruin",
+          "x": 6,
+          "y": 24,
+          "description": "군주의 약점과 봉인 장치의 기록입니다.",
+          "rewards": {
+            "xp": 205,
+            "reputation": {
+              "arcanum": 4
+            }
+          }
+        }
+      ],
+      "events": [],
+      "mechanisms": [
+        {
+          "id": "grave_depth_2_lever",
+          "name": "위험 장치 차단",
+          "x": 6,
+          "y": 6,
+          "circuit": "vents",
+          "description": "이 층의 환경 위험을 멈춥니다."
+        }
+      ],
+      "zones": [
+        {
+          "id": "grave_depth_2_vent_0",
+          "circuit": "vents",
+          "x": 16,
+          "y": 15,
+          "kind": "ring",
+          "radius": 3.2,
+          "windup": 1.2,
+          "period": 5.5,
+          "damage": 50,
+          "offset": 0.0,
+          "name": "영혼 고리",
+          "innerRadius": 1
+        },
+        {
+          "id": "grave_depth_2_vent_1",
+          "circuit": "vents",
+          "x": 25,
+          "y": 16,
+          "kind": "ring",
+          "radius": 3.2,
+          "windup": 1.2,
+          "period": 5.5,
+          "damage": 50,
+          "offset": 1.3,
+          "name": "영혼 고리",
+          "innerRadius": 1
+        },
+        {
+          "id": "grave_depth_2_vent_2",
+          "circuit": "vents",
+          "x": 30,
+          "y": 24,
+          "kind": "ring",
+          "radius": 3.2,
+          "windup": 1.2,
+          "period": 5.5,
+          "damage": 50,
+          "offset": 2.6,
+          "name": "영혼 고리",
+          "innerRadius": 1
+        }
+      ],
+      "waypoint": null,
+      "group": "grave",
+      "guardianTotal": 3
+    },
+    "grave_throne": {
+      "id": "grave_throne",
+      "name": "망자의 원수의 전당",
+      "kind": "boss",
+      "width": 34,
+      "height": 28,
+      "level": 37,
+      "music": "boss",
+      "spawn": [
+        3.5,
+        14.5
+      ],
+      "tiles": [
+        "##################################",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "##################################"
+      ],
+      "props": [
+        {
+          "type": "ruin",
+          "x": 10,
+          "y": 3,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        },
+        {
+          "type": "ruin",
+          "x": 29,
+          "y": 4,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        },
+        {
+          "type": "ruin",
+          "x": 29,
+          "y": 24,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        }
+      ],
+      "npcs": [],
+      "portals": [
+        {
+          "id": "exit",
+          "name": "입구로",
+          "x": 2,
+          "y": 14,
+          "to": "grave_depth_2",
+          "spawn": [
+            36,
+            15.5
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": false
+        }
+      ],
+      "spawns": [
+        {
+          "id": "grave_boss",
+          "monster": "grave_marshal",
+          "x": 23,
+          "y": 14,
+          "level": 37,
+          "guardian": false
+        }
+      ],
+      "resources": [],
+      "chests": [],
+      "discoveries": [],
+      "events": [],
+      "mechanisms": [
+        {
+          "id": "grave_ward_0",
+          "name": "수호석 1",
+          "x": 9,
+          "y": 5,
+          "ward": true,
+          "description": "해제하면 군주의 피해 감소 12%가 사라집니다."
+        },
+        {
+          "id": "grave_ward_1",
+          "name": "수호석 2",
+          "x": 28,
+          "y": 23,
+          "ward": true,
+          "description": "해제하면 군주의 피해 감소 12%가 사라집니다."
+        }
+      ],
+      "zones": [
+        {
+          "id": "grave_zone_0",
+          "x": 15,
+          "y": 8,
+          "kind": "ring",
+          "radius": 3.2,
+          "windup": 1.4,
+          "period": 7,
+          "damage": 55,
+          "offset": 0,
+          "name": "영혼 고리",
+          "innerRadius": 1
+        },
+        {
+          "id": "grave_zone_1",
+          "x": 18,
+          "y": 21,
+          "kind": "ring",
+          "radius": 3.2,
+          "windup": 1.4,
+          "period": 7,
+          "damage": 55,
+          "offset": 2,
+          "name": "영혼 고리",
+          "innerRadius": 1
+        }
+      ],
+      "waypoint": null,
+      "group": "grave",
+      "boss": "grave_marshal"
+    },
+    "eclipse_depth_1": {
+      "id": "eclipse_depth_1",
+      "name": "황혼 성채 · 1층",
+      "kind": "dungeon",
+      "width": 40,
+      "height": 30,
+      "level": 41,
+      "music": "dungeon",
+      "spawn": [
+        3.5,
+        15.5
+      ],
+      "tiles": [
+        "########################################",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaa#aaaaaaa#aaaaaaa#aaaaaaa#aaaaaaa#",
+        "#aaaaaa#aaaaaaa#aaaaaaa#aaaaaaa#aaaaaaa#",
+        "#aaaaaa#aaaaaaa#aaaaaaa#aaaaaaa#aaaaaaa#",
+        "#aaaaaaaaaaaaaa#aaaaaaaaaaaaaaa#aaaaaaa#",
+        "#aaaaaaaaaaaaaa#aaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaa#aaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaa#aaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaa#aaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaa#aaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaa#aaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaa#aaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaa#aaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaa#aaaaaaa#aaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaa#aaaaaaa#aaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaa#aaaaaaa#aaaaaaa#aaaaaaa#",
+        "#aaaaaaaaaaaaaa#aaaaaaa#aaaaaaa#aaaaaaa#",
+        "#aaaaaaaaaaaaaa#aaaaaaa#aaaaaaa#aaaaaaa#",
+        "#aaaaaaaaaaaaaa#aaaaaaa#aaaaaaa#aaaaaaa#",
+        "#aaaaaaaaaaaaaa#aaaaaaa#aaaaaaa#aaaaaaa#",
+        "#aaaaaaaaaaaaaa#aaaaaaa#aaaaaaa#aaaaaaa#",
+        "#aaaaaa#aaaaaaa#aaaaaaa#aaaaaaa#aaaaaaa#",
+        "#aaaaaa#aaaaaaa#aaaaaaa#aaaaaaa#aaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "########################################"
+      ],
+      "props": [
+        {
+          "type": "ruin",
+          "x": 10,
+          "y": 3,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        },
+        {
+          "type": "ruin",
+          "x": 35,
+          "y": 4,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        },
+        {
+          "type": "ruin",
+          "x": 35,
+          "y": 26,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        }
+      ],
+      "npcs": [],
+      "portals": [
+        {
+          "id": "exit",
+          "name": "지상으로",
+          "x": 2,
+          "y": 15,
+          "to": "eclipse_plain",
+          "spawn": [
+            41,
+            5
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": false
+        },
+        {
+          "id": "down",
+          "name": "아래층",
+          "x": 37,
+          "y": 15,
+          "to": "eclipse_depth_2",
+          "spawn": [
+            3.5,
+            15.5
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": true
+        }
+      ],
+      "spawns": [
+        {
+          "id": "eclipse_depth_1_mob_0",
+          "monster": "dusk_sentinel",
+          "x": 10,
+          "y": 7,
+          "level": 41,
+          "guardian": false
+        },
+        {
+          "id": "eclipse_depth_1_mob_1",
+          "monster": "dusk_magus",
+          "x": 20,
+          "y": 7,
+          "level": 41,
+          "guardian": false
+        },
+        {
+          "id": "eclipse_depth_1_mob_2",
+          "monster": "abyss_spider",
+          "x": 30,
+          "y": 7,
+          "level": 41,
+          "guardian": true
+        },
+        {
+          "id": "eclipse_depth_1_mob_3",
+          "monster": "dusk_sentinel",
+          "x": 8,
+          "y": 15,
+          "level": 41,
+          "guardian": false
+        },
+        {
+          "id": "eclipse_depth_1_mob_4",
+          "monster": "dusk_magus",
+          "x": 16,
+          "y": 15,
+          "level": 41,
+          "guardian": false
+        },
+        {
+          "id": "eclipse_depth_1_mob_5",
+          "monster": "abyss_spider",
+          "x": 25,
+          "y": 16,
+          "level": 41,
+          "guardian": false
+        },
+        {
+          "id": "eclipse_depth_1_mob_6",
+          "monster": "dusk_sentinel",
+          "x": 33,
+          "y": 16,
+          "level": 41,
+          "guardian": true
+        },
+        {
+          "id": "eclipse_depth_1_mob_7",
+          "monster": "dusk_magus",
+          "x": 10,
+          "y": 24,
+          "level": 41,
+          "guardian": false
+        },
+        {
+          "id": "eclipse_depth_1_mob_8",
+          "monster": "abyss_spider",
+          "x": 19,
+          "y": 24,
+          "level": 41,
+          "guardian": false
+        },
+        {
+          "id": "eclipse_depth_1_mob_9",
+          "monster": "dusk_sentinel",
+          "x": 28,
+          "y": 24,
+          "level": 41,
+          "guardian": false
+        },
+        {
+          "id": "eclipse_depth_1_mob_10",
+          "monster": "dusk_magus",
+          "x": 34,
+          "y": 25,
+          "level": 41,
+          "guardian": true
+        },
+        {
+          "id": "eclipse_depth_1_mob_11",
+          "monster": "abyss_spider",
+          "x": 15,
+          "y": 11,
+          "level": 41,
+          "guardian": false
+        }
+      ],
+      "resources": [],
+      "chests": [
+        {
+          "id": "eclipse_depth_1_chest",
+          "x": 34,
+          "y": 5,
+          "gold": 71,
+          "materials": {
+            "crystal": 2,
+            "ore": 3
+          },
+          "equipmentChance": 0.3
+        }
+      ],
+      "discoveries": [
+        {
+          "id": "eclipse_depth_1_record",
+          "name": "황혼 성채의 기록 1",
+          "kind": "landmark",
+          "sprite": "ruin",
+          "x": 6,
+          "y": 24,
+          "description": "군주의 약점과 봉인 장치의 기록입니다.",
+          "rewards": {
+            "xp": 223,
+            "reputation": {
+              "arcanum": 4
+            }
+          }
+        }
+      ],
+      "events": [],
+      "mechanisms": [
+        {
+          "id": "eclipse_depth_1_lever",
+          "name": "위험 장치 차단",
+          "x": 6,
+          "y": 6,
+          "circuit": "vents",
+          "description": "이 층의 환경 위험을 멈춥니다."
+        }
+      ],
+      "zones": [
+        {
+          "id": "eclipse_depth_1_vent_0",
+          "circuit": "vents",
+          "x": 16,
+          "y": 15,
+          "kind": "circle",
+          "radius": 1.8,
+          "windup": 1.2,
+          "period": 5.5,
+          "damage": 56,
+          "offset": 0.0,
+          "name": "황혼 분출"
+        },
+        {
+          "id": "eclipse_depth_1_vent_1",
+          "circuit": "vents",
+          "x": 25,
+          "y": 16,
+          "kind": "circle",
+          "radius": 1.8,
+          "windup": 1.2,
+          "period": 5.5,
+          "damage": 56,
+          "offset": 1.3,
+          "name": "황혼 분출"
+        },
+        {
+          "id": "eclipse_depth_1_vent_2",
+          "circuit": "vents",
+          "x": 30,
+          "y": 24,
+          "kind": "circle",
+          "radius": 1.8,
+          "windup": 1.2,
+          "period": 5.5,
+          "damage": 56,
+          "offset": 2.6,
+          "name": "황혼 분출"
+        }
+      ],
+      "waypoint": null,
+      "group": "eclipse",
+      "guardianTotal": 3
+    },
+    "eclipse_depth_2": {
+      "id": "eclipse_depth_2",
+      "name": "황혼 성채 · 2층",
+      "kind": "dungeon",
+      "width": 40,
+      "height": 30,
+      "level": 42,
+      "music": "dungeon",
+      "spawn": [
+        3.5,
+        15.5
+      ],
+      "tiles": [
+        "########################################",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaa#aaaaaaa#aaaaaaa#aaaaaaa#aaaaaaa#",
+        "#aaaaaa#aaaaaaa#aaaaaaa#aaaaaaa#aaaaaaa#",
+        "#aaaaaa#aaaaaaa#aaaaaaa#aaaaaaa#aaaaaaa#",
+        "#aaaaaaaaaaaaaa#aaaaaaa#aaaaaaa#aaaaaaa#",
+        "#aaaaaaaaaaaaaa#aaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaa#aaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaa#aaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaa#aaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaa#aaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaa#aaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaa#aaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaa#aaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaa#aaaaaaa#aaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaa#aaaaaaa#aaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaa#aaaaaaa#aaaaaaa#aaaaaaa#",
+        "#aaaaaaaaaaaaaa#aaaaaaa#aaaaaaa#aaaaaaa#",
+        "#aaaaaaaaaaaaaa#aaaaaaa#aaaaaaa#aaaaaaa#",
+        "#aaaaaaaaaaaaaa#aaaaaaa#aaaaaaa#aaaaaaa#",
+        "#aaaaaaaaaaaaaa#aaaaaaa#aaaaaaa#aaaaaaa#",
+        "#aaaaaa#aaaaaaa#aaaaaaa#aaaaaaa#aaaaaaa#",
+        "#aaaaaa#aaaaaaa#aaaaaaa#aaaaaaa#aaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "########################################"
+      ],
+      "props": [
+        {
+          "type": "ruin",
+          "x": 10,
+          "y": 3,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        },
+        {
+          "type": "ruin",
+          "x": 35,
+          "y": 4,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        },
+        {
+          "type": "ruin",
+          "x": 35,
+          "y": 26,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        }
+      ],
+      "npcs": [],
+      "portals": [
+        {
+          "id": "up",
+          "name": "위층",
+          "x": 2,
+          "y": 15,
+          "to": "eclipse_depth_1",
+          "spawn": [
+            36,
+            15.5
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": false
+        },
+        {
+          "id": "throne",
+          "name": "군주의 방",
+          "x": 37,
+          "y": 15,
+          "to": "eclipse_throne",
+          "spawn": [
+            3.5,
+            14
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": true
+        }
+      ],
+      "spawns": [
+        {
+          "id": "eclipse_depth_2_mob_0",
+          "monster": "dusk_sentinel",
+          "x": 10,
+          "y": 7,
+          "level": 42,
+          "guardian": false
+        },
+        {
+          "id": "eclipse_depth_2_mob_1",
+          "monster": "dusk_magus",
+          "x": 20,
+          "y": 7,
+          "level": 42,
+          "guardian": false
+        },
+        {
+          "id": "eclipse_depth_2_mob_2",
+          "monster": "abyss_spider",
+          "x": 30,
+          "y": 7,
+          "level": 42,
+          "guardian": true
+        },
+        {
+          "id": "eclipse_depth_2_mob_3",
+          "monster": "dusk_sentinel",
+          "x": 8,
+          "y": 15,
+          "level": 42,
+          "guardian": false
+        },
+        {
+          "id": "eclipse_depth_2_mob_4",
+          "monster": "dusk_magus",
+          "x": 16,
+          "y": 15,
+          "level": 42,
+          "guardian": false
+        },
+        {
+          "id": "eclipse_depth_2_mob_5",
+          "monster": "abyss_spider",
+          "x": 25,
+          "y": 16,
+          "level": 42,
+          "guardian": false
+        },
+        {
+          "id": "eclipse_depth_2_mob_6",
+          "monster": "dusk_sentinel",
+          "x": 33,
+          "y": 16,
+          "level": 42,
+          "guardian": true
+        },
+        {
+          "id": "eclipse_depth_2_mob_7",
+          "monster": "dusk_magus",
+          "x": 10,
+          "y": 24,
+          "level": 42,
+          "guardian": false
+        },
+        {
+          "id": "eclipse_depth_2_mob_8",
+          "monster": "abyss_spider",
+          "x": 19,
+          "y": 24,
+          "level": 42,
+          "guardian": false
+        },
+        {
+          "id": "eclipse_depth_2_mob_9",
+          "monster": "dusk_sentinel",
+          "x": 28,
+          "y": 24,
+          "level": 42,
+          "guardian": false
+        },
+        {
+          "id": "eclipse_depth_2_mob_10",
+          "monster": "dusk_magus",
+          "x": 34,
+          "y": 25,
+          "level": 42,
+          "guardian": true
+        },
+        {
+          "id": "eclipse_depth_2_mob_11",
+          "monster": "abyss_spider",
+          "x": 15,
+          "y": 11,
+          "level": 42,
+          "guardian": false
+        }
+      ],
+      "resources": [],
+      "chests": [
+        {
+          "id": "eclipse_depth_2_chest",
+          "x": 34,
+          "y": 5,
+          "gold": 71,
+          "materials": {
+            "crystal": 2,
+            "ore": 3
+          },
+          "equipmentChance": 0.3
+        }
+      ],
+      "discoveries": [
+        {
+          "id": "eclipse_depth_2_record",
+          "name": "황혼 성채의 기록 2",
+          "kind": "landmark",
+          "sprite": "ruin",
+          "x": 6,
+          "y": 24,
+          "description": "군주의 약점과 봉인 장치의 기록입니다.",
+          "rewards": {
+            "xp": 223,
+            "reputation": {
+              "arcanum": 4
+            }
+          }
+        }
+      ],
+      "events": [],
+      "mechanisms": [
+        {
+          "id": "eclipse_depth_2_lever",
+          "name": "위험 장치 차단",
+          "x": 6,
+          "y": 6,
+          "circuit": "vents",
+          "description": "이 층의 환경 위험을 멈춥니다."
+        }
+      ],
+      "zones": [
+        {
+          "id": "eclipse_depth_2_vent_0",
+          "circuit": "vents",
+          "x": 16,
+          "y": 15,
+          "kind": "circle",
+          "radius": 1.8,
+          "windup": 1.2,
+          "period": 5.5,
+          "damage": 56,
+          "offset": 0.0,
+          "name": "황혼 분출"
+        },
+        {
+          "id": "eclipse_depth_2_vent_1",
+          "circuit": "vents",
+          "x": 25,
+          "y": 16,
+          "kind": "circle",
+          "radius": 1.8,
+          "windup": 1.2,
+          "period": 5.5,
+          "damage": 56,
+          "offset": 1.3,
+          "name": "황혼 분출"
+        },
+        {
+          "id": "eclipse_depth_2_vent_2",
+          "circuit": "vents",
+          "x": 30,
+          "y": 24,
+          "kind": "circle",
+          "radius": 1.8,
+          "windup": 1.2,
+          "period": 5.5,
+          "damage": 56,
+          "offset": 2.6,
+          "name": "황혼 분출"
+        }
+      ],
+      "waypoint": null,
+      "group": "eclipse",
+      "guardianTotal": 3
+    },
+    "eclipse_throne": {
+      "id": "eclipse_throne",
+      "name": "황혼왕 발테르의 전당",
+      "kind": "boss",
+      "width": 34,
+      "height": 28,
+      "level": 43,
+      "music": "boss",
+      "spawn": [
+        3.5,
+        14.5
+      ],
+      "tiles": [
+        "##################################",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "##################################"
+      ],
+      "props": [
+        {
+          "type": "ruin",
+          "x": 10,
+          "y": 3,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        },
+        {
+          "type": "ruin",
+          "x": 29,
+          "y": 4,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        },
+        {
+          "type": "ruin",
+          "x": 29,
+          "y": 24,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        }
+      ],
+      "npcs": [],
+      "portals": [
+        {
+          "id": "exit",
+          "name": "입구로",
+          "x": 2,
+          "y": 14,
+          "to": "eclipse_depth_2",
+          "spawn": [
+            36,
+            15.5
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": false
+        }
+      ],
+      "spawns": [
+        {
+          "id": "eclipse_boss",
+          "monster": "eclipse_king",
+          "x": 23,
+          "y": 14,
+          "level": 43,
+          "guardian": false
+        }
+      ],
+      "resources": [],
+      "chests": [],
+      "discoveries": [],
+      "events": [],
+      "mechanisms": [
+        {
+          "id": "eclipse_ward_0",
+          "name": "수호석 1",
+          "x": 9,
+          "y": 5,
+          "ward": true,
+          "description": "해제하면 군주의 피해 감소 12%가 사라집니다."
+        },
+        {
+          "id": "eclipse_ward_1",
+          "name": "수호석 2",
+          "x": 28,
+          "y": 23,
+          "ward": true,
+          "description": "해제하면 군주의 피해 감소 12%가 사라집니다."
+        }
+      ],
+      "zones": [
+        {
+          "id": "eclipse_zone_0",
+          "x": 15,
+          "y": 8,
+          "kind": "circle",
+          "radius": 2,
+          "windup": 1.4,
+          "period": 7,
+          "damage": 61,
+          "offset": 0,
+          "name": "황혼 분출"
+        },
+        {
+          "id": "eclipse_zone_1",
+          "x": 18,
+          "y": 21,
+          "kind": "circle",
+          "radius": 2,
+          "windup": 1.4,
+          "period": 7,
+          "damage": 61,
+          "offset": 2,
+          "name": "황혼 분출"
+        }
+      ],
+      "waypoint": null,
+      "group": "eclipse",
+      "boss": "eclipse_king"
+    },
+    "forest_den_deep": {
+      "id": "forest_den_deep",
+      "name": "늑대숲 동굴 · 심층",
+      "kind": "dungeon",
+      "width": 36,
+      "height": 28,
+      "level": 6,
+      "music": "dungeon",
+      "spawn": [
+        3.5,
+        14.5
+      ],
+      "tiles": [
+        "####################################",
+        "#ffffffffffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffffffffffff#",
+        "#ffffff#fffffff#fffffff#fffffff#fff#",
+        "#ffffff#fffffff#fffffff#fffffff#fff#",
+        "#ffffff#fffffff#fffffff#fffffffffff#",
+        "#ffffff#fffffff#fffffff#fffffffffff#",
+        "#ffffff#fffffff#fffffff#fffffffffff#",
+        "#ffffff#fffffff#fffffff#fffffffffff#",
+        "#ffffff#fffffffffffffff#fffffffffff#",
+        "#ffffff#fffffffffffffff#fffffffffff#",
+        "#ffffff#fffffffffffffff#fffffffffff#",
+        "#ffffff#fffffffffffffff#fffffffffff#",
+        "#ffffffffffffffffffffff#fffffffffff#",
+        "#ffffffffffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffffffffffff#",
+        "#ffffffffffffff#fffffff#fffffffffff#",
+        "#ffffffffffffff#fffffffffffffffffff#",
+        "#ffffffffffffff#fffffffffffffffffff#",
+        "#ffffffffffffff#fffffffffffffffffff#",
+        "#ffffffffffffff#fffffffffffffffffff#",
+        "#ffffffffffffff#fffffffffffffffffff#",
+        "#ffffffffffffff#fffffff#fffffffffff#",
+        "#ffffff#fffffff#fffffff#fffffff#fff#",
+        "#ffffff#fffffff#fffffff#fffffff#fff#",
+        "#ffffffffffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffffffffffff#",
+        "####################################"
+      ],
+      "props": [],
+      "npcs": [],
+      "portals": [
+        {
+          "id": "up",
+          "name": "위층",
+          "x": 2,
+          "y": 14,
+          "to": "forest_den",
+          "spawn": [
+            27,
+            12.5
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": false
+        },
+        {
+          "id": "boss",
+          "name": "군주의 방",
+          "x": 33,
+          "y": 14,
+          "to": "wolf_lair",
+          "spawn": [
+            3.5,
+            11.5
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": true
+        }
+      ],
+      "spawns": [
+        {
+          "id": "forest_den_deep_0",
+          "monster": "cave_bat",
+          "x": 9,
+          "y": 6,
+          "level": 6,
+          "guardian": false
+        },
+        {
+          "id": "forest_den_deep_1",
+          "monster": "venom_spider",
+          "x": 18,
+          "y": 6,
+          "level": 6,
+          "guardian": false
+        },
+        {
+          "id": "forest_den_deep_2",
+          "monster": "goblin_guard",
+          "x": 27,
+          "y": 6,
+          "level": 6,
+          "guardian": true
+        },
+        {
+          "id": "forest_den_deep_3",
+          "monster": "cave_bat",
+          "x": 9,
+          "y": 14,
+          "level": 6,
+          "guardian": false
+        },
+        {
+          "id": "forest_den_deep_4",
+          "monster": "venom_spider",
+          "x": 18,
+          "y": 14,
+          "level": 6,
+          "guardian": false
+        },
+        {
+          "id": "forest_den_deep_5",
+          "monster": "goblin_guard",
+          "x": 28,
+          "y": 14,
+          "level": 6,
+          "guardian": true
+        },
+        {
+          "id": "forest_den_deep_6",
+          "monster": "cave_bat",
+          "x": 10,
+          "y": 22,
+          "level": 6,
+          "guardian": false
+        },
+        {
+          "id": "forest_den_deep_7",
+          "monster": "venom_spider",
+          "x": 21,
+          "y": 22,
+          "level": 6,
+          "guardian": false
+        },
+        {
+          "id": "forest_den_deep_8",
+          "monster": "goblin_guard",
+          "x": 30,
+          "y": 22,
+          "level": 6,
+          "guardian": true
+        }
+      ],
+      "resources": [],
+      "chests": [
+        {
+          "id": "forest_den_deep_chest",
+          "x": 30,
+          "y": 5,
+          "gold": 35,
+          "materials": {
+            "ore": 3,
+            "crystal": 2
+          },
+          "equipmentChance": 0.3
+        }
+      ],
+      "discoveries": [],
+      "events": [],
+      "mechanisms": [
+        {
+          "id": "forest_den_deep_lever",
+          "name": "분출 장치 차단",
+          "x": 6,
+          "y": 22,
+          "circuit": "steam",
+          "description": "증기 분출을 멈춥니다."
+        }
+      ],
+      "zones": [
+        {
+          "id": "forest_den_deep_zone",
+          "circuit": "steam",
+          "x": 18,
+          "y": 14,
+          "kind": "ring",
+          "radius": 3.5,
+          "innerRadius": 1.1,
+          "windup": 1.4,
+          "period": 6,
+          "damage": 20,
+          "offset": 0,
+          "name": "봉인 파동"
+        }
+      ],
+      "waypoint": null,
+      "group": "wolf",
+      "guardianTotal": 3
+    },
+    "mine_deep": {
+      "id": "mine_deep",
+      "name": "잊힌 폐광 · 심층",
+      "kind": "dungeon",
+      "width": 36,
+      "height": 28,
+      "level": 9,
+      "music": "dungeon",
+      "spawn": [
+        3.5,
+        14.5
+      ],
+      "tiles": [
+        "####################################",
+        "#ffffffffffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffffffffffff#",
+        "#ffffff#fffffff#fffffff#fffffff#fff#",
+        "#ffffff#fffffff#fffffff#fffffff#fff#",
+        "#ffffff#fffffff#fffffff#fffffffffff#",
+        "#ffffff#fffffff#fffffffffffffffffff#",
+        "#ffffff#fffffff#fffffffffffffffffff#",
+        "#ffffff#fffffff#fffffffffffffffffff#",
+        "#ffffff#fffffff#fffffffffffffffffff#",
+        "#ffffff#fffffffffffffffffffffffffff#",
+        "#ffffff#fffffffffffffff#fffffffffff#",
+        "#ffffff#fffffffffffffff#fffffffffff#",
+        "#ffffff#fffffffffffffff#fffffffffff#",
+        "#ffffffffffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffffffffffff#",
+        "#ffffffffffffff#fffffff#fffffffffff#",
+        "#ffffffffffffff#fffffff#fffffffffff#",
+        "#ffffffffffffff#fffffff#fffffffffff#",
+        "#ffffffffffffff#fffffff#fffffffffff#",
+        "#ffffffffffffff#fffffff#fffffffffff#",
+        "#ffffffffffffff#fffffff#fffffffffff#",
+        "#ffffffffffffff#fffffff#fffffffffff#",
+        "#ffffff#fffffff#fffffff#fffffff#fff#",
+        "#ffffff#fffffff#fffffff#fffffff#fff#",
+        "#ffffffffffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffffffffffff#",
+        "####################################"
+      ],
+      "props": [],
+      "npcs": [],
+      "portals": [
+        {
+          "id": "up",
+          "name": "위층",
+          "x": 2,
+          "y": 14,
+          "to": "mine",
+          "spawn": [
+            29,
+            12.5
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": false
+        },
+        {
+          "id": "boss",
+          "name": "군주의 방",
+          "x": 33,
+          "y": 14,
+          "to": "forge_chamber",
+          "spawn": [
+            3.5,
+            11.5
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": true
+        }
+      ],
+      "spawns": [
+        {
+          "id": "mine_deep_0",
+          "monster": "bone_soldier",
+          "x": 9,
+          "y": 6,
+          "level": 9,
+          "guardian": false
+        },
+        {
+          "id": "mine_deep_1",
+          "monster": "cave_bat",
+          "x": 18,
+          "y": 6,
+          "level": 9,
+          "guardian": false
+        },
+        {
+          "id": "mine_deep_2",
+          "monster": "golem",
+          "x": 27,
+          "y": 6,
+          "level": 9,
+          "guardian": true
+        },
+        {
+          "id": "mine_deep_3",
+          "monster": "bone_soldier",
+          "x": 9,
+          "y": 14,
+          "level": 9,
+          "guardian": false
+        },
+        {
+          "id": "mine_deep_4",
+          "monster": "cave_bat",
+          "x": 18,
+          "y": 14,
+          "level": 9,
+          "guardian": false
+        },
+        {
+          "id": "mine_deep_5",
+          "monster": "golem",
+          "x": 28,
+          "y": 14,
+          "level": 9,
+          "guardian": true
+        },
+        {
+          "id": "mine_deep_6",
+          "monster": "bone_soldier",
+          "x": 10,
+          "y": 22,
+          "level": 9,
+          "guardian": false
+        },
+        {
+          "id": "mine_deep_7",
+          "monster": "cave_bat",
+          "x": 21,
+          "y": 22,
+          "level": 9,
+          "guardian": false
+        },
+        {
+          "id": "mine_deep_8",
+          "monster": "golem",
+          "x": 30,
+          "y": 22,
+          "level": 9,
+          "guardian": true
+        }
+      ],
+      "resources": [],
+      "chests": [
+        {
+          "id": "mine_deep_chest",
+          "x": 30,
+          "y": 5,
+          "gold": 41,
+          "materials": {
+            "ore": 3,
+            "crystal": 2
+          },
+          "equipmentChance": 0.3
+        }
+      ],
+      "discoveries": [],
+      "events": [],
+      "mechanisms": [
+        {
+          "id": "mine_deep_lever",
+          "name": "분출 장치 차단",
+          "x": 6,
+          "y": 22,
+          "circuit": "steam",
+          "description": "증기 분출을 멈춥니다."
+        }
+      ],
+      "zones": [
+        {
+          "id": "mine_deep_zone",
+          "circuit": "steam",
+          "x": 18,
+          "y": 14,
+          "kind": "ring",
+          "radius": 3.5,
+          "innerRadius": 1.1,
+          "windup": 1.4,
+          "period": 6,
+          "damage": 23,
+          "offset": 0,
+          "name": "봉인 파동"
+        }
+      ],
+      "waypoint": null,
+      "group": "mine",
+      "guardianTotal": 3
+    },
+    "ruins_deep": {
+      "id": "ruins_deep",
+      "name": "별의 유적 · 심층",
+      "kind": "dungeon",
+      "width": 36,
+      "height": 28,
+      "level": 13,
+      "music": "dungeon",
+      "spawn": [
+        3.5,
+        14.5
+      ],
+      "tiles": [
+        "####################################",
+        "#ffffffffffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffffffffffff#",
+        "#ffffff#fffffff#fffffff#fffffff#fff#",
+        "#ffffff#fffffff#fffffff#fffffff#fff#",
+        "#ffffff#fffffff#fffffff#fffffffffff#",
+        "#ffffff#fffffff#fffffff#fffffffffff#",
+        "#ffffff#fffffff#fffffffffffffffffff#",
+        "#ffffff#fffffff#fffffffffffffffffff#",
+        "#ffffff#fffffff#fffffffffffffffffff#",
+        "#ffffff#fffffff#fffffffffffffffffff#",
+        "#ffffff#fffffffffffffffffffffffffff#",
+        "#ffffff#fffffffffffffff#fffffffffff#",
+        "#ffffff#fffffffffffffff#fffffffffff#",
+        "#ffffffffffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffffffffffff#",
+        "#ffffffffffffff#fffffff#fffffffffff#",
+        "#ffffffffffffff#fffffff#fffffffffff#",
+        "#ffffffffffffff#fffffff#fffffffffff#",
+        "#ffffffffffffff#fffffff#fffffffffff#",
+        "#ffffffffffffff#fffffff#fffffffffff#",
+        "#ffffffffffffff#fffffff#fffffffffff#",
+        "#ffffffffffffff#fffffff#fffffffffff#",
+        "#ffffff#fffffff#fffffff#fffffff#fff#",
+        "#ffffff#fffffff#fffffff#fffffff#fff#",
+        "#ffffffffffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffffffffffff#",
+        "####################################"
+      ],
+      "props": [],
+      "npcs": [],
+      "portals": [
+        {
+          "id": "up",
+          "name": "위층",
+          "x": 2,
+          "y": 14,
+          "to": "ruins",
+          "spawn": [
+            31,
+            12.5
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": false
+        },
+        {
+          "id": "boss",
+          "name": "군주의 방",
+          "x": 33,
+          "y": 14,
+          "to": "dragon_sanctum",
+          "spawn": [
+            3.5,
+            11.5
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": true
+        }
+      ],
+      "spawns": [
+        {
+          "id": "ruins_deep_0",
+          "monster": "curse_wraith",
+          "x": 9,
+          "y": 6,
+          "level": 13,
+          "guardian": false
+        },
+        {
+          "id": "ruins_deep_1",
+          "monster": "lizard",
+          "x": 18,
+          "y": 6,
+          "level": 13,
+          "guardian": false
+        },
+        {
+          "id": "ruins_deep_2",
+          "monster": "lizard_shaman",
+          "x": 27,
+          "y": 6,
+          "level": 13,
+          "guardian": true
+        },
+        {
+          "id": "ruins_deep_3",
+          "monster": "curse_wraith",
+          "x": 9,
+          "y": 14,
+          "level": 13,
+          "guardian": false
+        },
+        {
+          "id": "ruins_deep_4",
+          "monster": "lizard",
+          "x": 18,
+          "y": 14,
+          "level": 13,
+          "guardian": false
+        },
+        {
+          "id": "ruins_deep_5",
+          "monster": "lizard_shaman",
+          "x": 28,
+          "y": 14,
+          "level": 13,
+          "guardian": true
+        },
+        {
+          "id": "ruins_deep_6",
+          "monster": "curse_wraith",
+          "x": 10,
+          "y": 22,
+          "level": 13,
+          "guardian": false
+        },
+        {
+          "id": "ruins_deep_7",
+          "monster": "lizard",
+          "x": 21,
+          "y": 22,
+          "level": 13,
+          "guardian": false
+        },
+        {
+          "id": "ruins_deep_8",
+          "monster": "lizard_shaman",
+          "x": 30,
+          "y": 22,
+          "level": 13,
+          "guardian": true
+        }
+      ],
+      "resources": [],
+      "chests": [
+        {
+          "id": "ruins_deep_chest",
+          "x": 30,
+          "y": 5,
+          "gold": 49,
+          "materials": {
+            "ore": 3,
+            "crystal": 2
+          },
+          "equipmentChance": 0.3
+        }
+      ],
+      "discoveries": [],
+      "events": [],
+      "mechanisms": [
+        {
+          "id": "ruins_deep_lever",
+          "name": "분출 장치 차단",
+          "x": 6,
+          "y": 22,
+          "circuit": "steam",
+          "description": "증기 분출을 멈춥니다."
+        }
+      ],
+      "zones": [
+        {
+          "id": "ruins_deep_zone",
+          "circuit": "steam",
+          "x": 18,
+          "y": 14,
+          "kind": "ring",
+          "radius": 3.5,
+          "innerRadius": 1.1,
+          "windup": 1.4,
+          "period": 6,
+          "damage": 27,
+          "offset": 0,
+          "name": "봉인 파동"
+        }
+      ],
+      "waypoint": null,
+      "group": "ruins",
+      "guardianTotal": 3
+    },
+    "guild_arena": {
+      "id": "guild_arena",
+      "name": "길드의 시련장",
+      "kind": "dungeon",
+      "width": 34,
+      "height": 28,
+      "level": 10,
+      "music": "dungeon",
+      "spawn": [
+        3.5,
+        14.5
+      ],
+      "tiles": [
+        "##################################",
+        "#ffffffffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffffffffff#",
+        "#ffffff#fffffff#fffffff#fffffffff#",
+        "#ffffff#fffffff#fffffff#fffffffff#",
+        "#ffffff#fffffff#fffffff#fffffffff#",
+        "#ffffff#fffffff#fffffff#fffffffff#",
+        "#ffffff#fffffff#fffffff#fffffffff#",
+        "#ffffff#fffffff#fffffff#fffffffff#",
+        "#ffffff#fffffffffffffff#fffffffff#",
+        "#ffffff#fffffffffffffff#fffffffff#",
+        "#ffffff#fffffffffffffff#fffffffff#",
+        "#ffffff#fffffffffffffff#fffffffff#",
+        "#ffffffffffffffffffffff#fffffffff#",
+        "#ffffffffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffffffffff#",
+        "#ffffffffffffff#fffffff#fffffffff#",
+        "#ffffffffffffff#fffffffffffffffff#",
+        "#ffffff#fffffff#fffffffffffffffff#",
+        "#ffffff#fffffff#fffffffffffffffff#",
+        "#ffffff#fffffff#fffffffffffffffff#",
+        "#ffffff#fffffff#fffffffffffffffff#",
+        "#ffffff#fffffff#fffffff#fffffffff#",
+        "#ffffff#fffffff#fffffff#fffffffff#",
+        "#ffffff#fffffff#fffffff#fffffffff#",
+        "#ffffffffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffffffffff#",
+        "##################################"
+      ],
+      "props": [],
+      "npcs": [
+        {
+          "id": "arena_steward",
+          "name": "연전 관리인",
+          "service": "arena",
+          "x": 5,
+          "y": 14
+        }
+      ],
+      "portals": [
+        {
+          "id": "exit",
+          "name": "오크우드로",
+          "x": 2,
+          "y": 14,
+          "to": "oakwood",
+          "spawn": [
+            22,
+            14
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": false
+        }
+      ],
+      "spawns": [],
+      "resources": [],
+      "chests": [],
+      "discoveries": [],
+      "events": [],
+      "mechanisms": [],
+      "zones": [],
+      "waypoint": null,
+      "group": "trial",
+      "guardianTotal": 0
     }
   },
   "mapKinds": {
@@ -7791,6 +29076,214 @@ window.GAME_DB = {
         "............."
       ],
       "palette": {}
+    },
+    "skeleton": {
+      "width": 12,
+      "height": 14,
+      "rows": [
+        "....wwww....",
+        "...wkkkkw...",
+        "...wkwkkw...",
+        "....wwww....",
+        ".....ww.....",
+        "..wwwwwwww..",
+        ".w...ww...w.",
+        "....wwww....",
+        "...w.ww.w...",
+        "..w..ww..w..",
+        ".....ww.....",
+        "....w..w....",
+        "...w....w...",
+        "..ww....ww.."
+      ],
+      "palette": {
+        "w": "#ddd8c5",
+        "k": "#313b39",
+        "g": "#6b8d50",
+        "b": "#89704f"
+      }
+    },
+    "orc": {
+      "width": 12,
+      "height": 14,
+      "rows": [
+        "....gggg....",
+        "...gggggg...",
+        "..ggkggkgg..",
+        "..ggwggwgg..",
+        "...gggggg...",
+        "..bbbbbbbb..",
+        ".bbbggggbbb.",
+        "ggbbbbbbbbgg",
+        "ggbbbbbbbbgg",
+        "..bbbbbbbb..",
+        "...bb..bb...",
+        "...bb..bb...",
+        "..bbb..bbb..",
+        "..kkk..kkk.."
+      ],
+      "palette": {
+        "w": "#ddd8c5",
+        "k": "#313b39",
+        "g": "#6b8d50",
+        "b": "#89704f"
+      }
+    },
+    "spider": {
+      "width": 12,
+      "height": 14,
+      "rows": [
+        "............",
+        "..k......k..",
+        "...k.gg.k...",
+        ".kkgkkkkgkk.",
+        "...gkkkkg...",
+        "..ggkkkkgg..",
+        ".kggggggggk.",
+        "k.gggggggg.k",
+        ".kggkkkkggk.",
+        "..k.kkkk.k..",
+        ".k..kkkk..k.",
+        "k..........k",
+        "............",
+        "............"
+      ],
+      "palette": {
+        "w": "#ddd8c5",
+        "k": "#313b39",
+        "g": "#6b8d50",
+        "b": "#89704f"
+      }
+    },
+    "bat": {
+      "width": 12,
+      "height": 14,
+      "rows": [
+        "............",
+        "k..........k",
+        "kk..kkkk..kk",
+        "kkk.kkkk.kkk",
+        "kkkkkkkkkkkk",
+        ".kkkkkkkkkk.",
+        "..kkkkkkkk..",
+        "...kkkkkk...",
+        "....kkkk....",
+        "....kkkk....",
+        ".....kk.....",
+        "............",
+        "............",
+        "............"
+      ],
+      "palette": {
+        "w": "#ddd8c5",
+        "k": "#313b39",
+        "g": "#6b8d50",
+        "b": "#89704f"
+      }
+    },
+    "ghost": {
+      "width": 12,
+      "height": 14,
+      "rows": [
+        "....wwww....",
+        "...wwwwww...",
+        "..wwwwwwww..",
+        "..wwkwwkww..",
+        "..wwwwwwww..",
+        "..wwwkkwww..",
+        "..wwwwwwww..",
+        ".wwwwwwwwww.",
+        ".wwwwwwwwww.",
+        "..wwwwwwww..",
+        "..wwwwwwww..",
+        "..ww.ww.ww..",
+        "..w..ww..w..",
+        "............"
+      ],
+      "palette": {
+        "w": "#ddd8c5",
+        "k": "#313b39",
+        "g": "#6b8d50",
+        "b": "#89704f"
+      }
+    },
+    "ent": {
+      "width": 12,
+      "height": 14,
+      "rows": [
+        ".....bbbb...",
+        "..b..bbbb.b.",
+        "..bbbbbbbbb.",
+        "...bgbbgbb..",
+        "...bbbbbbb..",
+        "..bbbbbbbbb.",
+        ".bbbggggbbb.",
+        "bbbbggggbbbb",
+        "bb.bbbbbbb.b",
+        "b..bbbbbbb..",
+        "...bbbbbbb..",
+        "...bbb.bbb..",
+        "..bbbb.bbbb.",
+        ".bbbb...bbbb"
+      ],
+      "palette": {
+        "w": "#ddd8c5",
+        "k": "#313b39",
+        "g": "#6b8d50",
+        "b": "#89704f"
+      }
+    },
+    "scorpion": {
+      "width": 12,
+      "height": 14,
+      "rows": [
+        ".........kk.",
+        "........k..k",
+        "........k.k.",
+        ".........kk.",
+        ".kk...kkkk..",
+        "k..k.kkkkk..",
+        ".kkkkkkkkk..",
+        "...kkkkkkk..",
+        "..kkkkkkkkk.",
+        ".k.kkkkkkk.k",
+        "k..k.kk.k..k",
+        "..k..kk..k..",
+        "............",
+        "............"
+      ],
+      "palette": {
+        "w": "#ddd8c5",
+        "k": "#313b39",
+        "g": "#6b8d50",
+        "b": "#89704f"
+      }
+    },
+    "knight": {
+      "width": 12,
+      "height": 14,
+      "rows": [
+        "....kkkk....",
+        "...kwwwwk...",
+        "..kwwkkwwk..",
+        "..kwwkkwwk..",
+        "...kwwwwk...",
+        "..wwwwwwww..",
+        ".wwwwbbwwww.",
+        "wwwwwbbwwwww",
+        "wwwwwwwwwwww",
+        "..wwwwwwww..",
+        "...ww..ww...",
+        "...ww..ww...",
+        "..www..www..",
+        "..kkk..kkk.."
+      ],
+      "palette": {
+        "w": "#ddd8c5",
+        "k": "#313b39",
+        "g": "#6b8d50",
+        "b": "#89704f"
+      }
     }
   },
   "projectiles": {
@@ -8500,7 +29993,7 @@ window.GAME_DB = {
     "controls": "WASD / 방향키 이동 · E 상호작용 · R 물약 · Shift 대시 · Tab 장비 · Q 의뢰 · F 마력 물약",
     "mobileControls": "조이스틱으로 이동 · 대시 버튼으로 회피 · 가까이 가서 상호작용",
     "bag": "장비",
-    "talents": "직업",
+    "talents": "전직·수련",
     "quests": "의뢰",
     "map": "지도",
     "settings": "설정",
@@ -8521,7 +30014,7 @@ window.GAME_DB = {
     "safe": "안전 지역",
     "combat": "전투 중",
     "explore": "탐험 중",
-    "questAvailable": "새 의뢰",
+    "questAvailable": "길드에서 다음 의뢰를 수주하세요.",
     "questReady": "보상 받기",
     "accept": "의뢰 수락",
     "claim": "보상 받기",
@@ -8533,7 +30026,7 @@ window.GAME_DB = {
     "noQuest": "길드에서 새 의뢰를 받으세요.",
     "questProgress": "진행",
     "reward": "보상",
-    "mainQuest": "이야기",
+    "mainQuest": "주요 의뢰",
     "sideQuest": "의뢰",
     "repeatable": "반복",
     "moveTo": "위치 보기",
@@ -8568,7 +30061,7 @@ window.GAME_DB = {
     "meal": "따뜻한 식사",
     "blessing": "축복",
     "respec": "기술 재분배",
-    "respecHint": "마을에서 기술점을 무료로 되돌릴 수 있습니다.",
+    "respecHint": "마을에서 금화 60개로 전직과 수련을 모두 재설정합니다. 수련점은 전부 반환됩니다.",
     "learn": "투자",
     "learned": "완성",
     "requiresBranch": "이 갈래에 {count}점 투자 필요",
@@ -8603,7 +30096,7 @@ window.GAME_DB = {
     "firstClear": "첫 클리어",
     "clears": "클리어",
     "tierLocked": "이 던전 {count}회 클리어 필요",
-    "tierHint": "높은 난이도는 적 레벨과 보상을 함께 올립니다.",
+    "tierHint": "완주로 상위 난이도를 개방합니다. 정예 1회 완주는 주요 의뢰의 필수 목표입니다.",
     "boss": "보스",
     "bossDefeated": "보스 격파",
     "returnTown": "마을로 돌아왔습니다.",
@@ -8624,7 +30117,7 @@ window.GAME_DB = {
     "fullscreen": "화면 최대화",
     "exportName": "에버돈_모험.json",
     "musicHint": "이동과 전투에 따라 중세풍 음악이 바뀝니다.",
-    "journalHint": "의뢰 수락과 보상 수령은 의뢰인 앞에서 할 수 있습니다.",
+    "journalHint": "의뢰 수주 후 처치가 집계됩니다. 지역 사건·정예 던전·탐험 목표를 함께 진행하고 의뢰인에게 보고하세요.",
     "healed": "체력과 마력을 회복했습니다.",
     "crafted": "장비를 제작했습니다.",
     "upgraded": "강화에 성공했습니다.",
@@ -8643,10 +30136,10 @@ window.GAME_DB = {
     "selected": "선택",
     "deleteProtected": "장착 중이거나 보관한 장비는 처분할 수 없습니다.",
     "free": "무료",
-    "chapterComplete": "별의 계승자",
+    "chapterComplete": "황혼의 왕관",
     "chapterContinue": "모험 계속",
     "help": "조작 안내",
-    "helpBody": "WASD 또는 방향키로 이동합니다. Shift는 짧은 대시이며 최대 2회, 5초마다 1회 충전됩니다. Tab 장비, Q 의뢰, R 회복 물약, F 마력 물약을 사용합니다. 평타와 기술은 자동입니다. 필드의 성소·보물상자·배회 정예와 야영지 사건을 발견하고, 여행의 돌 근처에서만 빠른 이동을 이용하세요.",
+    "helpBody": "이동은 WASD·방향키, 상호작용은 E. 공격과 기술은 자동 사용됩니다. 의뢰를 수주하고 지역 사건·던전으로 성장하세요. Lv3/18/34에 한 계열씩 전직하고 이후 분기를 선택합니다.",
     "material": "재료",
     "held": "보유",
     "skillTab": "자동 기술",
@@ -8658,7 +30151,7 @@ window.GAME_DB = {
     "lockedSkill": "아직 사용할 수 없는 기술입니다.",
     "healFountain": "안전 지역에서는 체력과 마력이 회복됩니다.",
     "nameFallback": "모험가",
-    "storyComplete": "이야기 완료 · 더 높은 던전에 도전하세요.",
+    "storyComplete": "왕관의 여정",
     "newAdventure": "새 모험가",
     "equippedCount": "출전 장비",
     "buffs": "여행의 가호",
@@ -8688,7 +30181,7 @@ window.GAME_DB = {
     "portraitHint": "당신의 모험가",
     "itemDetail": "장비 상세",
     "upgradePreview": "강화 후 전투 능력",
-    "skillsSubtitle": "기술은 조건과 마력이 갖춰지면 자동으로 사용합니다.",
+    "skillsSubtitle": "자동 기술 두 개를 장착합니다. 각 직업의 후기 기술은 Lv20·32에 열립니다.",
     "skillKind_projectile": "표적에게 투사체 공격",
     "skillKind_nova": "자신 주변 범위 공격",
     "skillKind_targetArea": "표적 주변 범위 공격",
@@ -8711,7 +30204,7 @@ window.GAME_DB = {
     "walking": "도보 이동",
     "cleared": "격파 완료",
     "sellItems": "장비 처분",
-    "merchantHint": "장비와 보급품을 준비하세요. 판매 품목은 직업·레벨·상인에 따라 달라집니다.",
+    "merchantHint": "필수 보급품부터 준비하세요. 후기 장비는 레벨 조건, 세력 제작식은 평판 조건이 있습니다.",
     "smithHint": "장비를 강화하거나 재료로 희귀 장비를 제작하세요.",
     "templeHint": "현재 축복과 남은 시간을 확인하세요. 축복은 중첩되지 않으며 성장 트리는 마을에서 재분배할 수 있습니다.",
     "restHint": "20금화를 내고 체력과 마력을 전부 회복합니다.",
@@ -8731,7 +30224,7 @@ window.GAME_DB = {
     "playerStats": "모험가 능력",
     "autoSlots": "사용 순서",
     "npcTalk": "대화",
-    "dungeonGuardianHint": "봉인 수호자들을 쓰러뜨리면 보스방이 열립니다.",
+    "dungeonGuardianHint": "수호자를 격파하면 다음 층이 열립니다. 환경 장치를 차단하고 군주의 수호석을 해제하세요.",
     "runLevel": "적 레벨",
     "rareReward": "장비 획득 기회 · 강화 재료",
     "firstAdventure": "새 이야기",
@@ -8748,7 +30241,7 @@ window.GAME_DB = {
     "none": "없음",
     "notYet": "아직",
     "more": "상세 보기",
-    "chapterVictory": "별의 봉인이 다시 빛납니다. 새로운 빌드와 더 높은 던전 난이도로 모험을 계속할 수 있습니다.",
+    "chapterVictory": "모든 지역의 이야기를 마쳤습니다. 전설 던전, 연전, 전직과 평판 성장을 계속할 수 있습니다.",
     "inventoryBack": "장비 목록으로",
     "targetDirection": "목표 방향",
     "respawning": "재등장 대기",
@@ -8784,7 +30277,7 @@ window.GAME_DB = {
     "craftLevelGate": "Lv. {level}부터 제작 가능",
     "night": "밤",
     "day": "낮",
-    "nightHint": "밤에는 몬스터 피해가 10% 증가합니다.",
+    "nightHint": "밤에는 적 피해가 10% 증가합니다.",
     "discovery": "탐험 발견",
     "discover": "조사",
     "discovered": "발견 완료",
@@ -8820,7 +30313,94 @@ window.GAME_DB = {
     "eventReward": "보급 보상",
     "eventCooldown": "다음 조사",
     "xpCost": "다음 레벨 경험치",
-    "restNoFree": "휴식 시 20금화가 소모됩니다."
+    "restNoFree": "휴식 시 20금화가 소모됩니다.",
+    "advancement": "전직 성장",
+    "advancementHint": "각 단계에서 하나만 선택합니다. 선택한 계열의 후속 전직만 열리며 다른 계열과 중복 투자할 수 없습니다.",
+    "chooseAdvancement": "전직 선택",
+    "chosenAdvancement": "선택한 전직",
+    "advancementLocked": "이전 전직을 먼저 선택하세요.",
+    "advancementLevel": "Lv{level} 전직",
+    "advancementConflict": "이미 선택한 계열입니다. 다른 계열에는 투자할 수 없습니다.",
+    "advancementRequired": "먼저 이 계열로 전직하세요.",
+    "talentLevel": "수련 조건 · Lv{level}",
+    "respecPaid": "전직 재설정 · {gold} 금화",
+    "legacyAdvancement": "중복 투자한 다른 계열의 수련점을 환급했습니다.",
+    "firstAdvancement": "첫 전직은 Lv3에 열립니다.",
+    "nextAdvancement": "다음 전직",
+    "journal": "모험 기록",
+    "reputation": "평판",
+    "reputationGate": "세력 평판이 부족합니다.",
+    "companions": "동료",
+    "companionHint": "동료는 한 명만 동행합니다. 마을에서 교대하며 전투·지역 사건으로 유대가 성장합니다.",
+    "companionLocked": "동료의 맹약 의뢰를 완료하세요.",
+    "companionSelect": "동행하기",
+    "companionActive": "동행 중",
+    "companionNone": "혼자 모험",
+    "bond": "유대",
+    "codex": "몬스터 도감",
+    "codexHint": "누적 15·45·100회 처치 보상은 몬스터마다 한 번씩 받습니다. 보스의 상세 패턴은 던전에서 확인하세요.",
+    "codexClaim": "연구 보상",
+    "factions": "세력 평판",
+    "factionHint": "토벌·봉인·탐험으로 평판을 얻습니다. 평판 120에 세력 전용 제작식이 열립니다.",
+    "unseenMonster": "미발견",
+    "choiceReward": "보고 보상 선택",
+    "choiceRequired": "보고 보상 하나를 선택하세요.",
+    "repeatCooling": "의뢰 갱신 대기",
+    "repeatHint": "반복 의뢰는 수령 이후 처치만 계산합니다.",
+    "minQuestLevel": "Lv{level}부터 수주할 수 있습니다.",
+    "arena": "길드 연전",
+    "trialStart": "연전 시작",
+    "trialLocked": "연전 입장 레벨이 부족합니다.",
+    "trialReady": "연전 완주! 관리인에게 보상을 받으세요.",
+    "trialClaim": "완주 보상 받기",
+    "trialWave": "연전",
+    "trialFee": "참가비",
+    "trialExit": "퇴장 시 진행이 초기화됩니다.",
+    "trialClears": "연전 완주",
+    "wave": "습격",
+    "nextWave": "다음 습격",
+    "mechanism": "봉인 장치",
+    "mechanismAction": "장치 해제",
+    "mechanismUsed": "이미 해제한 장치입니다.",
+    "mechanismDone": "봉인 장치를 해제했습니다.",
+    "wardHint": "수호석이 군주를 보호합니다. E로 해제하세요.",
+    "wardCount": "남은 수호석",
+    "expeditionRule": "원정 방침",
+    "expeditionHint": "던전 전체에 적용됩니다. 귀환 후 다시 선택할 수 있습니다.",
+    "page": "페이지",
+    "previous": "이전",
+    "next": "다음",
+    "filterChapter": "현재 의뢰",
+    "noBranch": "미전직",
+    "eventWave": "습격 {wave} / {total}",
+    "pattern_circle": "근접 원형 공격",
+    "pattern_line": "예고 후 돌진·직선 공격",
+    "pattern_target": "발밑을 노리는 장판",
+    "pattern_ring": "안쪽으로 피하는 고리 공격",
+    "pattern_cone": "방향을 읽는 부채꼴 공격",
+    "questCooldown": "다시 수주하기까지 {time}초",
+    "questFilterMain": "주요 의뢰",
+    "questFilterSide": "부가 의뢰",
+    "questFilterRepeat": "반복 의뢰",
+    "questFilterAll": "진행 의뢰",
+    "mapRegion": "지역",
+    "allRegions": "모든 지역",
+    "bossWards": "수호석",
+    "phase": "단계",
+    "choiceSaved": "선택 기록",
+    "cooling": "갱신 대기",
+    "trialClaimed": "보상 수령 완료",
+    "mechanismHint": "E로 장치를 해제합니다.",
+    "branchRefund": "기존 중복 투자에서 수련점 {points}점을 돌려받았습니다.",
+    "rankGrowth": "계열 수련",
+    "respecConfirm": "전직 초기화",
+    "respecConfirmHint": "선택한 모든 전직과 수련을 초기화합니다. 수련점은 반환되며 60금화가 소모됩니다.",
+    "select": "선택",
+    "growthStages": "전직 계보",
+    "monster": "몬스터",
+    "elite": "정예",
+    "defeated": "누적 처치",
+    "growInvest": "이전 계열 수련 {count} 필요"
   },
   "_docs": {
     "source": "game-db.js는 모든 콘텐츠·수치·지도·그림·음악·문구의 단일 원본입니다.",
@@ -8829,7 +30409,10 @@ window.GAME_DB = {
     "save": "새 RPG 저장 키를 사용하며 이전 결투 v6 저장을 삭제하거나 덮어쓰지 않습니다.",
     "audio": "audio.tracks의 MIDI 멜로디·화음·베이스를 오프라인 Web Audio로 합성합니다.",
     "resourceBalance": "기본 마력 회복·적 금화·장비 드롭을 낮추고 XP 비용을 높였습니다. rarity/lootProfiles와 제작·상인 가격은 각각 DB에서 조정합니다. 희귀 장비를 고정 보장하는 일반 드롭·상자는 없습니다.",
-    "openWorld": "maps[].discoveries/events, resources, 일정이 있는 npcs와 patrol spawns가 오픈월드 콘텐츠입니다. discoveries 영구 보너스·사건 상태·상인 재고·추가된 필드 스폰은 저장·이전 저장 보완을 지원합니다."
+    "openWorld": "maps[].discoveries/events, resources, 일정이 있는 npcs와 patrol spawns가 오픈월드 콘텐츠입니다. discoveries 영구 보너스·사건 상태·상인 재고·추가된 필드 스폰은 저장·이전 저장 보완을 지원합니다.",
+    "advancement": "branches의 parent/stage/class로 단일 전직 계보를 정의합니다. 단계별 한 개만 선택하고 talents.minLevel과 선행 포인트를 검사합니다. 마을에서 유료 전직 초기화 시 선택도 모두 해제합니다.",
+    "content": "주요 의뢰의 챕터·선택 보상, 지역별 2층 던전, 연전 waves, phases/patterns, mechanisms/zones는 실제 전투와 연결됩니다.",
+    "onlineReadiness": "콘텐츠 ID와 캐릭터 영구 진행(전직·의뢰·평판·동료·도감), 지역 인스턴스(적·사건·장치·상자), 시간 기반 반복 의뢰를 구분합니다. 실제 멀티플레이/서버/거래는 아직 구현하지 않습니다. 이후 권위 서버가 같은 검증 경로를 사용하도록 규칙과 보상을 DB에서 관리합니다."
   },
   "comparisonStats": [
     "attack",
@@ -8981,6 +30564,993 @@ window.GAME_DB = {
       "cooldown": 3,
       "icon": "bait",
       "description": "3분간 이동 속도 +10%"
+    }
+  ],
+  "expeditionRules": [
+    {
+      "id": "scout",
+      "name": "정찰",
+      "description": "기본 위험과 보상.",
+      "enemyDamage": 1,
+      "reward": 1,
+      "manaRegen": 1
+    },
+    {
+      "id": "assault",
+      "name": "강행",
+      "description": "적 피해 +20% / 경험치·금화 +30%.",
+      "enemyDamage": 1.2,
+      "reward": 1.3,
+      "manaRegen": 1
+    },
+    {
+      "id": "sealed",
+      "name": "마력 봉쇄",
+      "description": "마력 회복 -30% / 경험치·금화 +40%.",
+      "enemyDamage": 1,
+      "reward": 1.4,
+      "manaRegen": 0.7
+    }
+  ],
+  "factions": [
+    {
+      "id": "rangers",
+      "name": "변경 사냥단",
+      "description": "현상 사냥과 야영지 토벌로 신뢰를 얻습니다.",
+      "icon": "bow",
+      "ranks": [
+        {
+          "value": 0,
+          "name": "낯선 이"
+        },
+        {
+          "value": 40,
+          "name": "협력자"
+        },
+        {
+          "value": 120,
+          "name": "신뢰받는 사냥꾼"
+        },
+        {
+          "value": 300,
+          "name": "변경의 영웅"
+        }
+      ]
+    },
+    {
+      "id": "wardens",
+      "name": "왕국 수호회",
+      "description": "던전 군주와 방어 의뢰가 수호회 장비를 개방합니다.",
+      "icon": "shield",
+      "ranks": [
+        {
+          "value": 0,
+          "name": "외지인"
+        },
+        {
+          "value": 40,
+          "name": "지원자"
+        },
+        {
+          "value": 120,
+          "name": "맹약의 동료"
+        },
+        {
+          "value": 300,
+          "name": "왕국의 방패"
+        }
+      ]
+    },
+    {
+      "id": "arcanum",
+      "name": "별빛 학회",
+      "description": "탐험과 봉인 조사를 통해 비전 제작식을 개방합니다.",
+      "icon": "staff",
+      "ranks": [
+        {
+          "value": 0,
+          "name": "방문자"
+        },
+        {
+          "value": 40,
+          "name": "조사원"
+        },
+        {
+          "value": 120,
+          "name": "연구 동료"
+        },
+        {
+          "value": 300,
+          "name": "별의 현자"
+        }
+      ]
+    }
+  ],
+  "advancementStages": [
+    {
+      "id": 1,
+      "name": "1차 전직",
+      "level": 3,
+      "requiredPoints": 0
+    },
+    {
+      "id": 2,
+      "name": "2차 전직",
+      "level": 18,
+      "requiredPoints": 8
+    },
+    {
+      "id": 3,
+      "name": "3차 전직",
+      "level": 34,
+      "requiredPoints": 8
+    }
+  ],
+  "trials": [
+    {
+      "id": "bronze",
+      "name": "청동 연전",
+      "minLevel": 10,
+      "fee": 35,
+      "map": "guild_arena",
+      "waves": [
+        [
+          {
+            "monster": "goblin_guard",
+            "x": 13,
+            "y": 8,
+            "level": 10,
+            "guardian": false
+          },
+          {
+            "monster": "wolf",
+            "x": 17,
+            "y": 8,
+            "level": 10,
+            "guardian": false
+          },
+          {
+            "monster": "cave_bat",
+            "x": 21,
+            "y": 8,
+            "level": 10,
+            "guardian": false
+          }
+        ],
+        [
+          {
+            "monster": "wolf",
+            "x": 13,
+            "y": 8,
+            "level": 10,
+            "guardian": false
+          },
+          {
+            "monster": "cave_bat",
+            "x": 17,
+            "y": 8,
+            "level": 10,
+            "guardian": false
+          },
+          {
+            "monster": "goblin_guard",
+            "x": 21,
+            "y": 8,
+            "level": 10,
+            "guardian": false
+          }
+        ],
+        [
+          {
+            "monster": "cave_bat",
+            "x": 13,
+            "y": 8,
+            "level": 11,
+            "guardian": false
+          },
+          {
+            "monster": "goblin_guard",
+            "x": 17,
+            "y": 8,
+            "level": 11,
+            "guardian": false
+          },
+          {
+            "monster": "wolf",
+            "x": 21,
+            "y": 8,
+            "level": 11,
+            "guardian": false
+          },
+          {
+            "monster": "cave_bat",
+            "x": 13,
+            "y": 15,
+            "level": 11,
+            "guardian": false
+          }
+        ],
+        [
+          {
+            "monster": "goblin_guard",
+            "x": 13,
+            "y": 8,
+            "level": 11,
+            "guardian": false
+          },
+          {
+            "monster": "wolf",
+            "x": 17,
+            "y": 8,
+            "level": 11,
+            "guardian": false
+          },
+          {
+            "monster": "cave_bat",
+            "x": 21,
+            "y": 8,
+            "level": 11,
+            "guardian": false
+          },
+          {
+            "monster": "goblin_guard",
+            "x": 13,
+            "y": 15,
+            "level": 11,
+            "guardian": false
+          }
+        ],
+        [
+          {
+            "monster": "wolf",
+            "x": 13,
+            "y": 8,
+            "level": 12,
+            "guardian": true
+          },
+          {
+            "monster": "cave_bat",
+            "x": 17,
+            "y": 8,
+            "level": 12,
+            "guardian": false
+          },
+          {
+            "monster": "goblin_guard",
+            "x": 21,
+            "y": 8,
+            "level": 12,
+            "guardian": false
+          },
+          {
+            "monster": "wolf",
+            "x": 13,
+            "y": 15,
+            "level": 12,
+            "guardian": false
+          },
+          {
+            "monster": "cave_bat",
+            "x": 17,
+            "y": 15,
+            "level": 12,
+            "guardian": false
+          }
+        ]
+      ],
+      "rewards": {
+        "xp": 350,
+        "gold": 115,
+        "materials": {
+          "sigil": 2
+        },
+        "reputation": {
+          "wardens": 8
+        }
+      },
+      "description": "휴식 없이 5번의 습격을 견디세요. 중도 퇴장하면 참가비는 돌려받지 못합니다."
+    },
+    {
+      "id": "silver",
+      "name": "은빛 연전",
+      "minLevel": 24,
+      "fee": 100,
+      "map": "guild_arena",
+      "waves": [
+        [
+          {
+            "monster": "highland_orc",
+            "x": 13,
+            "y": 8,
+            "level": 24,
+            "guardian": false
+          },
+          {
+            "monster": "ice_wraith",
+            "x": 17,
+            "y": 8,
+            "level": 24,
+            "guardian": false
+          },
+          {
+            "monster": "snow_golem",
+            "x": 21,
+            "y": 8,
+            "level": 24,
+            "guardian": false
+          }
+        ],
+        [
+          {
+            "monster": "ice_wraith",
+            "x": 13,
+            "y": 8,
+            "level": 24,
+            "guardian": false
+          },
+          {
+            "monster": "snow_golem",
+            "x": 17,
+            "y": 8,
+            "level": 24,
+            "guardian": false
+          },
+          {
+            "monster": "highland_orc",
+            "x": 21,
+            "y": 8,
+            "level": 24,
+            "guardian": false
+          }
+        ],
+        [
+          {
+            "monster": "snow_golem",
+            "x": 13,
+            "y": 8,
+            "level": 25,
+            "guardian": false
+          },
+          {
+            "monster": "highland_orc",
+            "x": 17,
+            "y": 8,
+            "level": 25,
+            "guardian": false
+          },
+          {
+            "monster": "ice_wraith",
+            "x": 21,
+            "y": 8,
+            "level": 25,
+            "guardian": false
+          },
+          {
+            "monster": "snow_golem",
+            "x": 13,
+            "y": 15,
+            "level": 25,
+            "guardian": false
+          }
+        ],
+        [
+          {
+            "monster": "highland_orc",
+            "x": 13,
+            "y": 8,
+            "level": 25,
+            "guardian": false
+          },
+          {
+            "monster": "ice_wraith",
+            "x": 17,
+            "y": 8,
+            "level": 25,
+            "guardian": false
+          },
+          {
+            "monster": "snow_golem",
+            "x": 21,
+            "y": 8,
+            "level": 25,
+            "guardian": false
+          },
+          {
+            "monster": "highland_orc",
+            "x": 13,
+            "y": 15,
+            "level": 25,
+            "guardian": false
+          }
+        ],
+        [
+          {
+            "monster": "ice_wraith",
+            "x": 13,
+            "y": 8,
+            "level": 26,
+            "guardian": false
+          },
+          {
+            "monster": "snow_golem",
+            "x": 17,
+            "y": 8,
+            "level": 26,
+            "guardian": false
+          },
+          {
+            "monster": "highland_orc",
+            "x": 21,
+            "y": 8,
+            "level": 26,
+            "guardian": false
+          },
+          {
+            "monster": "ice_wraith",
+            "x": 13,
+            "y": 15,
+            "level": 26,
+            "guardian": false
+          },
+          {
+            "monster": "snow_golem",
+            "x": 17,
+            "y": 15,
+            "level": 26,
+            "guardian": false
+          }
+        ],
+        [
+          {
+            "monster": "snow_golem",
+            "x": 13,
+            "y": 8,
+            "level": 26,
+            "guardian": true
+          },
+          {
+            "monster": "highland_orc",
+            "x": 17,
+            "y": 8,
+            "level": 26,
+            "guardian": false
+          },
+          {
+            "monster": "ice_wraith",
+            "x": 21,
+            "y": 8,
+            "level": 26,
+            "guardian": false
+          },
+          {
+            "monster": "snow_golem",
+            "x": 13,
+            "y": 15,
+            "level": 26,
+            "guardian": false
+          },
+          {
+            "monster": "highland_orc",
+            "x": 17,
+            "y": 15,
+            "level": 26,
+            "guardian": false
+          }
+        ]
+      ],
+      "rewards": {
+        "xp": 560,
+        "gold": 222,
+        "materials": {
+          "sigil": 4
+        },
+        "reputation": {
+          "wardens": 12
+        }
+      },
+      "description": "휴식 없이 6번의 습격을 견디세요. 중도 퇴장하면 참가비는 돌려받지 못합니다."
+    },
+    {
+      "id": "gold",
+      "name": "왕관 연전",
+      "minLevel": 40,
+      "fee": 220,
+      "map": "guild_arena",
+      "waves": [
+        [
+          {
+            "monster": "dusk_sentinel",
+            "x": 13,
+            "y": 8,
+            "level": 40,
+            "guardian": false
+          },
+          {
+            "monster": "dusk_magus",
+            "x": 17,
+            "y": 8,
+            "level": 40,
+            "guardian": false
+          },
+          {
+            "monster": "abyss_spider",
+            "x": 21,
+            "y": 8,
+            "level": 40,
+            "guardian": false
+          }
+        ],
+        [
+          {
+            "monster": "dusk_magus",
+            "x": 13,
+            "y": 8,
+            "level": 40,
+            "guardian": false
+          },
+          {
+            "monster": "abyss_spider",
+            "x": 17,
+            "y": 8,
+            "level": 40,
+            "guardian": false
+          },
+          {
+            "monster": "dusk_sentinel",
+            "x": 21,
+            "y": 8,
+            "level": 40,
+            "guardian": false
+          }
+        ],
+        [
+          {
+            "monster": "abyss_spider",
+            "x": 13,
+            "y": 8,
+            "level": 41,
+            "guardian": false
+          },
+          {
+            "monster": "dusk_sentinel",
+            "x": 17,
+            "y": 8,
+            "level": 41,
+            "guardian": false
+          },
+          {
+            "monster": "dusk_magus",
+            "x": 21,
+            "y": 8,
+            "level": 41,
+            "guardian": false
+          },
+          {
+            "monster": "abyss_spider",
+            "x": 13,
+            "y": 15,
+            "level": 41,
+            "guardian": false
+          }
+        ],
+        [
+          {
+            "monster": "dusk_sentinel",
+            "x": 13,
+            "y": 8,
+            "level": 41,
+            "guardian": false
+          },
+          {
+            "monster": "dusk_magus",
+            "x": 17,
+            "y": 8,
+            "level": 41,
+            "guardian": false
+          },
+          {
+            "monster": "abyss_spider",
+            "x": 21,
+            "y": 8,
+            "level": 41,
+            "guardian": false
+          },
+          {
+            "monster": "dusk_sentinel",
+            "x": 13,
+            "y": 15,
+            "level": 41,
+            "guardian": false
+          }
+        ],
+        [
+          {
+            "monster": "dusk_magus",
+            "x": 13,
+            "y": 8,
+            "level": 42,
+            "guardian": false
+          },
+          {
+            "monster": "abyss_spider",
+            "x": 17,
+            "y": 8,
+            "level": 42,
+            "guardian": false
+          },
+          {
+            "monster": "dusk_sentinel",
+            "x": 21,
+            "y": 8,
+            "level": 42,
+            "guardian": false
+          },
+          {
+            "monster": "dusk_magus",
+            "x": 13,
+            "y": 15,
+            "level": 42,
+            "guardian": false
+          },
+          {
+            "monster": "abyss_spider",
+            "x": 17,
+            "y": 15,
+            "level": 42,
+            "guardian": false
+          }
+        ],
+        [
+          {
+            "monster": "abyss_spider",
+            "x": 13,
+            "y": 8,
+            "level": 42,
+            "guardian": false
+          },
+          {
+            "monster": "dusk_sentinel",
+            "x": 17,
+            "y": 8,
+            "level": 42,
+            "guardian": false
+          },
+          {
+            "monster": "dusk_magus",
+            "x": 21,
+            "y": 8,
+            "level": 42,
+            "guardian": false
+          },
+          {
+            "monster": "abyss_spider",
+            "x": 13,
+            "y": 15,
+            "level": 42,
+            "guardian": false
+          },
+          {
+            "monster": "dusk_sentinel",
+            "x": 17,
+            "y": 15,
+            "level": 42,
+            "guardian": false
+          }
+        ],
+        [
+          {
+            "monster": "dusk_sentinel",
+            "x": 13,
+            "y": 8,
+            "level": 43,
+            "guardian": false
+          },
+          {
+            "monster": "dusk_magus",
+            "x": 17,
+            "y": 8,
+            "level": 43,
+            "guardian": false
+          },
+          {
+            "monster": "abyss_spider",
+            "x": 21,
+            "y": 8,
+            "level": 43,
+            "guardian": false
+          },
+          {
+            "monster": "dusk_sentinel",
+            "x": 13,
+            "y": 15,
+            "level": 43,
+            "guardian": false
+          },
+          {
+            "monster": "dusk_magus",
+            "x": 17,
+            "y": 15,
+            "level": 43,
+            "guardian": false
+          },
+          {
+            "monster": "abyss_spider",
+            "x": 21,
+            "y": 15,
+            "level": 43,
+            "guardian": false
+          }
+        ],
+        [
+          {
+            "monster": "dusk_magus",
+            "x": 13,
+            "y": 8,
+            "level": 43,
+            "guardian": true
+          },
+          {
+            "monster": "abyss_spider",
+            "x": 17,
+            "y": 8,
+            "level": 43,
+            "guardian": false
+          },
+          {
+            "monster": "dusk_sentinel",
+            "x": 21,
+            "y": 8,
+            "level": 43,
+            "guardian": false
+          },
+          {
+            "monster": "dusk_magus",
+            "x": 13,
+            "y": 15,
+            "level": 43,
+            "guardian": false
+          },
+          {
+            "monster": "abyss_spider",
+            "x": 17,
+            "y": 15,
+            "level": 43,
+            "guardian": false
+          },
+          {
+            "monster": "dusk_sentinel",
+            "x": 21,
+            "y": 15,
+            "level": 43,
+            "guardian": false
+          }
+        ]
+      ],
+      "rewards": {
+        "xp": 800,
+        "gold": 390,
+        "materials": {
+          "sigil": 6
+        },
+        "reputation": {
+          "wardens": 16
+        }
+      },
+      "description": "휴식 없이 8번의 습격을 견디세요. 중도 퇴장하면 참가비는 돌려받지 못합니다."
+    }
+  ],
+  "companions": [
+    {
+      "id": "lyra",
+      "name": "리라",
+      "role": "치유사",
+      "sprite": "healer",
+      "quest": "companion_lyra",
+      "npc": "lyra_npc",
+      "description": "체력이 절반 이하일 때 회복합니다.",
+      "mode": "heal",
+      "cooldown": 14,
+      "hpThreshold": 0.5,
+      "power": 0.08,
+      "scale": "hp",
+      "range": 6,
+      "stats": [
+        {
+          "stat": "mp",
+          "op": "add",
+          "value": 5
+        }
+      ]
+    },
+    {
+      "id": "brann",
+      "name": "브란",
+      "role": "방패병",
+      "sprite": "guardian",
+      "quest": "companion_brann",
+      "npc": "brann_npc",
+      "description": "전투 중 주기적으로 보호막을 제공합니다.",
+      "mode": "shield",
+      "cooldown": 12,
+      "power": 0.07,
+      "scale": "hp",
+      "range": 6,
+      "stats": [
+        {
+          "stat": "defense",
+          "op": "add",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "eris",
+      "name": "에리스",
+      "role": "원소술사",
+      "sprite": "magician",
+      "quest": "companion_eris",
+      "npc": "eris_npc",
+      "description": "주기적으로 목표 주변에 원소 폭발을 일으킵니다.",
+      "mode": "nova",
+      "cooldown": 8,
+      "power": 1.2,
+      "scale": "spell",
+      "radius": 1.7,
+      "range": 6,
+      "stats": [
+        {
+          "stat": "spell",
+          "op": "add",
+          "value": 2
+        }
+      ]
+    }
+  ],
+  "codexRewards": [
+    {
+      "kills": 15,
+      "rewards": {
+        "xp": 100,
+        "gold": 25
+      }
+    },
+    {
+      "kills": 45,
+      "rewards": {
+        "xp": 240,
+        "gold": 60,
+        "materials": {
+          "sigil": 1
+        }
+      }
+    },
+    {
+      "kills": 100,
+      "rewards": {
+        "xp": 500,
+        "gold": 120,
+        "materials": {
+          "sigil": 2
+        }
+      }
+    }
+  ],
+  "journalTabs": [
+    {
+      "id": "quests",
+      "name": "의뢰"
+    },
+    {
+      "id": "companions",
+      "name": "동료"
+    },
+    {
+      "id": "factions",
+      "name": "평판"
+    },
+    {
+      "id": "codex",
+      "name": "도감"
+    }
+  ],
+  "balance": {
+    "bossReputation": 3
+  },
+  "xpBands": [
+    {
+      "level": 1,
+      "multiplier": 1
+    },
+    {
+      "level": 15,
+      "multiplier": 1.45
+    },
+    {
+      "level": 25,
+      "multiplier": 2.1
+    },
+    {
+      "level": 35,
+      "multiplier": 2.9
+    },
+    {
+      "level": 45,
+      "multiplier": 3.7
+    }
+  ],
+  "regions": [
+    {
+      "id": "east",
+      "name": "동부 변경",
+      "maps": [
+        "oakwood",
+        "meadow",
+        "forest",
+        "silverhaven",
+        "marsh",
+        "forest_den",
+        "mine",
+        "ruins",
+        "wolf_lair",
+        "forge_chamber",
+        "dragon_sanctum",
+        "forest_den_deep",
+        "mine_deep",
+        "ruins_deep",
+        "guild_arena"
+      ]
+    },
+    {
+      "id": "highland",
+      "name": "가시바람",
+      "maps": [
+        "highland",
+        "highland_depth_1",
+        "highland_depth_2",
+        "highland_throne"
+      ]
+    },
+    {
+      "id": "frost",
+      "name": "백서리",
+      "maps": [
+        "snowfield",
+        "frostgate",
+        "frost_depth_1",
+        "frost_depth_2",
+        "frost_throne"
+      ]
+    },
+    {
+      "id": "sun",
+      "name": "붉은 해",
+      "maps": [
+        "sunwaste",
+        "sunharbor",
+        "sun_depth_1",
+        "sun_depth_2",
+        "sun_throne"
+      ]
+    },
+    {
+      "id": "grave",
+      "name": "왕의 묘역",
+      "maps": [
+        "gravewood",
+        "grave_depth_1",
+        "grave_depth_2",
+        "grave_throne"
+      ]
+    },
+    {
+      "id": "eclipse",
+      "name": "황혼",
+      "maps": [
+        "eclipse_plain",
+        "eclipse_depth_1",
+        "eclipse_depth_2",
+        "eclipse_throne"
+      ]
     }
   ]
 };
