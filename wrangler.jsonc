@@ -4,18 +4,38 @@
   "account_id": "b804e05b2e83b2c438d41b07893d37a6",
   "main": "cloudflare/worker.mjs",
   "compatibility_date": "2026-01-01",
-  "compatibility_flags": ["nodejs_compat"],
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
   "workers_dev": true,
-  "build": { "command": "node build-cloudflare.cjs" },
+  "build": {
+    "command": "node build-cloudflare.cjs"
+  },
   "assets": {
     "directory": "./dist/client",
     "binding": "ASSETS",
-    "run_worker_first": ["/api/*"]
+    "run_worker_first": true
   },
   "durable_objects": {
-    "bindings": [{ "name": "WORLD", "class_name": "EverdawnWorld" }]
+    "bindings": [
+      {
+        "name": "WORLD",
+        "class_name": "EverdawnWorld"
+      }
+    ]
   },
-  "migrations": [{ "tag": "everdawn-world-v1", "new_sqlite_classes": ["EverdawnWorld"] }],
-  "observability": { "enabled": true },
-  "vars": { "ALLOW_LEGACY_IMPORT": "0" }
+  "migrations": [
+    {
+      "tag": "everdawn-world-v1",
+      "new_sqlite_classes": [
+        "EverdawnWorld"
+      ]
+    }
+  ],
+  "observability": {
+    "enabled": true
+  },
+  "vars": {
+    "ALLOW_LEGACY_IMPORT": "0"
+  }
 }
