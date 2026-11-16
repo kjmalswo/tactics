@@ -22,7 +22,8 @@ export class CloudStore {
  saveCharacter(id,state,profile,now){this.sql.exec('INSERT INTO characters VALUES(?,?,?,?) ON CONFLICT(account) DO UPDATE SET state=excluded.state,profile=excluded.profile,updated=excluded.updated',id,JSON.stringify(state),JSON.stringify(profile),now);}
  social(){const row=this.one('SELECT data FROM social WHERE id=1');return row?JSON.parse(row.data):null;}
  saveSocial(value){this.sql.exec('INSERT INTO social VALUES(1,?) ON CONFLICT(id) DO UPDATE SET data=excluded.data',JSON.stringify(value));}
+ findRoom(mapId,enemyId){if(!enemyId)return null;return this.one("SELECT id FROM rooms WHERE json_extract(data,'$.instance.enemies[0].id')=? AND id LIKE ? ORDER BY updated DESC LIMIT 1",enemyId,'%|'+mapId);}
  room(id){const row=this.one('SELECT data FROM rooms WHERE id=?',id);return row?JSON.parse(row.data):null;}
  saveRoom(id,data,now){this.sql.exec('INSERT INTO rooms VALUES(?,?,?) ON CONFLICT(id) DO UPDATE SET data=excluded.data,updated=excluded.updated',id,JSON.stringify(data),now);}
- ranking(){return this.sql.exec('SELECT account,profile,state FROM characters ORDER BY updated DESC').toArray();}
+ ranking(limit){return this.sql.exec("SELECT account,profile,state FROM characters ORDER BY CAST(json_extract(profile,'$.rating') AS INTEGER) DESC LIMIT ?",limit).toArray();}
 }

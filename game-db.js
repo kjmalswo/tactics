@@ -1,7 +1,7 @@
 // Editable JSON-compatible fantasy RPG database.
 window.GAME_DB = {
   "meta": {
-    "version": "3.0",
+    "version": "3.1",
     "title": "에버돈",
     "subtitle": "왕국의 동료들",
     "description": "마을에서 시작해 나만의 직업 빌드를 완성하는 판타지 액션 RPG"
@@ -35458,7 +35458,8 @@ window.GAME_DB = {
       "zones": [],
       "waypoint": null,
       "group": "trial",
-      "guardianTotal": 0
+      "guardianTotal": 0,
+      "onlineScope": "solo"
     },
     "raid_verdant": {
       "id": "raid_verdant",
@@ -38247,7 +38248,12 @@ window.GAME_DB = {
     "guildCostHint": "원정에서 모은 왕국 주화로 길드를 창설하고 공동 목표를 달성하세요.",
     "groupEntry": "함께 모험의 공동 원정에서 입장",
     "elementHint": "화염 → 자연 → 비전 → 냉기 → 화염. 유리한 속성은 피해 +25%, 불리하면 -20%.",
-    "mailLoot": "가방 초과 획득 장비"
+    "mailLoot": "가방 초과 획득 장비",
+    "onlineReplaced": "다른 창에서 접속했습니다. 이 창의 온라인 연결을 종료합니다.",
+    "onlineStaleAction": "지역 또는 연결이 바뀌었습니다. 다시 시도하세요.",
+    "onlineMailOverflow": "가방이 가득 차 획득한 장비를 우편으로 보냈습니다.",
+    "onlineInterruptedDuel": "서버 재연결로 결투가 종료되었습니다. 승패와 재화는 변하지 않습니다.",
+    "onlineOtherSession": "다른 창에서 접속 중"
   },
   "_docs": {
     "source": "game-db.js는 모든 콘텐츠·수치·지도·그림·음악·문구의 단일 원본입니다.",
@@ -39424,7 +39430,7 @@ window.GAME_DB = {
     }
   ],
   "online": {
-    "protocol": 1,
+    "protocol": 2,
     "port": 8080,
     "maxPlayers": 64,
     "roomPlayers": 32,
@@ -39446,7 +39452,7 @@ window.GAME_DB = {
     "chatHistory": 40,
     "chatCooldown": 2,
     "rateWindow": 1,
-    "inputRate": 24,
+    "inputRate": 60,
     "actionRate": 12,
     "authWindow": 60,
     "authRate": 8,
@@ -39887,7 +39893,24 @@ window.GAME_DB = {
     "socketMessageBytes": 1024,
     "claimedMailHistory": 20,
     "requestTimeoutMs": 6000,
-    "publicUrl": "https://tactics.kjmalswo-804.workers.dev"
+    "publicUrl": "https://tactics.kjmalswo-804.workers.dev",
+    "maxPredictionSeconds": 0.8,
+    "maxPendingInputs": 64,
+    "maxInputSequenceGap": 1024,
+    "motionEpsilon": 1e-05,
+    "remoteLerp": 18,
+    "idempotencyEntries": 64,
+    "idempotencyMs": 30000,
+    "socketReplacedCode": 4001,
+    "socketUnauthorizedCode": 4003,
+    "motionResetMethods": [
+      "travel",
+      "enterDungeon",
+      "startTrial"
+    ],
+    "requestIdLength": 128,
+    "characterIdleMs": 300000,
+    "maxArgumentBytes": 2048
   },
   "elements": [
     {

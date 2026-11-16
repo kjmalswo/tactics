@@ -59,10 +59,13 @@ Wrangler 로컬 저장과 실제 서비스 저장은 분리됩니다. 개인 HTM
 ```sh
 npm run check:game
 npm run check:online
+npm run check:net
 npm run check:cloudflare
 ```
 
 `check:cloudflare`는 실행 중인 로컬 Wrangler 서버만 대상으로 합니다. 테스트 계정을 실제 서비스에 만들지 않습니다. 검증은 짧은 전투 판정과 API 요청만 사용하며 브라우저 자동화·전체 게임 자동 플레이를 수행하지 않습니다.
+
+온라인 이동은 입력 순번과 처리 시간 확인을 사용합니다. `rpg-netcode.js`가 서버 미처리 입력만 재적용하고 표시 오차를 부드럽게 보정합니다. 이전 접속의 입력·응답은 무시하며 파티·레이드의 실제 인스턴스는 재접속 후에도 이어집니다. 프로토콜이 바뀐 업데이트 후에는 새로고침하고 다시 접속하세요.
 
 `rpg-engine.js`는 공통 전투·성장 엔진입니다. `server/`의 공유 월드·경제 규칙은 Node와 Worker 양쪽에서 재사용합니다. `build-cloudflare.cjs`가 Worker용 함수 모듈을 생성하므로 생성 파일을 직접 편집하지 마세요. `cloudflare/store.mjs`와 `server/store.cjs`는 동일한 저장 계약을 각각 Durable Object SQLite와 Node SQLite에 연결합니다.
 

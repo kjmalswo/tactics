@@ -78,3 +78,8 @@ server/world.cjs와 server/social.cjs가 파티·공유 전투·길드·거래·
 Cloudflare Worker tactics는 Git main과 자동 배포로 연결되어 있습니다. wrangler.jsonc의 WORLD Durable Object 바인딩, namespace 이름, migration 태그를 보존합니다. build-cloudflare.cjs로 공통 엔진의 Worker용 함수 모듈과 정적 Assets를 생성하며 생성 파일은 직접 수정하지 않습니다. Worker에서는 WebSocket, 로컬 Node에서는 SSE를 사용합니다. 공개 완료 보고 전에 GitHub Workers Builds 체크와 실제 /api/v1/health의 backend/transport/version을 확인합니다. API 토큰을 소스·로그·대화에 넣지 않습니다.
 
 변경 대응 검증은 기존 node rpg-check.cjs, 서버 변경은 node server/check.cjs, Worker 변경은 로컬 Wrangler에 한해 node cloudflare/check.cjs를 사용합니다. 각 검사는 짧은 입력·전투·요청만 확인하며 전체 플레이 자동화를 수행하지 않습니다. 실제 서비스에서 테스트용 계정·거래·보상을 만들지 않습니다.
+
+
+온라인 이동 예측은 rpg-netcode.js의 입력 이력으로 관리합니다. 입력은 connectionId·locationEpoch·seq를 포함하고 서버 ackSeq/inputElapsed 이후의 미처리 시간만 공통 predictMovement로 재적용합니다. 화면 오프셋을 실제 충돌 좌표에 누적하지 않습니다. 연결 교체·맵 이동 시 이력을 초기화하고, 이전 연결의 종료 콜백·HTTP 결과·입력을 새 연결에 적용하지 않습니다. 정지 입력은 방향 변경 즉시 전송합니다. 관련 최소 검증은 node server/netcheck.cjs입니다.
+
+온라인 아이템 uid·origin·bound는 새 장비 생성 시에만 부여합니다. 우편·거래·가방 초과 반환에서 기존 uid와 귀속을 보존합니다. 파티와 개인 던전 scope는 저장하고 재배포·재접속 시 복원합니다. 단일 행동 transaction은 참여 캐릭터와 관련 방만 저장하고, 실패 시 공유 방과 이동 이력까지 복원합니다. 서버 tick은 실제 경과 시간을 고정 간격으로 나누고 DB의 추격 상한을 적용합니다.

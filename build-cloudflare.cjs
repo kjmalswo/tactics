@@ -4,7 +4,7 @@ const fs=require('node:fs'),path=require('node:path');
 const root=__dirname,read=name=>fs.readFileSync(path.join(root,name),'utf8'),out=path.join(root,'cloudflare','generated');
 fs.mkdirSync(out,{recursive:true});fs.mkdirSync(path.join(root,'dist','client'),{recursive:true});
 let html=read('rpg-shell.html');
-for(const [token,name]of Object.entries({__CSS__:'rpg.css',__ENGINE__:'rpg-engine.js',__RENDERER__:'rpg-renderer.js',__AUDIO__:'rpg-audio.js',__ONLINE__:'rpg-online.js',__UI__:'rpg-ui.js'}))html=html.replace(token,read(name));
+for(const [token,name]of Object.entries({__CSS__:'rpg.css',__ENGINE__:'rpg-engine.js',__RENDERER__:'rpg-renderer.js',__AUDIO__:'rpg-audio.js',__ONLINE__:'rpg-online.js',__NETCODE__:'rpg-netcode.js',__UI__:'rpg-ui.js'}))html=html.replace(token,read(name));
 if(/__[A-Z_]+__/.test(html))throw Error('Unresolved HTML source token');
 fs.writeFileSync(path.join(root,'index.html'),html);
 fs.writeFileSync(path.join(root,'dist','client','index.html'),html);
