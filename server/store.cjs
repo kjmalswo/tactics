@@ -27,6 +27,8 @@ class Store {
  findRoom(mapId,enemyId){if(!enemyId)return null;return this.db.prepare("SELECT id FROM rooms WHERE json_extract(data,'$.instance.enemies[0].id')=? AND id LIKE ? ORDER BY updated DESC LIMIT 1").get(enemyId,'%|'+mapId);}
  room(id){const row=this.db.prepare('SELECT data FROM rooms WHERE id=?').get(id);return row?JSON.parse(row.data):null;}
  saveRoom(id,data,now){this.db.prepare('INSERT INTO rooms VALUES(?,?,?) ON CONFLICT(id) DO UPDATE SET data=excluded.data,updated=excluded.updated').run(id,JSON.stringify(data),now);}
+ roomUsed(id){return !!this.db.prepare("SELECT 1 FROM characters WHERE json_extract(profile,'$.location.key')=? LIMIT 1").get(id);}
+ deleteRoom(id){this.db.prepare('DELETE FROM rooms WHERE id=?').run(id);}
  ranking(limit){return this.db.prepare("SELECT account,profile,state FROM characters ORDER BY CAST(json_extract(profile,'$.rating') AS INTEGER) DESC LIMIT ?").all(limit);}
  close(){this.db.close();}
 }

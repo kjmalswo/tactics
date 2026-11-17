@@ -25,5 +25,7 @@ export class CloudStore {
  findRoom(mapId,enemyId){if(!enemyId)return null;return this.one("SELECT id FROM rooms WHERE json_extract(data,'$.instance.enemies[0].id')=? AND id LIKE ? ORDER BY updated DESC LIMIT 1",enemyId,'%|'+mapId);}
  room(id){const row=this.one('SELECT data FROM rooms WHERE id=?',id);return row?JSON.parse(row.data):null;}
  saveRoom(id,data,now){this.sql.exec('INSERT INTO rooms VALUES(?,?,?) ON CONFLICT(id) DO UPDATE SET data=excluded.data,updated=excluded.updated',id,JSON.stringify(data),now);}
+ roomUsed(id){return !!this.one("SELECT 1 FROM characters WHERE json_extract(profile,'$.location.key')=? LIMIT 1",id);}
+ deleteRoom(id){this.sql.exec('DELETE FROM rooms WHERE id=?',id);}
  ranking(limit){return this.sql.exec("SELECT account,profile,state FROM characters ORDER BY CAST(json_extract(profile,'$.rating') AS INTEGER) DESC LIMIT ?",limit).toArray();}
 }

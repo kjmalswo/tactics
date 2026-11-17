@@ -42,13 +42,13 @@ DB·밸런스·콘텐츠 수정은 game-db.js에서 관련 키를 먼저 검색�
 
 현행 게임은 에버돈 왕국을 탐험하는 탑뷰 판타지 RPG입니다. WASD·방향키와 모바일 조이스틱으로 직접 이동하고 평타·장착 기술은 자동 사용합니다. 종족은 인간·엘프·드래고뉴트·드워프·수인, 직업은 워리어·아처·매지션·가디언입니다. 직업의 역할과 약점을 유지하고 클래스 ID에 따른 엔진 분기를 추가하지 않습니다.
 
-원본 파일은 rpg-shell.html, rpg.css, rpg-engine.js, rpg-renderer.js, rpg-audio.js, rpg-ui.js입니다. build-rpg.py로 index.html과 단일 오프라인 HTML을 생성합니다. index.html을 직접 편집하지 않습니다. 저장소의 실행본은 game-db.js를 동기 로드하며 단일 HTML 내보내기만 DB를 포함합니다.
+원본 파일은 rpg-shell.html, rpg.css, rpg-engine.js, rpg-growth.js, rpg-growth-ui.js, rpg-renderer.js, rpg-audio.js, rpg-ui.js입니다. build-rpg.py로 index.html과 단일 오프라인 HTML을 생성합니다. index.html을 직접 편집하지 않습니다. 저장소의 실행본은 game-db.js를 동기 로드하며 단일 HTML 내보내기만 DB를 포함합니다.
 
 콘텐츠를 수정할 때 game-db.js의 해당 키를 먼저 검색합니다. 종족·직업은 races/classes, 평타·자동 기술은 classes[].basic/skills, 성장 트리는 branches/talents, 장비·등급·옵션·제작은 items/rarities/affixes/recipes, 레벨과 전투 계수는 config/baseStats/statCaps에서 관리합니다. 성장 트리·장비 효과는 공통 stats 계산으로 실제 전투에 연결합니다.
 
 각 지역은 maps의 독립된 실제 맵입니다. ASCII tiles, terrain.walk, solid props를 충돌에 사용하고 npcs/portals/spawns/resources/chests 좌표를 사용합니다. 마을·필드·던전·보스방을 하나의 배경으로 축약하지 않습니다. 퀘스트는 quests, 몬스터·보스 패턴은 monsters, 난이도는 dungeonTiers에 있습니다. 퀘스트 선행 조건과 보스방 봉인 조건을 유지하며 새 의뢰·이동 경로가 명확하게 보이게 합니다.
 
-장비 강화는 실패 없이 금화·철광석으로 진행합니다. 종족·직업·레벨·장비·수련점·퀘스트는 저장하고 쓰러져도 장비와 경험치는 보존합니다. 던전 재진입 시 해당 던전의 적과 상자를 초기화하며 클리어로 상위 난이도를 개방합니다. 높은 난이도는 적 레벨과 파밍 보상을 함께 올립니다. RPG 저장 키는 tactics.everdawn.rpg.v1입니다. 기존 결투 v6·해상전 저장 키를 삭제하거나 덮어쓰지 않습니다.
+방어구·장신구·유물의 개별 강화는 실패 없이 금화·철광석으로 진행합니다. 무기는 아래 계승 단련 기준을 따릅니다. 종족·직업·레벨·장비·수련점·퀘스트는 저장하고 쓰러져도 장비와 경험치는 보존합니다. 던전 재진입 시 해당 던전의 적과 상자를 초기화하며 클리어로 상위 난이도를 개방합니다. 높은 난이도는 적 레벨과 파밍 보상을 함께 올립니다. RPG 저장 키는 tactics.everdawn.rpg.v1입니다. 기존 결투 v6·해상전 저장 키를 삭제하거나 덮어쓰지 않습니다.
 
 테마 색·글꼴·아이콘은 theme, 픽셀 캐릭터·몬스터·채집물은 sprites/spritePalette, 지도 표현 계수는 render에서 관리합니다. 양피지·목재·황동의 밝은 중세 색상을 유지하고 전투 화면의 체력·마력·현재 목표·가까운 상호작용이 잘 보이게 합니다. 메뉴를 열면 세계 시뮬레이션을 멈추며 모바일 장비 상세는 별도 창으로 제공합니다.
 
@@ -88,3 +88,14 @@ Cloudflare Worker tactics는 Git main과 자동 배포로 연결되어 있습니
 전체 온라인 상태를 수신해 엔진 상태 객체를 교체할 때는 교체 전 player를 MovementHistory.reconcile의 previousActor로 전달합니다. 교체 후 서버 player로 화면 오차를 계산하면 매 전체 갱신마다 이동 되감김이 재발합니다. server/netcheck.cjs는 실제 rpg-online.js 경로에서 지연·방향 전환·frame/state 혼합 수신을 확인합니다.
 
 플레이어 머리 위 이름표는 render.playerNameplate에서 색·크기·행간·자원 막대를 관리하고, 본인과 실제 onlinePeers를 같은 렌더링 경로로 표시합니다. 예측/보간된 캐릭터 표시 좌표를 사용하며 모든 배경·스프라이트 이후에 그려 이름이 가려지지 않게 합니다.
+
+
+# 계승 성장 v4
+
+rpg-growth.js는 공통 엔진의 성장 팩터리, rpg-growth-ui.js는 주무기·균열·생활 계약·숙련 화면입니다. browser/Node/Worker 빌드에서 같은 성장 원본을 로드합니다. game-db.js의 growth가 모든 비용·조건·확률·경로·보상·반응·생활 역할을 정의합니다. 관련 검증은 node rpg-growth-check.cjs를 사용합니다.
+
+무기 투자는 growth.weapon.rank에 영구 저장하고 장착 무기 교체 시 유지합니다. 이전 무기 enhance는 최초 로드 시 가장 높은 투자를 계승 단련으로 옮기고 다른 무기의 투자 비용은 growth.refund에 보존해 한 번만 환급합니다. 보관 상한에 걸린 잔액은 다음 수령까지 유지합니다. 주력만 실제 stats에 적용하며 예비 무기는 교대 시에만 활성화합니다. 예비 무기를 자동 분해·거래·판매하지 않습니다. 영웅 숙련과 단련·생활 등급·균열 깊이는 상한 대신 완만한 성장 곡선을 사용합니다.
+
+균열은 실제 맵과 파티 공유 방을 사용합니다. 시작·다음 층 이동은 모든 동행자의 조건을 먼저 확인하고 같은 transaction에서 이동합니다. 층 보상은 한 번 지급하고 기록·기억·재료는 철수 후 보존합니다. 보스 소환물에도 층별 난이도를 적용합니다. 참조 캐릭터가 없는 이전 균열 방만 transaction 안에서 삭제하며 기존 WORLD namespace·migration을 유지합니다.
+
+공동 사업의 미수령 보상은 social.project.rewards의 원장에 보존합니다. 단일 행동에서 다른 기여자의 profile을 따로 갱신하지 않습니다. 현장 도구의 피해·처치·파티 보상은 해당 방의 활성 캐릭터를 함께 transaction으로 묶습니다. 같은 스냅샷 안에서 상태와 공동 보상 원장을 함께 복원합니다. PvP에서는 계승 성장·기세·도구·속성 반응을 제한해 기존 정규화 결투를 보존합니다.

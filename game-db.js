@@ -1,9 +1,9 @@
 // Editable JSON-compatible fantasy RPG database.
 window.GAME_DB = {
   "meta": {
-    "version": "3.2",
+    "version": "4.0",
     "title": "에버돈",
-    "subtitle": "왕국의 동료들",
+    "subtitle": "계승하는 모험",
     "description": "마을에서 시작해 나만의 직업 빌드를 완성하는 판타지 액션 RPG"
   },
   "theme": {
@@ -395,6 +395,18 @@ window.GAME_DB = {
     ],
     "manaPotion": [
       "KeyF"
+    ],
+    "journey": [
+      "KeyL"
+    ],
+    "swap-weapon": [
+      "KeyX"
+    ],
+    "use-tool": [
+      "KeyZ"
+    ],
+    "surge": [
+      "KeyC"
     ]
   },
   "world": {
@@ -402,7 +414,7 @@ window.GAME_DB = {
     "body": "별의 봉인이 무너진 뒤, 왕국의 변경에서 다섯 왕관을 노리는 군세가 깨어납니다. 작은 길드의 모험가가 되어 동료와 함께 숲·고원·설원·사막·황혼 성채를 누비세요.",
     "chapter": "에버돈 대륙",
     "goal": "지역 의뢰로 성장하고 여덟 던전의 군주를 넘어 황혼 성채의 왕관을 되찾으세요.",
-    "completed": "황혼의 왕관을 되찾았습니다. 전설 던전과 길드 연전, 세력 장비와 전직 완성에 도전하세요."
+    "completed": "왕관을 되찾았습니다. 관측사 에린의 끝없는 균열, 계승 단련과 영웅 숙련으로 여정을 이어가세요."
   },
   "baseStats": {
     "hp": 100,
@@ -12772,7 +12784,7 @@ window.GAME_DB = {
   "slots": [
     {
       "id": "weapon",
-      "name": "무기",
+      "name": "주력 무기",
       "icon": "attack"
     },
     {
@@ -17840,6 +17852,619 @@ window.GAME_DB = {
         }
       ],
       "description": "평타 속성을 바꿔 몬스터 상성을 공략합니다."
+    },
+    {
+      "id": "rift_warrior_cinder",
+      "name": "잿불 철제 장검",
+      "slot": "weapon",
+      "classes": [
+        "warrior"
+      ],
+      "stats": [
+        {
+          "stat": "attack",
+          "op": "add",
+          "value": 6.5
+        },
+        {
+          "stat": "burnChance",
+          "value": 0.06,
+          "op": "add"
+        },
+        {
+          "stat": "speed",
+          "value": 0.98,
+          "op": "multiply"
+        }
+      ],
+      "icon": "attack",
+      "description": "잿불의 길에서 회수한 기억을 담은 주무기. 각인·예비 무기로 상성을 바꿀 수 있습니다.",
+      "minLevel": 12,
+      "element": "fire"
+    },
+    {
+      "id": "rift_warrior_frost",
+      "name": "서리 철제 장검",
+      "slot": "weapon",
+      "classes": [
+        "warrior"
+      ],
+      "stats": [
+        {
+          "stat": "attack",
+          "op": "add",
+          "value": 6.5
+        },
+        {
+          "stat": "slowChance",
+          "value": 0.07,
+          "op": "add"
+        },
+        {
+          "stat": "attackSpeed",
+          "value": 0.98,
+          "op": "multiply"
+        }
+      ],
+      "icon": "attack",
+      "description": "서리의 길에서 회수한 기억을 담은 주무기. 각인·예비 무기로 상성을 바꿀 수 있습니다.",
+      "minLevel": 12,
+      "element": "frost"
+    },
+    {
+      "id": "rift_warrior_wild",
+      "name": "메아리 철제 장검",
+      "slot": "weapon",
+      "classes": [
+        "warrior"
+      ],
+      "stats": [
+        {
+          "stat": "attack",
+          "op": "add",
+          "value": 6.5
+        },
+        {
+          "stat": "manaRegen",
+          "value": 0.16,
+          "op": "add"
+        },
+        {
+          "stat": "hp",
+          "value": 0.97,
+          "op": "multiply"
+        }
+      ],
+      "icon": "attack",
+      "description": "비전의 길에서 회수한 기억을 담은 주무기. 각인·예비 무기로 상성을 바꿀 수 있습니다.",
+      "minLevel": 12,
+      "element": "arcane"
+    },
+    {
+      "id": "rift_archer_cinder",
+      "name": "잿불 사냥꾼의 활",
+      "slot": "weapon",
+      "classes": [
+        "archer"
+      ],
+      "stats": [
+        {
+          "stat": "attack",
+          "op": "add",
+          "value": 6.5
+        },
+        {
+          "stat": "burnChance",
+          "value": 0.06,
+          "op": "add"
+        },
+        {
+          "stat": "speed",
+          "value": 0.98,
+          "op": "multiply"
+        }
+      ],
+      "icon": "bow",
+      "description": "잿불의 길에서 회수한 기억을 담은 주무기. 각인·예비 무기로 상성을 바꿀 수 있습니다.",
+      "minLevel": 12,
+      "element": "fire"
+    },
+    {
+      "id": "rift_archer_frost",
+      "name": "서리 사냥꾼의 활",
+      "slot": "weapon",
+      "classes": [
+        "archer"
+      ],
+      "stats": [
+        {
+          "stat": "attack",
+          "op": "add",
+          "value": 6.5
+        },
+        {
+          "stat": "slowChance",
+          "value": 0.07,
+          "op": "add"
+        },
+        {
+          "stat": "attackSpeed",
+          "value": 0.98,
+          "op": "multiply"
+        }
+      ],
+      "icon": "bow",
+      "description": "서리의 길에서 회수한 기억을 담은 주무기. 각인·예비 무기로 상성을 바꿀 수 있습니다.",
+      "minLevel": 12,
+      "element": "frost"
+    },
+    {
+      "id": "rift_archer_wild",
+      "name": "메아리 사냥꾼의 활",
+      "slot": "weapon",
+      "classes": [
+        "archer"
+      ],
+      "stats": [
+        {
+          "stat": "attack",
+          "op": "add",
+          "value": 6.5
+        },
+        {
+          "stat": "manaRegen",
+          "value": 0.16,
+          "op": "add"
+        },
+        {
+          "stat": "hp",
+          "value": 0.97,
+          "op": "multiply"
+        }
+      ],
+      "icon": "bow",
+      "description": "비전의 길에서 회수한 기억을 담은 주무기. 각인·예비 무기로 상성을 바꿀 수 있습니다.",
+      "minLevel": 12,
+      "element": "arcane"
+    },
+    {
+      "id": "rift_magician_cinder",
+      "name": "잿불 지팡이",
+      "slot": "weapon",
+      "classes": [
+        "magician"
+      ],
+      "stats": [
+        {
+          "stat": "spell",
+          "op": "add",
+          "value": 9.1
+        },
+        {
+          "stat": "burnChance",
+          "value": 0.06,
+          "op": "add"
+        },
+        {
+          "stat": "speed",
+          "value": 0.98,
+          "op": "multiply"
+        }
+      ],
+      "icon": "staff",
+      "description": "잿불의 길에서 회수한 기억을 담은 주무기. 각인·예비 무기로 상성을 바꿀 수 있습니다.",
+      "minLevel": 12,
+      "element": "fire"
+    },
+    {
+      "id": "rift_magician_frost",
+      "name": "서리 지팡이",
+      "slot": "weapon",
+      "classes": [
+        "magician"
+      ],
+      "stats": [
+        {
+          "stat": "spell",
+          "op": "add",
+          "value": 9.1
+        },
+        {
+          "stat": "slowChance",
+          "value": 0.07,
+          "op": "add"
+        },
+        {
+          "stat": "attackSpeed",
+          "value": 0.98,
+          "op": "multiply"
+        }
+      ],
+      "icon": "staff",
+      "description": "서리의 길에서 회수한 기억을 담은 주무기. 각인·예비 무기로 상성을 바꿀 수 있습니다.",
+      "minLevel": 12,
+      "element": "frost"
+    },
+    {
+      "id": "rift_magician_wild",
+      "name": "메아리 지팡이",
+      "slot": "weapon",
+      "classes": [
+        "magician"
+      ],
+      "stats": [
+        {
+          "stat": "spell",
+          "op": "add",
+          "value": 9.1
+        },
+        {
+          "stat": "manaRegen",
+          "value": 0.16,
+          "op": "add"
+        },
+        {
+          "stat": "hp",
+          "value": 0.97,
+          "op": "multiply"
+        }
+      ],
+      "icon": "staff",
+      "description": "비전의 길에서 회수한 기억을 담은 주무기. 각인·예비 무기로 상성을 바꿀 수 있습니다.",
+      "minLevel": 12,
+      "element": "arcane"
+    },
+    {
+      "id": "rift_guardian_cinder",
+      "name": "잿불 서약의 철퇴",
+      "slot": "weapon",
+      "classes": [
+        "guardian"
+      ],
+      "stats": [
+        {
+          "stat": "spell",
+          "op": "add",
+          "value": 5.2
+        },
+        {
+          "stat": "defense",
+          "op": "add",
+          "value": 2.6
+        },
+        {
+          "stat": "burnChance",
+          "value": 0.06,
+          "op": "add"
+        },
+        {
+          "stat": "speed",
+          "value": 0.98,
+          "op": "multiply"
+        }
+      ],
+      "icon": "shield",
+      "description": "잿불의 길에서 회수한 기억을 담은 주무기. 각인·예비 무기로 상성을 바꿀 수 있습니다.",
+      "minLevel": 12,
+      "element": "fire"
+    },
+    {
+      "id": "rift_guardian_frost",
+      "name": "서리 서약의 철퇴",
+      "slot": "weapon",
+      "classes": [
+        "guardian"
+      ],
+      "stats": [
+        {
+          "stat": "spell",
+          "op": "add",
+          "value": 5.2
+        },
+        {
+          "stat": "defense",
+          "op": "add",
+          "value": 2.6
+        },
+        {
+          "stat": "slowChance",
+          "value": 0.07,
+          "op": "add"
+        },
+        {
+          "stat": "attackSpeed",
+          "value": 0.98,
+          "op": "multiply"
+        }
+      ],
+      "icon": "shield",
+      "description": "서리의 길에서 회수한 기억을 담은 주무기. 각인·예비 무기로 상성을 바꿀 수 있습니다.",
+      "minLevel": 12,
+      "element": "frost"
+    },
+    {
+      "id": "rift_guardian_wild",
+      "name": "메아리 서약의 철퇴",
+      "slot": "weapon",
+      "classes": [
+        "guardian"
+      ],
+      "stats": [
+        {
+          "stat": "spell",
+          "op": "add",
+          "value": 5.2
+        },
+        {
+          "stat": "defense",
+          "op": "add",
+          "value": 2.6
+        },
+        {
+          "stat": "manaRegen",
+          "value": 0.16,
+          "op": "add"
+        },
+        {
+          "stat": "hp",
+          "value": 0.97,
+          "op": "multiply"
+        }
+      ],
+      "icon": "shield",
+      "description": "비전의 길에서 회수한 기억을 담은 주무기. 각인·예비 무기로 상성을 바꿀 수 있습니다.",
+      "minLevel": 12,
+      "element": "arcane"
+    },
+    {
+      "id": "echo_relic_fang",
+      "name": "늑대의 송곳니의 유물",
+      "slot": "relic",
+      "icon": "attack",
+      "minLevel": 15,
+      "stats": [
+        {
+          "stat": "basicDamage",
+          "value": 1.1,
+          "op": "multiply"
+        },
+        {
+          "stat": "skillDamage",
+          "value": 0.96,
+          "op": "multiply"
+        }
+      ],
+      "description": "기억과 공명하는 유물. 이득과 대가를 함께 갖습니다."
+    },
+    {
+      "id": "echo_relic_ember",
+      "name": "잿불 심장의 유물",
+      "slot": "relic",
+      "icon": "signature",
+      "minLevel": 15,
+      "stats": [
+        {
+          "stat": "burnChance",
+          "value": 0.12,
+          "op": "add"
+        },
+        {
+          "stat": "fireResist",
+          "value": -0.04,
+          "op": "add"
+        }
+      ],
+      "description": "기억과 공명하는 유물. 이득과 대가를 함께 갖습니다."
+    },
+    {
+      "id": "echo_relic_winter",
+      "name": "겨울의 맹세의 유물",
+      "slot": "relic",
+      "icon": "shield",
+      "minLevel": 15,
+      "stats": [
+        {
+          "stat": "slowChance",
+          "value": 0.14,
+          "op": "add"
+        },
+        {
+          "stat": "speed",
+          "value": 0.97,
+          "op": "multiply"
+        }
+      ],
+      "description": "기억과 공명하는 유물. 이득과 대가를 함께 갖습니다."
+    },
+    {
+      "id": "echo_relic_spark",
+      "name": "비전의 파편의 유물",
+      "slot": "relic",
+      "icon": "staff",
+      "minLevel": 15,
+      "stats": [
+        {
+          "stat": "skillDamage",
+          "value": 1.12,
+          "op": "multiply"
+        },
+        {
+          "stat": "basicDamage",
+          "value": 0.95,
+          "op": "multiply"
+        }
+      ],
+      "description": "기억과 공명하는 유물. 이득과 대가를 함께 갖습니다."
+    },
+    {
+      "id": "echo_relic_root",
+      "name": "고목의 의지의 유물",
+      "slot": "relic",
+      "icon": "tree",
+      "minLevel": 15,
+      "stats": [
+        {
+          "stat": "hp",
+          "value": 1.12,
+          "op": "multiply"
+        },
+        {
+          "stat": "attackSpeed",
+          "value": 0.96,
+          "op": "multiply"
+        }
+      ],
+      "description": "기억과 공명하는 유물. 이득과 대가를 함께 갖습니다."
+    },
+    {
+      "id": "echo_relic_glass",
+      "name": "유리 칼날의 유물",
+      "slot": "relic",
+      "icon": "fight",
+      "minLevel": 15,
+      "stats": [
+        {
+          "stat": "crit",
+          "value": 0.055,
+          "op": "add"
+        },
+        {
+          "stat": "hp",
+          "value": 0.94,
+          "op": "multiply"
+        }
+      ],
+      "description": "기억과 공명하는 유물. 이득과 대가를 함께 갖습니다."
+    },
+    {
+      "id": "echo_relic_tidal",
+      "name": "되돌아오는 파도의 유물",
+      "slot": "relic",
+      "icon": "recover",
+      "minLevel": 15,
+      "stats": [
+        {
+          "stat": "manaRegen",
+          "value": 0.24,
+          "op": "add"
+        },
+        {
+          "stat": "defense",
+          "value": 0.95,
+          "op": "multiply"
+        }
+      ],
+      "description": "기억과 공명하는 유물. 이득과 대가를 함께 갖습니다."
+    },
+    {
+      "id": "echo_relic_thorn",
+      "name": "왕관의 가시의 유물",
+      "slot": "relic",
+      "icon": "shield",
+      "minLevel": 15,
+      "stats": [
+        {
+          "stat": "thorns",
+          "value": 5,
+          "op": "add"
+        },
+        {
+          "stat": "shieldOnSkill",
+          "value": 0.025,
+          "op": "add"
+        },
+        {
+          "stat": "skillDamage",
+          "value": 0.97,
+          "op": "multiply"
+        }
+      ],
+      "description": "기억과 공명하는 유물. 이득과 대가를 함께 갖습니다."
+    },
+    {
+      "id": "echo_relic_gust",
+      "name": "바람의 발자취의 유물",
+      "slot": "relic",
+      "icon": "dash",
+      "minLevel": 15,
+      "stats": [
+        {
+          "stat": "speed",
+          "value": 1.06,
+          "op": "multiply"
+        },
+        {
+          "stat": "hp",
+          "value": 0.97,
+          "op": "multiply"
+        }
+      ],
+      "description": "기억과 공명하는 유물. 이득과 대가를 함께 갖습니다."
+    },
+    {
+      "id": "echo_relic_venom",
+      "name": "늪의 속삭임의 유물",
+      "slot": "relic",
+      "icon": "bait",
+      "minLevel": 15,
+      "stats": [
+        {
+          "stat": "poisonChance",
+          "value": 0.14,
+          "op": "add"
+        },
+        {
+          "stat": "natureResist",
+          "value": -0.04,
+          "op": "add"
+        }
+      ],
+      "description": "기억과 공명하는 유물. 이득과 대가를 함께 갖습니다."
+    },
+    {
+      "id": "echo_relic_echo",
+      "name": "메아리의 손의 유물",
+      "slot": "relic",
+      "icon": "staff",
+      "minLevel": 15,
+      "stats": [
+        {
+          "stat": "skillEcho",
+          "value": 0.05,
+          "op": "add"
+        },
+        {
+          "stat": "manaRegen",
+          "value": -0.1,
+          "op": "add"
+        }
+      ],
+      "description": "기억과 공명하는 유물. 이득과 대가를 함께 갖습니다."
+    },
+    {
+      "id": "echo_relic_fortune",
+      "name": "방랑자의 동전의 유물",
+      "slot": "relic",
+      "icon": "coins",
+      "minLevel": 15,
+      "stats": [
+        {
+          "stat": "goldGain",
+          "value": 1.12,
+          "op": "multiply"
+        },
+        {
+          "stat": "attack",
+          "value": 0.97,
+          "op": "multiply"
+        },
+        {
+          "stat": "spell",
+          "value": 0.97,
+          "op": "multiply"
+        }
+      ],
+      "description": "기억과 공명하는 유물. 이득과 대가를 함께 갖습니다."
     }
   ],
   "affixes": [
@@ -18037,6 +18662,26 @@ window.GAME_DB = {
     {
       "id": "sigil",
       "name": "정복 인장",
+      "icon": "rank"
+    },
+    {
+      "id": "forge_essence",
+      "name": "단련 정수",
+      "icon": "signature"
+    },
+    {
+      "id": "tempered_core",
+      "name": "응축핵",
+      "icon": "anvil"
+    },
+    {
+      "id": "rift_shard",
+      "name": "균열 잔재",
+      "icon": "portal"
+    },
+    {
+      "id": "world_seal",
+      "name": "왕국 인장",
       "icon": "rank"
     }
   ],
@@ -19106,6 +19751,378 @@ window.GAME_DB = {
         "crystal": 17
       },
       "description": "파밍 재료로 확정 제작합니다."
+    },
+    {
+      "id": "rift_warrior_cinder",
+      "name": "잿불 철제 장검",
+      "item": "rift_warrior_cinder",
+      "classes": [
+        "warrior"
+      ],
+      "minLevel": 12,
+      "rarity": "rare",
+      "gold": 310,
+      "materials": {
+        "rift_shard": 8,
+        "tempered_core": 2,
+        "crystal": 6
+      },
+      "description": "균열 파밍과 정련 재료로 제작하는 속성 무기."
+    },
+    {
+      "id": "rift_warrior_frost",
+      "name": "서리 철제 장검",
+      "item": "rift_warrior_frost",
+      "classes": [
+        "warrior"
+      ],
+      "minLevel": 12,
+      "rarity": "rare",
+      "gold": 310,
+      "materials": {
+        "rift_shard": 8,
+        "tempered_core": 2,
+        "crystal": 6
+      },
+      "description": "균열 파밍과 정련 재료로 제작하는 속성 무기."
+    },
+    {
+      "id": "rift_warrior_wild",
+      "name": "메아리 철제 장검",
+      "item": "rift_warrior_wild",
+      "classes": [
+        "warrior"
+      ],
+      "minLevel": 12,
+      "rarity": "rare",
+      "gold": 310,
+      "materials": {
+        "rift_shard": 8,
+        "tempered_core": 2,
+        "crystal": 6
+      },
+      "description": "균열 파밍과 정련 재료로 제작하는 속성 무기."
+    },
+    {
+      "id": "rift_archer_cinder",
+      "name": "잿불 사냥꾼의 활",
+      "item": "rift_archer_cinder",
+      "classes": [
+        "archer"
+      ],
+      "minLevel": 12,
+      "rarity": "rare",
+      "gold": 310,
+      "materials": {
+        "rift_shard": 8,
+        "tempered_core": 2,
+        "crystal": 6
+      },
+      "description": "균열 파밍과 정련 재료로 제작하는 속성 무기."
+    },
+    {
+      "id": "rift_archer_frost",
+      "name": "서리 사냥꾼의 활",
+      "item": "rift_archer_frost",
+      "classes": [
+        "archer"
+      ],
+      "minLevel": 12,
+      "rarity": "rare",
+      "gold": 310,
+      "materials": {
+        "rift_shard": 8,
+        "tempered_core": 2,
+        "crystal": 6
+      },
+      "description": "균열 파밍과 정련 재료로 제작하는 속성 무기."
+    },
+    {
+      "id": "rift_archer_wild",
+      "name": "메아리 사냥꾼의 활",
+      "item": "rift_archer_wild",
+      "classes": [
+        "archer"
+      ],
+      "minLevel": 12,
+      "rarity": "rare",
+      "gold": 310,
+      "materials": {
+        "rift_shard": 8,
+        "tempered_core": 2,
+        "crystal": 6
+      },
+      "description": "균열 파밍과 정련 재료로 제작하는 속성 무기."
+    },
+    {
+      "id": "rift_magician_cinder",
+      "name": "잿불 지팡이",
+      "item": "rift_magician_cinder",
+      "classes": [
+        "magician"
+      ],
+      "minLevel": 12,
+      "rarity": "rare",
+      "gold": 310,
+      "materials": {
+        "rift_shard": 8,
+        "tempered_core": 2,
+        "crystal": 6
+      },
+      "description": "균열 파밍과 정련 재료로 제작하는 속성 무기."
+    },
+    {
+      "id": "rift_magician_frost",
+      "name": "서리 지팡이",
+      "item": "rift_magician_frost",
+      "classes": [
+        "magician"
+      ],
+      "minLevel": 12,
+      "rarity": "rare",
+      "gold": 310,
+      "materials": {
+        "rift_shard": 8,
+        "tempered_core": 2,
+        "crystal": 6
+      },
+      "description": "균열 파밍과 정련 재료로 제작하는 속성 무기."
+    },
+    {
+      "id": "rift_magician_wild",
+      "name": "메아리 지팡이",
+      "item": "rift_magician_wild",
+      "classes": [
+        "magician"
+      ],
+      "minLevel": 12,
+      "rarity": "rare",
+      "gold": 310,
+      "materials": {
+        "rift_shard": 8,
+        "tempered_core": 2,
+        "crystal": 6
+      },
+      "description": "균열 파밍과 정련 재료로 제작하는 속성 무기."
+    },
+    {
+      "id": "rift_guardian_cinder",
+      "name": "잿불 서약의 철퇴",
+      "item": "rift_guardian_cinder",
+      "classes": [
+        "guardian"
+      ],
+      "minLevel": 12,
+      "rarity": "rare",
+      "gold": 310,
+      "materials": {
+        "rift_shard": 8,
+        "tempered_core": 2,
+        "crystal": 6
+      },
+      "description": "균열 파밍과 정련 재료로 제작하는 속성 무기."
+    },
+    {
+      "id": "rift_guardian_frost",
+      "name": "서리 서약의 철퇴",
+      "item": "rift_guardian_frost",
+      "classes": [
+        "guardian"
+      ],
+      "minLevel": 12,
+      "rarity": "rare",
+      "gold": 310,
+      "materials": {
+        "rift_shard": 8,
+        "tempered_core": 2,
+        "crystal": 6
+      },
+      "description": "균열 파밍과 정련 재료로 제작하는 속성 무기."
+    },
+    {
+      "id": "rift_guardian_wild",
+      "name": "메아리 서약의 철퇴",
+      "item": "rift_guardian_wild",
+      "classes": [
+        "guardian"
+      ],
+      "minLevel": 12,
+      "rarity": "rare",
+      "gold": 310,
+      "materials": {
+        "rift_shard": 8,
+        "tempered_core": 2,
+        "crystal": 6
+      },
+      "description": "균열 파밍과 정련 재료로 제작하는 속성 무기."
+    },
+    {
+      "id": "echo_relic_fang",
+      "name": "늑대의 송곳니의 유물",
+      "item": "echo_relic_fang",
+      "minLevel": 15,
+      "rarity": "uncommon",
+      "gold": 240,
+      "materials": {
+        "rift_shard": 6,
+        "forge_essence": 8,
+        "ore": 8
+      },
+      "description": "기억과 공명하는 유물. 이득과 대가를 함께 갖습니다."
+    },
+    {
+      "id": "echo_relic_ember",
+      "name": "잿불 심장의 유물",
+      "item": "echo_relic_ember",
+      "minLevel": 15,
+      "rarity": "uncommon",
+      "gold": 240,
+      "materials": {
+        "rift_shard": 6,
+        "forge_essence": 8,
+        "ore": 8
+      },
+      "description": "기억과 공명하는 유물. 이득과 대가를 함께 갖습니다."
+    },
+    {
+      "id": "echo_relic_winter",
+      "name": "겨울의 맹세의 유물",
+      "item": "echo_relic_winter",
+      "minLevel": 15,
+      "rarity": "uncommon",
+      "gold": 240,
+      "materials": {
+        "rift_shard": 6,
+        "forge_essence": 8,
+        "ore": 8
+      },
+      "description": "기억과 공명하는 유물. 이득과 대가를 함께 갖습니다."
+    },
+    {
+      "id": "echo_relic_spark",
+      "name": "비전의 파편의 유물",
+      "item": "echo_relic_spark",
+      "minLevel": 15,
+      "rarity": "uncommon",
+      "gold": 240,
+      "materials": {
+        "rift_shard": 6,
+        "forge_essence": 8,
+        "ore": 8
+      },
+      "description": "기억과 공명하는 유물. 이득과 대가를 함께 갖습니다."
+    },
+    {
+      "id": "echo_relic_root",
+      "name": "고목의 의지의 유물",
+      "item": "echo_relic_root",
+      "minLevel": 15,
+      "rarity": "uncommon",
+      "gold": 240,
+      "materials": {
+        "rift_shard": 6,
+        "forge_essence": 8,
+        "ore": 8
+      },
+      "description": "기억과 공명하는 유물. 이득과 대가를 함께 갖습니다."
+    },
+    {
+      "id": "echo_relic_glass",
+      "name": "유리 칼날의 유물",
+      "item": "echo_relic_glass",
+      "minLevel": 15,
+      "rarity": "uncommon",
+      "gold": 240,
+      "materials": {
+        "rift_shard": 6,
+        "forge_essence": 8,
+        "ore": 8
+      },
+      "description": "기억과 공명하는 유물. 이득과 대가를 함께 갖습니다."
+    },
+    {
+      "id": "echo_relic_tidal",
+      "name": "되돌아오는 파도의 유물",
+      "item": "echo_relic_tidal",
+      "minLevel": 15,
+      "rarity": "uncommon",
+      "gold": 240,
+      "materials": {
+        "rift_shard": 6,
+        "forge_essence": 8,
+        "ore": 8
+      },
+      "description": "기억과 공명하는 유물. 이득과 대가를 함께 갖습니다."
+    },
+    {
+      "id": "echo_relic_thorn",
+      "name": "왕관의 가시의 유물",
+      "item": "echo_relic_thorn",
+      "minLevel": 15,
+      "rarity": "uncommon",
+      "gold": 240,
+      "materials": {
+        "rift_shard": 6,
+        "forge_essence": 8,
+        "ore": 8
+      },
+      "description": "기억과 공명하는 유물. 이득과 대가를 함께 갖습니다."
+    },
+    {
+      "id": "echo_relic_gust",
+      "name": "바람의 발자취의 유물",
+      "item": "echo_relic_gust",
+      "minLevel": 15,
+      "rarity": "uncommon",
+      "gold": 240,
+      "materials": {
+        "rift_shard": 6,
+        "forge_essence": 8,
+        "ore": 8
+      },
+      "description": "기억과 공명하는 유물. 이득과 대가를 함께 갖습니다."
+    },
+    {
+      "id": "echo_relic_venom",
+      "name": "늪의 속삭임의 유물",
+      "item": "echo_relic_venom",
+      "minLevel": 15,
+      "rarity": "uncommon",
+      "gold": 240,
+      "materials": {
+        "rift_shard": 6,
+        "forge_essence": 8,
+        "ore": 8
+      },
+      "description": "기억과 공명하는 유물. 이득과 대가를 함께 갖습니다."
+    },
+    {
+      "id": "echo_relic_echo",
+      "name": "메아리의 손의 유물",
+      "item": "echo_relic_echo",
+      "minLevel": 15,
+      "rarity": "uncommon",
+      "gold": 240,
+      "materials": {
+        "rift_shard": 6,
+        "forge_essence": 8,
+        "ore": 8
+      },
+      "description": "기억과 공명하는 유물. 이득과 대가를 함께 갖습니다."
+    },
+    {
+      "id": "echo_relic_fortune",
+      "name": "방랑자의 동전의 유물",
+      "item": "echo_relic_fortune",
+      "minLevel": 15,
+      "rarity": "uncommon",
+      "gold": 240,
+      "materials": {
+        "rift_shard": 6,
+        "forge_essence": 8,
+        "ore": 8
+      },
+      "description": "기억과 공명하는 유물. 이득과 대가를 함께 갖습니다."
     }
   ],
   "shop": [
@@ -19923,7 +20940,8 @@ window.GAME_DB = {
         2
       ],
       "material": {
-        "herb": 0.18
+        "herb": 0.18,
+        "forge_essence": 0.09
       },
       "size": 0.9,
       "element": "nature"
@@ -19946,7 +20964,8 @@ window.GAME_DB = {
         3
       ],
       "material": {
-        "ore": 0.32
+        "ore": 0.32,
+        "forge_essence": 0.09
       },
       "size": 1,
       "element": "physical"
@@ -19970,7 +20989,8 @@ window.GAME_DB = {
         3
       ],
       "material": {
-        "hide": 0.48
+        "hide": 0.48,
+        "forge_essence": 0.09
       },
       "size": 1.1,
       "dash": true,
@@ -19995,7 +21015,8 @@ window.GAME_DB = {
         4
       ],
       "material": {
-        "hide": 0.6
+        "hide": 0.6,
+        "forge_essence": 0.09
       },
       "size": 1.2,
       "dash": true,
@@ -20019,7 +21040,8 @@ window.GAME_DB = {
         4
       ],
       "material": {
-        "crystal": 0.32
+        "crystal": 0.32,
+        "forge_essence": 0.09
       },
       "size": 1.1,
       "element": "physical"
@@ -20042,7 +21064,8 @@ window.GAME_DB = {
         6
       ],
       "material": {
-        "ore": 0.8
+        "ore": 0.8,
+        "forge_essence": 0.25
       },
       "size": 1.25,
       "elite": true,
@@ -20066,7 +21089,8 @@ window.GAME_DB = {
         7
       ],
       "material": {
-        "ore": 1
+        "ore": 1,
+        "forge_essence": 0.09
       },
       "size": 1.4,
       "element": "physical"
@@ -20089,7 +21113,8 @@ window.GAME_DB = {
         8
       ],
       "material": {
-        "crystal": 1
+        "crystal": 1,
+        "forge_essence": 0.25
       },
       "size": 1.3,
       "elite": true,
@@ -20157,7 +21182,8 @@ window.GAME_DB = {
       ],
       "element": "physical",
       "material": {
-        "sigil": 0.8
+        "sigil": 0.8,
+        "tempered_core": 0.6
       }
     },
     "mine_golem": {
@@ -20219,7 +21245,8 @@ window.GAME_DB = {
       ],
       "element": "physical",
       "material": {
-        "sigil": 0.8
+        "sigil": 0.8,
+        "tempered_core": 0.6
       }
     },
     "ancient_drake": {
@@ -20296,7 +21323,8 @@ window.GAME_DB = {
       ],
       "element": "fire",
       "material": {
-        "sigil": 0.8
+        "sigil": 0.8,
+        "tempered_core": 0.6
       }
     },
     "goblin_captain": {
@@ -20317,7 +21345,8 @@ window.GAME_DB = {
         12
       ],
       "material": {
-        "ore": 0.32
+        "ore": 0.32,
+        "forge_essence": 0.25
       },
       "size": 1.4,
       "elite": true,
@@ -20343,7 +21372,8 @@ window.GAME_DB = {
         12
       ],
       "material": {
-        "hide": 0.48
+        "hide": 0.48,
+        "forge_essence": 0.25
       },
       "size": 1.4,
       "dash": true,
@@ -20369,7 +21399,8 @@ window.GAME_DB = {
         12
       ],
       "material": {
-        "crystal": 0.32
+        "crystal": 0.32,
+        "forge_essence": 0.25
       },
       "size": 1.4,
       "elite": true,
@@ -20394,7 +21425,8 @@ window.GAME_DB = {
         7
       ],
       "material": {
-        "wood": 0.6
+        "wood": 0.6,
+        "forge_essence": 0.09
       },
       "size": 1.4,
       "innerRadius": 1.15,
@@ -20420,7 +21452,8 @@ window.GAME_DB = {
         3
       ],
       "material": {
-        "hide": 0.32
+        "hide": 0.32,
+        "forge_essence": 0.09
       },
       "size": 0.85,
       "dash": true,
@@ -20444,7 +21477,8 @@ window.GAME_DB = {
         5
       ],
       "material": {
-        "ore": 0.38
+        "ore": 0.38,
+        "forge_essence": 0.09
       },
       "size": 1,
       "element": "physical"
@@ -20467,7 +21501,8 @@ window.GAME_DB = {
         4
       ],
       "material": {
-        "herb": 0.4
+        "herb": 0.4,
+        "forge_essence": 0.09
       },
       "size": 0.9,
       "element": "nature"
@@ -20491,7 +21526,8 @@ window.GAME_DB = {
       ],
       "material": {
         "hide": 0.45,
-        "ore": 0.25
+        "ore": 0.25,
+        "forge_essence": 0.09
       },
       "size": 1,
       "angle": 1.3,
@@ -20516,7 +21552,8 @@ window.GAME_DB = {
       ],
       "material": {
         "ember": 0.2,
-        "crystal": 0.4
+        "crystal": 0.4,
+        "forge_essence": 0.09
       },
       "size": 1.3,
       "elite": false,
@@ -20542,7 +21579,8 @@ window.GAME_DB = {
         7
       ],
       "material": {
-        "hide": 0.5
+        "hide": 0.5,
+        "forge_essence": 0.09
       },
       "size": 1.2,
       "dash": true,
@@ -20567,7 +21605,8 @@ window.GAME_DB = {
         6
       ],
       "material": {
-        "hide": 0.6
+        "hide": 0.6,
+        "forge_essence": 0.09
       },
       "size": 1.1,
       "dash": true,
@@ -20592,7 +21631,8 @@ window.GAME_DB = {
         7
       ],
       "material": {
-        "moonstone": 0.32
+        "moonstone": 0.32,
+        "forge_essence": 0.09
       },
       "size": 1.3,
       "elite": false,
@@ -20619,7 +21659,8 @@ window.GAME_DB = {
       ],
       "material": {
         "moonstone": 0.5,
-        "ore": 0.3
+        "ore": 0.3,
+        "forge_essence": 0.09
       },
       "size": 1.4,
       "angle": 1.8,
@@ -20646,7 +21687,8 @@ window.GAME_DB = {
       ],
       "material": {
         "hide": 0.4,
-        "ember": 0.22
+        "ember": 0.22,
+        "forge_essence": 0.09
       },
       "size": 1.1,
       "dash": true,
@@ -20671,7 +21713,8 @@ window.GAME_DB = {
         9
       ],
       "material": {
-        "ore": 0.4
+        "ore": 0.4,
+        "forge_essence": 0.09
       },
       "size": 1,
       "angle": 1.4,
@@ -20696,7 +21739,8 @@ window.GAME_DB = {
         10
       ],
       "material": {
-        "ember": 0.5
+        "ember": 0.5,
+        "forge_essence": 0.09
       },
       "size": 1.2,
       "elite": false,
@@ -20722,7 +21766,8 @@ window.GAME_DB = {
       ],
       "material": {
         "ore": 0.4,
-        "sigil": 0.09
+        "sigil": 0.09,
+        "forge_essence": 0.09
       },
       "size": 1,
       "length": 4,
@@ -20748,7 +21793,8 @@ window.GAME_DB = {
         10
       ],
       "material": {
-        "crystal": 0.6
+        "crystal": 0.6,
+        "forge_essence": 0.09
       },
       "size": 1.3,
       "elite": false,
@@ -20775,7 +21821,8 @@ window.GAME_DB = {
       ],
       "material": {
         "herb": 0.45,
-        "sigil": 0.08
+        "sigil": 0.08,
+        "forge_essence": 0.09
       },
       "size": 0.9,
       "bursts": 3,
@@ -20816,7 +21863,8 @@ window.GAME_DB = {
       ],
       "material": {
         "ore": 0.5,
-        "sigil": 0.12
+        "sigil": 0.12,
+        "forge_essence": 0.09
       },
       "size": 1,
       "length": 4,
@@ -20844,7 +21892,8 @@ window.GAME_DB = {
       ],
       "material": {
         "crystal": 0.55,
-        "moonstone": 0.3
+        "moonstone": 0.3,
+        "forge_essence": 0.09
       },
       "size": 1.3,
       "elite": false,
@@ -21049,7 +22098,8 @@ window.GAME_DB = {
       "tint": "#79a56f",
       "element": "nature",
       "material": {
-        "sigil": 0.8
+        "sigil": 0.8,
+        "tempered_core": 0.6
       }
     },
     "frost_regent": {
@@ -21209,7 +22259,8 @@ window.GAME_DB = {
       "tint": "#8aafce",
       "element": "frost",
       "material": {
-        "sigil": 0.8
+        "sigil": 0.8,
+        "tempered_core": 0.6
       }
     },
     "sun_scorpion": {
@@ -21405,7 +22456,8 @@ window.GAME_DB = {
       "tint": "#c9a25c",
       "element": "fire",
       "material": {
-        "sigil": 0.8
+        "sigil": 0.8,
+        "tempered_core": 0.6
       }
     },
     "grave_marshal": {
@@ -21544,7 +22596,8 @@ window.GAME_DB = {
       "tint": "#b5a4bd",
       "element": "arcane",
       "material": {
-        "sigil": 0.8
+        "sigil": 0.8,
+        "tempered_core": 0.6
       }
     },
     "eclipse_king": {
@@ -21785,7 +22838,8 @@ window.GAME_DB = {
       "tint": "#d6b16c",
       "element": "arcane",
       "material": {
-        "sigil": 0.8
+        "sigil": 0.8,
+        "tempered_core": 0.6
       }
     },
     "highland_elite": {
@@ -21807,7 +22861,8 @@ window.GAME_DB = {
       ],
       "material": {
         "hide": 0.45,
-        "ore": 0.25
+        "ore": 0.25,
+        "forge_essence": 0.25
       },
       "size": 1.5,
       "angle": 1.3,
@@ -21833,7 +22888,8 @@ window.GAME_DB = {
         6
       ],
       "material": {
-        "hide": 0.6
+        "hide": 0.6,
+        "forge_essence": 0.25
       },
       "size": 1.5,
       "dash": true,
@@ -21861,7 +22917,8 @@ window.GAME_DB = {
       ],
       "material": {
         "hide": 0.4,
-        "ember": 0.22
+        "ember": 0.22,
+        "forge_essence": 0.25
       },
       "size": 1.5,
       "dash": true,
@@ -21887,7 +22944,8 @@ window.GAME_DB = {
         5
       ],
       "material": {
-        "ore": 0.38
+        "ore": 0.38,
+        "forge_essence": 0.25
       },
       "size": 1.5,
       "elite": true,
@@ -21912,7 +22970,8 @@ window.GAME_DB = {
       ],
       "material": {
         "ore": 0.5,
-        "sigil": 0.12
+        "sigil": 0.12,
+        "forge_essence": 0.25
       },
       "size": 1.5,
       "length": 4,
@@ -22103,7 +23162,8 @@ window.GAME_DB = {
       "tint": "#79a56f",
       "element": "nature",
       "material": {
-        "sigil": 0.8
+        "sigil": 0.8,
+        "tempered_core": 0.6
       },
       "raid": true
     },
@@ -22264,7 +23324,8 @@ window.GAME_DB = {
       "tint": "#8aafce",
       "element": "frost",
       "material": {
-        "sigil": 0.8
+        "sigil": 0.8,
+        "tempered_core": 0.6
       },
       "raid": true
     },
@@ -22506,7 +23567,8 @@ window.GAME_DB = {
       "tint": "#d6b16c",
       "element": "arcane",
       "material": {
-        "sigil": 0.8
+        "sigil": 0.8,
+        "tempered_core": 0.6
       },
       "raid": true
     },
@@ -22569,7 +23631,8 @@ window.GAME_DB = {
       ],
       "element": "physical",
       "material": {
-        "sigil": 0.8
+        "sigil": 0.8,
+        "tempered_core": 0.6
       },
       "worldBoss": true
     },
@@ -22647,7 +23710,8 @@ window.GAME_DB = {
       ],
       "element": "fire",
       "material": {
-        "sigil": 0.8
+        "sigil": 0.8,
+        "tempered_core": 0.6
       },
       "worldBoss": true
     },
@@ -22670,7 +23734,348 @@ window.GAME_DB = {
       ],
       "size": 1,
       "element": "physical",
-      "ignoreCodex": true
+      "ignoreCodex": true,
+      "material": {
+        "forge_essence": 0.09
+      }
+    },
+    "rift_goblin": {
+      "name": "균열 고블린",
+      "sprite": "goblin",
+      "hp": 56.160000000000004,
+      "attack": 16,
+      "defense": 1,
+      "speed": 2,
+      "range": 0.85,
+      "cooldown": 1.55,
+      "windup": 0.45,
+      "kind": "circle",
+      "radius": 1,
+      "xp": 12.100000000000001,
+      "gold": [
+        1,
+        3
+      ],
+      "material": {
+        "forge_essence": 0.24,
+        "rift_shard": 0.15
+      },
+      "size": 1,
+      "element": "physical"
+    },
+    "rift_wolf": {
+      "name": "잔향 늑대",
+      "sprite": "wolf",
+      "hp": 64.48,
+      "attack": 20,
+      "defense": 1,
+      "speed": 2.75,
+      "range": 0.9,
+      "cooldown": 1.65,
+      "windup": 0.55,
+      "kind": "line",
+      "radius": 0.6,
+      "length": 2.1,
+      "xp": 14.3,
+      "gold": [
+        1,
+        3
+      ],
+      "material": {
+        "forge_essence": 0.24,
+        "rift_shard": 0.15
+      },
+      "size": 1.1,
+      "dash": true,
+      "element": "physical"
+    },
+    "rift_slime": {
+      "name": "거울 슬라임",
+      "sprite": "slime",
+      "hp": 36.4,
+      "attack": 12,
+      "defense": 0,
+      "speed": 1.3,
+      "range": 0.75,
+      "cooldown": 1.7,
+      "windup": 0.5,
+      "kind": "circle",
+      "radius": 0.9,
+      "xp": 8.8,
+      "gold": [
+        1,
+        2
+      ],
+      "material": {
+        "forge_essence": 0.24,
+        "rift_shard": 0.15
+      },
+      "size": 0.9,
+      "element": "nature"
+    },
+    "rift_lizard": {
+      "name": "비전 리자드",
+      "sprite": "lizard",
+      "hp": 89.44,
+      "attack": 26,
+      "defense": 2,
+      "speed": 2,
+      "range": 3,
+      "cooldown": 2.1,
+      "windup": 0.8,
+      "kind": "target",
+      "radius": 1.05,
+      "xp": 22.0,
+      "gold": [
+        2,
+        4
+      ],
+      "material": {
+        "forge_essence": 0.24,
+        "rift_shard": 0.15
+      },
+      "size": 1.1,
+      "element": "physical"
+    },
+    "rift_cinder_lord": {
+      "name": "잿불의 파수군",
+      "sprite": "goblin",
+      "hp": 390,
+      "attack": 22,
+      "defense": 3,
+      "speed": 1.8,
+      "range": 2.6,
+      "xp": 110,
+      "gold": [
+        14,
+        25
+      ],
+      "size": 2,
+      "boss": true,
+      "tint": "#eaa06a",
+      "group": "endless_rift",
+      "drop": null,
+      "patterns": [
+        {
+          "name": "파수의 휩쓸기",
+          "kind": "circle",
+          "radius": 2.3,
+          "windup": 1.05,
+          "cooldown": 2.8,
+          "damage": 1
+        },
+        {
+          "name": "돌파선",
+          "kind": "line",
+          "length": 6.4,
+          "radius": 0.7,
+          "windup": 1.35,
+          "cooldown": 3.5,
+          "damage": 1.35,
+          "dash": true
+        },
+        {
+          "name": "빈 중심",
+          "kind": "ring",
+          "radius": 4.6,
+          "innerRadius": 1.4,
+          "windup": 1.45,
+          "cooldown": 3.8,
+          "damage": 1.2
+        },
+        {
+          "name": "메아리 낙하",
+          "kind": "target",
+          "radius": 1.8,
+          "windup": 1.15,
+          "cooldown": 3.2,
+          "damage": 1.15
+        }
+      ],
+      "adds": [
+        "rift_slime",
+        "rift_goblin"
+      ],
+      "element": "fire",
+      "material": {
+        "tempered_core": 1,
+        "forge_essence": 1
+      },
+      "phases": [
+        {
+          "threshold": 0.65,
+          "adds": [
+            "rift_slime"
+          ]
+        },
+        {
+          "threshold": 0.3,
+          "adds": [
+            "rift_goblin",
+            "rift_slime"
+          ]
+        }
+      ]
+    },
+    "rift_frost_lord": {
+      "name": "겨울의 추적왕",
+      "sprite": "wolf",
+      "hp": 390,
+      "attack": 22,
+      "defense": 3,
+      "speed": 1.8,
+      "range": 2.6,
+      "xp": 110,
+      "gold": [
+        14,
+        25
+      ],
+      "size": 2,
+      "boss": true,
+      "tint": "#afdce7",
+      "group": "endless_rift",
+      "drop": null,
+      "patterns": [
+        {
+          "name": "파수의 휩쓸기",
+          "kind": "circle",
+          "radius": 2.3,
+          "windup": 1.05,
+          "cooldown": 2.8,
+          "damage": 1
+        },
+        {
+          "name": "돌파선",
+          "kind": "line",
+          "length": 6.4,
+          "radius": 0.7,
+          "windup": 1.35,
+          "cooldown": 3.5,
+          "damage": 1.35,
+          "dash": true
+        },
+        {
+          "name": "빈 중심",
+          "kind": "ring",
+          "radius": 4.6,
+          "innerRadius": 1.4,
+          "windup": 1.45,
+          "cooldown": 3.8,
+          "damage": 1.2
+        },
+        {
+          "name": "메아리 낙하",
+          "kind": "target",
+          "radius": 1.8,
+          "windup": 1.15,
+          "cooldown": 3.2,
+          "damage": 1.15
+        }
+      ],
+      "adds": [
+        "rift_slime",
+        "rift_goblin"
+      ],
+      "element": "frost",
+      "material": {
+        "tempered_core": 1,
+        "forge_essence": 1
+      },
+      "phases": [
+        {
+          "threshold": 0.65,
+          "adds": [
+            "rift_slime"
+          ]
+        },
+        {
+          "threshold": 0.3,
+          "adds": [
+            "rift_goblin",
+            "rift_slime"
+          ]
+        }
+      ]
+    },
+    "rift_arcane_lord": {
+      "name": "거울의 수호자",
+      "sprite": "lizard",
+      "hp": 390,
+      "attack": 22,
+      "defense": 3,
+      "speed": 1.8,
+      "range": 2.6,
+      "xp": 110,
+      "gold": [
+        14,
+        25
+      ],
+      "size": 2,
+      "boss": true,
+      "tint": "#c1abe3",
+      "group": "endless_rift",
+      "drop": null,
+      "patterns": [
+        {
+          "name": "파수의 휩쓸기",
+          "kind": "circle",
+          "radius": 2.3,
+          "windup": 1.05,
+          "cooldown": 2.8,
+          "damage": 1
+        },
+        {
+          "name": "돌파선",
+          "kind": "line",
+          "length": 6.4,
+          "radius": 0.7,
+          "windup": 1.35,
+          "cooldown": 3.5,
+          "damage": 1.35,
+          "dash": true
+        },
+        {
+          "name": "빈 중심",
+          "kind": "ring",
+          "radius": 4.6,
+          "innerRadius": 1.4,
+          "windup": 1.45,
+          "cooldown": 3.8,
+          "damage": 1.2
+        },
+        {
+          "name": "메아리 낙하",
+          "kind": "target",
+          "radius": 1.8,
+          "windup": 1.15,
+          "cooldown": 3.2,
+          "damage": 1.15
+        }
+      ],
+      "adds": [
+        "rift_slime",
+        "rift_goblin"
+      ],
+      "element": "arcane",
+      "material": {
+        "tempered_core": 1,
+        "forge_essence": 1
+      },
+      "phases": [
+        {
+          "threshold": 0.65,
+          "adds": [
+            "rift_slime"
+          ]
+        },
+        {
+          "threshold": 0.3,
+          "adds": [
+            "rift_goblin",
+            "rift_slime"
+          ]
+        }
+      ]
     }
   },
   "quests": [
@@ -25072,6 +26477,11 @@ window.GAME_DB = {
       "name": "동료",
       "icon": "heart",
       "sprite": "villager"
+    },
+    "rift": {
+      "name": "균열 관측소",
+      "icon": "quest",
+      "sprite": "villager"
     }
   },
   "terrain": {
@@ -25253,6 +26663,13 @@ window.GAME_DB = {
           "service": "arena",
           "x": 24,
           "y": 14
+        },
+        {
+          "id": "rift_keeper",
+          "name": "관측사 에린",
+          "service": "rift",
+          "x": 20,
+          "y": 13
         }
       ],
       "portals": [
@@ -35954,6 +37371,324 @@ window.GAME_DB = {
       "waypoint": null,
       "group": "duel",
       "guardianTotal": 0
+    },
+    "rift_cinder": {
+      "id": "rift_cinder",
+      "name": "잿불의 길",
+      "kind": "dungeon",
+      "width": 32,
+      "height": 23,
+      "tiles": [
+        "################################",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaa#aaaaaaa#aaaaaaaaaa#",
+        "#aaaaaaaaaaa#aaaaaaa#aaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaa#aaaaaaa#aaaaaaaaaa#",
+        "#aaaaaaaaaaa#aaaaaaa#aaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#",
+        "################################"
+      ],
+      "level": 5,
+      "music": "dungeon",
+      "spawn": [
+        3.5,
+        19.5
+      ],
+      "npcs": [],
+      "portals": [
+        {
+          "id": "rift_cinder_return",
+          "name": "철수 · 획득물 보존",
+          "x": 3.5,
+          "y": 19.5,
+          "to": "oakwood",
+          "spawn": [
+            20,
+            13
+          ]
+        },
+        {
+          "id": "rift_cinder_next_frost",
+          "name": "서리의 길 · 다음 층",
+          "x": 10.5,
+          "y": 3.5,
+          "to": "rift_frost",
+          "riftRoute": "frost",
+          "requiresRiftClear": true
+        },
+        {
+          "id": "rift_cinder_next_wild",
+          "name": "비전의 길 · 다음 층",
+          "x": 21.5,
+          "y": 3.5,
+          "to": "rift_wild",
+          "riftRoute": "wild",
+          "requiresRiftClear": true
+        }
+      ],
+      "spawns": [],
+      "props": [],
+      "resources": [],
+      "chests": [],
+      "waypoint": false,
+      "discoveries": [],
+      "events": [],
+      "mechanisms": [
+        {
+          "id": "rift_cinder_ward",
+          "name": "불안정한 수호석",
+          "x": 7.5,
+          "y": 10.5,
+          "ward": true,
+          "circuit": "rift",
+          "description": "해제하면 군주의 방어와 분출 지대가 약해집니다."
+        }
+      ],
+      "zones": [
+        {
+          "id": "rift_cinder_eruption",
+          "name": "균열 분출",
+          "x": 17,
+          "y": 11,
+          "kind": "circle",
+          "radius": 2.3,
+          "innerRadius": 1.5,
+          "windup": 1.6,
+          "period": 7,
+          "damage": 14,
+          "offset": 2,
+          "circuit": "rift"
+        }
+      ],
+      "group": "endless_rift",
+      "onlineScope": "solo"
+    },
+    "rift_frost": {
+      "id": "rift_frost",
+      "name": "서리의 길",
+      "kind": "dungeon",
+      "width": 32,
+      "height": 23,
+      "tiles": [
+        "################################",
+        "#nnnnnnnnnnnnnnnnnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnn#nnnnnnn#nnnnnnnnnn#",
+        "#nnnnnnnnnnn#nnnnnnn#nnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnn#nnnnnnn#nnnnnnnnnn#",
+        "#nnnnnnnnnnn#nnnnnnn#nnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnnnnnnnnnn#",
+        "#nnnnnnnnnnnnnnnnnnnnnnnnnnnnnn#",
+        "################################"
+      ],
+      "level": 5,
+      "music": "dungeon",
+      "spawn": [
+        3.5,
+        19.5
+      ],
+      "npcs": [],
+      "portals": [
+        {
+          "id": "rift_frost_return",
+          "name": "철수 · 획득물 보존",
+          "x": 3.5,
+          "y": 19.5,
+          "to": "oakwood",
+          "spawn": [
+            20,
+            13
+          ]
+        },
+        {
+          "id": "rift_frost_next_wild",
+          "name": "비전의 길 · 다음 층",
+          "x": 10.5,
+          "y": 3.5,
+          "to": "rift_wild",
+          "riftRoute": "wild",
+          "requiresRiftClear": true
+        },
+        {
+          "id": "rift_frost_next_cinder",
+          "name": "잿불의 길 · 다음 층",
+          "x": 21.5,
+          "y": 3.5,
+          "to": "rift_cinder",
+          "riftRoute": "cinder",
+          "requiresRiftClear": true
+        }
+      ],
+      "spawns": [],
+      "props": [],
+      "resources": [],
+      "chests": [],
+      "waypoint": false,
+      "discoveries": [],
+      "events": [],
+      "mechanisms": [
+        {
+          "id": "rift_frost_ward",
+          "name": "불안정한 수호석",
+          "x": 7.5,
+          "y": 10.5,
+          "ward": true,
+          "circuit": "rift",
+          "description": "해제하면 군주의 방어와 분출 지대가 약해집니다."
+        }
+      ],
+      "zones": [
+        {
+          "id": "rift_frost_eruption",
+          "name": "균열 분출",
+          "x": 17,
+          "y": 11,
+          "kind": "circle",
+          "radius": 2.3,
+          "innerRadius": 1.5,
+          "windup": 1.6,
+          "period": 7,
+          "damage": 14,
+          "offset": 2,
+          "circuit": "rift"
+        }
+      ],
+      "group": "endless_rift",
+      "onlineScope": "solo"
+    },
+    "rift_wild": {
+      "id": "rift_wild",
+      "name": "비전의 길",
+      "kind": "dungeon",
+      "width": 32,
+      "height": 23,
+      "tiles": [
+        "################################",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvv#vvvvvvv#vvvvvvvvvv#",
+        "#vvvvvvvvvvv#vvvvvvv#vvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvv#vvvvvvv#vvvvvvvvvv#",
+        "#vvvvvvvvvvv#vvvvvvv#vvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "################################"
+      ],
+      "level": 5,
+      "music": "dungeon",
+      "spawn": [
+        3.5,
+        19.5
+      ],
+      "npcs": [],
+      "portals": [
+        {
+          "id": "rift_wild_return",
+          "name": "철수 · 획득물 보존",
+          "x": 3.5,
+          "y": 19.5,
+          "to": "oakwood",
+          "spawn": [
+            20,
+            13
+          ]
+        },
+        {
+          "id": "rift_wild_next_cinder",
+          "name": "잿불의 길 · 다음 층",
+          "x": 10.5,
+          "y": 3.5,
+          "to": "rift_cinder",
+          "riftRoute": "cinder",
+          "requiresRiftClear": true
+        },
+        {
+          "id": "rift_wild_next_frost",
+          "name": "서리의 길 · 다음 층",
+          "x": 21.5,
+          "y": 3.5,
+          "to": "rift_frost",
+          "riftRoute": "frost",
+          "requiresRiftClear": true
+        }
+      ],
+      "spawns": [],
+      "props": [],
+      "resources": [],
+      "chests": [],
+      "waypoint": false,
+      "discoveries": [],
+      "events": [],
+      "mechanisms": [
+        {
+          "id": "rift_wild_ward",
+          "name": "불안정한 수호석",
+          "x": 7.5,
+          "y": 10.5,
+          "ward": true,
+          "circuit": "rift",
+          "description": "해제하면 군주의 방어와 분출 지대가 약해집니다."
+        }
+      ],
+      "zones": [
+        {
+          "id": "rift_wild_eruption",
+          "name": "균열 분출",
+          "x": 17,
+          "y": 11,
+          "kind": "ring",
+          "radius": 4,
+          "innerRadius": 1.5,
+          "windup": 1.6,
+          "period": 7,
+          "damage": 14,
+          "offset": 2,
+          "circuit": "rift"
+        }
+      ],
+      "group": "endless_rift",
+      "onlineScope": "solo"
     }
   },
   "mapKinds": {
@@ -37147,6 +38882,59 @@ window.GAME_DB = {
           "color": "mp"
         }
       ]
+    },
+    "forgeAura": {
+      "tiers": [
+        {
+          "rank": 0,
+          "name": "소박한 불꽃",
+          "color": "#c6b28b",
+          "alpha": 0.08
+        },
+        {
+          "rank": 3,
+          "name": "빛나는 불꽃",
+          "color": "#e0bd73",
+          "alpha": 0.16
+        },
+        {
+          "rank": 8,
+          "name": "푸른 단련",
+          "color": "#93cadf",
+          "alpha": 0.2
+        },
+        {
+          "rank": 15,
+          "name": "보랏빛 공명",
+          "color": "#c3a7e6",
+          "alpha": 0.24
+        },
+        {
+          "rank": 25,
+          "name": "왕관의 광휘",
+          "color": "#f2d78c",
+          "alpha": 0.28
+        },
+        {
+          "rank": 40,
+          "name": "계승의 성화",
+          "color": "#f6e8c4",
+          "alpha": 0.32
+        }
+      ],
+      "radius": 0.45,
+      "pulse": 0.08,
+      "line": 2,
+      "attackRadius": 0.72,
+      "speed": 4,
+      "surgeAlpha": 0.08,
+      "surgeColor": "#e5bf7a",
+      "attackAlpha": 0.7,
+      "startAngle": -1.2,
+      "endAngle": 1.2,
+      "weaponX": 0.28,
+      "weaponY": 0.55,
+      "sparkRadius": 0.06
     }
   },
   "audio": {
@@ -37666,6 +39454,18 @@ window.GAME_DB = {
           "gain": 0.08,
           "filter": 1700
         }
+      },
+      "forge": {
+        "wave": "triangle",
+        "notes": [
+          220,
+          330,
+          440,
+          660
+        ],
+        "duration": 0.55,
+        "gain": 0.35,
+        "gap": 0.085
       }
     },
     "luteDivisions": 2,
@@ -37700,7 +39500,7 @@ window.GAME_DB = {
     "name": "이름",
     "namePlaceholder": "모험가",
     "autoCombat": "이동은 직접 · 공격과 기술은 자동",
-    "controls": "WASD / 방향키 이동 · E 상호작용 · R 물약 · Shift 대시 · Tab 장비 · Q 의뢰 · F 마력 물약",
+    "controls": "WASD / 방향키 이동 · E 상호작용 · R 물약 · Shift 대시 · Tab 장비 · Q 의뢰 · F 마력 물약 · L 영웅 여정 · X 예비 무기 교대 · Z 현장 도구 · C 기세 해방",
     "mobileControls": "조이스틱으로 이동 · 대시 버튼으로 회피 · 가까이 가서 상호작용",
     "bag": "장비",
     "talents": "전직·수련",
@@ -37849,7 +39649,7 @@ window.GAME_DB = {
     "chapterComplete": "황혼의 왕관",
     "chapterContinue": "모험 계속",
     "help": "조작 안내",
-    "helpBody": "이동은 WASD·방향키, 상호작용은 E. 공격과 기술은 자동 사용됩니다. 의뢰를 수주하고 지역 사건·던전으로 성장하세요. Lv3/18/34에 한 계열씩 전직하고 이후 분기를 선택합니다.",
+    "helpBody": "이동은 WASD·방향키, 상호작용은 E. 공격과 기술은 자동 사용됩니다. 의뢰를 수주하고 지역 사건·던전으로 성장하세요. Lv3/18/34에 한 계열씩 전직하고 이후 분기를 선택합니다. 무기 강화는 교체해도 이어집니다. L에서 다음 성장 목표와 균열·생활 계약을 확인하세요.",
     "material": "재료",
     "held": "보유",
     "skillTab": "자동 기술",
@@ -37915,7 +39715,7 @@ window.GAME_DB = {
     "cleared": "격파 완료",
     "sellItems": "장비 처분",
     "merchantHint": "필수 보급품부터 준비하세요. 후기 장비는 레벨 조건, 세력 제작식은 평판 조건이 있습니다.",
-    "smithHint": "장비를 강화하거나 재료로 희귀 장비를 제작하세요.",
+    "smithHint": "주무기는 계승 단련으로 성장합니다. 방어구 강화·장비 제작·각인은 아래에서 선택하세요.",
     "templeHint": "현재 축복과 남은 시간을 확인하세요. 축복은 중첩되지 않으며 성장 트리는 마을에서 재분배할 수 있습니다.",
     "restHint": "20금화를 내고 체력과 마력을 전부 회복합니다.",
     "innFood": "식사 효과",
@@ -38234,7 +40034,7 @@ window.GAME_DB = {
     "bound": "귀속",
     "tradeable": "거래 가능",
     "mastery": "장기 숙련",
-    "masteryHint": "Lv50 이후 경험치가 숙련으로 누적됩니다. 기존 레벨과 장비는 초기화되지 않습니다.",
+    "masteryHint": "레벨 50 이후 경험치는 영웅 숙련으로 이어집니다. 상한 없이 성장하며 높은 수련 단계에서는 효율이 완만해집니다.",
     "masteryPoints": "숙련점",
     "masteryLearn": "숙련 투자",
     "element": "속성",
@@ -38291,7 +40091,116 @@ window.GAME_DB = {
     "onlineStaleAction": "지역 또는 연결이 바뀌었습니다. 다시 시도하세요.",
     "onlineMailOverflow": "가방이 가득 차 획득한 장비를 우편으로 보냈습니다.",
     "onlineInterruptedDuel": "서버 재연결로 결투가 종료되었습니다. 승패와 재화는 변하지 않습니다.",
-    "onlineOtherSession": "다른 창에서 접속 중"
+    "onlineOtherSession": "다른 창에서 접속 중",
+    "journey": "영웅의 여정",
+    "mainWeapon": "주력 무기",
+    "reserveWeapon": "예비 무기",
+    "noReserve": "예비 무기를 등록하면 전투 중 X로 교대할 수 있습니다.",
+    "setReserve": "예비 무기로 등록",
+    "clearReserve": "예비 해제",
+    "swapWeapon": "무기 교대",
+    "forgeMain": "주무기 단련",
+    "forgeRank": "계승 단련 +{rank}",
+    "forgeHint": "단련은 캐릭터에 남습니다. 주무기·예비 무기를 바꿔도 강화 수치는 이어집니다.",
+    "forgeReady": "대장장이 근처에서 단련할 수 있습니다.",
+    "forgeDone": "단련 +{rank} · 무기에 새 불꽃이 깃듭니다.",
+    "forgeGate": "전투 경험과 재료, 레벨 조건을 확인하세요.",
+    "practice": "무기 경험",
+    "weaponProficiency": "무기 숙련",
+    "forgePath": "단련 방향",
+    "forgePathHint": "상황에 맞게 대장간에서 변경합니다. 단련 수치는 유지됩니다.",
+    "forgeMigrate": "이전 무기 강화는 계승 단련으로 보존되었습니다.",
+    "forgeNext": "다음 단련",
+    "forgeLegacy": "강화는 영구 유지 · 파괴·하락 없음",
+    "growthMaterials": "필요 재료",
+    "growthSources": "사냥·의뢰 → 단련 정수 / 장비 분해 → 정수 / 정련 → 응축핵 / 보스·계약·공동 사업 → 왕국 인장",
+    "riftTitle": "끝없는 균열",
+    "riftFloor": "균열 {depth}층",
+    "riftHint": "기록한 층부터 다시 도전합니다. 층 보상과 무기 성장은 즉시 보존되며, 5층마다 군주가 등장합니다.",
+    "riftGate": "레벨 {level}부터 관측사 에린에게서 입장합니다.",
+    "riftClear": "{depth}층 공략 · 다음 길을 고르거나 철수하세요.",
+    "riftRemaining": "{depth}층 · 남은 적 {count}",
+    "riftBest": "최고 도달",
+    "riftEnter": "원정 시작",
+    "riftNext": "다음 층",
+    "riftLocked": "현재 층을 공략하거나 입장 조건을 확인하세요.",
+    "riftPartyReady": "파티장이 같은 지역의 준비된 파티원과 함께 입장해야 합니다.",
+    "riftObjective": "수호석을 해제하고 적을 처치하세요.",
+    "memory": "균열의 기억",
+    "memoryHint": "획득한 기억은 영구 보존됩니다. 서로 다른 계열 2개를 장착해 빌드를 구성하세요. 중복 획득은 기억을 성장시킵니다.",
+    "memoryFound": "새 기억: {name}",
+    "memoryDeepened": "기억 공명: {name}",
+    "memoryEquip": "기억 장착",
+    "memoryUnequip": "기억 해제",
+    "memoryLocked": "균열 공략으로 발견",
+    "memoryConflict": "같은 계열은 하나만, 총 2개의 기억을 장착할 수 있습니다.",
+    "vocation": "생활 역할",
+    "vocationHint": "역할별 경험은 모두 보존됩니다. 활성 역할의 전문 효과만 적용됩니다.",
+    "vocationSelect": "역할 선택",
+    "vocationLevel": "숙련 {level}",
+    "contracts": "모험 계약",
+    "contractHint": "동시에 2개까지 수락합니다. 완료한 계약 대신 새 계약이 나타나며 수주 이후 행동을 기록합니다.",
+    "contractAccept": "계약 수락",
+    "contractClaim": "계약 보상",
+    "contractLimit": "이미 수락한 계약을 마무리하세요.",
+    "refining": "정련·도구 제작",
+    "refine": "정련",
+    "refineHint": "사냥과 채집 중 원하는 재료 경로를 선택하세요. 정련은 대장간에서 진행합니다.",
+    "tool": "현장 도구",
+    "equipTool": "도구 장착",
+    "toolHint": "도구를 장착하고 Z로 사용합니다. 서리 → 비전, 중독 → 화염, 화상 → 서리 조합을 시험하세요.",
+    "toolEmpty": "제작한 도구를 장착하세요.",
+    "toolWait": "현장 도구 재사용 대기 중입니다.",
+    "surge": "기세 해방",
+    "surgeHint": "처치·위험 속 대시·속성 반응으로 기세를 모읍니다. C로 6초간 공격을 가속하되 받는 피해가 증가합니다.",
+    "surgeReady": "기세 해방 준비",
+    "surgeWait": "기세 100이 필요합니다.",
+    "flow": "기세",
+    "endlessMastery": "끝없는 영웅 숙련",
+    "endlessMasteryHint": "레벨 50 이후 경험치는 영웅 숙련으로 이어집니다. 상한 없이 성장하며 높은 수련 단계에서는 효율이 완만해집니다.",
+    "project": "왕국 공동 사업",
+    "projectHint": "사냥·채집·제작·균열 공략이 같은 목표에 기여합니다. 3점 이상 기여한 사업의 보상을 언제든 수령하세요.",
+    "projectStage": "봉인 재건 {stage}단계",
+    "projectClaim": "공동 사업 보상",
+    "projectContribution": "내 기여",
+    "noProjectReward": "아직 수령할 공동 사업 보상이 없습니다.",
+    "reserveProtected": "주력·예비 무기는 분해·판매·거래할 수 없습니다.",
+    "growthNextHunt": "사냥과 채집으로 단련 재료를 모으세요.",
+    "growthNextForge": "대장간에서 주무기를 단련하세요.",
+    "growthNextRift": "관측사 에린에게서 균열 원정을 시작하세요.",
+    "growthHelp": "L 영웅 여정 · X 예비 무기 교대 · Z 현장 도구 · C 기세 해방",
+    "mainBadge": "주력",
+    "reserveBadge": "예비",
+    "memoryCopies": "기억 조각 {count}",
+    "riftReward": "층 보상은 즉시 보존됩니다.",
+    "refineMade": "정련 완료",
+    "vocationChanged": "생활 역할을 변경했습니다.",
+    "forgeMilestone": "돌파 재료는 정련·보스·계약으로 얻습니다.",
+    "infinite": "상한 없음",
+    "growthPower": "영구 성장",
+    "journeyGoal": "다음 성장 목표",
+    "contractReady": "계약 완료",
+    "growthRoute": "선택한 길",
+    "newRift": "새 최고 층!",
+    "riftNpcHelp": "왕국 아래 균열은 끝이 없습니다. 함께 들어가고, 얻은 힘을 가지고 돌아오세요.",
+    "growthForgePower": "주무기 공격·주문 +{power}%",
+    "growthReadyContracts": "수령 가능한 계약 {count}개",
+    "contractCancel": "계약 포기",
+    "vocationGained": "{name} 숙련 {level}",
+    "contractCompleted": "{name} 완료 · 영웅 여정에서 보상 수령",
+    "surgeCharged": "기세 100 · C로 해방할 수 있습니다.",
+    "riftChooseFloor": "도전할 층",
+    "riftRecord": "최고층 공략 기록",
+    "growthNeedLevel": "레벨 {level}을 달성하세요.",
+    "growthNeedPractice": "몬스터를 잡아 무기 경험 {count}을 더 모으세요.",
+    "growthNeedGold": "사냥·계약으로 금화 {count}을 더 모으세요.",
+    "growthNeedMaterial": "{name} {count}개 추가 · {source}",
+    "secondsSuffix": "초",
+    "growthRefund": "이전 강화 투자 환급",
+    "growthRefundHint": "가장 높은 무기 강화는 계승 단련으로 보존했습니다. 나머지 무기에 쓴 금화·철광석은 환급합니다.",
+    "growthRefundClaim": "환급 받기",
+    "growthRefundClaimed": "환급: 금화 {gold} · 철광석 {ore}",
+    "growthRefundFull": "금화·재료 보관 공간을 확보하세요."
   },
   "_docs": {
     "source": "game-db.js는 모든 콘텐츠·수치·지도·그림·음악·문구의 단일 원본입니다.",
@@ -38335,7 +40244,11 @@ window.GAME_DB = {
     "quests": "Q",
     "dash": "Shift",
     "manaPotion": "F",
-    "interact": "E"
+    "interact": "E",
+    "journey": "L",
+    "swap-weapon": "X",
+    "use-tool": "Z",
+    "surge": "C"
   },
   "lootProfiles": {
     "boss": {
@@ -38468,6 +40381,40 @@ window.GAME_DB = {
       "cooldown": 3,
       "icon": "bait",
       "description": "3분간 이동 속도 +10%"
+    },
+    {
+      "id": "frost_flask",
+      "name": "서리병",
+      "icon": "signature",
+      "tool": {
+        "element": "frost",
+        "power": 0.8,
+        "slow": true
+      },
+      "cooldown": 14,
+      "description": "주변 적 둔화·서리 피해 / 장착 후 Z"
+    },
+    {
+      "id": "ember_flask",
+      "name": "불씨병",
+      "icon": "fight",
+      "tool": {
+        "element": "fire",
+        "power": 1.1,
+        "burn": true
+      },
+      "cooldown": 14,
+      "description": "주변 화염 피해·화상 / 장착 후 Z"
+    },
+    {
+      "id": "gale_flask",
+      "name": "바람병",
+      "icon": "dash",
+      "tool": {
+        "dash": 1
+      },
+      "cooldown": 14,
+      "description": "대시 1회 충전 / 장착 후 Z"
     }
   ],
   "expeditionRules": [
@@ -39465,6 +41412,15 @@ window.GAME_DB = {
         "raid_astral",
         "duel_arena"
       ]
+    },
+    {
+      "id": "rifts",
+      "name": "끝없는 균열",
+      "maps": [
+        "rift_cinder",
+        "rift_frost",
+        "rift_wild"
+      ]
     }
   ],
   "online": {
@@ -39549,8 +41505,8 @@ window.GAME_DB = {
     "elementStrong": 1.25,
     "elementWeak": 0.8,
     "resistCap": 0.5,
-    "masteryCap": 100,
-    "masteryXpBase": 1800,
+    "masteryCap": null,
+    "masteryXpBase": 600,
     "masteryXpGrowth": 1.045,
     "drawCost": 1,
     "drawTen": 10,
@@ -39840,6 +41796,111 @@ window.GAME_DB = {
           "id"
         ],
         "refresh": true
+      },
+      "forge-main": {
+        "method": "forgeMain",
+        "args": [],
+        "refresh": true
+      },
+      "forge-path": {
+        "method": "selectForgePath",
+        "args": [
+          "id"
+        ],
+        "refresh": true
+      },
+      "reserve-weapon": {
+        "method": "reserveWeapon",
+        "args": [
+          "id"
+        ],
+        "refresh": true
+      },
+      "swap-weapon": {
+        "method": "swapWeapon",
+        "args": []
+      },
+      "equip-memory": {
+        "method": "equipMemory",
+        "args": [
+          "id"
+        ],
+        "refresh": true
+      },
+      "rift-enter": {
+        "method": "startRift",
+        "args": [
+          "index",
+          "id"
+        ],
+        "close": true
+      },
+      "vocation": {
+        "method": "chooseVocation",
+        "args": [
+          "id"
+        ],
+        "refresh": true
+      },
+      "contract-accept": {
+        "method": "acceptContract",
+        "args": [
+          "id"
+        ],
+        "refresh": true
+      },
+      "contract-claim": {
+        "method": "claimContract",
+        "args": [
+          "id"
+        ],
+        "refresh": true
+      },
+      "refine": {
+        "method": "refine",
+        "args": [
+          "id"
+        ],
+        "refresh": true
+      },
+      "equip-tool": {
+        "method": "equipTool",
+        "args": [
+          "id"
+        ],
+        "refresh": true
+      },
+      "use-tool": {
+        "method": "useTool",
+        "args": []
+      },
+      "surge": {
+        "method": "activateSurge",
+        "args": []
+      },
+      "project-claim": {
+        "method": "social.project.claim",
+        "args": [],
+        "refresh": true
+      },
+      "learn-mastery": {
+        "method": "learnMastery",
+        "args": [
+          "id"
+        ],
+        "refresh": true
+      },
+      "contract-cancel": {
+        "method": "cancelContract",
+        "args": [
+          "id"
+        ],
+        "refresh": true
+      },
+      "growth-refund": {
+        "method": "claimGrowthRefund",
+        "args": [],
+        "refresh": true
       }
     },
     "pvpStats": {
@@ -39896,7 +41957,11 @@ window.GAME_DB = {
     "guildNameMin": 2,
     "guildProjectReward": {
       "stars": 1,
-      "crowns": 5
+      "crowns": 5,
+      "materials": {
+        "world_seal": 1,
+        "tempered_core": 1
+      }
     },
     "pvpManaRegen": 3,
     "pvpCritCap": 0.3,
@@ -39944,11 +42009,14 @@ window.GAME_DB = {
     "motionResetMethods": [
       "travel",
       "enterDungeon",
-      "startTrial"
+      "startTrial",
+      "startRift"
     ],
     "requestIdLength": 128,
     "characterIdleMs": 300000,
-    "maxArgumentBytes": 2048
+    "maxArgumentBytes": 2048,
+    "masteryXpPower": 1.15,
+    "masteryXpLinear": 0.025
   },
   "elements": [
     {
@@ -40354,7 +42422,7 @@ window.GAME_DB = {
     {
       "id": "vitality",
       "name": "생명 수련",
-      "maxRank": 10,
+      "maxRank": null,
       "stats": [
         {
           "stat": "hp",
@@ -40366,7 +42434,7 @@ window.GAME_DB = {
     {
       "id": "mind",
       "name": "정신 수련",
-      "maxRank": 10,
+      "maxRank": null,
       "stats": [
         {
           "stat": "mp",
@@ -40378,7 +42446,7 @@ window.GAME_DB = {
     {
       "id": "blade",
       "name": "무기 수련",
-      "maxRank": 10,
+      "maxRank": null,
       "stats": [
         {
           "stat": "attack",
@@ -40390,7 +42458,7 @@ window.GAME_DB = {
     {
       "id": "spell",
       "name": "주문 수련",
-      "maxRank": 10,
+      "maxRank": null,
       "stats": [
         {
           "stat": "spell",
@@ -40402,7 +42470,7 @@ window.GAME_DB = {
     {
       "id": "armor",
       "name": "갑주 수련",
-      "maxRank": 10,
+      "maxRank": null,
       "stats": [
         {
           "stat": "defense",
@@ -40414,7 +42482,7 @@ window.GAME_DB = {
     {
       "id": "flow",
       "name": "마력 순환",
-      "maxRank": 10,
+      "maxRank": null,
       "stats": [
         {
           "stat": "manaRegen",
@@ -40426,7 +42494,7 @@ window.GAME_DB = {
     {
       "id": "focus",
       "name": "집중",
-      "maxRank": 10,
+      "maxRank": null,
       "stats": [
         {
           "stat": "crit",
@@ -40438,7 +42506,7 @@ window.GAME_DB = {
     {
       "id": "pace",
       "name": "발걸음",
-      "maxRank": 10,
+      "maxRank": null,
       "stats": [
         {
           "stat": "speed",
@@ -40450,7 +42518,7 @@ window.GAME_DB = {
     {
       "id": "recovery",
       "name": "물약 연구",
-      "maxRank": 10,
+      "maxRank": null,
       "stats": [
         {
           "stat": "potionPower",
@@ -40462,7 +42530,7 @@ window.GAME_DB = {
     {
       "id": "ward",
       "name": "대비",
-      "maxRank": 10,
+      "maxRank": null,
       "stats": [
         {
           "stat": "damageReduction",
@@ -41028,6 +43096,46 @@ window.GAME_DB = {
         "stars": 2
       },
       "title": "성장의 끝 너머"
+    },
+    {
+      "id": "first_forge",
+      "name": "나의 주무기",
+      "metric": "forges",
+      "target": 5,
+      "rewards": {
+        "crowns": 8,
+        "stars": 1
+      }
+    },
+    {
+      "id": "rift_explorer",
+      "name": "균열의 개척자",
+      "metric": "riftFloors",
+      "target": 10,
+      "rewards": {
+        "crowns": 15,
+        "stars": 2
+      }
+    },
+    {
+      "id": "contract_veteran",
+      "name": "왕국의 해결사",
+      "metric": "contracts",
+      "target": 8,
+      "rewards": {
+        "crowns": 8,
+        "stars": 2
+      }
+    },
+    {
+      "id": "reaction_scholar",
+      "name": "속성의 연금술사",
+      "metric": "reactions",
+      "target": 100,
+      "rewards": {
+        "crowns": 12,
+        "stars": 1
+      }
     }
   ],
   "expeditionGoals": [
@@ -41138,5 +43246,995 @@ window.GAME_DB = {
       ],
       "description": "방어 역할이 시선을 붙잡고, 공격 역할은 수호석과 군주를 공략합니다. 지원 기술은 근처 동료에게 적용됩니다."
     }
-  ]
+  ],
+  "growth": {
+    "version": 1,
+    "tabs": [
+      {
+        "id": "weapon",
+        "name": "주무기",
+        "icon": "anvil"
+      },
+      {
+        "id": "rift",
+        "name": "균열 원정",
+        "icon": "portal"
+      },
+      {
+        "id": "life",
+        "name": "생활·계약",
+        "icon": "scroll"
+      },
+      {
+        "id": "legacy",
+        "name": "영웅 숙련",
+        "icon": "rank"
+      }
+    ],
+    "weapon": {
+      "defaultPath": "balanced",
+      "swapCooldown": 8,
+      "pathCost": 90,
+      "practiceBase": 40,
+      "practicePower": 1.65,
+      "practiceKill": 7,
+      "practiceBoss": 45,
+      "practiceQuest": 35,
+      "practiceRift": 60,
+      "proficiencyStat": 0.003,
+      "softcap": 20,
+      "power": 0.7,
+      "bonusPerRank": 0.065,
+      "stats": [
+        "attack",
+        "spell"
+      ],
+      "forgeGoldBase": 32,
+      "forgeGoldPower": 1.42,
+      "forgeOreBase": 2,
+      "forgeOrePower": 0.9,
+      "forgeEssenceBase": 2,
+      "forgeEssencePower": 0.7,
+      "forgePracticeBase": 22,
+      "forgePracticePower": 1.1,
+      "coreStart": 5,
+      "coreInterval": 5,
+      "sealStart": 10,
+      "sealInterval": 10,
+      "levelPerRanks": 2,
+      "levelStep": 1,
+      "salvageEssence": {
+        "common": 1,
+        "uncommon": 2,
+        "rare": 5,
+        "epic": 12,
+        "legendary": 24
+      },
+      "costCapRatio": 0.08
+    },
+    "paths": [
+      {
+        "id": "balanced",
+        "name": "균형 단련",
+        "icon": "attack",
+        "description": "평타와 기술을 함께 운용합니다.",
+        "stats": []
+      },
+      {
+        "id": "edge",
+        "name": "맹공 단련",
+        "icon": "fight",
+        "description": "평타·치명타 강화 / 기술 피해·방어 감소",
+        "stats": [
+          {
+            "stat": "basicDamage",
+            "value": 1.18,
+            "op": "multiply"
+          },
+          {
+            "stat": "crit",
+            "value": 0.035,
+            "op": "add"
+          },
+          {
+            "stat": "skillDamage",
+            "value": 0.94,
+            "op": "multiply"
+          },
+          {
+            "stat": "defense",
+            "value": 0.9,
+            "op": "multiply"
+          }
+        ]
+      },
+      {
+        "id": "aegis",
+        "name": "수호 단련",
+        "icon": "shield",
+        "description": "체력·보호막 강화 / 공격 속도 감소",
+        "stats": [
+          {
+            "stat": "hp",
+            "value": 1.14,
+            "op": "multiply"
+          },
+          {
+            "stat": "shieldOnSkill",
+            "value": 0.035,
+            "op": "add"
+          },
+          {
+            "stat": "attackSpeed",
+            "value": 0.94,
+            "op": "multiply"
+          }
+        ]
+      },
+      {
+        "id": "arcane",
+        "name": "비전 단련",
+        "icon": "staff",
+        "description": "기술 피해·마력 회복 강화 / 평타·최대 체력 감소",
+        "stats": [
+          {
+            "stat": "skillDamage",
+            "value": 1.22,
+            "op": "multiply"
+          },
+          {
+            "stat": "manaRegen",
+            "value": 0.3,
+            "op": "add"
+          },
+          {
+            "stat": "basicDamage",
+            "value": 0.91,
+            "op": "multiply"
+          },
+          {
+            "stat": "hp",
+            "value": 0.94,
+            "op": "multiply"
+          }
+        ]
+      }
+    ],
+    "endless": {
+      "softcap": 30,
+      "power": 0.55,
+      "rankPointCostBase": 1,
+      "rankPointCostStep": 25
+    },
+    "vocations": [
+      {
+        "id": "hunter",
+        "name": "토벌꾼",
+        "icon": "fight",
+        "event": "kill",
+        "xp": 7,
+        "practiceBonus": 0.15,
+        "description": "사냥으로 성장합니다. 무기 경험 +15%.",
+        "stats": [
+          {
+            "stat": "crit",
+            "value": 0.015,
+            "op": "add"
+          }
+        ]
+      },
+      {
+        "id": "prospector",
+        "name": "채집가",
+        "icon": "tree",
+        "event": "gather",
+        "xp": 12,
+        "gatherChance": 0.22,
+        "description": "채집으로 성장합니다. 채집물 추가 획득 확률 +22%.",
+        "stats": [
+          {
+            "stat": "hp",
+            "value": 1.025,
+            "op": "multiply"
+          }
+        ]
+      },
+      {
+        "id": "artisan",
+        "name": "연금장인",
+        "icon": "anvil",
+        "event": "craft",
+        "xp": 18,
+        "discount": 0.15,
+        "description": "제작·정련으로 성장합니다. 정련 금화 비용 -15%.",
+        "stats": [
+          {
+            "stat": "mp",
+            "value": 1.04,
+            "op": "multiply"
+          }
+        ]
+      },
+      {
+        "id": "explorer",
+        "name": "길잡이",
+        "icon": "map",
+        "event": "rift",
+        "xp": 35,
+        "riftBonus": 0.15,
+        "description": "원정·발견으로 성장합니다. 균열 정수 보상 +15%.",
+        "stats": [
+          {
+            "stat": "speed",
+            "value": 1.025,
+            "op": "multiply"
+          }
+        ]
+      }
+    ],
+    "life": {
+      "default": "hunter",
+      "changeCost": 90,
+      "xpBase": 45,
+      "xpPower": 1.45,
+      "gatherRankChance": 0.008,
+      "maxGatherBonus": 0.5,
+      "statsPerRank": 0.002,
+      "statSoftcap": 20,
+      "statPower": 0.55
+    },
+    "contracts": {
+      "activeLimit": 2,
+      "offers": 3,
+      "goldGrowth": 0.035,
+      "maxRewardScale": 2.5,
+      "deck": [
+        {
+          "id": "hunt",
+          "name": "변경의 정리",
+          "kind": "kill",
+          "count": 18,
+          "label": "몬스터 처치",
+          "reward": {
+            "gold": 45,
+            "xp": 100,
+            "materials": {
+              "forge_essence": 3
+            }
+          }
+        },
+        {
+          "id": "gather",
+          "name": "공방 보급품",
+          "kind": "gather",
+          "count": 8,
+          "label": "자원 채집",
+          "reward": {
+            "gold": 28,
+            "xp": 75,
+            "materials": {
+              "forge_essence": 2
+            }
+          }
+        },
+        {
+          "id": "boss",
+          "name": "우두머리 현상금",
+          "kind": "boss",
+          "count": 2,
+          "label": "보스 처치",
+          "reward": {
+            "gold": 95,
+            "xp": 230,
+            "materials": {
+              "tempered_core": 2,
+              "world_seal": 1
+            }
+          }
+        },
+        {
+          "id": "forge",
+          "name": "숙련 장인의 납품",
+          "kind": "craft",
+          "count": 3,
+          "label": "제작·정련",
+          "reward": {
+            "gold": 38,
+            "xp": 90,
+            "materials": {
+              "tempered_core": 1
+            }
+          }
+        },
+        {
+          "id": "rift",
+          "name": "균열의 잔향",
+          "kind": "rift",
+          "count": 2,
+          "label": "균열 층 공략",
+          "reward": {
+            "gold": 85,
+            "xp": 180,
+            "materials": {
+              "forge_essence": 5,
+              "tempered_core": 1
+            }
+          }
+        },
+        {
+          "id": "quest",
+          "name": "왕국의 신뢰",
+          "kind": "quest",
+          "count": 3,
+          "label": "일반 의뢰 완료",
+          "reward": {
+            "gold": 55,
+            "xp": 140,
+            "materials": {
+              "world_seal": 1
+            }
+          }
+        },
+        {
+          "id": "reaction",
+          "name": "속성 연구",
+          "kind": "reaction",
+          "count": 12,
+          "label": "속성 반응 발생",
+          "reward": {
+            "gold": 44,
+            "xp": 110,
+            "materials": {
+              "forge_essence": 4,
+              "crystal": 2
+            }
+          }
+        },
+        {
+          "id": "discovery",
+          "name": "잊힌 길의 기록",
+          "kind": "discover",
+          "count": 3,
+          "label": "명소 발견",
+          "reward": {
+            "gold": 70,
+            "xp": 160,
+            "materials": {
+              "rift_shard": 3,
+              "world_seal": 1
+            }
+          }
+        }
+      ],
+      "starter": "hunt"
+    },
+    "rift": {
+      "minLevel": 5,
+      "group": "endless_rift",
+      "baseLevel": 5,
+      "levelsPerFloor": 1,
+      "hpGrowth": 0.16,
+      "hpPower": 1.25,
+      "hpCurve": 0.025,
+      "damageGrowth": 0.055,
+      "damagePower": 1.15,
+      "bossEvery": 5,
+      "bossScale": 1.35,
+      "baseEssence": 3,
+      "essenceGrowth": 0.32,
+      "baseGold": 26,
+      "goldGrowth": 8,
+      "baseXp": 75,
+      "xpGrowth": 28,
+      "bossSeal": 1,
+      "bossCore": 1,
+      "memoryChance": 0.32,
+      "memoryPity": 4,
+      "affixChance": 0.35,
+      "memorySlots": 2,
+      "memoryMaxRank": 5,
+      "memoryRankScale": 0.08,
+      "eliteEssenceChance": 0.13,
+      "bossEssence": 2,
+      "returnMap": "oakwood",
+      "returnSpawn": [
+        20,
+        13
+      ],
+      "positions": [
+        [
+          8,
+          6
+        ],
+        [
+          17,
+          5
+        ],
+        [
+          24,
+          7
+        ],
+        [
+          7,
+          14
+        ],
+        [
+          18,
+          13
+        ],
+        [
+          24,
+          17
+        ]
+      ],
+      "bossPosition": [
+        16,
+        10
+      ],
+      "routes": [
+        {
+          "id": "cinder",
+          "name": "잿불의 길",
+          "map": "rift_cinder",
+          "color": "#edac70",
+          "description": "화염 적·분출 장판 / 냉기 속성 무기로 약점을 노리세요.",
+          "element": "fire",
+          "monsters": [
+            "rift_goblin",
+            "rift_wolf",
+            "rift_lizard"
+          ],
+          "boss": "rift_cinder_lord",
+          "reward": 1.15,
+          "next": [
+            "frost",
+            "wild"
+          ]
+        },
+        {
+          "id": "frost",
+          "name": "서리의 길",
+          "map": "rift_frost",
+          "color": "#a5d9ea",
+          "description": "빠른 추적자·안전지대 / 비전 속성 무기로 약점을 노리세요.",
+          "element": "frost",
+          "monsters": [
+            "rift_wolf",
+            "rift_slime",
+            "rift_lizard"
+          ],
+          "boss": "rift_frost_lord",
+          "reward": 1,
+          "next": [
+            "wild",
+            "cinder"
+          ]
+        },
+        {
+          "id": "wild",
+          "name": "비전의 길",
+          "map": "rift_wild",
+          "color": "#c8afe8",
+          "description": "수호석·비전 파동 / 자연 속성 무기로 약점을 노리세요.",
+          "element": "arcane",
+          "monsters": [
+            "rift_lizard",
+            "rift_slime",
+            "rift_goblin"
+          ],
+          "boss": "rift_arcane_lord",
+          "reward": 1.25,
+          "next": [
+            "cinder",
+            "frost"
+          ]
+        }
+      ],
+      "affixes": [
+        {
+          "id": "swift",
+          "name": "질주",
+          "color": "#c4db9c",
+          "hp": 0.9,
+          "attack": 1.04,
+          "speed": 1.24,
+          "defense": 1
+        },
+        {
+          "id": "armored",
+          "name": "철갑",
+          "color": "#c7bd9d",
+          "hp": 1.12,
+          "attack": 1,
+          "speed": 0.86,
+          "defense": 1.5
+        },
+        {
+          "id": "fierce",
+          "name": "격노",
+          "color": "#efb18c",
+          "hp": 0.8,
+          "attack": 1.23,
+          "speed": 1.07,
+          "defense": 0.8
+        }
+      ],
+      "bossAdds": 3,
+      "shardGrowth": 0.2
+    },
+    "memories": [
+      {
+        "id": "fang",
+        "name": "늑대의 송곳니",
+        "icon": "attack",
+        "group": "offense",
+        "stats": [
+          {
+            "stat": "basicDamage",
+            "value": 1.1,
+            "op": "multiply"
+          },
+          {
+            "stat": "skillDamage",
+            "value": 0.96,
+            "op": "multiply"
+          }
+        ]
+      },
+      {
+        "id": "ember",
+        "name": "잿불 심장",
+        "icon": "signature",
+        "group": "element",
+        "stats": [
+          {
+            "stat": "burnChance",
+            "value": 0.12,
+            "op": "add"
+          },
+          {
+            "stat": "fireResist",
+            "value": -0.04,
+            "op": "add"
+          }
+        ]
+      },
+      {
+        "id": "winter",
+        "name": "겨울의 맹세",
+        "icon": "shield",
+        "group": "element",
+        "stats": [
+          {
+            "stat": "slowChance",
+            "value": 0.14,
+            "op": "add"
+          },
+          {
+            "stat": "speed",
+            "value": 0.97,
+            "op": "multiply"
+          }
+        ]
+      },
+      {
+        "id": "spark",
+        "name": "비전의 파편",
+        "icon": "staff",
+        "group": "offense",
+        "stats": [
+          {
+            "stat": "skillDamage",
+            "value": 1.12,
+            "op": "multiply"
+          },
+          {
+            "stat": "basicDamage",
+            "value": 0.95,
+            "op": "multiply"
+          }
+        ]
+      },
+      {
+        "id": "root",
+        "name": "고목의 의지",
+        "icon": "tree",
+        "group": "guard",
+        "stats": [
+          {
+            "stat": "hp",
+            "value": 1.12,
+            "op": "multiply"
+          },
+          {
+            "stat": "attackSpeed",
+            "value": 0.96,
+            "op": "multiply"
+          }
+        ]
+      },
+      {
+        "id": "glass",
+        "name": "유리 칼날",
+        "icon": "fight",
+        "group": "offense",
+        "stats": [
+          {
+            "stat": "crit",
+            "value": 0.055,
+            "op": "add"
+          },
+          {
+            "stat": "hp",
+            "value": 0.94,
+            "op": "multiply"
+          }
+        ]
+      },
+      {
+        "id": "tidal",
+        "name": "되돌아오는 파도",
+        "icon": "recover",
+        "group": "sustain",
+        "stats": [
+          {
+            "stat": "manaRegen",
+            "value": 0.24,
+            "op": "add"
+          },
+          {
+            "stat": "defense",
+            "value": 0.95,
+            "op": "multiply"
+          }
+        ]
+      },
+      {
+        "id": "thorn",
+        "name": "왕관의 가시",
+        "icon": "shield",
+        "group": "guard",
+        "stats": [
+          {
+            "stat": "thorns",
+            "value": 5,
+            "op": "add"
+          },
+          {
+            "stat": "shieldOnSkill",
+            "value": 0.025,
+            "op": "add"
+          },
+          {
+            "stat": "skillDamage",
+            "value": 0.97,
+            "op": "multiply"
+          }
+        ]
+      },
+      {
+        "id": "gust",
+        "name": "바람의 발자취",
+        "icon": "dash",
+        "group": "motion",
+        "stats": [
+          {
+            "stat": "speed",
+            "value": 1.06,
+            "op": "multiply"
+          },
+          {
+            "stat": "hp",
+            "value": 0.97,
+            "op": "multiply"
+          }
+        ]
+      },
+      {
+        "id": "venom",
+        "name": "늪의 속삭임",
+        "icon": "bait",
+        "group": "element",
+        "stats": [
+          {
+            "stat": "poisonChance",
+            "value": 0.14,
+            "op": "add"
+          },
+          {
+            "stat": "natureResist",
+            "value": -0.04,
+            "op": "add"
+          }
+        ]
+      },
+      {
+        "id": "echo",
+        "name": "메아리의 손",
+        "icon": "staff",
+        "group": "sustain",
+        "stats": [
+          {
+            "stat": "skillEcho",
+            "value": 0.05,
+            "op": "add"
+          },
+          {
+            "stat": "manaRegen",
+            "value": -0.1,
+            "op": "add"
+          }
+        ]
+      },
+      {
+        "id": "fortune",
+        "name": "방랑자의 동전",
+        "icon": "coins",
+        "group": "fortune",
+        "stats": [
+          {
+            "stat": "goldGain",
+            "value": 1.12,
+            "op": "multiply"
+          },
+          {
+            "stat": "attack",
+            "value": 0.97,
+            "op": "multiply"
+          },
+          {
+            "stat": "spell",
+            "value": 0.97,
+            "op": "multiply"
+          }
+        ]
+      }
+    ],
+    "combat": {
+      "disabledGroup": "duel",
+      "flowMax": 100,
+      "flowKill": 12,
+      "flowBoss": 25,
+      "flowReaction": 8,
+      "flowDash": 5,
+      "flowDecayDelay": 4,
+      "flowDecay": 8,
+      "surgeSeconds": 6,
+      "surgeDamageTaken": 1.12,
+      "surgeStats": [
+        {
+          "stat": "attackSpeed",
+          "value": 1.35,
+          "op": "multiply"
+        },
+        {
+          "stat": "cooldownRate",
+          "value": 0.78,
+          "op": "multiply"
+        },
+        {
+          "stat": "basicDamage",
+          "value": 1.15,
+          "op": "multiply"
+        },
+        {
+          "stat": "skillDamage",
+          "value": 1.15,
+          "op": "multiply"
+        }
+      ],
+      "reactionCooldown": 1.2,
+      "toolRange": 4.4,
+      "toolCooldown": 14,
+      "toolIds": [
+        "frost_flask",
+        "ember_flask",
+        "gale_flask"
+      ],
+      "reactions": [
+        {
+          "id": "shatter",
+          "name": "쇄빙",
+          "element": "arcane",
+          "requires": "slow",
+          "multiplier": 1.4,
+          "color": "#b5e7f4",
+          "consume": true
+        },
+        {
+          "id": "combust",
+          "name": "연소 폭발",
+          "element": "fire",
+          "requires": "poison",
+          "multiplier": 1.45,
+          "color": "#f4b56e",
+          "consume": true
+        },
+        {
+          "id": "thermal",
+          "name": "열충격",
+          "element": "frost",
+          "requires": "burn",
+          "multiplier": 1.4,
+          "color": "#d9cfed",
+          "consume": true
+        }
+      ],
+      "reactionRadius": 1.4
+    },
+    "project": {
+      "goalBase": 45,
+      "goalStep": 15,
+      "minShare": 3,
+      "weights": {
+        "kill": 1,
+        "boss": 8,
+        "gather": 1,
+        "craft": 3,
+        "quest": 4,
+        "rift": 10
+      },
+      "reward": {
+        "gold": 65,
+        "materials": {
+          "forge_essence": 5,
+          "tempered_core": 1,
+          "world_seal": 1
+        }
+      },
+      "offlineGoal": 45
+    },
+    "refinements": [
+      {
+        "id": "core_hunt",
+        "name": "사냥꾼의 응축핵",
+        "icon": "fight",
+        "gold": 14,
+        "materials": {
+          "hide": 5,
+          "forge_essence": 3
+        },
+        "reward": {
+          "materials": {
+            "tempered_core": 1
+          }
+        },
+        "description": "사냥 재료를 주무기 돌파 재료로 바꿉니다."
+      },
+      {
+        "id": "core_gather",
+        "name": "장인의 응축핵",
+        "icon": "anvil",
+        "gold": 18,
+        "materials": {
+          "ore": 7,
+          "herb": 4,
+          "crystal": 1
+        },
+        "reward": {
+          "materials": {
+            "tempered_core": 1
+          }
+        },
+        "description": "채집으로도 무기를 돌파할 수 있습니다."
+      },
+      {
+        "id": "essence",
+        "name": "장비 잔재 정련",
+        "icon": "signature",
+        "gold": 12,
+        "materials": {
+          "rift_shard": 2,
+          "ore": 2
+        },
+        "reward": {
+          "materials": {
+            "forge_essence": 6
+          }
+        },
+        "description": "균열 잔재를 강화 정수로 정련합니다."
+      },
+      {
+        "id": "frost_flask",
+        "name": "서리병 조제",
+        "icon": "signature",
+        "gold": 8,
+        "materials": {
+          "herb": 2,
+          "crystal": 1
+        },
+        "reward": {
+          "supplies": {
+            "frost_flask": 2
+          }
+        },
+        "description": "적을 둔화시키고 비전 공격으로 쇄빙을 유도합니다."
+      },
+      {
+        "id": "ember_flask",
+        "name": "불씨병 조제",
+        "icon": "fight",
+        "gold": 8,
+        "materials": {
+          "wood": 2,
+          "herb": 1
+        },
+        "reward": {
+          "supplies": {
+            "ember_flask": 2
+          }
+        },
+        "description": "화염 피해와 화상. 중독된 적에게 연소 폭발을 일으킵니다."
+      },
+      {
+        "id": "gale_flask",
+        "name": "바람병 조제",
+        "icon": "dash",
+        "gold": 10,
+        "materials": {
+          "herb": 3,
+          "forge_essence": 1
+        },
+        "reward": {
+          "supplies": {
+            "gale_flask": 2
+          }
+        },
+        "description": "대시 1회 즉시 충전. 경로를 바꾸고 위험을 넘습니다."
+      }
+    ],
+    "ui": {
+      "separator": " · ",
+      "forgeFlashMs": 1300,
+      "replayOffset": 4,
+      "routeRewards": "보상",
+      "actions": [
+        "forge-main",
+        "forge-path",
+        "reserve-weapon",
+        "swap-weapon",
+        "equip-memory",
+        "rift-enter",
+        "vocation",
+        "contract-accept",
+        "contract-claim",
+        "refine",
+        "equip-tool",
+        "use-tool",
+        "surge",
+        "project-claim",
+        "learn-mastery",
+        "contract-cancel",
+        "growth-refund"
+      ],
+      "smithTabs": [
+        {
+          "id": "weapon",
+          "name": "주무기 단련"
+        },
+        {
+          "id": "refine",
+          "name": "정련·도구"
+        },
+        {
+          "id": "enhance",
+          "name": "방어구 강화"
+        },
+        {
+          "id": "craft",
+          "name": "장비 제작"
+        },
+        {
+          "id": "engrave",
+          "name": "속성 각인"
+        }
+      ],
+      "materialSources": {
+        "ore": "필드 광맥 채집·장비 분해",
+        "forge_essence": "사냥·모험 계약·장비 분해",
+        "tempered_core": "대장간 정련·균열 군주",
+        "world_seal": "보스·모험 계약·공동 사업"
+      }
+    }
+  }
 };
