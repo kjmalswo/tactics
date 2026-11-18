@@ -2,11 +2,11 @@
    A depth buffer resolves faces and equipment, then identical views share a bounded atlas. */
 (() => {
 'use strict';
-const art=window.GAME_DB.graphics,v=art.view,side=Math.SQRT1_2,up=Math.sqrt(1-v.pitch*v.pitch);
+const art=window.GAME_DB.graphics,v=art.view,up=Math.sqrt(1-v.pitch*v.pitch);
 const geometry=new Map(),atlas=new Map(),portraits=new Map(),rgb=new Map();
 let settings={...art.defaults},pixels=0,deadline=Infinity,gpu;
 const clock=()=>performance.now();
-function project(x,h,z){return [(x-z)*side,(x+z)*side*v.pitch-h*up,(x+z)*side*up+h*v.pitch];}
+function project(x,h,z){return [x,z*v.pitch-h*up,z*up+h*v.pitch];}
 function readColor(hex){if(!rgb.has(hex))rgb.set(hex,[1,3,5].map(i=>parseInt(hex.slice(i,i+2),16)/255));return rgb.get(hex);}
 function primitive(shape,lod){
  const key=shape+lod;if(geometry.has(key))return geometry.get(key);
@@ -40,10 +40,10 @@ function primitive(shape,lod){
  }
  const mesh={vertices,indices};geometry.set(key,mesh);return mesh;
 }
-function makeMesh(id,overlay,colors,yaw,scale,lod){
+function makeMesh(id,overlay,colors,yaw,scale,lod,hidePart){
  const m=art.models[id],pal={...art.palette,...m.colors,...colors},vertices=[],indices=[];
  const cos=Math.cos(yaw),sin=Math.sin(yaw),bounds=[Infinity,Infinity,Infinity,-Infinity,-Infinity,-Infinity];
- for(const group of (overlay?m.parts.concat(overlay):m.parts))for(const [shape,material,x,h,z,a,b,c,tilt] of art.parts[group]){
+ for(const group of (overlay?m.parts.concat(overlay):m.parts).filter(group=>group!==hidePart))for(const [shape,material,x,h,z,a,b,c,tilt] of art.parts[group]){
   const mesh=primitive(shape,lod),base=vertices.length/9,col=readColor(pal[material]),ct=Math.cos(tilt),st=Math.sin(tilt);
   for(const [vx,vy,vz,nx,ny,nz] of mesh.vertices){
    const px=(vx*a*ct-vy*b*st+x)*scale[0],py=(vx*a*st+vy*b*ct+h)*scale[1],pz=(vz*c+z)*scale[2];
@@ -110,11 +110,11 @@ function raster(mesh,out,origin,res){
  ctx.putImageData(img,0,0);
 }
 const unitScale=[1,1,1];
-function view(id,{colors={},overlay='',yaw=0,scale=unitScale,lod=1,portrait=false}={},urgent=false){
- const key=JSON.stringify([id,overlay,colors,yaw,scale,lod,portrait]);let hit=atlas.get(key);
+function view(id,{colors={},overlay='',yaw=0,scale=unitScale,lod=1,portrait=false,hidePart}={},urgent=false){
+ const key=JSON.stringify([id,overlay,colors,yaw,scale,lod,portrait,hidePart]);let hit=atlas.get(key);
  if(hit){atlas.delete(key);atlas.set(key,hit);return hit;}
  if(!urgent&&clock()>deadline)return null;
- const mesh=makeMesh(id,overlay,colors,yaw,scale,lod),b=mesh.bounds,dx=b[3]-b[0],dy=b[4]-b[1];
+ const mesh=makeMesh(id,overlay,colors,yaw,scale,lod,hidePart),b=mesh.bounds,dx=b[3]-b[0],dy=b[4]-b[1];
  const res=Math.min(v.bakeUnit*v.aaScale[settings.aa]*(portrait?2:1),(v.surfaceMax-2*v.pad)/Math.max(dx,dy));
  const canvas=document.createElement('canvas');canvas.width=Math.ceil(dx*res)+2*v.pad;canvas.height=Math.ceil(dy*res)+2*v.pad;
  const origin=[b[0]-v.pad/res,b[1]-v.pad/res,b[2]-1],span=[canvas.width/res,canvas.height/res,b[5]-b[2]+2];
@@ -128,7 +128,7 @@ function heroStyle(race,ch){return {colors:{skin:race.skin,hair:race.hair,cloth:
 function heroPortrait(raceId,classId){
  const key=raceId+'/'+classId;if(portraits.has(key))return portraits.get(key);
  const d=window.GAME_DB,r=d.races.find(r=>r.id===raceId),ch=d.classes.find(c=>c.id===classId);
- const {canvas}=view(ch.sprite,{...heroStyle(r,ch),lod:settings.lod,portrait:true},true);
+ const {canvas}=view(ch.sprite,{...heroStyle(r,ch),lod:settings.lod,portrait:true,yaw:v.portraitYaw},true);
  const html='<img class="clay-portrait" alt="" src="'+(canvas.toDataURL?.()||'')+'">';portraits.set(key,html);return html;
 }
 function configure(values={}){

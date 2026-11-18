@@ -63,3 +63,39 @@
 .graphics-settings label{display:flex;align-items:center;justify-content:space-between;gap:.75rem}
 .graphics-settings select{max-width:55%;font:inherit;color:var(--ink);background:var(--paperLight);border:1px solid var(--paperEdge);border-radius:.35rem;padding:.28rem}
 .settings-grid .settings-actions{grid-column:1/-1}
+
+.hero-status-button{border:0;background:transparent;color:inherit;padding:0;text-align:left;cursor:pointer}
+.hero-status-button:hover,.hero-status-button:focus-visible{background:color-mix(in srgb,var(--brassLight) 15%,transparent)}
+.gear-toolbar,.stats-intro{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.gear-toolbar .wallet{margin:0}
+.gear-tabs{margin:12px 0}
+.gear-tabs button{display:inline-flex;align-items:center;gap:6px}
+.gear-tabs svg{width:16px;height:16px}
+.inventory-layout.gear-layout{grid-template-columns:minmax(0,1fr) minmax(0,.9fr);gap:16px;align-items:start}
+.inventory-layout .gear-list{grid-template-columns:minmax(0,1fr);align-items:start}
+.inventory-layout .gear-list .item-card{display:grid;grid-template-columns:42px minmax(0,1fr) auto;gap:10px;align-items:center;min-height:62px;text-align:left;padding:7px 10px;border-inline-start:3px solid var(--rarity)}
+.inventory-layout .gear-list .item-art{width:36px;height:36px;margin:0}
+.item-card-info{display:grid;min-width:0;gap:2px}
+.item-card-info>.item-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;line-height:1.25}
+.item-card-stats{display:flex;gap:5px 10px;flex-wrap:wrap;font-variant-numeric:tabular-nums}
+.item-slot-badge{border-radius:4px;padding:3px 5px;color:var(--equippedInk);background:var(--equippedPaper);font-size:.68rem;white-space:nowrap}
+.reserved .item-slot-badge{background:var(--brassLight);color:var(--woodDeep)}
+.inventory-weapon-slots{margin:0 0 14px}
+.inventory-weapon-slots article>span{font-size:.8rem;line-height:1.4}
+.gear-effects dl,.hero-stat-groups dl{margin:0}
+.gear-effects dl>div,.hero-stat-groups dl>div{display:flex;justify-content:space-between;gap:10px;padding:5px 0;border-bottom:1px solid color-mix(in srgb,var(--paperEdge) 55%,transparent)}
+.gear-effects dd,.hero-stat-groups dd{margin:0;font-weight:750;font-variant-numeric:tabular-nums}
+.comparison>div{display:grid;grid-template-columns:minmax(0,1fr) auto auto auto auto;gap:4px 8px;align-items:center;font-variant-numeric:tabular-nums}
+.comparison>div>span{white-space:normal}
+.stats-intro{padding-bottom:13px}
+.stats-intro small,.project-reward small{display:block}
+.hero-stat-groups{display:grid;grid-template-columns:repeat(auto-fit,minmax(206px,1fr));gap:13px;align-items:start}
+.hero-stat-groups section{background:var(--paperLight);border:1px solid var(--paperEdge);border-radius:9px;padding:10px 13px;font-size:.88rem}
+.hero-stat-groups h3{margin:0 0 5px}
+.growth-combat-strip .flow-widget{display:grid;gap:2px;width:auto;min-width:78px;min-height:0;padding:3px 6px;background:transparent;color:inherit;border:0}
+.flow-track{display:block;height:4px;background:var(--woodDeep);overflow:hidden;border-radius:4px}
+.flow-track i{display:block;height:100%;background:var(--brassLight)}
+.growth-combat-strip>#surge-action.ready{color:var(--brassLight);border-color:var(--brassLight);box-shadow:0 0 8px var(--brass)}
+.project-guide .project-reward{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));align-items:start;gap:8px}
+.project-reward>span{padding:8px;background:var(--paperLight);border:1px solid var(--paperEdge);border-radius:6px;display:block}
+@media(max-width:720px){.inventory-layout.gear-layout{grid-template-columns:1fr}.inventory-layout.gear-layout>.item-detail{display:none}.gear-tabs button{padding:5px 7px}.gear-tabs svg{display:none}}
