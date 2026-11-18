@@ -1,7 +1,7 @@
 // Editable JSON-compatible fantasy RPG database.
 window.GAME_DB = {
   "meta": {
-    "version": "5.2",
+    "version": "5.3",
     "title": "에버돈",
     "subtitle": "계승하는 모험",
     "description": "마을에서 시작해 나만의 직업 빌드를 완성하는 판타지 액션 RPG"
@@ -234,7 +234,7 @@ window.GAME_DB = {
     "decimalDigits": 1,
     "inputDeadzone": 0.1,
     "joystickRadius": 42,
-    "cameraLerp": 9,
+    "cameraSlackTiles": 0.7,
     "cameraMinZoom": 0.68,
     "cameraZoomWidth": 1000,
     "cameraMaxZoom": 1,
@@ -311,7 +311,7 @@ window.GAME_DB = {
     ],
     "dashCharges": 2,
     "dashCooldown": 5,
-    "dashDistance": 3.5,
+    "dashDistance": 3,
     "dashDuration": 0.24,
     "dashInvulnerability": 0.12,
     "dashDeadzone": 0.12,
@@ -44042,7 +44042,8 @@ window.GAME_DB = {
     },
     "npcStyle": {"guild":"npc_guild","merchant":"npc_merchant","inn":"npc_inn","rift":"npc_rift","companion":"npc_companion"},
     "biomes": {"default":{},"frost":{"leaf":"#84cbd4","lightLeaf":"#d5f1f7","stone":"#a3cadd"},"sun":{"leaf":"#9db761","lightLeaf":"#f3cd74","stone":"#dca478"},"grave":{"leaf":"#7aaa78","lightLeaf":"#a8c476"},"eclipse":{"leaf":"#9475ba","lightLeaf":"#db93bb"},"legion":{"leaf":"#955e99","lightLeaf":"#da7fa5","stone":"#a687a5","roof":"#c54c70"}},
-    "gearCardLines": 2,
+    "gearSlotPx": 28,
+    "gearGlyphPx": 16,
     "frameBakeLimit": 1,
     "enemyFacings": 4,
     "fallbackResolution": 0.7,

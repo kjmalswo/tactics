@@ -79,7 +79,9 @@ class Renderer{
   }
   const player=(actor,self=false)=>{
    const pos=self?hero:drawPosition(actor),ch=DB.classes.find(c=>c.id===actor.classId),race=DB.races.find(r=>r.id===actor.raceId);if(!ch||!race)return;
-   const time=self?s.networkView?.time??s.time:s.time,dashing=actor.dashUntil>time;
+   const time=self?s.networkView?.time??s.time:s.time,pose=self&&s.networkView?.dashPose;
+   if(pose)actor={...actor,dashUntil:time+pose.remaining,dashX:pose.x,dashY:pose.y};
+   const dashing=actor.dashUntil>time;
    put(ch.sprite,pos.x,pos.y,{...M.heroStyle(race,ch),size:race.scale,urgent:self,actor,weapon:I.styles[ch.id],
     yaw:dashing?direction(actor.dashX,actor.dashY):actor.swing&&fades(actor.swing.at,s.time,I.swingSeconds)?direction(Math.sin(actor.swing.yaw),Math.cos(actor.swing.yaw)):direction(actor.lastMoveX??actor.facing??0,actor.lastMoveY??1),moving:actor.moving,hit:actor.flash>0});
   };
@@ -133,7 +135,7 @@ class Renderer{
  }
  dashStreak(entry,time){
   const actor=entry.actor,c=this.ctx,at=entry.at,u=this.unit;
-  const travelled=Math.max(0,Math.min(1,1-(actor.dashUntil-time)/C.dashDuration))*C.dashDistance;
+  const travelled=G.dashProgress(actor.dashUntil-time)*C.dashDistance;
   if(!travelled)return;
   const length=Math.min(R.dashTrailSpacing*R.dashTrailCount,travelled),dx=actor.dashX*u*length,dy=actor.dashY*u*pitch*length;
   if(!Number.isFinite(dx+dy))return;
@@ -193,7 +195,10 @@ class Renderer{
  }
  render(dt=0){
   const s=G.state();if(!s)return;const map=G.mapDef(),hero=heroPosition(s),changed=this.lastMap!==map.id;
-  const blend=changed?1:Math.min(1,dt*C.cameraLerp);this.camera.x+=(hero.x-this.camera.x)*blend;this.camera.y+=(hero.y-this.camera.y)*blend;this.lastMap=map.id;
+  // A stationary hero stays at the same screen pixel after landing.
+  const slack=changed?0:C.cameraSlackTiles;
+  this.camera.x=Math.max(hero.x-slack,Math.min(hero.x+slack,this.camera.x));
+  this.camera.y=Math.max(hero.y-slack,Math.min(hero.y+slack,this.camera.y));this.lastMap=map.id;
   const hurt=fades(s.player.hurtAt,s.time,I.hurtSeconds),quality=M.settings().effects;
   this.shake=quality&&!this.reduceMotion?.matches?Math.sin(hurt*TAU)*hurt*I.shake:0;
   const c=this.ctx;c.setTransform(this.dpr,0,0,this.dpr,0,0);c.imageSmoothingEnabled=true;c.fillStyle=V.clear;c.fillRect(0,0,this.width,this.height);

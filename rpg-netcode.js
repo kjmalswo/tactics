@@ -2,9 +2,9 @@
 (() => {
 'use strict';
 class MovementHistory {
- constructor(options,step,predict,predictDash){this.options=options;this.step=step;this.predict=predict;this.predictDash=predictDash;this.clear();}
- clear(){this.connectionId=null;this.locationEpoch=-1;this.sequence=0;this.segments=[];this.lastSent=-Infinity;this.motionRevision=-1;this.stateRevision=-1;this.ackSeq=0;this.ackedElapsed=0;this.clock=0;this.offset={x:0,y:0};}
- bind(meta){if(!meta)return false;const reset=meta.connectionId!==this.connectionId||meta.locationEpoch!==this.locationEpoch;if(reset){if(meta.connectionId!==this.connectionId)this.stateRevision=-1;this.connectionId=meta.connectionId;this.ackSeq=meta.ackSeq||0;this.ackedElapsed=meta.inputElapsed||0;this.locationEpoch=meta.locationEpoch;this.segments=[];this.sequence=meta.receivedSeq||0;this.lastSent=-Infinity;this.motionRevision=-1;this.clock=meta.time||0;this.offset={x:0,y:0};}return reset;}
+ constructor(options,step,predict,predictDash,milliseconds){this.options=options;this.milliseconds=milliseconds;this.step=step;this.predict=predict;this.predictDash=predictDash;this.clear();}
+ clear(){this.connectionId=null;this.locationEpoch=-1;this.sequence=0;this.segments=[];this.lastSent=-Infinity;this.motionRevision=-1;this.stateRevision=-1;this.ackSeq=0;this.ackedElapsed=0;this.clock=0;this.offset={x:0,y:0};this.dashView=null;}
+ bind(meta){if(!meta)return false;const reset=meta.connectionId!==this.connectionId||meta.locationEpoch!==this.locationEpoch;if(reset){if(meta.connectionId!==this.connectionId)this.stateRevision=-1;this.connectionId=meta.connectionId;this.ackSeq=meta.ackSeq||0;this.ackedElapsed=meta.inputElapsed||0;this.locationEpoch=meta.locationEpoch;this.segments=[];this.sequence=meta.receivedSeq||0;this.lastSent=-Infinity;this.motionRevision=-1;this.clock=meta.time||0;this.offset={x:0,y:0};this.dashView=null;}return reset;}
  context(){return {connectionId:this.connectionId,locationEpoch:this.locationEpoch};}
  packet(input,now,force=false){
   const length=Math.max(1,Math.hypot(input.x,input.y)),x=input.x/length,y=input.y/length,last=this.segments.at(-1);
@@ -17,6 +17,10 @@ class MovementHistory {
   if(!result.ok)return result;
   const packet=this.packet(input,now,true);
   this.segments.at(-1).dash=true;
+  // Play the visible dash once on the input clock. Reconciliation can replay physics
+  // while this pose continues from the last pixel the player actually saw.
+  this.dashView={actor:{...actor},startOffset:{...this.offset},clock:this.clock,duration:actor.dashUntil-this.clock,
+   seq:packet.seq,settled:false,elapsed:0,at:now};
   return {...result,packet:{...packet,dash:true}};
  }
  sample(actor,input,dt,now){
@@ -27,7 +31,18 @@ class MovementHistory {
    const duration=Math.min(dt,this.options.maxPredictionSeconds-pending);last.duration+=duration;this.advance(actor,last,duration);
   }
   if(this.segments.length>this.options.maxPendingInputs)this.segments.splice(0,this.segments.length-this.options.maxPendingInputs);
-  this.smooth(actor.x-x,actor.y-y,dt);
+  const view=this.dashView;
+  if(view){
+   // Continue through the landing until its authoritative position has arrived.
+   const sinceInput=Math.max(0,(now-view.at)/this.milliseconds-view.elapsed);
+   const duration=Math.min(dt,sinceInput,Math.max(0,this.options.maxPredictionSeconds-view.elapsed));
+   view.clock=this.integrate(view.actor,input,duration,view.clock);
+   view.elapsed+=duration;
+   // Absorb any outstanding walking correction during the lunge, not after landing.
+   const fraction=Math.min(1,view.elapsed/view.duration),carry=(1-fraction)**2;
+   this.offset={x:view.actor.x-actor.x+view.startOffset.x*carry,y:view.actor.y-actor.y+view.startOffset.y*carry};
+   if(view.settled&&view.clock>=view.actor.dashUntil)this.dashView=null;
+  }else this.smooth(actor.x-x,actor.y-y,dt);
   return packet;
  }
  smooth(dx,dy,dt){
@@ -43,10 +58,16 @@ class MovementHistory {
   }
   this.offset.x-=x;this.offset.y-=y;
  }
- advance(actor,input,duration){let left=duration;while(left>this.options.motionEpsilon){const dt=Math.min(this.step,left);this.predict(actor,input,dt,this.clock);this.clock+=dt;left-=dt;}}
+ integrate(actor,input,duration,clock){
+  let left=duration;
+  while(left>this.options.motionEpsilon){const dt=Math.min(this.step,left);this.predict(actor,input,dt,clock);clock+=dt;left-=dt;}
+  return clock;
+ }
+ advance(actor,input,duration){this.clock=this.integrate(actor,input,duration,this.clock);}
  reconcile(actor,authoritative,meta,previousActor=actor){
   if(!meta||meta.revision<this.motionRevision&&meta.connectionId===this.connectionId)return false;
   const display={x:previousActor.x+this.offset.x,y:previousActor.y+this.offset.y},reset=this.bind(meta);
+  if(this.dashView&&meta.ackSeq>=this.dashView.seq&&authoritative.dashUntil<=meta.time)this.dashView.settled=true;
   Object.assign(actor,authoritative);
   this.clock=meta.time;this.ackSeq=meta.ackSeq;this.ackedElapsed=meta.inputElapsed;
   this.segments=this.segments.filter(s=>s.seq>=meta.ackSeq);

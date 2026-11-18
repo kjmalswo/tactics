@@ -3,7 +3,7 @@
 'use strict';
 const G=window.RPG,DB=G.DB,O=DB.online,C=DB.config,T=DB.ui,$=id=>document.getElementById(id),find=(a,id)=>a.find(v=>v.id===id),esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let active=false,connected=false,health=null,source=null,socket=null,reconnectTimer=null,backup=null,tab=O.tabs[0].id,view=null,authMode='login',lastInput=0,queue=Promise.resolve(),draws=[],pending=false,chatChannel='local',generation=0,requestSeq=0,blocked=false,starting=null,waitingForMap=false,mapRequest=null,inputBarrier=null,pendingInputs=[];
-const movement=new window.RPGNetcode.MovementHistory(O,C.step,(actor,input,dt,time)=>G.predictMovement(actor,input,dt,time),(actor,input,time)=>G.predictDash(actor,input,time));
+const movement=new window.RPGNetcode.MovementHistory(O,C.step,(actor,input,dt,time)=>G.predictMovement(actor,input,dt,time),(actor,input,time)=>G.predictDash(actor,input,time),C.milliseconds);
 const ui=()=>window.RPGUI,button=(action,label,data={},disabled=false,cls='')=>`<button data-action="online-${action}" ${Object.entries(data).map(([k,v])=>`data-${k}="${esc(v)}"`).join(' ')} ${disabled?'disabled':''} class="${cls}">${label}</button>`;
 const wallet=p=>`<div class="online-wallet">${[['crowns',T.crowns],['stars',T.stars],['shards',T.shards],['honor',T.honor]].map(([key,label])=>`<span>${label}<b>${p[key]||0}</b></span>`).join('')}</div>`;
 const tag=value=>`<span class="tag">${esc(value)}</span>`;
@@ -19,7 +19,9 @@ function visualEntities(items,previous,reset=false){
   return {...item,drawX:before.drawX??before.x,drawY:before.drawY??before.y,blendLeft:Math.min(O.remoteBlendMax,O.frameMs/C.milliseconds)};
  });
 }
-function publishMovement(s){s.networkView={...movement.offset,time:movement.clock};}
+function publishMovement(s){const view=movement.dashView;
+ s.networkView={...movement.offset,time:movement.clock,dashPose:view?{
+  remaining:Math.max(0,view.actor.dashUntil-view.clock),x:view.actor.dashX,y:view.actor.dashY}:null};}
 function preserveMotion(s){return Object.fromEntries(['player','mapId','instances','time','hazards','projectiles','effects','floats','orbs','onlinePeers','network','networkStats'].map(k=>[k,s[k]]));}
 function sendInput(packet){
  if(!packet||!active||!connected||blocked)return;
