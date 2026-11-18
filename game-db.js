@@ -1,7 +1,7 @@
 // Editable JSON-compatible fantasy RPG database.
 window.GAME_DB = {
   "meta": {
-    "version": "5.1",
+    "version": "5.2",
     "title": "에버돈",
     "subtitle": "계승하는 모험",
     "description": "마을에서 시작해 나만의 직업 빌드를 완성하는 판타지 액션 RPG"
@@ -311,8 +311,8 @@ window.GAME_DB = {
     ],
     "dashCharges": 2,
     "dashCooldown": 5,
-    "dashDistance": 4.5,
-    "dashDuration": 0.16,
+    "dashDistance": 3.5,
+    "dashDuration": 0.24,
     "dashInvulnerability": 0.12,
     "dashDeadzone": 0.12,
     "fieldSpawnRevision": 2,
@@ -38485,8 +38485,8 @@ window.GAME_DB = {
     "navigationFont": 10,
     "navigationLabelOffset": 24,
     "navigationLine": 2,
-    "dashTrailCount": 2,
-    "dashTrailSpacing": 0.22,
+    "dashTrailCount": 3,
+    "dashTrailSpacing": 0.28,
     "dashTrailAlpha": 0.25,
     "nightAlpha": 0.15,
     "discoveryScale": 3,
@@ -41210,7 +41210,7 @@ window.GAME_DB = {
     "duplicateShards": 5,
     "shardExchange": 30,
     "predictionLerp": 12,
-    "predictionSnap": 2.5,
+    "predictionCorrectionSpeed": 9,
     "retryMs": 2000,
     "clientInputMs": 100,
     "maxCatalogRows": 24,
@@ -41698,7 +41698,7 @@ window.GAME_DB = {
     "maxPendingInputs": 64,
     "maxInputSequenceGap": 1024,
     "motionEpsilon": 1e-05,
-    "remoteLerp": 18,
+    "remoteBlendMax": 0.18,
     "idempotencyEntries": 64,
     "idempotencyMs": 30000,
     "socketReplacedCode": 4001,
@@ -43938,7 +43938,7 @@ window.GAME_DB = {
     "title": "그래픽 설정",
     "defaults": {"shadow":1,"texture":1,"light":2,"effects":1,"aa":1,"lod":1},
     "settings": [["shadow","그림자",["끄기","접지","햇빛"]],["texture","표면 질감",["단색","결","세밀한 결"]],["light","조명 셰이더",["기본","햇빛","햇빛과 윤광"]],["effects","전투 효과",["간결","표준","풍부"]],["aa","안티에일리어싱",["기본 해상도","고해상도","슈퍼샘플링"]],["lod","모델 세부도",["경량","거리 적응","정밀"]]],
-    "view": {"pitch":0.61,"aaScale":[0.85,1.3,1.9],"meshRings":[4,7,10],"meshSlices":[8,12,18],"farTiles":6,"surfaceMax":480,"cachePixels":6500000,"cacheCount":220,"miniInterval":0.18,"terrainPixels":36,"pad":3,"clear":"#bef1fc","sun":[-0.52,0.8,0.32],"budgetMs":4,"shade":"#315b49","inkAlpha":0.18,"swingLean":0.1,"sparkRange":2.5,"sparkCount":5,"castOffset":0.25,"walkLift":0.061,"walkLean":0.04,"sceneScale":1.12,"occlude":0.44,"modelMargin":5,"groundDetail":[0,3,6],"wave":"#e3fbff","fxLimit":[8,22,48],"factionColor":"#ffb7a3","factionMark":"♜","headGap":0.08,"bakeUnit":41,"portraitYaw":0.42,"impact":{"swingSeconds":0.3,"sweep":2.75,"reach":0.85,"hilt":0.33,"height":0.68,"handWidth":0.17,"lift":0.34,"bladeWidth":0.071,"trailWidth":3,"hitSeconds":0.18,"hurtSeconds":0.22,"shake":2.7,"flashAlpha":0.24,"floatHeight":0.38,"floatLane":15,"goldScale":0.89,"critScale":1.27,"pop":0.19,"sparks":7,"sparkLength":0.15,"edge":"#ff5045","flash":"#fff8cc","metal":"#effbff","metalDark":"#83aaca","grip":"#593b38","trim":"#ffc55a","styles":{"warrior":"blade","guardian":"mace"}}},
+    "view": {"pitch":0.61,"aaScale":[0.85,1.3,1.9],"meshRings":[4,7,10],"meshSlices":[8,12,18],"farTiles":6,"surfaceMax":480,"cachePixels":6500000,"cacheCount":220,"miniInterval":0.18,"terrainPixels":36,"pad":3,"clear":"#bef1fc","sun":[-0.52,0.8,0.32],"budgetMs":4,"shade":"#315b49","inkAlpha":0.18,"swingLean":0.1,"sparkRange":2.5,"sparkCount":5,"castOffset":0.25,"walkLift":0.061,"walkLean":0.04,"sceneScale":1.12,"occlude":0.44,"modelMargin":5,"groundDetail":[0,3,6],"wave":"#e3fbff","fxLimit":[8,22,48],"factionColor":"#ffb7a3","factionMark":"♜","headGap":0.08,"dashLean":0.24,"dashOpacity":0.76,"dashLine":2,"dashLineGap":5,"bakeUnit":41,"portraitYaw":0.42,"impact":{"swingSeconds":0.3,"sweep":2.75,"reach":0.85,"hilt":0.33,"height":0.68,"handWidth":0.17,"lift":0.34,"bladeWidth":0.071,"trailWidth":3,"hitSeconds":0.18,"hurtSeconds":0.22,"shake":2.7,"flashAlpha":0.24,"floatHeight":0.38,"floatLane":15,"goldScale":0.89,"critScale":1.27,"pop":0.19,"sparks":7,"sparkLength":0.15,"edge":"#ff5045","flash":"#fff8cc","metal":"#effbff","metalDark":"#83aaca","grip":"#593b38","trim":"#ffc55a","styles":{"warrior":"blade","guardian":"mace"}}},
     "palette": {"skin":"#ffd1a4","hair":"#694337","cloth":"#43aa94","accent":"#ffcf58","boot":"#57473e","eye":"#312f37","glint":"#fff9de","blush":"#e79d83","steel":"#c2dff8","metal":"#596675","gold":"#ffd353","wood":"#906448","bark":"#805a46","leaf":"#4eb657","lightLeaf":"#9de266","stone":"#a4b8be","darkStone":"#6c7e80","water":"#4fc9ed","wall":"#f9dfb6","roof":"#dc794e","trim":"#926348","gem":"#58e4eb","wing":"#8b657b","bone":"#ead7ad","banner":"#bb4565","plum":"#55374c","ember":"#ffac87","moss":"#759566","petal":"#ffe5a0","fur":"#91a3a0","belly":"#e8d5aa"},
     "parts": {
       "body": [["ball","boot",-0.16,0.14,0.045,0.14,0.14,0.19,0],["ball","boot",0.16,0.14,0.045,0.14,0.14,0.19,0],["ball","cloth",0,0.51,0,0.35,0.39,0.25,0],["ball","accent",0,0.68,0.12,0.33,0.1,0.17,0],["ball","skin",-0.32,0.49,0.08,0.11,0.16,0.12,0.25],["ball","skin",0.32,0.49,0.08,0.11,0.16,0.12,-0.25]],
@@ -44043,6 +44043,9 @@ window.GAME_DB = {
     "npcStyle": {"guild":"npc_guild","merchant":"npc_merchant","inn":"npc_inn","rift":"npc_rift","companion":"npc_companion"},
     "biomes": {"default":{},"frost":{"leaf":"#84cbd4","lightLeaf":"#d5f1f7","stone":"#a3cadd"},"sun":{"leaf":"#9db761","lightLeaf":"#f3cd74","stone":"#dca478"},"grave":{"leaf":"#7aaa78","lightLeaf":"#a8c476"},"eclipse":{"leaf":"#9475ba","lightLeaf":"#db93bb"},"legion":{"leaf":"#955e99","lightLeaf":"#da7fa5","stone":"#a687a5","roof":"#c54c70"}},
     "gearCardLines": 2,
+    "frameBakeLimit": 1,
+    "enemyFacings": 4,
+    "fallbackResolution": 0.7,
     "statGroups": [["statOffense",["attack","spell","crit","critDamage","attackSpeed","basicDamage","skillDamage","range","cooldownRate","cleave","extraShots","chain","skillEcho","burnChance","poisonChance","slowChance","lowHpDamage","burnDamage","poisonDamage"]],["statSurvival",["hp","mp","defense","damageReduction","lifesteal","shieldOnSkill","thorns","lifeOnKill","threatGain"]],["statUtility",["speed","manaRegen","hpRegen","manaOnHit","potionPower"]],["statResist",["physicalResist","fireResist","frostResist","natureResist","arcaneResist"]],["statLoot",["xpGain","goldGain"]]]
   }
 };

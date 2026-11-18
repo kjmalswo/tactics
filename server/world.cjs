@@ -40,8 +40,19 @@ class Realm {
  disconnectStream(id,reason='replaced'){const old=this.streams.get(id);if(old){this.streams.delete(id);try{if(reason==='replaced')old({event:'replaced',data:{message:DB.ui.onlineReplaced}});old(null,reason);}catch{}}const c=this.characters.get(id);if(c){if(reason==='replaced'){c.connectionId=this.id();c.commands=new Map();this.resetMovement(c);}c.G.setInput(0,0);c.lastSeen=this.now();}}
  disconnect(c){this.disconnectStream(c.id,'logout');c.active=false;this.resetMovement(c);c.lastSeen=this.now();this.cancelTrades(c.id);this.persist();}
  resetMovement(c){c.locationEpoch=(c.locationEpoch||0)+1;c.inputQueue=[];c.appliedSeq=c.receivedSeq||0;c.appliedElapsed=0;c.appliedInputAt=this.time();c.appliedInput={x:0,y:0};c.G.setInput(0,0);if(c.profile.location)c.profile.location.epoch=c.locationEpoch;}
- network(c){return {connectionId:c.connectionId||null,locationEpoch:c.locationEpoch||0,revision:this.revision,ackSeq:c.appliedSeq||0,receivedSeq:c.receivedSeq||0,inputElapsed:c.appliedElapsed||0,time:c.G.state().time};}
- prepareInput(c,time){while(c.inputQueue?.length&&c.inputQueue[0].at<=time){const value=c.inputQueue.shift();c.appliedSeq=value.seq;c.appliedElapsed=0;c.appliedInput={x:value.x,y:value.y};c.appliedInputAt=value.at;}const input=time-(c.appliedInputAt||0)>O.inputTimeout?{x:0,y:0}:c.appliedInput||{x:0,y:0};c.G.setInput(input.x,input.y);c.appliedElapsed=(c.appliedElapsed||0)+C.step;}
+ network(c){return {connectionId:c.connectionId||null,locationEpoch:c.locationEpoch||0,revision:this.revision,ackSeq:c.appliedSeq||0,receivedSeq:c.receivedSeq||0,inputElapsed:c.appliedElapsed||0,dashInput:true,time:c.G.state().time};}
+ prepareInput(c,time){
+  while(c.inputQueue?.length&&c.inputQueue[0].at<=time){
+   const value=c.inputQueue.shift();
+   c.appliedSeq=value.seq;c.appliedElapsed=0;c.appliedInput={x:value.x,y:value.y};c.appliedInputAt=value.at;
+   if(value.dash){
+    c.G.setInput(value.x,value.y);
+    c.G.dash();
+   }
+  }
+  const input=time-(c.appliedInputAt||0)>O.inputTimeout?{x:0,y:0}:c.appliedInput||{x:0,y:0};
+  c.G.setInput(input.x,input.y);c.appliedElapsed=(c.appliedElapsed||0)+C.step;
+ }
  pulse(){const now=this.now(),elapsed=this.lastPulseAt===null?O.tickMs:Math.max(0,now-this.lastPulseAt);this.lastPulseAt=now;this.tick(elapsed);}
 
  party(c){return this.social.parties[c.profile.partyId]||null;}
@@ -58,7 +69,7 @@ class Realm {
   must(this.active().filter(peer=>peer.id!==c.id&&peer.room===key).length<O.roomPlayers,'onlineMapFull');if(c.room!==key)this.resetMovement(c);c.room=key;c.profile.location={mapId:map.id,group:map.group||null,scope,key,epoch:c.locationEpoch};s.instances[s.mapId]=room.instance;if(map.kind==='field'&&!room.spawnsChecked){c.G.fieldSpawns();room.spawnsChecked=true;}s.hazards=room.hazards;s.runTier=room.tier;s.expeditionRule=room.rule;room.last=this.now();
  }
  touch(c){c.lastSeen=this.now();}
- input(c,x,y,meta={}){must(Number.isFinite(x)&&Number.isFinite(y)&&Math.abs(x)<=1&&Math.abs(y)<=1);if(meta.connectionId&&meta.connectionId!==c.connectionId||meta.locationEpoch!==undefined&&meta.locationEpoch!==c.locationEpoch)return false;const seq=meta.seq===undefined?(c.receivedSeq||0)+1:meta.seq;must(Number.isSafeInteger(seq)&&seq>=0&&seq<=(c.receivedSeq||0)+O.maxInputSequenceGap);if(seq<=(c.receivedSeq||0))return false;c.receivedSeq=seq;this.touch(c);c.inputAt=this.now();c.inputQueue??=[];c.inputQueue.push({seq,x,y,at:this.time()});if(c.inputQueue.length>O.maxPendingInputs)c.inputQueue.splice(0,c.inputQueue.length-O.maxPendingInputs);return true;}
+ input(c,x,y,meta={}){must(Number.isFinite(x)&&Number.isFinite(y)&&Math.abs(x)<=1&&Math.abs(y)<=1);if(meta.connectionId&&meta.connectionId!==c.connectionId||meta.locationEpoch!==undefined&&meta.locationEpoch!==c.locationEpoch)return false;const seq=meta.seq===undefined?(c.receivedSeq||0)+1:meta.seq;must(Number.isSafeInteger(seq)&&seq>=0&&seq<=(c.receivedSeq||0)+O.maxInputSequenceGap);if(seq<=(c.receivedSeq||0))return false;c.receivedSeq=seq;this.touch(c);c.inputAt=this.now();c.inputQueue??=[];c.inputQueue.push({seq,x,y,dash:meta.dash===true,at:this.time()});if(c.inputQueue.length>O.maxPendingInputs)c.inputQueue.splice(0,c.inputQueue.length-O.maxPendingInputs);return true;}
  metric(c,key,n=1){c.profile.metrics[key]=(c.profile.metrics[key]||0)+n;for(const kind of ['day','week']){const period=kind+':'+this.period(kind);c.profile.periods[period]??={};c.profile.periods[period][key]=(c.profile.periods[period][key]||0)+n;}}
  reward(c,reward){for(const key of ['crowns','stars','shards','honor'])if(reward[key])c.profile[key]+=reward[key];if(reward.materials){c.G.grant({materials:reward.materials});for(const [id,n]of Object.entries(reward.materials))c.profile.certifiedMaterials[id]=(c.profile.certifiedMaterials[id]||0)+n;}}
  damage(c,enemy,value,options={}){
@@ -78,20 +89,52 @@ class Realm {
  }
  support(c,skill){if(!skill.party)return;const party=c.profile.duelId?null:this.party(c),s=c.G.state();for(const peer of this.active())if((peer.id===c.id||party?.members.includes(peer.id))&&peer.room===c.room&&distance(peer.G.state().player,s.player)<=skill.party.range)peer.G.receiveSupport(skill.party,'party:'+skill.name);if(skill.party.taunt){const room=this.rooms.get(c.room);for(const e of room?.instance.enemies||[])if(!e.dead&&distance(e,s.player)<=skill.party.range){e.threat??={};const top=Math.max(0,...Object.values(e.threat));e.threat[c.id]=top+s.level*skill.party.taunt*O.tauntScale;}}}
  tick(elapsedMs=O.tickMs){
-  this.tickRemainder+=Math.min(Math.max(0,elapsedMs),O.tickMs*O.maxCatchUp);const steps=Math.floor(this.tickRemainder/(C.step*C.milliseconds));this.tickRemainder-=steps*C.step*C.milliseconds;if(!steps)return;this.revision++;for(let sub=0;sub<steps;sub++){const stepTime=this.time()-(steps-1-sub)*C.step;
-   for(const c of this.active()){if(this.now()-c.lastSeen>O.offlineGrace*C.milliseconds&&!this.streams.has(c.id)){this.disconnect(c);continue;}if(c.profile.duelId)continue;this.prepareInput(c,stepTime);c.G.state().time=stepTime-C.step;c.G.tick(C.step,true);}
-   for(const room of this.rooms.values()){
-    const peers=this.active().filter(c=>c.room===room.id&&c.G.state().mapId===room.mapId&&!c.profile.duelId);if(!peers.length)continue;const leader=peers[0];for(const peer of peers){peer.G.state().instances[room.mapId]=room.instance;peer.G.state().hazards=room.hazards;}
-    leader.G.updateMechanics();leader.G.updateTrial();for(const e of [...room.instance.enemies]){const living=peers.filter(c=>c.G.state().player.hp>0),engaged=living.filter(c=>distance(c.G.state().player,e)<=C.leashRange);const target=(engaged.length?engaged:living).sort((a,b)=>(e.threat?.[b.id]||0)-(e.threat?.[a.id]||0)||distance(a.G.state().player,e)-distance(b.G.state().player,e))[0];if(target)target.G.stepEnemy(e,C.step);}
-    leader.G.updateWorld();for(const peer of peers)peer.G.stepSharedHazards(peer.id);for(const h of room.hazards)if(h.at<=leader.G.state().time&&h.dash&&!h.dashDone){const source=room.instance.enemies.find(e=>e.id===h.source);if(source&&!source.dead)leader.G.moveActor(source,h.dx*h.length*C.hazardDashFraction,h.dy*h.length*C.hazardDashFraction,DB.maps[room.mapId]);h.dashDone=true;}room.hazards=room.hazards.filter(h=>h.expires>this.time()&&(!h.source||room.instance.enemies.some(e=>e.id===h.source&&!e.dead)));
+  const ms=C.step*C.milliseconds,now=this.now(),time=(now-Date.parse(O.epoch))/C.milliseconds;
+  this.tickRemainder+=Math.min(Math.max(0,elapsedMs),O.tickMs*O.maxCatchUp);
+  const steps=Math.floor(this.tickRemainder/ms);this.tickRemainder-=steps*ms;
+  if(!steps)return;
+  this.revision++;
+  for(let sub=0;sub<steps;sub++){
+   const stepTime=time-this.tickRemainder/C.milliseconds-(steps-1-sub)*C.step,groups=new Map(),active=this.active();
+   for(const c of active){
+    if(now-c.lastSeen>O.offlineGrace*C.milliseconds&&!this.streams.has(c.id)){this.disconnect(c);continue;}
+    if(c.profile.duelId)continue;
+    const state=c.G.state();state.time=stepTime-C.step;this.prepareInput(c,stepTime);c.G.tick(C.step,true);
+    if(this.rooms.get(c.room)?.mapId!==state.mapId){this.attach(c);this.send(c,true);}
+    const peers=groups.get(c.room);
+    if(peers)peers.push(c);else groups.set(c.room,[c]);
    }
-   for(const c of this.active())if(!c.profile.duelId&&this.rooms.get(c.room)?.mapId!==c.G.state().mapId)this.attach(c);
+   for(const [id,peers]of groups){
+    const room=this.rooms.get(id),leader=peers[0];
+    if(!room)continue;
+    for(const peer of peers){peer.G.state().instances[room.mapId]=room.instance;peer.G.state().hazards=room.hazards;}
+    leader.G.updateMechanics();leader.G.updateTrial();
+    const living=peers.filter(c=>c.G.state().player.hp>0).map(c=>({c,p:c.G.state().player}));
+    const count=room.instance.enemies.length;
+    for(let i=0;i<count;i++){
+     const e=room.instance.enemies[i];let target=null,closest=Infinity,top=-Infinity,inRange=false;
+     for(const {c,p}of living){
+      const d=(p.x-e.x)**2+(p.y-e.y)**2,local=d<=C.leashRange**2,threat=e.threat?.[c.id]||0;
+      if(!target||(local!==inRange?local:threat>top||threat===top&&d<closest)){target=c;closest=d;top=threat;inRange=local;}
+     }
+     if(target)target.G.stepEnemy(e,C.step);
+    }
+    leader.G.updateWorld();for(const peer of peers)peer.G.stepSharedHazards(peer.id);
+    const liveIds=new Set(room.instance.enemies.filter(e=>!e.dead).map(e=>e.id));
+    for(const h of room.hazards)if(h.at<=stepTime&&h.dash&&!h.dashDone){
+     const source=liveIds.has(h.source)&&room.instance.enemies.find(e=>e.id===h.source);
+     if(source)leader.G.moveActor(source,h.dx*h.length*C.hazardDashFraction,h.dy*h.length*C.hazardDashFraction,DB.maps[room.mapId]);
+     h.dashDone=true;
+    }
+    room.hazards=room.hazards.filter(h=>h.expires>stepTime&&(!h.source||liveIds.has(h.source)));
+   }
+   for(const c of active)if(c.active&&!c.profile.duelId&&this.rooms.get(c.room)?.mapId!==c.G.state().mapId){this.attach(c);this.send(c,true);}
    this.tickDuels(stepTime);
   }
   this.expire();for(const [id,c]of this.characters)if(!c.active&&!this.streams.has(id)&&!c.profile.duelId&&this.now()-c.lastSeen>O.characterIdleMs&&!Object.values(this.social.trades).some(t=>t.members.includes(id))){this.persistCharacter(c);this.characters.delete(id);}
  }
  executeCommand(c,method,args=[],input=null){
-  must(c.active,'onlineLoginRequired');must(typeof method==='string'&&Array.isArray(args)&&args.length<=O.maxArgs);this.touch(c);if(input)this.input(c,input.x,input.y,input);
+  must(c.active,'onlineLoginRequired');must(typeof method==='string'&&Array.isArray(args)&&args.length<=O.maxArgs);this.touch(c);if(input)this.input(c,input.x,input.y,{...input,dash:false});
   if(method.startsWith('social.'))return this.socialCommand(c,method.slice('social.'.length),args);
   const allowed=new Set(Object.values(O.actionBindings).map(v=>v.method));must(allowed.has(method));must(!c.profile.duelId||O.duelMethods.includes(method),'onlineActionBlocked');if(method==='startRift')return this.beginRift(c,args[0],args[1]);const gate=method==='interact'&&c.G.nearby();if(gate?.riftRoute){must(c.G.portalAllowed(gate).ok,'riftLocked');return this.beginRift(c,(c.G.growthState().rift.run?.depth||0)+1,gate.riftRoute);}const beforeMap=c.G.state().mapId,beforeMaterials=clone(c.G.state().materials),oldRoom=c.room;
   c.source=method==='craft'&&DB.recipes.find(r=>r.id===args[0])&&Object.entries(DB.recipes.find(r=>r.id===args[0]).materials).every(([id,n])=>(c.profile.certifiedMaterials[id]||0)>=n)?'certifiedCraft':method;
@@ -107,13 +150,36 @@ class Realm {
  enemyView(enemy){const out={};for(const key of ['id','template','level','x','y','hp','maxHp','guardian','dead','hidden','moving','facing','flash','phase','castingUntil','engagedUntil','growthAffix'])if(enemy[key]!==undefined)out[key]=enemy[key];return out;}
  projectileView(shot){const out={};for(const key of ['id','x','y','vx','vy','life','projectile'])if(shot[key]!==undefined)out[key]=shot[key];return out;}
  statsView(c){if(c.statsRevision!==this.revision){c.statsRevision=this.revision;c.cachedStats=c.G.stats();}return c.cachedStats;}
- publicPlayer(c){const s=c.G.state(),st=this.statsView(c),guild=this.social.guilds[c.profile.guildId];return {id:c.id,name:s.name,raceId:s.raceId,classId:s.classId,level:s.level,job:s.advancements[3]||s.advancements[2]||s.advancements[1]||null,x:s.player.x,y:s.player.y,hp:s.player.hp,maxHp:st.hp,mp:s.player.mp,maxMp:st.mp,facing:s.player.facing,moving:s.player.moving,lastMoveX:s.player.lastMoveX,lastMoveY:s.player.lastMoveY,guild:guild?.name||'',mastery:s.masteryLevel,weaponRank:s.growth.weapon.rank,swing:s.player.swing,armed:!!s.equipment.weapon,attackFlash:s.player.attackFlash||0,role:this.party(c)?.roles[c.id]||DB.classes.find(ch=>ch.id===s.classId).onlineRole};}
- frame(c){const s=c.G.state(),room=this.rooms.get(c.room),peers=this.active().filter(p=>p.room===c.room);return {network:this.network(c),networkStats:this.statsView(c),revision:this.revision,time:s.time,mapId:s.mapId,player:clone(s.player),growthCombat:clone(s.growth.combat),enemies:(c.profile.duelId?s.instances[s.mapId].enemies:room?.instance.enemies||[]).map(e=>this.enemyView(e)),hazards:clone(room?.hazards||s.hazards),projectiles:peers.flatMap(p=>p.G.state().projectiles.map(shot=>this.projectileView(shot))),effects:peers.flatMap(p=>clone(p.G.state().effects)),floats:peers.flatMap(p=>clone(p.G.state().floats)),orbs:clone(s.orbs),peers:peers.filter(p=>p.id!==c.id).map(p=>this.publicPlayer(p))};}
+ publicPlayer(c){const s=c.G.state(),st=this.statsView(c),guild=this.social.guilds[c.profile.guildId];return {id:c.id,name:s.name,raceId:s.raceId,classId:s.classId,level:s.level,job:s.advancements[3]||s.advancements[2]||s.advancements[1]||null,x:s.player.x,y:s.player.y,hp:s.player.hp,maxHp:st.hp,mp:s.player.mp,maxMp:st.mp,facing:s.player.facing,moving:s.player.moving,lastMoveX:s.player.lastMoveX,lastMoveY:s.player.lastMoveY,guild:guild?.name||'',mastery:s.masteryLevel,weaponRank:s.growth.weapon.rank,swing:s.player.swing,armed:!!s.equipment.weapon,dashUntil:s.player.dashUntil,dashX:s.player.dashX,dashY:s.player.dashY,attackFlash:s.player.attackFlash||0,role:this.party(c)?.roles[c.id]||DB.classes.find(ch=>ch.id===s.classId).onlineRole};}
+ roomView(c,peers){
+  const s=c.G.state(),room=this.rooms.get(c.room);
+  const enemies=(c.profile.duelId?s.instances[s.mapId].enemies:room?.instance.enemies||[]).map(e=>this.enemyView(e));
+  const hazards=(room?.hazards||s.hazards).map(({hitPlayers,dashDone,...h})=>h);
+  return {enemies,hazards,projectiles:peers.flatMap(p=>p.G.state().projectiles.map(shot=>this.projectileView(shot))),
+   effects:peers.flatMap(p=>p.G.state().effects.map(e=>({...e}))),floats:peers.flatMap(p=>p.G.state().floats.map(f=>({...f}))),players:peers.map(p=>this.publicPlayer(p))};
+ }
+ frame(c,view=this.roomView(c,this.active().filter(p=>p.room===c.room))){
+  const s=c.G.state(),{players,...shared}=view;
+  return {...shared,network:this.network(c),networkStats:this.statsView(c),revision:this.revision,time:s.time,mapId:s.mapId,
+   player:clone(s.player),growthCombat:clone(s.growth.combat),orbs:clone(s.orbs),peers:players.filter(p=>p.id!==c.id)};
+ }
  state(c){const raw=c.G.state(),{instances,...personal}=raw,s=clone(personal),room=this.rooms.get(c.room),{enemies,...instance}=c.G.instance();s.instances={[s.mapId]:{...clone(instance),enemies:enemies.map(e=>this.enemyView(e))}};s.hazards=clone(room?.hazards||s.hazards);s.input={x:0,y:0};s.onlinePeers=this.active().filter(p=>p.room===c.room&&p.id!==c.id).map(p=>this.publicPlayer(p));s.network=this.network(c);s.networkStats=this.statsView(c);s.onlineProfile=clone(c.profile);s.onlineContext=this.context(c);delete s.onlineProfile.certifiedMaterials;return s;}
 
  context(c){const party=this.party(c),guild=this.social.guilds[c.profile.guildId];return {party:party?{...clone(party),members:party.members.map(id=>{const member=this.character(id);return {...this.publicPlayer(member),online:member.active};})}:null,guild:guild?{...clone(guild),memberCount:guild.members.length}:null,players:this.active().filter(p=>p.room===c.room).map(p=>this.publicPlayer(p)),chat:this.chat.filter(m=>m.room===c.room),invites:Object.values(this.social.invites).filter(i=>i.to===c.id&&i.until>this.now()),trade:Object.values(this.social.trades).find(t=>t.members.includes(c.id))||null,duel:this.social.duels[c.profile.duelId]||null,onlineCount:this.active().length,project:this.projectView(c)};}
- send(c,full=false){const write=this.streams.get(c.id);if(!write)return;try{write({event:full?'state':'frame',data:full?this.state(c):this.frame(c)});if(full)c.G.state().sounds=[];}catch{this.streams.delete(c.id);}}
- broadcast(full=false){for(const c of this.active())this.send(c,full);}
+ send(c,full=false,view){
+  const write=this.streams.get(c.id);if(!write)return;
+  try{write({event:full?'state':'frame',data:full?this.state(c):this.frame(c,view)});if(full)c.G.state().sounds=[];}
+  catch{this.streams.delete(c.id);c.lastSeen=this.now();this.resetMovement(c);try{write(null,'error');}catch{}}
+ }
+ broadcast(full=false){
+  const active=this.active();
+  if(full){for(const c of active)this.send(c,true);return;}
+  const groups=new Map();for(const c of active){const peers=groups.get(c.room);if(peers)peers.push(c);else groups.set(c.room,[c]);}
+  for(const peers of groups.values()){
+   const view=peers[0].profile.duelId?null:this.roomView(peers[0],peers);
+   for(const c of peers)this.send(c,false,view||this.roomView(c,peers));
+  }
+ }
  persistCharacter(c){const claimed=c.profile.mails.filter(m=>m.claimed).slice(-O.claimedMailHistory),unclaimed=c.profile.mails.filter(m=>!m.claimed);c.profile.mails=[...claimed,...unclaimed];const s=c.G.snapshot({currentMapOnly:true});this.store.saveCharacter(c.id,s,c.profile,this.now());}
  persist(){this.store.transaction(()=>{for(const c of this.characters.values())this.persistCharacter(c);for(const room of this.rooms.values())this.store.saveRoom(room.id,{instance:room.instance,tier:room.tier,rule:room.rule},this.now());this.store.saveSocial(this.social);});}
  atomic(ids,fn){

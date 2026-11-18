@@ -2,41 +2,103 @@
 (() => {
 'use strict';
 const G=window.RPG,DB=G.DB,O=DB.online,C=DB.config,T=DB.ui,$=id=>document.getElementById(id),find=(a,id)=>a.find(v=>v.id===id),esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-let active=false,connected=false,health=null,source=null,socket=null,reconnectTimer=null,backup=null,tab=O.tabs[0].id,view=null,authMode='login',lastInput=0,lastFullMap=null,queue=Promise.resolve(),draws=[],pending=false,chatChannel='local',generation=0,requestSeq=0,blocked=false,starting=null,waitingForMap=false;
-const movement=new window.RPGNetcode.MovementHistory(O,C.step,(actor,input,dt,time)=>G.predictMovement(actor,input,dt,time));
+let active=false,connected=false,health=null,source=null,socket=null,reconnectTimer=null,backup=null,tab=O.tabs[0].id,view=null,authMode='login',lastInput=0,queue=Promise.resolve(),draws=[],pending=false,chatChannel='local',generation=0,requestSeq=0,blocked=false,starting=null,waitingForMap=false,mapRequest=null,inputBarrier=null,pendingInputs=[];
+const movement=new window.RPGNetcode.MovementHistory(O,C.step,(actor,input,dt,time)=>G.predictMovement(actor,input,dt,time),(actor,input,time)=>G.predictDash(actor,input,time));
 const ui=()=>window.RPGUI,button=(action,label,data={},disabled=false,cls='')=>`<button data-action="online-${action}" ${Object.entries(data).map(([k,v])=>`data-${k}="${esc(v)}"`).join(' ')} ${disabled?'disabled':''} class="${cls}">${label}</button>`;
 const wallet=p=>`<div class="online-wallet">${[['crowns',T.crowns],['stars',T.stars],['shards',T.shards],['honor',T.honor]].map(([key,label])=>`<span>${label}<b>${p[key]||0}</b></span>`).join('')}</div>`;
 const tag=value=>`<span class="tag">${esc(value)}</span>`;
 function message(value,bad=false){ui()?.toast(value,bad);}
 async function request(path,body=null){const response=await fetch('/api/v1/'+path,{method:body===null?'GET':'POST',credentials:'same-origin',signal:typeof AbortSignal!=='undefined'&&AbortSignal.timeout?AbortSignal.timeout(O.requestTimeoutMs):undefined,headers:body===null?{}:{'content-type':'application/json','x-game-request':'1'},body:body===null?undefined:JSON.stringify(body)});const value=await response.json();if(response.status===401)value.unauthorized=true;return value;}
 
-function visualEntities(items,previous,reset=false){const old=new Map((previous||[]).map(v=>[v.id,v]));return items.map(item=>{const before=!reset&&old.get(item.id);return {...item,drawX:before?.drawX??before?.x??item.x,drawY:before?.drawY??before?.y??item.y};});}
+function visualEntities(items,previous,reset=false){
+ const old=new Map((previous||[]).map(v=>[v.id,v]));
+ return items.map(item=>{
+  const before=!reset&&old.get(item.id);
+  if(!before||before.dead!==item.dead||before.hidden!==item.hidden)return {...item,drawX:item.x,drawY:item.y};
+  if(before.x===item.x&&before.y===item.y)return {...item,drawX:before.drawX,drawY:before.drawY,blendLeft:before.blendLeft};
+  return {...item,drawX:before.drawX??before.x,drawY:before.drawY??before.y,blendLeft:Math.min(O.remoteBlendMax,O.frameMs/C.milliseconds)};
+ });
+}
+function publishMovement(s){s.networkView={...movement.offset,time:movement.clock};}
 function preserveMotion(s){return Object.fromEntries(['player','mapId','instances','time','hazards','projectiles','effects','floats','orbs','onlinePeers','network','networkStats'].map(k=>[k,s[k]]));}
-function sendInput(packet){if(!packet||!active||!connected||blocked)return;if(socket&&socket.readyState===WebSocket.OPEN)socket.send(JSON.stringify({type:'input',...packet}));else if(health?.transport!=='websocket')request('input',packet).then(r=>{if(!r.ok)message(r.message,true);}).catch(()=>{connected=false;status();});}
-function stopInput(){if(!active||!connected)return;const packet=movement.packet({x:0,y:0},performance.now());sendInput(packet);G.setInput(0,0);}
+function sendInput(packet){
+ if(!packet||!active||!connected||blocked)return;
+ if(socket&&socket.readyState===WebSocket.OPEN){socket.send(JSON.stringify({type:'input',...packet}));return;}
+ if(health?.transport==='websocket')return;
+ const sentGeneration=generation,post=()=>{
+  if(sentGeneration!==generation||!active||blocked||packet.locationEpoch!==movement.locationEpoch)return;
+  return request('input',packet).then(r=>{if(!r.ok)message(r.message,true);}).catch(()=>{connected=false;status();});
+ };
+ // Preserve dash edges across HTTP delivery, and keep only the latest queued direction.
+ if(inputBarrier){
+  if(packet.dash||!pendingInputs.length||pendingInputs.at(-1).dash)pendingInputs.push(packet);
+  else pendingInputs[pendingInputs.length-1]=packet;
+  return;
+ }
+ const sent=post();
+ if(packet.dash){
+  const barrier=Promise.resolve(sent).finally(()=>{
+   if(inputBarrier!==barrier)return;
+   inputBarrier=null;
+   const queued=pendingInputs;pendingInputs=[];
+   for(const next of queued)if(sentGeneration===generation&&next.locationEpoch===movement.locationEpoch)sendInput(next);
+  });
+  inputBarrier=barrier;
+ }
+}
+function stopInput(){if(!active||!connected||waitingForMap)return;const packet=movement.packet({x:0,y:0},performance.now());sendInput(packet);G.setInput(0,0);}
 function replaced(){blocked=true;connected=false;clearTimeout(reconnectTimer);source?.close();socket?.close();message(T.onlineReplaced,true);status();}
 function acceptPacket(packet,connectionStart=false){if(packet.event==='replaced'){replaced();return;}if(packet.event==='state'){connected=true;applyState(packet.data,connectionStart);}else if(packet.event==='frame'){connected=true;applyFrame(packet.data);}else if(packet.event==='error')message(packet.data.message,true);}
 
 function applyState(state,connectionStart=false){
- if(!active)return;const meta=state.network;if(!meta)return;if(connectionStart){requestSeq=0;movement.clear();movement.bind(meta);}else if(meta.connectionId!==movement.connectionId)return;
+ if(!active)return;const meta=state.network;if(!meta)return;if(connectionStart){requestSeq=0;movement.clear();inputBarrier=null;pendingInputs=[];}else if(meta.connectionId!==movement.connectionId)return;
  if(meta.locationEpoch<movement.locationEpoch||meta.revision<movement.stateRevision)return;
  const previous=G.state(),newMap=previous?.mapId!==state.mapId||meta.locationEpoch!==movement.locationEpoch,keepMotion=!newMap&&meta.revision<movement.motionRevision,saved=keepMotion?preserveMotion(previous):null;
  const previousCombat=keepMotion?previous.growth?.combat:null;G.acceptNetworkState(state);const s=G.state();if(saved){const currentStats=s.networkStats;if(currentStats&&saved.networkStats)Object.assign(currentStats,saved.networkStats);Object.assign(s,saved,{networkStats:currentStats});}else{if(!newMap&&previous)s.time=Math.max(s.time,previous.time);movement.reconcile(s.player,state.player,meta,newMap?s.player:previous?.player);s.instances[s.mapId].enemies=visualEntities(s.instances[s.mapId].enemies,previous?.instances?.[s.mapId]?.enemies,newMap);s.onlinePeers=visualEntities(s.onlinePeers||[],previous?.onlinePeers,newMap);s.projectiles=visualEntities(s.projectiles,previous?.projectiles,newMap);}
- if(previousCombat&&s.growth)s.growth.combat=previousCombat;movement.stateRevision=meta.revision;waitingForMap=false;s.networkView=movement.offset;lastFullMap=s.mapId;ui()?.updateHUD();status();
+ if(previousCombat&&s.growth)s.growth.combat=previousCombat;if(meta.dashInput)s.sounds=s.sounds.filter(id=>id!=='dash');movement.stateRevision=meta.revision;waitingForMap=false;publishMovement(s);ui()?.updateHUD();status();
 }
 function applyFrame(packet){
  if(!active||!packet.network||packet.network.connectionId!==movement.connectionId)return;const meta=packet.network,s=G.state();if(meta.locationEpoch<movement.locationEpoch||meta.revision<movement.motionRevision)return;
- if(!s||s.mapId!==packet.mapId||meta.locationEpoch!==movement.locationEpoch){if(lastFullMap!==packet.mapId||meta.locationEpoch!==movement.locationEpoch){const requestGeneration=generation;lastFullMap=packet.mapId;movement.bind(meta);waitingForMap=true;stopInput();request('session').then(r=>{if(r.ok&&requestGeneration===generation)applyState(r.state);}).catch(()=>{});}return;}
- if(packet.networkStats&&s.networkStats)Object.assign(s.networkStats,packet.networkStats);movement.reconcile(s.player,packet.player,meta);s.networkView=movement.offset;s.network=meta;if(packet.growthCombat&&s.growth)Object.assign(s.growth.combat,packet.growthCombat);s.time=Math.max(s.time,packet.time);s.instances[s.mapId].enemies=visualEntities(packet.enemies,s.instances[s.mapId].enemies);s.hazards=packet.hazards;s.projectiles=visualEntities(packet.projectiles,s.projectiles);s.effects=packet.effects;s.floats=packet.floats;s.orbs=packet.orbs;s.onlinePeers=visualEntities(packet.peers,s.onlinePeers);
+ if(!s||s.mapId!==packet.mapId||meta.locationEpoch!==movement.locationEpoch){
+  waitingForMap=true;
+  if(!mapRequest){
+   const requestGeneration=generation;
+   const lookup=request('session').then(r=>{if(r.ok&&requestGeneration===generation)applyState(r.state);}).catch(()=>{}).finally(()=>{if(mapRequest===lookup)mapRequest=null;});
+   mapRequest=lookup;
+  }
+  return;
+ }
+ if(packet.networkStats&&s.networkStats)Object.assign(s.networkStats,packet.networkStats);movement.reconcile(s.player,packet.player,meta);publishMovement(s);s.network=meta;if(packet.growthCombat&&s.growth)Object.assign(s.growth.combat,packet.growthCombat);s.time=Math.max(s.time,packet.time);s.instances[s.mapId].enemies=visualEntities(packet.enemies,s.instances[s.mapId].enemies);s.hazards=packet.hazards;s.projectiles=visualEntities(packet.projectiles,s.projectiles);s.effects=packet.effects;s.floats=packet.floats;s.orbs=packet.orbs;s.onlinePeers=visualEntities(packet.peers,s.onlinePeers);
 }
 async function establish(){if(active)return;const startGeneration=generation,session=await request('session');if(startGeneration!==generation)return;if(!session.ok){showAuth();return;}backup=G.snapshot();active=true;connected=false;blocked=false;movement.clear();generation++;G.acceptNetworkState(session.state);ui().showGame();status();if(health?.transport==='websocket'){connectSocket();return;}const connectionGeneration=generation;source=new EventSource('/api/v1/events?protocol='+O.protocol,{withCredentials:true});let first=true;source.addEventListener('state',event=>{if(connectionGeneration!==generation)return;const data=JSON.parse(event.data);acceptPacket({event:'state',data},first||data.network?.connectionId!==movement.connectionId);first=false;});source.addEventListener('frame',event=>{if(connectionGeneration===generation)acceptPacket({event:'frame',data:JSON.parse(event.data)});});source.addEventListener('replaced',()=>{if(connectionGeneration===generation)replaced();});source.onerror=()=>{if(connectionGeneration!==generation||blocked)return;connected=false;G.setInput(0,0);status();return checkSession(connectionGeneration);};}
 function start(){if(active)return Promise.resolve();if(!starting)starting=establish().finally(()=>{starting=null;});return starting;}
 async function checkSession(expectedGeneration){try{const result=await request('session');if(!active||generation!==expectedGeneration||blocked)return false;if(result.unauthorized){await logout(false);showAuth();message(T.onlineLoginRequired,true);return false;}return result.ok;}catch{return false;}}
 function connectSocket(){if(!active||blocked)return;const connection=new WebSocket((location.protocol==='https:'?'wss:':'ws:')+'//'+location.host+'/api/v1/socket?protocol='+O.protocol),connectionGeneration=++generation;socket=connection;let first=true;connection.onmessage=event=>{if(socket!==connection||connectionGeneration!==generation||blocked)return;const packet=JSON.parse(event.data);acceptPacket(packet,first&&packet.event==='state');if(packet.event==='state')first=false;};connection.onerror=()=>{if(socket===connection){connected=false;status();}};connection.onclose=event=>{if(socket!==connection||connectionGeneration!==generation)return;if(event.code===O.socketReplacedCode){replaced();return;}connected=false;status();if(active&&!blocked){const retry=async()=>{if(socket!==connection||connectionGeneration!==generation||!active||blocked)return;if(await checkSession(connectionGeneration)){connectSocket();return;}if(active&&!blocked&&connectionGeneration===generation)reconnectTimer=setTimeout(retry,O.retryMs);};reconnectTimer=setTimeout(retry,O.retryMs);}};}
-async function logout(remoteLogout=!blocked){active=false;connected=false;generation++;clearTimeout(reconnectTimer);source?.close();source=null;socket?.close();socket=null;movement.clear();G.clearNetworkState();if(backup)G.load(backup);else{try{const saved=JSON.parse(localStorage.getItem(C.storageKey)||'null');if(saved)G.load(saved);else G.clearState();}catch{G.clearState();}}backup=null;blocked=false;ui().showTitle();if(remoteLogout)try{await request('auth/logout',{});}catch{}}
+async function logout(remoteLogout=!blocked){active=false;connected=false;generation++;clearTimeout(reconnectTimer);source?.close();source=null;socket?.close();socket=null;movement.clear();mapRequest=null;inputBarrier=null;pendingInputs=[];G.clearNetworkState();if(backup)G.load(backup);else{try{const saved=JSON.parse(localStorage.getItem(C.storageKey)||'null');if(saved)G.load(saved);else G.clearState();}catch{G.clearState();}}backup=null;blocked=false;ui().showTitle();if(remoteLogout)try{await request('auth/logout',{});}catch{}}
 function status(){const badge=$('online-status');if(badge){badge.textContent=active?(blocked?T.onlineOtherSession:connected?T.onlineConnected:T.onlineReconnecting):T.online;badge.classList.toggle('connected',active&&connected);}const hud=$('online-party-hud');if(hud){const party=G.state()?.onlineContext?.party;hud.hidden=!active||!party;hud.innerHTML=party?party.members.map(m=>`<div><span>${esc(m.name)} <small>${esc(O.roles.find(r=>r.id===m.role)?.name||'')}</small></span><b>${Math.ceil(m.hp)}/${m.maxHp}</b><i style="width:${Math.max(0,m.hp/m.maxHp*C.percentage)}%"></i></div>`).join(''):'';}}
-function step(dt,input){if(!active)return;const s=G.state();if(!connected||waitingForMap){s.player.moving=false;return;}sendInput(movement.sample(s.player,input,dt,performance.now()));s.input={x:input.x,y:input.y};s.networkView=movement.offset;s.time+=dt;const blend=1-Math.exp(-O.remoteLerp*dt);for(const actor of [...(s.onlinePeers||[]),...G.instance().enemies,...s.projectiles]){actor.drawX=(actor.drawX??actor.x)+(actor.x-(actor.drawX??actor.x))*blend;actor.drawY=(actor.drawY??actor.y)+(actor.y-(actor.drawY??actor.y))*blend;}status();}
+let partyHudElapsed=0;
+function step(dt,input){
+ if(!active)return;
+ const s=G.state();if(!connected||waitingForMap){s.player.moving=false;return;}
+ sendInput(movement.sample(s.player,input,dt,performance.now()));
+ s.input={x:input.x,y:input.y};publishMovement(s);s.time+=dt;
+ for(const list of [s.onlinePeers||[],G.instance().enemies,s.projectiles])for(const actor of list){
+  if(!(actor.blendLeft>0))continue;
+  const blend=Math.min(1,dt/actor.blendLeft);
+  actor.drawX+=(actor.x-actor.drawX)*blend;actor.drawY+=(actor.y-actor.drawY)*blend;
+  actor.blendLeft=Math.max(0,actor.blendLeft-dt);
+ }
+ partyHudElapsed+=dt;
+ if(partyHudElapsed>=C.hudInterval){partyHudElapsed=0;status();}
+}
 function command(method,args=[],input=null){
+ if(method==='dash'&&G.state()?.network?.dashInput){
+  if(!active||!connected||blocked||waitingForMap)return Promise.resolve({ok:false,message:T.onlineDisconnected});
+  const s=G.state(),result=movement.dash(s.player,input||s.input,performance.now());
+  if(result.ok){sendInput(result.packet);s.sounds.push('dash');publishMovement(s);}
+  else message(result.message,true);
+  return Promise.resolve(result);
+ }
  const commandGeneration=generation,context={...movement.context(),requestId:movement.connectionId+':'+(++requestSeq),requestSeq};let direction=null;if(method==='dash'&&input){direction=movement.packet(input,performance.now())||{...movement.context(),seq:movement.sequence,x:input.x,y:input.y};sendInput(direction);}
  const run=async()=>{if(!active||!connected||blocked||commandGeneration!==generation)return {ok:false,message:T.onlineDisconnected};if(context.locationEpoch!==movement.locationEpoch)return {ok:false,message:T.onlineStaleAction};try{const value=await request('action',{method,args,input:direction,context});if(!active||commandGeneration!==generation)return {ok:false};if(value.state)applyState(value.state);if(!value.ok)message(value.message,true);if(value.state?.network?.locationEpoch<movement.locationEpoch)return {ok:false};return value;}catch{message(T.onlineError,true);return {ok:false};}};const promise=queue.then(run,run);queue=promise.catch(()=>{});return promise;
 }

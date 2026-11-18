@@ -42,7 +42,7 @@ async function clientSnapshots(){
  const client=vm.createContext({window:{RPG:local,RPGUI:{showGame(){},showTitle(){},updateHUD(){},toast(){}}},document:{getElementById:()=>null},location:{protocol:'http:',host:'localhost'},performance:{now:()=>clock},EventSource:Events,setTimeout,clearTimeout,
   fetch:async(url,options)=>{let value={ok:true};if(url.endsWith('/health'))value={ok:true,protocol:O.protocol,transport:'sse'};else if(url.endsWith('/session'))value={ok:true,state:world.state(hero)};else if(url.endsWith('/input')){const packet=JSON.parse(options.body);outgoing.push({at:clock+125+(packet.seq%3)*9,packet});}return {json:async()=>value};}});
  for(const file of ['rpg-netcode.js','rpg-online.js'])vm.runInContext(fs.readFileSync(path.join(__dirname,'..',file),'utf8'),client,{filename:file});const online=client.window.RPGOnline;await online.init();await online.start();stream.events.state({data:JSON.stringify(world.state(hero))});
- let serverTick=0,fullUpdates=0,maxFullJump=0;const displayed=()=>{const s=local.state();return {x:s.player.x+(s.networkView?.x||0),y:s.player.y+(s.networkView?.y||0)};};
+ let serverTick=0,fullUpdates=0,maxFullJump=0,dashSeq=0;const displayed=()=>{const s=local.state();return {x:s.player.x+(s.networkView?.x||0),y:s.player.y+(s.networkView?.y||0)};};
  for(let frame=1;frame<=180;frame++){
   clock=frame*1000/60;
   while((serverTick+1)*O.tickMs<=clock){const time=++serverTick*O.tickMs;while(outgoing.length&&outgoing[0].at<=time){const next=outgoing.shift();serverTime=origin+next.at;world.input(hero,next.packet.x,next.packet.y,next.packet);}serverTime=origin+time;world.pulse();
@@ -50,8 +50,19 @@ async function clientSnapshots(){
    if(time%O.snapshotMs===0)incoming.push({at:time+125,event:'state',data:world.state(hero)});
   }
   while(incoming.length&&incoming[0].at<=clock){const next=incoming.shift(),before=displayed();stream.events[next.event]({data:JSON.stringify(next.data)});if(next.event==='state'){const after=displayed();fullUpdates++;maxFullJump=Math.max(maxFullJump,Math.hypot(after.x-before.x,after.y-before.y));}}
-  const input=clock<800?{x:1,y:0}:clock<1400?{x:0,y:1}:clock<2000?{x:-1,y:0}:{x:0,y:0};online.step(1/60,input);
+  if(frame===20){
+   const at=displayed(),result=await online.command('dash',[],{x:1,y:0});
+   assert(result.ok&&result.packet.dash);dashSeq=result.packet.seq;
+   assert.equal(local.state().player.dashCharges,1);
+   assert.equal(hero.G.state().player.dashCharges,2,'local dash begins before the server applies it');
+   online.step(1/60,{x:1,y:0});
+   assert(displayed().x-at.x>C.dashDistance/C.dashDuration/100,'dash moves on the next displayed frame');
+   assert(displayed().x-at.x<C.dashDistance/2,'dash advances through intermediate poses');
+   continue;
+  }
+  const input=clock<800?{x:1,y:0}:clock<1400?{x:0,y:1}:clock<2000?{x:-1,y:0}:{x:0,y:0};online.step(1/60,input);if(dashSeq)await new Promise(resolve=>setImmediate(resolve));
  }
+ assert(dashSeq>0&&world.network(hero).ackSeq>=dashSeq);assert.equal(hero.G.state().player.dashCharges,1);assert.equal(local.state().player.dashCharges,1);
  assert(fullUpdates>=2);assert(maxFullJump<O.motionEpsilon,'full snapshots must preserve the displayed predicted position; jump='+maxFullJump);
  assert(Math.hypot(local.state().player.x-hero.G.state().player.x,local.state().player.y-hero.G.state().player.y)<O.motionEpsilon,'released movement converges to the server after mixed full/frame updates');
  // A late full response must not detach the live stats object from subsequent frame updates.

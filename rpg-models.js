@@ -3,8 +3,8 @@
 (() => {
 'use strict';
 const art=window.GAME_DB.graphics,v=art.view,up=Math.sqrt(1-v.pitch*v.pitch);
-const geometry=new Map(),atlas=new Map(),portraits=new Map(),rgb=new Map();
-let settings={...art.defaults},pixels=0,deadline=Infinity,gpu;
+const geometry=new Map(),atlas=new Map(),portraits=new Map(),rgb=new Map(),poses=new Map();
+let settings={...art.defaults},pixels=0,deadline=Infinity,bakes=Infinity,gpu;
 const clock=()=>performance.now();
 function project(x,h,z){return [x,z*v.pitch-h*up,z*up+h*v.pitch];}
 function readColor(hex){if(!rgb.has(hex))rgb.set(hex,[1,3,5].map(i=>parseInt(hex.slice(i,i+2),16)/255));return rgb.get(hex);}
@@ -111,17 +111,21 @@ function raster(mesh,out,origin,res){
 }
 const unitScale=[1,1,1];
 function view(id,{colors={},overlay='',yaw=0,scale=unitScale,lod=1,portrait=false,hidePart}={},urgent=false){
- const key=JSON.stringify([id,overlay,colors,yaw,scale,lod,portrait,hidePart]);let hit=atlas.get(key);
+ const family=JSON.stringify([id,overlay,colors,scale,portrait,hidePart]),key=family+'|'+yaw+'|'+lod;
+ let hit=atlas.get(key);
  if(hit){atlas.delete(key);atlas.set(key,hit);return hit;}
- if(!urgent&&clock()>deadline)return null;
+ if(!urgent&&(bakes<=0||clock()>deadline))return atlas.get(poses.get(family));
+ if(!urgent)bakes--;
+ if(gpu===undefined){try{gpu=initGPU();}catch{gpu=null;}}
  const mesh=makeMesh(id,overlay,colors,yaw,scale,lod,hidePart),b=mesh.bounds,dx=b[3]-b[0],dy=b[4]-b[1];
- const res=Math.min(v.bakeUnit*v.aaScale[settings.aa]*(portrait?2:1),(v.surfaceMax-2*v.pad)/Math.max(dx,dy));
+ const res=Math.min(v.bakeUnit*v.aaScale[settings.aa]*(portrait?2:gpu?1:art.fallbackResolution),(v.surfaceMax-2*v.pad)/Math.max(dx,dy));
  const canvas=document.createElement('canvas');canvas.width=Math.ceil(dx*res)+2*v.pad;canvas.height=Math.ceil(dy*res)+2*v.pad;
  const origin=[b[0]-v.pad/res,b[1]-v.pad/res,b[2]-1],span=[canvas.width/res,canvas.height/res,b[5]-b[2]+2];
- if(gpu===undefined){try{gpu=initGPU();}catch{gpu=null;}}
- if(!gpu||!gpu(mesh,canvas,origin,span))raster(mesh,canvas,origin,res);
- hit={canvas,left:origin[0],top:origin[1],width:span[0],height:span[1]};atlas.set(key,hit);pixels+=canvas.width*canvas.height;
- while(atlas.size>v.cacheCount||pixels>v.cachePixels){const [k,old]=atlas.entries().next().value;pixels-=old.canvas.width*old.canvas.height;atlas.delete(k);}
+ let rendered=false;
+ if(gpu){try{rendered=gpu(mesh,canvas,origin,span);}catch{gpu=null;}}
+ if(!rendered)raster(mesh,canvas,origin,res);
+ hit={canvas,left:origin[0],top:origin[1],width:span[0],height:span[1]};atlas.set(key,hit);poses.set(family,key);pixels+=canvas.width*canvas.height;
+ while(atlas.size>v.cacheCount||pixels>v.cachePixels){const [k,old]=atlas.entries().next().value;pixels-=old.canvas.width*old.canvas.height;atlas.delete(k);const family=k.slice(0,k.indexOf('|'));if(poses.get(family)===k)poses.delete(family);}
  return hit;
 }
 function heroStyle(race,ch){return {colors:{skin:race.skin,hair:race.hair,cloth:ch.cloth,accent:ch.accent},overlay:race.overlay||''};}
@@ -133,8 +137,8 @@ function heroPortrait(raceId,classId){
 }
 function configure(values={}){
  values=values||{};const next={...art.defaults};for(const [key,,levels] of art.settings)if(Number.isInteger(values[key])&&values[key]>=0&&values[key]<levels.length)next[key]=values[key];
- if(Object.keys(next).some(k=>next[k]!==settings[k])){settings=next;atlas.clear();portraits.clear();pixels=0;}
+ if(Object.keys(next).some(k=>next[k]!==settings[k])){settings=next;atlas.clear();poses.clear();portraits.clear();pixels=0;}
 }
-window.RPGModels={project,view,heroStyle,configure,settings:()=>settings,begin:()=>{deadline=clock()+v.budgetMs;},heroPortrait};
+window.RPGModels={project,view,heroStyle,configure,settings:()=>settings,begin:()=>{deadline=clock()+v.budgetMs;bakes=art.frameBakeLimit;},heroPortrait};
 window.RPGArt={heroPortrait};
 })();

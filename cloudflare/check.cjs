@@ -17,5 +17,27 @@ async function connect(client){const socket=new WebSocket(base.replace(/^http/,'
  const before=(await api(a,'session')).state.onlineProfile.stars,draw=await act(a,'social.summon',[1]);assert(draw.ok);assert.equal(draw.draws.length,1);assert.equal(draw.state.onlineProfile.stars,before-1);
  const oldCookie=a.cookie;assert((await api(a,'auth/login',{username:a.username,password:a.password})).ok);assert.equal((await api(a,'session')).state.onlineProfile.stars,before-1,'SQLite saved progress survives login');assert(!(await api({cookie:oldCookie},'session')).ok,'prior cookie is revoked');await connect(a);assert((await api(a,'session')).ok,'fresh authenticated socket reconnects');
  assert(!(await api(a,'auth/register',{username:'cf_'+crypto.randomBytes(4).toString('hex'),password:a.password,name:'이관검증',raceId:'human',classId:'warrior',legacy:{}})).ok,'public unsigned import is disabled');
- console.log('PASS: Cloudflare workerd SQLite, two authenticated WebSockets, peer visibility, shared party, server-only movement, illegal-write rejection, summon persistence, growth initialization/entry/forge/project guards and session revocation.');
+ const {DB}=require('../server/engine.cjs'),C=DB.config,O=DB.online;
+ const pause=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+ const send=(c,x,y,dash=false)=>c.socket.send(JSON.stringify({type:'input',connectionId:c.net.connectionId,locationEpoch:c.net.locationEpoch,seq:++c.inputSeq,x,y,dash}));
+ const latest=c=>c.frames.findLast(p=>p.event==='frame')?.data||c.state;
+ const startDash=latest(a).player.x;send(a,1,0,true);send(a,0,0);
+ await pause((C.dashDuration+.24)*C.milliseconds);
+ const dashFrames=a.frames.filter(p=>p.event==='frame').map(p=>p.data.player);
+ assert(dashFrames.some(p=>p.x>startDash+.3&&p.x<startDash+C.dashDistance-.3),'dash travels through intermediate server positions');
+ assert(Math.abs(latest(a).player.x-startDash-C.dashDistance)<.15,'dash distance on ordered input stream');
+ const east=DB.maps.oakwood.portals[0];
+ for(let n=0;n<50&&latest(a).player.x<east.x-1.5;n++){send(a,1,0);await pause(O.clientInputMs);}
+ send(a,0,0);
+ const entered=await act(a,'interact');assert(entered.ok&&entered.state.mapId==='meadow','real portal into the field');
+ a.net=entered.state.network;await pause(O.frameMs*2);
+ for(let n=0;n<34&&latest(a).player.x<8.0;n++){send(a,1,0);await pause(O.clientInputMs);}
+ send(a,0,0);
+ const first=latest(a);assert.equal(first.mapId,'meadow');assert(first.player.x>=7,'player continues after entering field');
+ await pause(1200);
+ const field=a.frames.filter(p=>p.event==='frame'&&p.data.mapId==='meadow');
+ const slime=field.map(p=>p.data.enemies.find(e=>e.template==='slime')).filter(Boolean);
+ assert(new Set(slime.map(e=>e.x+','+e.y)).size>3,'nearby monsters keep moving on the live Worker');
+ assert(field.some(p=>p.data.hazards.length||p.data.floats.length||p.data.effects.length),'field combat keeps emitting authoritative events');
+ console.log('PASS: Cloudflare workerd SQLite, two authenticated WebSockets, peer visibility, shared party, server-only movement, illegal-write rejection, summon persistence, growth guards, session revocation, ordered dash, field monster movement and combat.');
 })().catch(e=>{error=e;console.error(e);process.exitCode=1;}).finally(async()=>{for(const c of clients){c.socket?.terminate();try{await api(c,'auth/logout',{});}catch{}}if(error)process.exit(1);});
