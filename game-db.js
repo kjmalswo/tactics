@@ -1,7 +1,7 @@
 // Editable JSON-compatible fantasy RPG database.
 window.GAME_DB = {
   "meta": {
-    "version": "4.0",
+    "version": "5.0",
     "title": "에버돈",
     "subtitle": "계승하는 모험",
     "description": "마을에서 시작해 나만의 직업 빌드를 완성하는 판타지 액션 RPG"
@@ -414,7 +414,7 @@ window.GAME_DB = {
     "body": "별의 봉인이 무너진 뒤, 왕국의 변경에서 다섯 왕관을 노리는 군세가 깨어납니다. 작은 길드의 모험가가 되어 동료와 함께 숲·고원·설원·사막·황혼 성채를 누비세요.",
     "chapter": "에버돈 대륙",
     "goal": "지역 의뢰로 성장하고 여덟 던전의 군주를 넘어 황혼 성채의 왕관을 되찾으세요.",
-    "completed": "왕관을 되찾았습니다. 관측사 에린의 끝없는 균열, 계승 단련과 영웅 숙련으로 여정을 이어가세요."
+    "completed": "왕관을 되찾았습니다. 관측사 에린의 끝없는 균열, 계승 단련과 영웅 숙련으로 여정을 이어가세요. 황혼 평원의 마왕군 전위대를 추적하는 의뢰도 기다립니다."
   },
   "baseStats": {
     "hp": 100,
@@ -24076,6 +24076,256 @@ window.GAME_DB = {
           ]
         }
       ]
+    },
+    "legion_bulwark": {
+      "name": "마왕군 흑철 방패병",
+      "sprite": "knight",
+      "hp": 170,
+      "attack": 31,
+      "defense": 11,
+      "speed": 1.55,
+      "range": 2.4,
+      "cooldown": 1.55,
+      "windup": 1.2,
+      "kind": "line",
+      "radius": 0.7,
+      "xp": 46,
+      "gold": [
+        4,
+        9
+      ],
+      "material": {
+        "ore": 0.4,
+        "sigil": 0.09,
+        "forge_essence": 0.09
+      },
+      "size": 1,
+      "length": 4.5,
+      "dash": true,
+      "element": "arcane",
+      "model": "legion_guard",
+      "faction": "legion"
+    },
+    "legion_marksman": {
+      "name": "마왕군 붉은 석궁병",
+      "sprite": "knight",
+      "hp": 103,
+      "attack": 31,
+      "defense": 2,
+      "speed": 2,
+      "range": 6.2,
+      "cooldown": 2.65,
+      "windup": 1.1,
+      "kind": "line",
+      "radius": 0.4,
+      "xp": 46,
+      "gold": [
+        4,
+        9
+      ],
+      "material": {
+        "ore": 0.4,
+        "sigil": 0.09,
+        "forge_essence": 0.09
+      },
+      "size": 1,
+      "length": 7,
+      "dash": false,
+      "element": "arcane",
+      "model": "legion_bolt",
+      "faction": "legion"
+    },
+    "legion_augur": {
+      "name": "마왕군 잿불 술사",
+      "sprite": "ghost",
+      "hp": 145,
+      "attack": 40,
+      "defense": 3,
+      "speed": 1.7,
+      "range": 5.4,
+      "cooldown": 2.8,
+      "windup": 1.3,
+      "kind": "target",
+      "radius": 1.35,
+      "xp": 59,
+      "gold": [
+        7,
+        12
+      ],
+      "material": {
+        "crystal": 0.55,
+        "moonstone": 0.3,
+        "forge_essence": 0.09
+      },
+      "size": 1.3,
+      "elite": false,
+      "innerRadius": 1.6,
+      "bursts": 3,
+      "interval": 0.5,
+      "offsets": [
+        [
+          0,
+          0
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          -2,
+          -2
+        ]
+      ],
+      "element": "fire",
+      "model": "legion_hex",
+      "faction": "legion"
+    },
+    "legion_sovereign": {
+      "name": "마왕 아르델",
+      "sprite": "knight",
+      "hp": 3550,
+      "attack": 46,
+      "defense": 8,
+      "speed": 1.65,
+      "range": 5.5,
+      "xp": 504,
+      "gold": [
+        92,
+        138
+      ],
+      "size": 1.85,
+      "boss": true,
+      "group": "legion",
+      "drop": "eclipse_crown",
+      "patterns": [
+        {
+          "name": "흑왕검",
+          "kind": "cone",
+          "angle": 1.55,
+          "radius": 5.8,
+          "windup": 1.25,
+          "cooldown": 2.9,
+          "damage": 1.3
+        },
+        {
+          "name": "옥좌 파동",
+          "kind": "ring",
+          "innerRadius": 2.4,
+          "radius": 7,
+          "windup": 1.6,
+          "cooldown": 3.2,
+          "damage": 1.32
+        }
+      ],
+      "adds": [
+        "legion_bulwark",
+        "legion_marksman"
+      ],
+      "phases": [
+        {
+          "threshold": 0.68,
+          "adds": [
+            "legion_bulwark",
+            "legion_marksman"
+          ],
+          "patterns": [
+            {
+              "name": "흑왕검",
+              "kind": "cone",
+              "angle": 1.55,
+              "radius": 5.8,
+              "windup": 1.25,
+              "cooldown": 2.9,
+              "damage": 1.3
+            },
+            {
+              "name": "왕의 진군",
+              "kind": "line",
+              "length": 8,
+              "radius": 0.85,
+              "dash": true,
+              "windup": 1.25,
+              "cooldown": 3,
+              "damage": 1.25
+            }
+          ]
+        },
+        {
+          "threshold": 0.32,
+          "adds": [
+            "legion_augur"
+          ],
+          "patterns": [
+            {
+              "name": "옥좌 파동",
+              "kind": "ring",
+              "innerRadius": 2.4,
+              "radius": 7,
+              "windup": 1.6,
+              "cooldown": 3.2,
+              "damage": 1.32
+            },
+            {
+              "name": "잿빛 포위",
+              "kind": "target",
+              "radius": 1.6,
+              "windup": 1.35,
+              "cooldown": 3,
+              "damage": 1.12,
+              "bursts": 3,
+              "interval": 0.5,
+              "offsets": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  1.6,
+                  0
+                ],
+                [
+                  -1.6,
+                  0
+                ]
+              ]
+            }
+          ]
+        }
+      ],
+      "element": "arcane",
+      "material": {
+        "sigil": 0.8,
+        "tempered_core": 0.6
+      },
+      "model": "legion_lord",
+      "faction": "legion"
+    },
+    "legion_scout": {
+      "name": "마왕군 척후병",
+      "sprite": "goblin",
+      "hp": 52,
+      "attack": 16,
+      "defense": 1,
+      "speed": 2,
+      "range": 3.6,
+      "cooldown": 2.4,
+      "windup": 1.15,
+      "kind": "line",
+      "radius": 0.36,
+      "xp": 11,
+      "gold": [
+        1,
+        3
+      ],
+      "material": {
+        "ore": 0.32,
+        "forge_essence": 0.09
+      },
+      "size": 0.94,
+      "element": "physical",
+      "model": "legion_bolt",
+      "faction": "legion",
+      "length": 4.8
     }
   },
   "quests": [
@@ -26428,6 +26678,70 @@ window.GAME_DB = {
           "rangers": 8
         }
       }
+    },
+    {
+      "id": "legion_orders",
+      "name": "검은 해의 전령",
+      "npc": "darius",
+      "requires": "eclipse_survey",
+      "description": "황혼 평원 동쪽에서 전위대를 격파하고 다리우스에게 보고하세요. 방패 돌진은 옆으로, 석궁의 사선은 가로질러 피하세요.",
+      "objectives": [
+        {
+          "kind": "kill",
+          "target": "legion_bulwark",
+          "count": 1,
+          "label": "흑철 방패병 처치",
+          "map": "eclipse_plain"
+        },
+        {
+          "kind": "kill",
+          "target": "legion_marksman",
+          "count": 1,
+          "label": "붉은 석궁병 처치",
+          "map": "eclipse_plain"
+        },
+        {
+          "kind": "kill",
+          "target": "legion_augur",
+          "count": 1,
+          "label": "잿불 술사 처치",
+          "map": "eclipse_plain"
+        }
+      ],
+      "rewards": {
+        "xp": 820,
+        "gold": 250,
+        "materials": {
+          "tempered_core": 1
+        }
+      },
+      "minLevel": 40
+    },
+    {
+      "id": "legion_king",
+      "name": "마왕의 왕좌",
+      "npc": "darius",
+      "requires": "legion_orders",
+      "description": "평원 동쪽 군문을 넘어 세 지휘병을 쓰러뜨리세요. 왕좌에서는 파동의 안쪽으로 파고들고 마왕이 부른 지원병을 먼저 끊으세요.",
+      "objectives": [
+        {
+          "kind": "boss",
+          "target": "legion_sovereign",
+          "count": 1,
+          "label": "마왕 아르델 격파",
+          "map": "legion_throne"
+        }
+      ],
+      "rewards": {
+        "xp": 1800,
+        "gold": 480,
+        "points": 1,
+        "materials": {
+          "tempered_core": 2,
+          "world_seal": 1
+        }
+      },
+      "minLevel": 40
     }
   ],
   "npcTypes": {
@@ -27579,6 +27893,36 @@ window.GAME_DB = {
             "gold": 14,
             "materials": {
               "hide": 2
+            }
+          }
+        },
+        {
+          "id": "legion_signal",
+          "name": "붉은 깃발의 척후대",
+          "sprite": "standard",
+          "x": 18,
+          "y": 8,
+          "description": "마왕군 척후병 둘이 교차 사격을 준비합니다. 깃발을 조사해 전투를 시작하세요.",
+          "spawns": [
+            {
+              "monster": "legion_scout",
+              "level": 5,
+              "x": 17,
+              "y": 7
+            },
+            {
+              "monster": "legion_scout",
+              "level": 5,
+              "x": 21,
+              "y": 9
+            }
+          ],
+          "cooldown": 360,
+          "rewards": {
+            "xp": 45,
+            "gold": 14,
+            "materials": {
+              "ore": 2
             }
           }
         }
@@ -31655,6 +31999,19 @@ window.GAME_DB = {
           ],
           "requiresQuest": "eclipse_hunt",
           "requiresGuardians": false
+        },
+        {
+          "id": "legion_pass",
+          "name": "흑적 군단 주둔지",
+          "x": 43,
+          "y": 18,
+          "to": "legion_gate",
+          "spawn": [
+            3.5,
+            9.5
+          ],
+          "requiresQuest": "legion_orders",
+          "requiresGuardians": false
         }
       ],
       "spawns": [
@@ -31871,6 +32228,30 @@ window.GAME_DB = {
               23
             ]
           ]
+        },
+        {
+          "id": "legion_vanguard_0",
+          "monster": "legion_bulwark",
+          "x": 34,
+          "y": 19,
+          "level": 40,
+          "guardian": false
+        },
+        {
+          "id": "legion_vanguard_1",
+          "monster": "legion_marksman",
+          "x": 35,
+          "y": 21,
+          "level": 40,
+          "guardian": false
+        },
+        {
+          "id": "legion_vanguard_2",
+          "monster": "legion_augur",
+          "x": 37,
+          "y": 19,
+          "level": 40,
+          "guardian": false
         }
       ],
       "resources": [
@@ -37689,6 +38070,266 @@ window.GAME_DB = {
       ],
       "group": "endless_rift",
       "onlineScope": "solo"
+    },
+    "legion_gate": {
+      "id": "legion_gate",
+      "name": "흑적 군단 주둔지",
+      "width": 30,
+      "height": 19,
+      "kind": "dungeon",
+      "level": 41,
+      "tiles": [
+        "##############################",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvv#vvvvv#vvvvv#vvvvv#vvvv#",
+        "#vvvvv#vvvvv#vvvvv#vvvvv#vvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "#ffffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffffff#",
+        "#ffffffffffffffffffffffffffff#",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvv#vvvvv#vvvvv#vvvvv#vvvv#",
+        "#vvvvv#vvvvv#vvvvv#vvvvv#vvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvvvvvvv#",
+        "##############################"
+      ],
+      "group": "legion",
+      "music": "dungeon",
+      "spawn": [
+        3.5,
+        9.5
+      ],
+      "props": [
+        {
+          "type": "standard",
+          "x": 4,
+          "y": 4,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        },
+        {
+          "type": "standard",
+          "x": 25,
+          "y": 4,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        },
+        {
+          "type": "standard",
+          "x": 4,
+          "y": 14,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        },
+        {
+          "type": "standard",
+          "x": 25,
+          "y": 14,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        }
+      ],
+      "portals": [
+        {
+          "id": "retreat",
+          "name": "황혼 평원",
+          "x": 2,
+          "y": 9,
+          "to": "eclipse_plain",
+          "spawn": [
+            42.5,
+            18
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": false
+        },
+        {
+          "id": "audience",
+          "name": "검은 해의 왕좌",
+          "x": 27,
+          "y": 9,
+          "to": "legion_throne",
+          "spawn": [
+            3.5,
+            10.5
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": true
+        }
+      ],
+      "npcs": [],
+      "spawns": [
+        {
+          "id": "legion_gate_0",
+          "monster": "legion_bulwark",
+          "x": 10,
+          "y": 10,
+          "level": 41,
+          "guardian": false
+        },
+        {
+          "id": "legion_gate_1",
+          "monster": "legion_marksman",
+          "x": 13,
+          "y": 7,
+          "level": 41,
+          "guardian": false
+        },
+        {
+          "id": "legion_gate_2",
+          "monster": "legion_augur",
+          "x": 18,
+          "y": 12,
+          "level": 42,
+          "guardian": false
+        },
+        {
+          "id": "legion_gate_3",
+          "monster": "legion_bulwark",
+          "x": 21,
+          "y": 9,
+          "level": 42,
+          "guardian": true
+        },
+        {
+          "id": "legion_gate_4",
+          "monster": "legion_marksman",
+          "x": 23,
+          "y": 6,
+          "level": 43,
+          "guardian": true
+        },
+        {
+          "id": "legion_gate_5",
+          "monster": "legion_augur",
+          "x": 24,
+          "y": 11,
+          "level": 43,
+          "guardian": true
+        }
+      ],
+      "resources": [],
+      "chests": [],
+      "discoveries": [],
+      "events": [],
+      "mechanisms": [],
+      "zones": [],
+      "waypoint": null
+    },
+    "legion_throne": {
+      "id": "legion_throne",
+      "name": "검은 해의 왕좌",
+      "width": 25,
+      "height": 21,
+      "kind": "boss",
+      "level": 46,
+      "tiles": [
+        "#########################",
+        "#vvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvv#vvvvv#vvvvv#vvvvv#",
+        "#vvvvv#vvvvv#vvvvv#vvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvv#",
+        "#fffffffffffffffffffffff#",
+        "#fffffffffffffffffffffff#",
+        "#fffffffffffffffffffffff#",
+        "#fffffffffffffffffffffff#",
+        "#fffffffffffffffffffffff#",
+        "#vvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvv#vvvvv#vvvvv#vvvvv#",
+        "#vvvvv#vvvvv#vvvvv#vvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvv#",
+        "#vvvvvvvvvvvvvvvvvvvvvvv#",
+        "#########################"
+      ],
+      "group": "legion",
+      "music": "boss",
+      "spawn": [
+        3.5,
+        10.5
+      ],
+      "props": [
+        {
+          "type": "standard",
+          "x": 4,
+          "y": 4,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        },
+        {
+          "type": "standard",
+          "x": 20,
+          "y": 4,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        },
+        {
+          "type": "standard",
+          "x": 4,
+          "y": 16,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        },
+        {
+          "type": "standard",
+          "x": 20,
+          "y": 16,
+          "width": 1,
+          "height": 1,
+          "solid": false
+        }
+      ],
+      "portals": [
+        {
+          "id": "gate",
+          "name": "군단 주둔지",
+          "x": 2,
+          "y": 10,
+          "to": "legion_gate",
+          "spawn": [
+            26.5,
+            9.5
+          ],
+          "requiresQuest": null,
+          "requiresGuardians": false
+        }
+      ],
+      "npcs": [],
+      "spawns": [
+        {
+          "id": "black_sun",
+          "monster": "legion_sovereign",
+          "x": 17,
+          "y": 10,
+          "level": 46,
+          "guardian": false
+        }
+      ],
+      "resources": [],
+      "chests": [],
+      "discoveries": [],
+      "events": [],
+      "mechanisms": [],
+      "zones": [],
+      "waypoint": null,
+      "boss": "legion_sovereign"
     }
   },
   "mapKinds": {
@@ -37696,999 +38337,6 @@ window.GAME_DB = {
     "field": "필드",
     "dungeon": "던전",
     "boss": "보스방"
-  },
-  "spritePalette": {
-    "k": "#28312a",
-    "s": "@skin",
-    "h": "@hair",
-    "c": "@cloth",
-    "a": "@accent",
-    "m": "#bcc5b2",
-    "d": "#5e6e60",
-    "w": "#f4e8c5",
-    "r": "#b85b43",
-    "g": "#73985c",
-    "b": "#7c613c",
-    "y": "#d6bb73",
-    "o": "#d39758",
-    "v": "#967f9e",
-    "e": "#302f26",
-    "f": "#afd2bc",
-    "n": "#8095a3"
-  },
-  "sprites": {
-    "warrior": {
-      "width": 16,
-      "height": 20,
-      "rows": [
-        "......hhhh......",
-        ".....hhhhhh.....",
-        ".....hssssh.....",
-        ".....sskssk.....",
-        "......ssss......",
-        "......hssh......",
-        "....aacccca.....",
-        "...aacccccca....",
-        "...accmcmcca....",
-        "..ssccmmmccss...",
-        "..sscccccccss...",
-        "..aacccmcccaa...",
-        "...acccccca.m...",
-        "...acccccca.m...",
-        "....cbbbbc..m...",
-        "....dd..dd..m...",
-        "....dd..dd..m...",
-        "....dd..dd..y...",
-        "...bbb..bbb.....",
-        "...bbb..bbb....."
-      ],
-      "palette": {}
-    },
-    "archer": {
-      "width": 16,
-      "height": 20,
-      "rows": [
-        "......cccc......",
-        ".....cccccc.....",
-        "....ccssshcc....",
-        "....csksskcc....",
-        ".....cssssc.....",
-        "......sssh......",
-        "....aacccca.....",
-        "...acccbccca....",
-        "...cccbcccaa.y..",
-        "..ssccbcccss..y.",
-        "..sscccbccss..y.",
-        "...accccbca...y.",
-        "...accccbca..y..",
-        "....ccbbcc..y...",
-        "....dd..dd......",
-        "....dd..dd......",
-        "....dd..dd......",
-        "...bbb..bbb.....",
-        "...bbb..bbb.....",
-        "................"
-      ],
-      "palette": {}
-    },
-    "magician": {
-      "width": 16,
-      "height": 20,
-      "rows": [
-        ".......a........",
-        "......ccc.......",
-        ".....ccccc......",
-        "....ccccccc.....",
-        "...aaaacaaaa....",
-        ".....hssssh.....",
-        ".....sskssk.....",
-        "......ssss......",
-        "....aacccca..f..",
-        "...accccccca.f..",
-        "..sscccccccs.b..",
-        "..ssccaaaccs.b..",
-        "...acccccca..b..",
-        "...acccccca..b..",
-        "...acccccca..b..",
-        "...cccaaccc..b..",
-        "..cccccccccc.b..",
-        "..cccccccccc.b..",
-        "...bbb..bbb.....",
-        "................"
-      ],
-      "palette": {}
-    },
-    "guardian": {
-      "width": 16,
-      "height": 20,
-      "rows": [
-        "......mmmm......",
-        ".....mmmmmm.....",
-        ".....mssmss.....",
-        ".....mskskm.....",
-        "......ssss......",
-        "....aammmmaa....",
-        "...ammmmmmma....",
-        "..mmmmccmmmm....",
-        "..mmmcccmmaa....",
-        "..ssmmmmmmss....",
-        "..mmmaaaammss...",
-        "..maaaaaamm.....",
-        "..maamaaaam..m..",
-        "..maaaaaaam..m..",
-        "...aaaaaam..b...",
-        "....dd..dd..b...",
-        "....dd..dd......",
-        "....dd..dd......",
-        "...mmm..mmm.....",
-        "...bbb..bbb....."
-      ],
-      "palette": {}
-    },
-    "elf_ears": {
-      "width": 16,
-      "height": 20,
-      "rows": [
-        "................",
-        "................",
-        "................",
-        "...s........s...",
-        "..ss........ss..",
-        "................",
-        "................",
-        "................",
-        "................",
-        "................",
-        "................",
-        "................",
-        "................",
-        "................",
-        "................",
-        "................",
-        "................",
-        "................",
-        "................",
-        "................"
-      ],
-      "palette": {}
-    },
-    "dragon_horns": {
-      "width": 16,
-      "height": 20,
-      "rows": [
-        "....a......a....",
-        "....aa....aa....",
-        ".....a....a.....",
-        "................",
-        "................",
-        "................",
-        "................",
-        "................",
-        "................",
-        "................",
-        "................",
-        "................",
-        "................",
-        "................",
-        ".............a..",
-        ".............aa.",
-        "..............a.",
-        ".............aa.",
-        "............aa..",
-        "................"
-      ],
-      "palette": {}
-    },
-    "dwarf_beard": {
-      "width": 16,
-      "height": 20,
-      "rows": [
-        "................",
-        "................",
-        "................",
-        "................",
-        "................",
-        ".....hhhhhh.....",
-        ".....hwhhwh.....",
-        "......hhhh......",
-        "......hhhh......",
-        ".......hh.......",
-        "................",
-        "................",
-        "................",
-        "................",
-        "................",
-        "................",
-        "................",
-        "................",
-        "................",
-        "................"
-      ],
-      "palette": {}
-    },
-    "beast_ears": {
-      "width": 16,
-      "height": 20,
-      "rows": [
-        "....h......h....",
-        "....ha....ah....",
-        "....hh....hh....",
-        "................",
-        "................",
-        "................",
-        "................",
-        "................",
-        "................",
-        "................",
-        "................",
-        "................",
-        "................",
-        "................",
-        "................",
-        "..............h.",
-        ".............hh.",
-        "............hhh.",
-        "............hh..",
-        "................"
-      ],
-      "palette": {}
-    },
-    "slime": {
-      "width": 16,
-      "height": 12,
-      "rows": [
-        "................",
-        "......gggg......",
-        "....gggggggg....",
-        "...ggfffffggg...",
-        "..gggffffffggg..",
-        "..gggggggggggg..",
-        ".ggggkggggkgggg.",
-        ".ggggkggggkgggg.",
-        ".gggggggggggggg.",
-        "..gggggwwggggg..",
-        "...gggggggggg...",
-        "....dddddddd...."
-      ],
-      "palette": {
-        "g": "#89b68a",
-        "f": "#bdd5a4",
-        "d": "#668568"
-      }
-    },
-    "goblin": {
-      "width": 16,
-      "height": 14,
-      "rows": [
-        ".....ggggg......",
-        "..g.ggggggg.g...",
-        "..gggkggkgggg...",
-        "...ggggggggg....",
-        "....ggwwwgg.....",
-        ".....ggggg......",
-        "....bbccbb......",
-        "...bbccccbb.....",
-        "..ggbccccbgg.m..",
-        "..ggbccccbgg.m..",
-        "....bbbbbb...m..",
-        "....bb..bb...y..",
-        "....gg..gg......",
-        "...bbb..bbb....."
-      ],
-      "palette": {
-        "c": "#8a7350"
-      }
-    },
-    "wolf": {
-      "width": 18,
-      "height": 14,
-      "rows": [
-        "..................",
-        "...dd........dd...",
-        "...dndddddddndd...",
-        "....nnnnnnnnnn....",
-        "...nnkwnnnwknnn...",
-        "...nnnnnwnnnnnn...",
-        "....nnnnknnnnn....",
-        ".....nwwwwnn......",
-        "....nnnnnnnnn.....",
-        "...nnnnnnnnnnnn...",
-        "..nnnnnnnnnnnnnd..",
-        ".dnnnnnnnnnnnnn.d.",
-        "..nn..nn..nn..nn..",
-        "..dd..dd..dd..dd.."
-      ],
-      "palette": {
-        "n": "#9daba6",
-        "d": "#66766b"
-      }
-    },
-    "boar": {
-      "width": 18,
-      "height": 12,
-      "rows": [
-        "..................",
-        "....bbbbbbbb......",
-        "..bbbbbbbbbbbb....",
-        ".bbbbbbbbbbbbbb...",
-        "bbbbbbbbbbbbbbbb..",
-        "bbbkbbbbbbbbkbbb..",
-        "bbwwbbboobbwwbbb..",
-        ".bbbbooooobbbbb...",
-        "..bbbooeeoobbbb...",
-        "...bbbbbbbbbbb....",
-        "...bb..bb..bb.....",
-        "...kk..kk..kk....."
-      ],
-      "palette": {
-        "b": "#96714c",
-        "o": "#b28b68"
-      }
-    },
-    "lizard": {
-      "width": 16,
-      "height": 14,
-      "rows": [
-        ".....gggg.......",
-        "....gggggg......",
-        "...ggkgkgsg.....",
-        "....ggwwwg......",
-        ".....gggg.......",
-        "....aaccca......",
-        "...ggcccccgg....",
-        "..gg.ccccc.gg...",
-        ".....ccccc...g..",
-        ".....ccccc...gg.",
-        ".....gg.gg..gg..",
-        "....ggg.ggggg...",
-        "....ddd.ddd.....",
-        "................"
-      ],
-      "palette": {
-        "g": "#6b9b75",
-        "c": "#847951"
-      }
-    },
-    "golem": {
-      "width": 16,
-      "height": 14,
-      "rows": [
-        "....mmmmmmmm....",
-        "...mmddddddmm...",
-        "..mmmfmmmmfmmm..",
-        "..mmmmmmmmmmmm..",
-        "...mmmwwwwmmm...",
-        "..mmmmmmmmmmmm..",
-        ".mmmmdmmmmdmmm..",
-        "mmmmdmmmmmmdmmm.",
-        "mmm.mmmffmmm.mmm",
-        "mmm.mmmmmmmm.mmm",
-        "....mmmmmmmm....",
-        "....mm..mm......",
-        "...mmm..mmm.....",
-        "...ddd..ddd....."
-      ],
-      "palette": {
-        "m": "#a5afa0",
-        "f": "#b3d7be"
-      }
-    },
-    "drake": {
-      "width": 24,
-      "height": 18,
-      "rows": [
-        "..rr................rr..",
-        "..rrr..............rrr..",
-        ".rrrrr....aa......rrrrr.",
-        "rrrrrrr..arra....rrrrrrr",
-        "rrrrr.rrarrrrarrr.rrrrrr",
-        "rrrr..rrrrrrrrrrr..rrrrr",
-        "rrr...rrrkwkwrrrr...rrrr",
-        "rr.....rrrrwwrrrr....rrr",
-        "r.......rrrrrrrrr.....rr",
-        ".......rrrrrrrrrrr.....r",
-        "......rrrroooorrrrr.....",
-        ".....rrrrrooooorrrrr....",
-        "......rrrrrooorrrrrr....",
-        ".......rrrrrrrrrrr......",
-        ".......rrr...rrr..rr....",
-        "......rrrr...rrrr..rr...",
-        "......kkkk...kkkk...rr..",
-        ".....................rr."
-      ],
-      "palette": {
-        "r": "#a9674d",
-        "o": "#d3a376",
-        "a": "#e3c590"
-      }
-    },
-    "villager": {
-      "width": 16,
-      "height": 20,
-      "rows": [
-        "......hhhh......",
-        ".....hhhhhh.....",
-        ".....hssssh.....",
-        ".....sskssk.....",
-        "......ssss......",
-        "......hssh......",
-        "....aacccca.....",
-        "...aacccccca....",
-        "...accmcmcca....",
-        "..ssccmmmccss...",
-        "..sscccccccss...",
-        "..aacccmcccaa...",
-        "...acccccca.....",
-        "...acccccca.....",
-        "....cbbbbc......",
-        "....dd..dd......",
-        "....dd..dd......",
-        "....dd..dd......",
-        "...bbb..bbb.....",
-        "...bbb..bbb....."
-      ],
-      "palette": {
-        "c": "#a18b67",
-        "a": "#d6b987",
-        "m": "#c3b59a"
-      }
-    },
-    "smith": {
-      "width": 16,
-      "height": 20,
-      "rows": [
-        "......hhhh......",
-        ".....hhhhhh.....",
-        ".....hssssh.....",
-        ".....sskssk.....",
-        "......ssss......",
-        "......hssh......",
-        "....aacccca.....",
-        "...aacccccca....",
-        "...accmcmcca....",
-        "..ssccmmmccsmmmm",
-        "..sscccccccsmmmm",
-        "..aacccmcccaab..",
-        "...acccccca..b..",
-        "...acccccca..b..",
-        "....cbbbbc......",
-        "....dd..dd......",
-        "....dd..dd......",
-        "....dd..dd......",
-        "...bbb..bbb.....",
-        "...bbb..bbb....."
-      ],
-      "palette": {
-        "c": "#7b6a58",
-        "a": "#a9916b",
-        "b": "#72583c"
-      }
-    },
-    "healer": {
-      "width": 16,
-      "height": 20,
-      "rows": [
-        ".......a........",
-        "......ccc.......",
-        ".....ccccc......",
-        "....ccccccc.....",
-        "...aaaacaaaa....",
-        ".....hssssh.....",
-        ".....sskssk.....",
-        "......ssss......",
-        "....aacccca..f..",
-        "...accccccca.f..",
-        "..sscccccccs.b..",
-        "..ssccaaaccs.b..",
-        "...acccccca..b..",
-        "...acccccca..b..",
-        "...acccccca..b..",
-        "...cccaaccc..b..",
-        "..cccccccccc.b..",
-        "..cccccccccc.b..",
-        "...bbb..bbb.....",
-        "................"
-      ],
-      "palette": {
-        "c": "#ded7bd",
-        "a": "#8fa9ad",
-        "f": "#e8d89b"
-      }
-    },
-    "tree": {
-      "width": 20,
-      "height": 15,
-      "rows": [
-        ".......gggggg.......",
-        ".....gggggggggg.....",
-        "...ggggffffffgggg...",
-        "..ggggffffffgggggg..",
-        ".ggggffffffgggggggg.",
-        "gggggggggggggggggggg",
-        "gggggggggggggggggggg",
-        ".gggggggggggggggggg.",
-        "..gggggggggggggggg..",
-        "...gggggggggggggg...",
-        "......bbbbbbbb......",
-        ".......bbbbbb.......",
-        ".......bbbbbb.......",
-        ".......bbbbbb.......",
-        "......bbbbbbbb......"
-      ],
-      "palette": {
-        "g": "#587b50",
-        "f": "#79965c"
-      }
-    },
-    "rock": {
-      "width": 14,
-      "height": 6,
-      "rows": [
-        "....mmmmmm....",
-        "..mmmmmmmmmm..",
-        ".mmmffffmmmmm.",
-        "mmmmmmmmmmmmmm",
-        ".mmmmmmmmmmmm.",
-        "..dddddddddd.."
-      ],
-      "palette": {
-        "m": "#8a9585",
-        "f": "#a7af9b",
-        "d": "#707d70"
-      }
-    },
-    "herb": {
-      "width": 10,
-      "height": 6,
-      "rows": [
-        "...g..g...",
-        "..gg..gg..",
-        ".ggg.gggg.",
-        "..gggggg..",
-        "...gggg...",
-        "....bb...."
-      ],
-      "palette": {
-        "g": "#729657"
-      }
-    },
-    "ore": {
-      "width": 11,
-      "height": 6,
-      "rows": [
-        "...mmmmm...",
-        "..mmmmmmm..",
-        ".mmmffmmmm.",
-        "mmmmfffmmmm",
-        ".mmmmmmmmm.",
-        "..ddddddd.."
-      ],
-      "palette": {}
-    },
-    "crystal": {
-      "width": 9,
-      "height": 7,
-      "rows": [
-        "....f....",
-        "...fff...",
-        "..ffvff..",
-        ".ffvvvff.",
-        "..fvvvf..",
-        "...fvf...",
-        "....f...."
-      ],
-      "palette": {
-        "f": "#aecbcc",
-        "v": "#819ba9"
-      }
-    },
-    "chest": {
-      "width": 14,
-      "height": 8,
-      "rows": [
-        "..bbbbbbbbbb..",
-        ".bbyyyyyyyybb.",
-        "bbbbbbbbbbbbbb",
-        "bbbyyyyyyyybbb",
-        "bbbbbyyybbbbbb",
-        "bbbbbyyybbbbbb",
-        "bbbbbbbbbbbbbb",
-        ".dddddddddddd."
-      ],
-      "palette": {
-        "b": "#9a7548",
-        "y": "#d0b26f"
-      }
-    },
-    "board": {
-      "width": 14,
-      "height": 9,
-      "rows": [
-        "..bbbbbbbbbb..",
-        "..bwwwwwwwwb..",
-        "..bwkkkkkkwb..",
-        "..bwwwwwwwwb..",
-        "..bwkkkkwwwb..",
-        "..bwwwwwwwwb..",
-        "..bbbbbbbbbb..",
-        "....b....b....",
-        "....b....b...."
-      ],
-      "palette": {}
-    },
-    "waystone": {
-      "width": 12,
-      "height": 9,
-      "rows": [
-        ".....mm.....",
-        "....mffm....",
-        "...mmffmm...",
-        "...mmvvmm...",
-        "...mmvvmm...",
-        "...mmffmm...",
-        "...mmmmmm...",
-        "..mmmmmmmm..",
-        "..dddddddd.."
-      ],
-      "palette": {}
-    },
-    "warrior_back": {
-      "width": 16,
-      "height": 20,
-      "rows": [
-        "......hhhh......",
-        ".....hhhhhh.....",
-        ".....hhhhhh.....",
-        ".....hhhhhh.....",
-        "......hhhh......",
-        "......hhhh......",
-        "....aacccca.....",
-        "...aacccccca....",
-        "...accmcmcca....",
-        "..ssccmmmccss...",
-        "..sscccccccss...",
-        "..aacccmcccaa...",
-        "...acccccca.m...",
-        "...acccccca.m...",
-        "....cbbbbc..m...",
-        "....dd..dd..m...",
-        "....dd..dd..m...",
-        "....dd..dd..y...",
-        "...bbb..bbb.....",
-        "...bbb..bbb....."
-      ],
-      "palette": {}
-    },
-    "archer_back": {
-      "width": 16,
-      "height": 20,
-      "rows": [
-        "......cccc......",
-        ".....cccccc.....",
-        "....cchhhhcc....",
-        "....chhhhhcc....",
-        ".....chhhhc.....",
-        "......hhhh......",
-        "....aacccca.....",
-        "...acccbccca....",
-        "...cccbcccaa.y..",
-        "..ssccbcccss..y.",
-        "..sscccbccss..y.",
-        "...accccbca...y.",
-        "...accccbca..y..",
-        "....ccbbcc..y...",
-        "....dd..dd......",
-        "....dd..dd......",
-        "....dd..dd......",
-        "...bbb..bbb.....",
-        "...bbb..bbb.....",
-        "................"
-      ],
-      "palette": {}
-    },
-    "magician_back": {
-      "width": 16,
-      "height": 20,
-      "rows": [
-        ".......a........",
-        "......ccc.......",
-        ".....ccccc......",
-        "....ccccccc.....",
-        "...aaaacaaaa....",
-        ".....hhhhhh.....",
-        ".....sskssk.....",
-        "......ssss......",
-        "....aacccca..f..",
-        "...accccccca.f..",
-        "..sscccccccs.b..",
-        "..ssccaaaccs.b..",
-        "...acccccca..b..",
-        "...acccccca..b..",
-        "...acccccca..b..",
-        "...cccaaccc..b..",
-        "..cccccccccc.b..",
-        "..cccccccccc.b..",
-        "...bbb..bbb.....",
-        "................"
-      ],
-      "palette": {}
-    },
-    "guardian_back": {
-      "width": 16,
-      "height": 20,
-      "rows": [
-        "......mmmm......",
-        ".....mmmmmm.....",
-        ".....mhhmhh.....",
-        ".....mhhhhm.....",
-        "......hhhh......",
-        "....aammmmaa....",
-        "...ammmmmmma....",
-        "..mmmmccmmmm....",
-        "..mmmcccmmaa....",
-        "..ssmmmmmmss....",
-        "..mmmaaaammss...",
-        "..maaaaaamm.....",
-        "..maamaaaam..m..",
-        "..maaaaaaam..m..",
-        "...aaaaaam..b...",
-        "....dd..dd..b...",
-        "....dd..dd......",
-        "....dd..dd......",
-        "...mmm..mmm.....",
-        "...bbb..bbb....."
-      ],
-      "palette": {}
-    },
-    "wood": {
-      "width": 12,
-      "height": 5,
-      "rows": [
-        "..bbbbbbbb..",
-        ".bbbbbbbbbb.",
-        "bbbybbbbbybb",
-        ".bbbbbbbbbb.",
-        "..bbbbbbbb.."
-      ],
-      "palette": {}
-    },
-    "ruin": {
-      "width": 14,
-      "height": 8,
-      "rows": [
-        "...mmmmmmmm...",
-        "..mm......mm..",
-        "..mm......mm..",
-        "..mm......mm..",
-        "..mm......mm..",
-        "..mm......mm..",
-        ".mmmmmmmmmmmm.",
-        "..dddddddddd.."
-      ],
-      "palette": {}
-    },
-    "camp": {
-      "width": 13,
-      "height": 7,
-      "rows": [
-        "......r......",
-        ".....ror.....",
-        "....royor....",
-        ".....ryr.....",
-        "...bbbbb.....",
-        "..bb...bb....",
-        "............."
-      ],
-      "palette": {}
-    },
-    "skeleton": {
-      "width": 12,
-      "height": 14,
-      "rows": [
-        "....wwww....",
-        "...wkkkkw...",
-        "...wkwkkw...",
-        "....wwww....",
-        ".....ww.....",
-        "..wwwwwwww..",
-        ".w...ww...w.",
-        "....wwww....",
-        "...w.ww.w...",
-        "..w..ww..w..",
-        ".....ww.....",
-        "....w..w....",
-        "...w....w...",
-        "..ww....ww.."
-      ],
-      "palette": {
-        "w": "#ddd8c5",
-        "k": "#313b39",
-        "g": "#6b8d50",
-        "b": "#89704f"
-      }
-    },
-    "orc": {
-      "width": 12,
-      "height": 14,
-      "rows": [
-        "....gggg....",
-        "...gggggg...",
-        "..ggkggkgg..",
-        "..ggwggwgg..",
-        "...gggggg...",
-        "..bbbbbbbb..",
-        ".bbbggggbbb.",
-        "ggbbbbbbbbgg",
-        "ggbbbbbbbbgg",
-        "..bbbbbbbb..",
-        "...bb..bb...",
-        "...bb..bb...",
-        "..bbb..bbb..",
-        "..kkk..kkk.."
-      ],
-      "palette": {
-        "w": "#ddd8c5",
-        "k": "#313b39",
-        "g": "#6b8d50",
-        "b": "#89704f"
-      }
-    },
-    "spider": {
-      "width": 12,
-      "height": 14,
-      "rows": [
-        "............",
-        "..k......k..",
-        "...k.gg.k...",
-        ".kkgkkkkgkk.",
-        "...gkkkkg...",
-        "..ggkkkkgg..",
-        ".kggggggggk.",
-        "k.gggggggg.k",
-        ".kggkkkkggk.",
-        "..k.kkkk.k..",
-        ".k..kkkk..k.",
-        "k..........k",
-        "............",
-        "............"
-      ],
-      "palette": {
-        "w": "#ddd8c5",
-        "k": "#313b39",
-        "g": "#6b8d50",
-        "b": "#89704f"
-      }
-    },
-    "bat": {
-      "width": 12,
-      "height": 14,
-      "rows": [
-        "............",
-        "k..........k",
-        "kk..kkkk..kk",
-        "kkk.kkkk.kkk",
-        "kkkkkkkkkkkk",
-        ".kkkkkkkkkk.",
-        "..kkkkkkkk..",
-        "...kkkkkk...",
-        "....kkkk....",
-        "....kkkk....",
-        ".....kk.....",
-        "............",
-        "............",
-        "............"
-      ],
-      "palette": {
-        "w": "#ddd8c5",
-        "k": "#313b39",
-        "g": "#6b8d50",
-        "b": "#89704f"
-      }
-    },
-    "ghost": {
-      "width": 12,
-      "height": 14,
-      "rows": [
-        "....wwww....",
-        "...wwwwww...",
-        "..wwwwwwww..",
-        "..wwkwwkww..",
-        "..wwwwwwww..",
-        "..wwwkkwww..",
-        "..wwwwwwww..",
-        ".wwwwwwwwww.",
-        ".wwwwwwwwww.",
-        "..wwwwwwww..",
-        "..wwwwwwww..",
-        "..ww.ww.ww..",
-        "..w..ww..w..",
-        "............"
-      ],
-      "palette": {
-        "w": "#ddd8c5",
-        "k": "#313b39",
-        "g": "#6b8d50",
-        "b": "#89704f"
-      }
-    },
-    "ent": {
-      "width": 12,
-      "height": 14,
-      "rows": [
-        ".....bbbb...",
-        "..b..bbbb.b.",
-        "..bbbbbbbbb.",
-        "...bgbbgbb..",
-        "...bbbbbbb..",
-        "..bbbbbbbbb.",
-        ".bbbggggbbb.",
-        "bbbbggggbbbb",
-        "bb.bbbbbbb.b",
-        "b..bbbbbbb..",
-        "...bbbbbbb..",
-        "...bbb.bbb..",
-        "..bbbb.bbbb.",
-        ".bbbb...bbbb"
-      ],
-      "palette": {
-        "w": "#ddd8c5",
-        "k": "#313b39",
-        "g": "#6b8d50",
-        "b": "#89704f"
-      }
-    },
-    "scorpion": {
-      "width": 12,
-      "height": 14,
-      "rows": [
-        ".........kk.",
-        "........k..k",
-        "........k.k.",
-        ".........kk.",
-        ".kk...kkkk..",
-        "k..k.kkkkk..",
-        ".kkkkkkkkk..",
-        "...kkkkkkk..",
-        "..kkkkkkkkk.",
-        ".k.kkkkkkk.k",
-        "k..k.kk.k..k",
-        "..k..kk..k..",
-        "............",
-        "............"
-      ],
-      "palette": {
-        "w": "#ddd8c5",
-        "k": "#313b39",
-        "g": "#6b8d50",
-        "b": "#89704f"
-      }
-    },
-    "knight": {
-      "width": 12,
-      "height": 14,
-      "rows": [
-        "....kkkk....",
-        "...kwwwwk...",
-        "..kwwkkwwk..",
-        "..kwwkkwwk..",
-        "...kwwwwk...",
-        "..wwwwwwww..",
-        ".wwwwbbwwww.",
-        "wwwwwbbwwwww",
-        "wwwwwwwwwwww",
-        "..wwwwwwww..",
-        "...ww..ww...",
-        "...ww..ww...",
-        "..www..www..",
-        "..kkk..kkk.."
-      ],
-      "palette": {
-        "w": "#ddd8c5",
-        "k": "#313b39",
-        "g": "#6b8d50",
-        "b": "#89704f"
-      }
-    }
   },
   "projectiles": {
     "arrow": {
@@ -39492,7 +39140,7 @@ window.GAME_DB = {
     "newGame": "새 모험",
     "continue": "이어하기",
     "start": "모험 시작",
-    "titleTag": "탑뷰 판타지 RPG",
+    "titleTag": "쿼터뷰 판타지 RPG",
     "createTitle": "당신의 모험가",
     "createHint": "종족과 직업을 고르면 오크우드에서 모험을 시작합니다.",
     "race": "종족",
@@ -41420,6 +41068,14 @@ window.GAME_DB = {
         "rift_cinder",
         "rift_frost",
         "rift_wild"
+      ]
+    },
+    {
+      "id": "legion",
+      "name": "마왕령",
+      "maps": [
+        "legion_gate",
+        "legion_throne"
       ]
     }
   ],
@@ -44236,5 +43892,114 @@ window.GAME_DB = {
         "world_seal": "보스·모험 계약·공동 사업"
       }
     }
+  },
+  "graphics": {
+    "title": "그래픽 설정",
+    "defaults": {"shadow":1,"texture":1,"light":2,"effects":1,"aa":1,"lod":1},
+    "settings": [["shadow","그림자",["끄기","접지","햇빛"]],["texture","표면 질감",["단색","결","세밀한 결"]],["light","조명 셰이더",["기본","햇빛","햇빛과 윤광"]],["effects","전투 효과",["간결","표준","풍부"]],["aa","안티에일리어싱",["기본 해상도","고해상도","슈퍼샘플링"]],["lod","모델 세부도",["경량","거리 적응","정밀"]]],
+    "view": {"pitch":0.58,"aaScale":[0.85,1.3,1.9],"meshRings":[4,7,10],"meshSlices":[8,12,18],"farTiles":6,"surfaceMax":480,"cachePixels":6500000,"cacheCount":220,"miniInterval":0.18,"terrainPixels":36,"pad":3,"clear":"#afc4bc","sun":[-0.52,0.8,0.32],"budgetMs":4,"shade":"#3c504a","inkAlpha":0.18,"swingLean":0.10,"sparkRange":2.5,"sparkCount":5,"castOffset":0.25,"walkLift":0.061,"walkLean":0.04,"sceneScale":1.12,"occlude":0.44,"modelMargin":5,"groundDetail":[0,3,6],"wave":"#ceeae3","fxLimit":[8,22,48],"factionColor":"#ffb7a3","factionMark":"♜","headGap":0.15,"bakeUnit":41},
+    "palette": {"skin":"#f3c398","hair":"#705344","cloth":"#559485","accent":"#f4c875","boot":"#57473e","eye":"#312f37","glint":"#fff9de","blush":"#e79d83","steel":"#b5ccce","metal":"#596675","gold":"#eabe65","wood":"#906448","bark":"#805a46","leaf":"#67a585","lightLeaf":"#9dbd74","stone":"#98a69c","darkStone":"#6c7e80","water":"#7ccac5","wall":"#f9dfb6","roof":"#c37e6e","trim":"#926348","gem":"#87cecd","wing":"#8b657b","bone":"#ead7ad","banner":"#9a4354","plum":"#55374c","ember":"#ffac87","moss":"#759566","petal":"#ffe5a0","fur":"#91a3a0","belly":"#e8d5aa"},
+    "parts": {
+      "body": [["ball","boot",-0.16,0.14,0.045,0.14,0.14,0.19,0],["ball","boot",0.16,0.14,0.045,0.14,0.14,0.19,0],["ball","cloth",0,0.51,0,0.35,0.39,0.25,0],["ball","accent",0,0.68,0.12,0.33,0.1,0.17,0],["ball","skin",-0.32,0.49,0.08,0.11,0.16,0.12,0.25],["ball","skin",0.32,0.49,0.08,0.11,0.16,0.12,-0.25]],
+      "face": [["ball","skin",0,1.05,0,0.411,0.38,0.35,0],["ball","hair",0,1.29,-0.045,0.414,0.202,0.347,0],["ball","hair",-0.22,1.23,0.22,0.18,0.102,0.11,-0.4],["ball","eye",-0.144,1.077,0.32,0.041,0.061,0.027,0],["ball","eye",0.144,1.077,0.32,0.041,0.061,0.027,0],["ball","glint",-0.151,1.098,0.343,0.013,0.016,0.009,0],["ball","glint",0.151,1.098,0.343,0.013,0.016,0.009,0],["ball","blush",-0.241,0.986,0.276,0.059,0.027,0.021,0],["ball","blush",0.241,0.986,0.276,0.059,0.027,0.021,0]],
+      "elf_ears": [["cone","skin",-0.4,1.1,0,0.1,0.19,0.09,0.93],["cone","skin",0.4,1.1,0,0.1,0.19,0.09,-0.93]],
+      "dragon_horns": [["cone","bone",-0.28,1.45,-0.065,0.09,0.2,0.09,0.36],["cone","bone",0.28,1.45,-0.065,0.09,0.2,0.09,-0.36],["ball","skin",0,0.97,0.3,0.16,0.095,0.11,0]],
+      "dwarf_beard": [["ball","hair",0,0.91,0.24,0.3,0.23,0.17,0],["ball","skin",0,1.02,0.397,0.085,0.066,0.046,0]],
+      "beast_ears": [["cone","hair",-0.235,1.46,-0.025,0.15,0.195,0.1,0.23],["cone","hair",0.235,1.46,-0.025,0.15,0.195,0.1,-0.23],["cone","blush",-0.235,1.46,0.036,0.083,0.11,0.051,0.23],["cone","blush",0.235,1.46,0.036,0.083,0.11,0.051,-0.23],["ball","hair",0,0.47,-0.26,0.11,0.2,0.16,0]],
+      "blade": [["box","gold",0.44,0.57,0.12,0.15,0.038,0.055,-0.2],["cone","steel",0.546,0.88,0.12,0.091,0.36,0.048,-0.24],["box","boot",0.416,0.47,0.12,0.035,0.12,0.04,-0.23]],
+      "buckler": [["ball","metal",-0.36,0.6,0.17,0.195,0.27,0.085,0],["ball","accent",-0.36,0.6,0.246,0.095,0.14,0.025,0]],
+      "greatshield": [["box","metal",-0.36,0.6,0.145,0.208,0.356,0.078,-0.08],["box","accent",-0.36,0.63,0.234,0.044,0.242,0.016,0],["box","accent",-0.36,0.67,0.237,0.16,0.037,0.017,0]],
+      "bow": [["box","wood",0.43,0.61,0.13,0.036,0.21,0.032,0],["box","wood",0.39,0.91,0.13,0.032,0.12,0.03,0.38],["box","wood",0.39,0.32,0.13,0.032,0.12,0.03,-0.38],["box","bone",0.34,0.618,0.13,0.01,0.4,0.013,0],["ball","cloth",0,1.32,-0.02,0.425,0.18,0.355,0],["cone","accent",-0.22,1.53,0,0.074,0.16,0.046,0.48]],
+      "staff": [["tube","wood",0.43,0.57,0.1,0.032,0.52,0.032,0],["ball","gold",0.43,1.06,0.1,0.105,0.093,0.1,0],["ball","gem",0.43,1.18,0.1,0.09,0.13,0.09,0]],
+      "hat": [["ball","cloth",0,1.33,0,0.49,0.078,0.4,0],["cone","cloth",-0.045,1.52,-0.02,0.32,0.26,0.29,0.2],["ball","accent",-0.13,1.76,-0.02,0.046,0.047,0.046,0]],
+      "helm": [["ball","metal",0,1.31,-0.018,0.425,0.194,0.354,0],["box","accent",0,1.22,0.322,0.048,0.107,0.025,0],["ball","accent",0,1.49,-0.04,0.065,0.1,0.16,0]],
+      "apron": [["box","belly",0,0.47,0.21,0.19,0.19,0.038,0],["box","wood",0.4,0.36,0.13,0.036,0.14,0.045,0],["box","metal",0.4,0.53,0.13,0.14,0.085,0.084,0]],
+      "hood": [["ball","cloth",0,1.28,-0.073,0.43,0.235,0.344,0],["ball","accent",0,0.75,0.24,0.08,0.08,0.05,0]],
+      "hornhelm": [["cone","bone",-0.32,1.43,-0.07,0.09,0.22,0.1,0.52],["cone","bone",0.32,1.43,-0.07,0.09,0.22,0.1,-0.52],["ball","plum",0,1.28,-0.048,0.43,0.21,0.35,0],["box","banner",0,0.52,-0.188,0.326,0.33,0.065,0]],
+      "crown": [["tube","gold",0,1.43,-0.022,0.328,0.065,0.293,0],["cone","gold",-0.25,1.55,0.094,0.082,0.16,0.078,0.25],["cone","gold",0,1.55,0.231,0.082,0.16,0.078,0],["cone","gold",0.25,1.55,0.094,0.082,0.16,0.078,-0.25],["cone","gold",0,1.55,-0.23,0.082,0.16,0.078,0],["ball","ember",0,1.47,0.266,0.061,0.074,0.038,0]],
+      "slime": [["ball","cloth",0,0.39,0,0.53,0.4,0.47,0],["ball","glint",-0.18,0.63,0.28,0.078,0.039,0.036,0],["ball","eye",-0.145,0.43,0.422,0.043,0.057,0.027,0],["ball","eye",0.145,0.43,0.422,0.043,0.057,0.027,0]],
+      "paws": [["ball","fur",-0.22,0.19,-0.25,0.12,0.19,0.14,0],["ball","fur",-0.22,0.19,0.24,0.12,0.19,0.14,0],["ball","fur",0.22,0.19,-0.25,0.12,0.19,0.14,0],["ball","fur",0.22,0.19,0.24,0.12,0.19,0.14,0]],
+      "animal": [["ball","fur",0,0.46,-0.04,0.35,0.35,0.52,0],["ball","fur",0,0.72,0.32,0.33,0.31,0.32,0],["ball","belly",0,0.64,0.56,0.199,0.138,0.16,0],["ball","eye",0,0.69,0.7,0.08,0.05,0.045,0],["ball","eye",-0.15,0.79,0.584,0.038,0.054,0.026,0],["ball","eye",0.15,0.79,0.584,0.038,0.054,0.026,0]],
+      "ears": [["cone","fur",-0.198,1.02,0.26,0.124,0.19,0.096,0.22],["cone","fur",0.198,1.02,0.26,0.124,0.19,0.096,-0.22]],
+      "tail": [["ball","fur",0,0.59,-0.46,0.14,0.2,0.27,0]],
+      "tusks": [["cone","bone",-0.141,0.66,0.66,0.046,0.116,0.047,0.28],["cone","bone",0.141,0.66,0.66,0.046,0.116,0.047,-0.28],["ball","blush",0,0.679,0.703,0.112,0.082,0.047,0]],
+      "spines": [["cone","accent",0,0.6708000000000001,-0.38,0.076,0.117,0.082,0],["cone","accent",0,0.749,-0.15,0.076,0.117,0.082,0],["cone","accent",0,0.8170000000000001,0.05,0.076,0.117,0.082,0],["cone","accent",0,0.8918,0.27,0.076,0.117,0.082,0],["cone","fur",0,0.41,-0.55,0.125,0.18,0.17,0]],
+      "wings": [["ball","wing",-0.455,0.71,-0.16,0.28,0.074,0.249,-0.42],["ball","wing",0.455,0.71,-0.16,0.28,0.074,0.249,0.42],["cone","wing",-0.654,0.78,-0.22,0.112,0.21,0.18,0.78],["cone","wing",0.654,0.78,-0.22,0.112,0.21,0.18,-0.78]],
+      "stoneBody": [["ball","stone",0,0.62,0,0.41,0.47,0.31,0],["ball","stone",0,1.1,0,0.31,0.28,0.28,0],["ball","stone",-0.395,0.65,0,0.195,0.29,0.2,0],["ball","stone",0.395,0.65,0,0.195,0.29,0.2,0],["ball","darkStone",-0.19,0.18,0.02,0.185,0.182,0.21,0],["ball","darkStone",0.19,0.18,0.02,0.185,0.182,0.21,0],["ball","gem",-0.12,1.13,0.25,0.048,0.042,0.022,0],["ball","gem",0.12,1.13,0.25,0.048,0.042,0.022,0],["cone","gem",0,0.76,0.29,0.083,0.106,0.036,0]],
+      "leaves": [["ball","leaf",0,1.56,0,0.66,0.61,0.57,0],["ball","lightLeaf",-0.34,1.52,0.06,0.42,0.38,0.4,0],["ball","leaf",0.347,1.34,0.048,0.45,0.4,0.41,0],["ball","lightLeaf",0.067,1.88,-0.036,0.42,0.35,0.39,0]],
+      "legs": [["ball","fur",-0.335,0.16,-0.265,0.18,0.075,0.062,-0.37],["ball","fur",-0.385,0.16,0,0.18,0.075,0.062,-0.37],["ball","fur",-0.335,0.16,0.235,0.18,0.075,0.062,-0.37],["ball","fur",0.335,0.16,-0.265,0.18,0.075,0.062,0.37],["ball","fur",0.385,0.16,0,0.18,0.075,0.062,0.37],["ball","fur",0.335,0.16,0.235,0.18,0.075,0.062,0.37]],
+      "bug": [["ball","fur",0,0.34,-0.13,0.34,0.26,0.39,0],["ball","fur",0,0.3,0.25,0.245,0.196,0.22,0],["ball","ember",-0.096,0.343,0.438,0.05,0.048,0.034,0],["ball","ember",0.096,0.343,0.438,0.05,0.048,0.034,0]],
+      "sting": [["ball","fur",0,0.55,-0.45,0.12,0.28,0.11,0],["cone","ember",0,0.81,-0.46,0.086,0.13,0.071,0],["ball","fur",-0.26,0.28,0.46,0.134,0.122,0.18,0],["ball","fur",0.26,0.28,0.46,0.134,0.122,0.18,0]],
+      "bat": [["ball","fur",0,0.7,0,0.22,0.24,0.17,0],["cone","fur",-0.126,0.94,-0.025,0.093,0.12,0.09,0],["cone","fur",0.126,0.94,-0.025,0.093,0.12,0.09,0],["ball","eye",-0.086,0.75,0.155,0.035,0.042,0.018,0],["ball","eye",0.086,0.75,0.155,0.035,0.042,0.018,0]],
+      "ghost": [["cone","cloth",0,0.36,0,0.35,0.22,0.3,0],["ball","cloth",0,0.78,0,0.32,0.44,0.29,0],["ball","eye",-0.12,0.86,0.269,0.053,0.067,0.026,0],["ball","eye",0.12,0.86,0.269,0.053,0.067,0.026,0],["ball","cloth",-0.29,0.67,0.04,0.14,0.095,0.09,0.22],["ball","cloth",0.29,0.67,0.04,0.14,0.095,0.09,-0.22]],
+      "trunk": [["tube","bark",0,0.62,0,0.195,0.62,0.18,0],["ball","moss",-0.12,0.09,0.13,0.22,0.1,0.2,0]],
+      "rocks": [["ball","stone",0.025,0.29,-0.035,0.46,0.34,0.4,0],["ball","darkStone",-0.285,0.15,0.13,0.218,0.177,0.219,0],["ball","stone",0.31,0.101,0.15,0.15,0.109,0.17,0]],
+      "gems": [["cone","gem",0,0.43,0,0.17,0.43,0.17,0],["cone","gem",-0.19,0.25,0.06,0.115,0.25,0.115,0.26],["cone","gem",0.17,0.3,0.07,0.126,0.3,0.126,-0.3]],
+      "herb": [["ball","leaf",-0.13,0.19,0.025,0.096,0.2,0.082,0.39],["ball","leaf",0.13,0.19,0,0.096,0.2,0.082,-0.39],["ball","leaf",0.014,0.19,0.09,0.096,0.2,0.082,-0.042],["ball","petal",0,0.386,0,0.075,0.053,0.07,0]],
+      "logs": [["tube","bark",-0.14,0.17,0,0.14,0.19,0.14,0.9],["tube","bark",0.1,0.17,0.12,0.14,0.19,0.14,0.9],["tube","bark",0.1,0.17,-0.14,0.14,0.19,0.14,0.9]],
+      "chest": [["box","wood",0,0.24,0,0.38,0.22,0.24,0],["ball","wood",0,0.44,0,0.38,0.16,0.24,0],["box","gold",-0.235,0.3,0,0.036,0.254,0.246,0],["box","gold",0.235,0.3,0,0.036,0.254,0.246,0],["box","gold",0,0.32,0.247,0.065,0.078,0.026,0]],
+      "sign": [["tube","wood",-0.245,0.42,0,0.063,0.42,0.064,0],["tube","wood",0.245,0.42,0,0.063,0.42,0.064,0],["box","bark",0,0.82,0,0.42,0.29,0.082,0],["box","wall",-0.09,0.83,0.086,0.136,0.198,0.015,-0.09],["box","petal",0.18,0.84,0.087,0.074,0.135,0.015,0.16]],
+      "ruin": [["box","stone",0,0.087,0,0.36,0.087,0.31,0],["tube","stone",0,0.47,0,0.22,0.39,0.2,0],["box","darkStone",0,0.855,0,0.255,0.08,0.233,0]],
+      "obelisk": [["cone","gem",0,1.21,0,0.216,0.37,0.195,0],["tube","gold",0,0.89,0,0.219,0.05,0.2,0]],
+      "tent": [["gable","cloth",0,0.36,0,0.53,0.34,0.46,0],["cone","ember",0.55,0.135,0.36,0.115,0.14,0.102,0]],
+      "portal": [["tube","stone",-0.48,0.61,0,0.11,0.61,0.12,0],["tube","stone",0.48,0.61,0,0.11,0.61,0.12,0],["box","gold",0,1.25,0,0.53,0.082,0.12,0],["cone","gem",0,1.47,0,0.138,0.17,0.115,0],["ball","gem",0,0.05,0,0.44,0.05,0.31,0]],
+      "fountain": [["tube","stone",0,0.14,0,0.86,0.14,0.86,0],["tube","water",0,0.277,0,0.746,0.025,0.746,0],["tube","stone",0,0.51,0,0.17,0.23,0.17,0],["ball","stone",0,0.73,0,0.39,0.095,0.39,0],["ball","water",0,0.83,0,0.294,0.068,0.294,0],["ball","water",0,0.98,0,0.082,0.17,0.082,0]],
+      "cottage": [["box","stone",0,0.094,0,0.5,0.094,0.5,0],["box","wall",0,0.53,0,0.476,0.38,0.466,0],["gable","roof",0,1.06,0,0.545,0.25,0.55,0],["box","trim",0,0.85,0,0.503,0.046,0.501,0],["box","bark",0,0.4,0.474,0.091,0.25,0.016,0],["ball","gold",0.055,0.38,0.496,0.013,0.015,0.013,0],["box","stone",-0.22,1.26,-0.23,0.059,0.21,0.071,0],["box","darkStone",-0.22,1.472,-0.23,0.073,0.036,0.082,0]],
+      "windows": [["box","trim",-0.3,0.55,0.476,0.084,0.118,0.015,0],["box","petal",-0.3,0.56,0.492,0.063,0.088,0.007,0],["box","trim",-0.3,0.56,0.502,0.009,0.09,0.007,0],["box","trim",0.3,0.55,0.476,0.084,0.118,0.015,0],["box","petal",0.3,0.56,0.492,0.063,0.088,0.007,0],["box","trim",0.3,0.56,0.502,0.009,0.09,0.007,0],["box","trim",0.477,0.55,-0.265,0.016,0.12,0.084,0],["box","petal",0.494,0.55,-0.265,0.007,0.088,0.065,0],["box","trim",0.477,0.55,0.265,0.016,0.12,0.084,0],["box","petal",0.494,0.55,0.265,0.007,0.088,0.065,0]],
+      "standard": [["tube","metal",0,0.84,0,0.053,0.84,0.054,0],["cone","gold",0,1.74,0,0.077,0.115,0.07,0],["box","banner",0.22,1.22,0,0.216,0.332,0.036,0],["box","gold",0.22,1.27,0.038,0.042,0.14,0.009,0]],
+      "crossbow": [["box","wood",0.38,0.63,0.18,0.054,0.052,0.31,0],["ball","metal",0.38,0.65,0.38,0.29,0.04,0.071,0],["box","bone",0.38,0.65,0.27,0.245,0.014,0.012,0],["box","steel",0.38,0.701,0.31,0.018,0.018,0.26,0],["box","gold",0.38,0.615,0.095,0.067,0.059,0.056,0]],
+      "drakeHorns": [["cone","bone",-0.2,1.02,0.21,0.081,0.162,0.083,0.33],["cone","bone",0.2,1.02,0.21,0.081,0.162,0.083,-0.33]],
+      "cloak": [["ball","banner",0,0.54,-0.165,0.39,0.48,0.17,0],["ball","bone",-0.27,0.763,-0.008,0.13,0.066,0.116,0],["ball","bone",0.27,0.763,-0.008,0.13,0.066,0.116,0]]
+    },
+    "models": {
+      "warrior": {"parts":["body","face","blade","buckler"],"colors":{}},
+      "archer": {"parts":["body","face","bow"],"colors":{}},
+      "magician": {"parts":["body","face","hat","staff"],"colors":{}},
+      "guardian": {"parts":["body","face","helm","greatshield","blade"],"colors":{}},
+      "villager": {"parts":["body","face"],"colors":{}},
+      "healer": {"parts":["body","face","hood","staff"],"colors":{"cloth":"#eee3ca","gem":"#b4d67f"}},
+      "smith": {"parts":["body","face","apron"],"colors":{"cloth":"#97705c","hair":"#4a4943"}},
+      "goblin": {"parts":["body","face","elf_ears","blade"],"colors":{"skin":"#92ab76","cloth":"#997655"}},
+      "orc": {"parts":["body","face","blade","dragon_horns"],"colors":{"skin":"#879f73","cloth":"#956953"}},
+      "skeleton": {"parts":["body","face","blade"],"colors":{"skin":"#e4debd","cloth":"#7e8280","hair":"#e9dfbe"}},
+      "knight": {"parts":["body","face","helm","blade","buckler"],"colors":{"cloth":"#66617a","metal":"#797486"}},
+      "legion_guard": {"parts":["body","face","hornhelm","greatshield","blade"],"colors":{"skin":"#baa0a2","cloth":"#823d53","metal":"#5b5066","accent":"#e5ac74","hair":"#46394a","gem":"#ff896e","eye":"#742e35"}},
+      "legion_bolt": {"parts":["body","face","hornhelm","crossbow"],"colors":{"skin":"#baa0a2","cloth":"#823d53","metal":"#5b5066","accent":"#e5ac74","hair":"#46394a","gem":"#ff896e","eye":"#742e35"}},
+      "legion_hex": {"parts":["body","face","hornhelm","staff"],"colors":{"skin":"#baa0a2","cloth":"#823d53","metal":"#5b5066","accent":"#e5ac74","hair":"#46394a","gem":"#ff896e","eye":"#742e35"}},
+      "legion_lord": {"parts":["cloak","body","face","hornhelm","crown","blade","greatshield"],"colors":{"skin":"#baa0a2","cloth":"#823d53","metal":"#5b5066","accent":"#e5ac74","hair":"#46394a","gem":"#ff896e","eye":"#742e35"}},
+      "slime": {"parts":["slime"],"colors":{"cloth":"#80c5a2"}},
+      "wolf": {"parts":["paws","animal","ears","tail"],"colors":{}},
+      "boar": {"parts":["paws","animal","ears","tusks"],"colors":{"fur":"#b17f65","belly":"#d29b7c"}},
+      "lizard": {"parts":["paws","animal","spines","tail"],"colors":{"fur":"#77aa8b","accent":"#d4a06c"}},
+      "drake": {"parts":["paws","animal","wings","spines","drakeHorns"],"colors":{"fur":"#ad8073","accent":"#efb670"}},
+      "golem": {"parts":["stoneBody"],"colors":{}},
+      "ent": {"parts":["stoneBody","leaves"],"colors":{"stone":"#977c60","gem":"#f0cb7d"}},
+      "spider": {"parts":["bug","legs"],"colors":{"fur":"#896f87"}},
+      "scorpion": {"parts":["bug","legs","sting"],"colors":{"fur":"#bd946a"}},
+      "bat": {"parts":["bat","wings"],"colors":{"fur":"#957c91"}},
+      "ghost": {"parts":["ghost"],"colors":{"cloth":"#a7baca"}},
+      "tree": {"parts":["trunk","leaves"],"colors":{}},
+      "rock": {"parts":["rocks"],"colors":{}},
+      "ore": {"parts":["rocks","gems"],"colors":{"gem":"#d2aa82"}},
+      "crystal": {"parts":["gems"],"colors":{}},
+      "herb": {"parts":["herb"],"colors":{}},
+      "wood": {"parts":["logs"],"colors":{}},
+      "chest": {"parts":["chest"],"colors":{}},
+      "board": {"parts":["sign"],"colors":{}},
+      "ruin": {"parts":["ruin"],"colors":{}},
+      "waystone": {"parts":["ruin","obelisk"],"colors":{}},
+      "camp": {"parts":["tent"],"colors":{}},
+      "portal": {"parts":["portal"],"colors":{}},
+      "fountain": {"parts":["fountain"],"colors":{}},
+      "house": {"parts":["cottage","windows"],"colors":{}},
+      "standard": {"parts":["standard"],"colors":{}},
+      "npc_guild": {"parts":["body","face","hood"],"colors":{"cloth":"#5f819c","hair":"#78604b"}},
+      "npc_merchant": {"parts":["body","face","apron"],"colors":{"cloth":"#ac7356","hair":"#72534a"}},
+      "npc_inn": {"parts":["body","face","hood"],"colors":{"cloth":"#b68972","hair":"#82583d"}},
+      "npc_rift": {"parts":["body","face","hat","staff"],"colors":{"cloth":"#74769e","hair":"#dad2c5"}},
+      "npc_companion": {"parts":["body","face","bow"],"colors":{"cloth":"#6c907d","hair":"#c79764"}}
+    },
+    "npcStyle": {"guild":"npc_guild","merchant":"npc_merchant","inn":"npc_inn","rift":"npc_rift","companion":"npc_companion"},
+    "biomes": {"default":{},"frost":{"leaf":"#b6d4c9","lightLeaf":"#e4ede3","stone":"#aebdc3"},"sun":{"leaf":"#b4a778","lightLeaf":"#d2b882","stone":"#b8957b"},"grave":{"leaf":"#838e83","lightLeaf":"#a4a286"},"eclipse":{"leaf":"#897b90","lightLeaf":"#aa8a97"},"legion":{"leaf":"#7a687e","lightLeaf":"#a47e86","stone":"#897c88","roof":"#934859"}}
   }
 };

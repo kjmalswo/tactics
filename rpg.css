@@ -53,3 +53,13 @@
 @media(max-width:480px){.growth-card-grid,.growth-contract-grid,.growth-memory-grid{grid-template-columns:1fr}.growth-weapon-slots{gap:8px}.growth-weapon-slots>article{padding:10px}.growth-weapon-slots strong{font-size:11px}.growth-tabs>button{flex-direction:column;font-size:10px;gap:4px;min-height:48px}.growth-summary>strong{font-size:9px}.growth-summary b{font-size:22px}.forge-portrait{width:63px;height:94px}.forge-portrait svg{height:87px}.forge-stage{gap:13px;padding:14px}.forge-rank{font-size:34px}.forge-stage h3{font-size:16px}.growth-costs>span{font-size:10px}.growth-tabs .icon{width:16px;height:16px}}
 @media(prefers-reduced-motion:reduce){.forge-success,.forge-success .forge-portrait{animation:none}.growth-meter>i{transition:none}}
 .growth-depth-input{display:flex;align-items:center;gap:10px;font-size:12px;font-weight:700;margin:14px 0}.growth-depth-input>input{width:90px;min-height:37px;font-variant-numeric:tabular-nums}.growth-depth-input>small{font-size:11px;color:var(--muted)}.growth-equipped-note>span{display:block;margin:5px 0 10px}
+
+#world{image-rendering:auto}
+.clay-portrait{display:block;object-fit:contain;max-width:100%;max-height:100%;width:auto;height:100%;margin:auto}
+.race-grid .clay-portrait{width:55px;height:60px}
+.character-portrait .clay-portrait{width:min(100%,140px);height:125px}
+.hero-mini .clay-portrait,.paper-hero>.clay-portrait{width:42px;height:48px}
+.forge-portrait .clay-portrait{height:108px;width:auto}
+.graphics-settings label{display:flex;align-items:center;justify-content:space-between;gap:.75rem}
+.graphics-settings select{max-width:55%;font:inherit;color:var(--ink);background:var(--paperLight);border:1px solid var(--paperEdge);border-radius:.35rem;padding:.28rem}
+.settings-grid .settings-actions{grid-column:1/-1}
